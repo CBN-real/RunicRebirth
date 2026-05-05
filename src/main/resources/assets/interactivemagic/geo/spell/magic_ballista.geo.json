@@ -1,0 +1,60 @@
+{
+	"format_version": "1.12.0",
+	"minecraft:geometry": [
+		{
+			"description": {
+				"identifier": "geometry.magic_ballista",
+				"texture_width": 16,
+				"texture_height": 16,
+				"visible_bounds_width": 4,
+				"visible_bounds_height": 3,
+				"visible_bounds_offset": [0, 0, 0]
+			},
+			"bones": [
+				{
+					"name": "spell_boundary",
+					"pivot": [0, 0, 0],
+					"cubes": [
+						{
+							"origin": [-1, -1, -1],
+							"size": [2, 2, 2],
+							"inflate": 2.75,
+							"pivot": [0, 0, 0],
+							"rotation": [-42.5, 0, 42.5],
+							"uv": {
+								"north": {"uv": [0.25, 0.25], "uv_size": [0.5, 0.5]},
+								"east": {"uv": [1.25, 0.25], "uv_size": [0.5, 0.5]},
+								"south": {"uv": [2.25, 0.25], "uv_size": [0.5, 0.5]},
+								"west": {"uv": [3.25, 0.25], "uv_size": [0.5, 0.5]},
+								"up": {"uv": [4.75, 0.75], "uv_size": [-0.5, -0.5]},
+								"down": {"uv": [5.75, 0.75], "uv_size": [-0.5, -0.5]}
+							}
+						}
+					]
+				},
+				{
+					"name": "inner_spell",
+					"parent": "spell_boundary",
+					"pivot": [0, 0, 0],
+					"cubes": [
+						{
+							"origin": [-1, -1, -1],
+							"size": [2, 2, 2],
+							"inflate": 2.65,
+							"pivot": [0, 0, 0],
+							"rotation": [-42.5, 0, 42.5],
+							"uv": {
+								"north": {"uv": [6.25, 0.25], "uv_size": [0.5, 0.5]},
+								"east": {"uv": [7.25, 0.25], "uv_size": [0.5, 0.5]},
+								"south": {"uv": [8.25, 0.25], "uv_size": [0.5, 0.5]},
+								"west": {"uv": [9.25, 0.25], "uv_size": [0.5, 0.5]},
+								"up": {"uv": [10.75, 0.75], "uv_size": [-0.5, -0.5]},
+								"down": {"uv": [11.75, 0.75], "uv_size": [-0.5, -0.5]}
+							}
+						}
+					]
+				}
+			]
+		}
+	]
+}
