@@ -25,7 +25,7 @@ public record StackChangedS2CPacket(
     int activeIndex,
     List<List<Entry>> stacks,
     int charges,
-    boolean castingInProgress
+    List<ResourceLocation> stackElements
 ) implements CustomPacketPayload {
 
     public record Entry(byte kind, ResourceLocation id) {
@@ -48,7 +48,11 @@ public record StackChangedS2CPacket(
                 }
             }
             buf.writeVarInt(packet.charges);
-            buf.writeBoolean(packet.castingInProgress);
+            buf.writeVarInt(packet.stackElements.size());
+            for (ResourceLocation rl : packet.stackElements) {
+                buf.writeBoolean(rl != null);
+                if (rl != null) buf.writeResourceLocation(rl);
+            }
         },
         buf -> {
             int active = buf.readVarInt();
@@ -65,8 +69,12 @@ public record StackChangedS2CPacket(
                 stacks.add(stack);
             }
             int charges = buf.readVarInt();
-            boolean castingInProgress = buf.readBoolean();
-            return new StackChangedS2CPacket(active, stacks, charges, castingInProgress);
+            int elemCount = buf.readVarInt();
+            List<ResourceLocation> stackElements = new ArrayList<>(elemCount);
+            for (int i = 0; i < elemCount; i++) {
+                stackElements.add(buf.readBoolean() ? buf.readResourceLocation() : null);
+            }
+            return new StackChangedS2CPacket(active, stacks, charges, stackElements);
         }
     );
 
@@ -78,6 +86,7 @@ public record StackChangedS2CPacket(
         SpellStack[] stacks = data.stacks();
         if (stacks == null) return;
         List<List<Entry>> snapshot = new ArrayList<>(stacks.length);
+        List<ResourceLocation> elementIds = new ArrayList<>(stacks.length);
         for (SpellStack s : stacks) {
             List<Entry> list = new ArrayList<>(s.size());
             for (SpellComponent c : s.components()) {
@@ -86,8 +95,10 @@ public record StackChangedS2CPacket(
                 list.add(new Entry(kind, c.id()));
             }
             snapshot.add(list);
+            com.github.interactivemagic.api.spells.Element el = s.resolveElement();
+            elementIds.add(el != null ? el.id() : null);
         }
-        PacketDistributor.sendToPlayer(player, new StackChangedS2CPacket(data.activeStackIndex(), snapshot, data.charges(), data.isCastingInProgress()));
+        PacketDistributor.sendToPlayer(player, new StackChangedS2CPacket(data.activeStackIndex(), snapshot, data.charges(), elementIds));
     }
 
     public static void handle(StackChangedS2CPacket packet, IPayloadContext ctx) {

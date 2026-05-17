@@ -3,11 +3,15 @@ package com.github.interactivemagic.client;
 import com.github.interactivemagic.InteractiveMagic;
 import com.github.interactivemagic.client.input.ModKeyMappings;
 import com.github.interactivemagic.client.overlays.SpellStackOverlay;
+import com.github.interactivemagic.client.particles.ArcaneElementParticle;
+import com.github.interactivemagic.client.particles.ArcaneTinyParticle;
 import com.github.interactivemagic.client.particles.EarthElementParticle;
 import com.github.interactivemagic.client.particles.FireElementParticle;
+import com.github.interactivemagic.client.particles.IceElementParticle;
 import com.github.interactivemagic.client.particles.WindElementParticle;
 import com.github.interactivemagic.client.renderers.entities.MagicArrowRenderer;
 import com.github.interactivemagic.client.renderers.entities.MagicBallistaRenderer;
+import com.github.interactivemagic.client.renderers.entities.MagicBeamRenderer;
 import com.github.interactivemagic.client.renderers.entities.MagicBindingRenderer;
 import com.github.interactivemagic.client.renderers.entities.MagicHammerRenderer;
 import com.github.interactivemagic.client.renderers.entities.MagicMeteorRenderer;
@@ -28,6 +32,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
+import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
@@ -36,6 +41,9 @@ import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.component.DyedItemColor;
+import com.github.interactivemagic.init.ModItems;
+import com.github.interactivemagic.items.armor.ApprenticeSetItem;
 
 @Mod(value = InteractiveMagic.MODID, dist = Dist.CLIENT)
 @EventBusSubscriber(modid = InteractiveMagic.MODID, value = Dist.CLIENT)
@@ -48,6 +56,7 @@ public class InteractiveMagicClient {
         modBus.addListener(this::registerKeyMappings);
         modBus.addListener(this::registerGuiLayers);
         modBus.addListener(this::registerParticles);
+        modBus.addListener(this::registerItemColors);
     }
 
     @SubscribeEvent
@@ -70,6 +79,7 @@ public class InteractiveMagicClient {
         event.registerEntityRenderer(ModEntities.MAGIC_HAMMER.get(), MagicHammerRenderer::new);
         event.registerEntityRenderer(ModEntities.MAGIC_BINDING.get(), MagicBindingRenderer::new);
         event.registerEntityRenderer(ModEntities.MAGIC_BALLISTA.get(), MagicBallistaRenderer::new);
+        event.registerEntityRenderer(ModEntities.MAGIC_BEAM.get(), MagicBeamRenderer::new);
         event.registerEntityRenderer(ModEntities.BASIC_CIRCLE.get(), BasicCircleRenderer::new);
     }
 
@@ -78,10 +88,22 @@ public class InteractiveMagicClient {
     }
 
     public void registerParticles(RegisterParticleProvidersEvent event) {
-      event.registerSpriteSet(ModParticles.ARCANE_ELEMENT.get(), EarthElementParticle.Provider::new);
+      event.registerSpriteSet(ModParticles.ARCANE_ELEMENT.get(), ArcaneElementParticle.Provider::new);
+      event.registerSpriteSet(ModParticles.ARCANE_TINY.get(), ArcaneTinyParticle.Provider::new);
         event.registerSpriteSet(ModParticles.FIRE_ELEMENT.get(), FireElementParticle.Provider::new);
       event.registerSpriteSet(ModParticles.WIND_ELEMENT.get(), WindElementParticle.Provider::new);
       event.registerSpriteSet(ModParticles.EARTH_ELEMENT.get(), EarthElementParticle.Provider::new);
+      event.registerSpriteSet(ModParticles.ICE_ELEMENT.get(), IceElementParticle.Provider::new);
+    }
+
+    public void registerItemColors(RegisterColorHandlersEvent.Item event) {
+        event.register(
+            (stack, layer) -> layer > 0 ? -1 : DyedItemColor.getOrDefault(stack, ApprenticeSetItem.DEFAULT_DYE_COLOR),
+            ModItems.APPRENTICE_SET_HELMET.get(),
+            ModItems.APPRENTICE_SET_CHESTPLATE.get(),
+            ModItems.APPRENTICE_SET_LEGGINGS.get(),
+            ModItems.APPRENTICE_SET_BOOTS.get()
+        );
     }
 
     public void registerGuiLayers(RegisterGuiLayersEvent event) {

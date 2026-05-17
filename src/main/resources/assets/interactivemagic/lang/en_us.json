@@ -33,6 +33,10 @@
   "spell_component.interactivemagic.four_casts": "Four Casts",
   "spell_component.interactivemagic.charges": "Charges",
   "magic.interactivemagic.element.arcane": "Arcane",
+  "magic.interactivemagic.element.fire": "Fire",
+  "magic.interactivemagic.element.earth": "Earth",
+  "magic.interactivemagic.element.ice": "Ice",
+  "magic.interactivemagic.element.air": "Air",
   "key.categories.interactivemagic": "Interactive Magic",
   "key.interactivemagic.switch_spell_stack": "Switch Spell Stack",
   "screen.interactivemagic.drawing_canvas": "Drawing Canvas",
@@ -48,5 +52,9 @@
   "gui.interactivemagic.adv_spells": "Adv. Spells",
   "gui.interactivemagic.beg_mods": "Beg. Mods",
   "gui.interactivemagic.int_mods": "Int. Mods",
-  "gui.interactivemagic.adv_mods": "Adv. Mods"
+  "gui.interactivemagic.adv_mods": "Adv. Mods",
+  "item.interactivemagic.apprentice_set_helmet": "Apprentice Hat",
+  "item.interactivemagic.apprentice_set_chestplate": "Apprentice Robe",
+  "item.interactivemagic.apprentice_set_leggings": "Apprentice Leggings",
+  "item.interactivemagic.apprentice_set_boots": "Apprentice Boots"
 }

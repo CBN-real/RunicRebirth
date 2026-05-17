@@ -33,7 +33,7 @@ public class MagicProjectileRenderer extends GeoEntityRenderer<MagicProjectileEn
   @Override
   public RenderType getRenderType(MagicProjectileEntity entity, ResourceLocation texture,
       @Nullable MultiBufferSource bufferSource, float partialTick) {
-    return ModRenderTypes.entityTranslucentNoDepth(texture);
+    return RenderType.entityTranslucentEmissive(texture);
   }
 
   @Override

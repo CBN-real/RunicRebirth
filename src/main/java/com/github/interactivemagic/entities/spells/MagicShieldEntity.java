@@ -6,7 +6,6 @@ import com.github.interactivemagic.api.spells.SpellParams;
 import com.github.interactivemagic.init.ModElements;
 import com.github.interactivemagic.init.ModEntities;
 import com.github.interactivemagic.init.ModParticles;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -18,38 +17,25 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import software.bernie.geckolib.animatable.GeoEntity;
-import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.animation.AnimatableManager;
-import software.bernie.geckolib.animation.AnimationController;
-import software.bernie.geckolib.animation.PlayState;
-import software.bernie.geckolib.animation.RawAnimation;
-import software.bernie.geckolib.util.GeckoLibUtil;
 
 import java.util.UUID;
 
-public class MagicShieldEntity extends Entity implements GeoEntity {
-
-    private static final RawAnimation IDLE = RawAnimation.begin().thenLoop("idle_animation");
-    private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
+public class MagicShieldEntity extends AbstractSpellEntity {
 
     private static final EntityDataAccessor<Float> DATA_SHIELD_HEALTH =
         SynchedEntityData.defineId(MagicShieldEntity.class, EntityDataSerializers.FLOAT);
-    private static final EntityDataAccessor<Float> DATA_SIZE =
-        SynchedEntityData.defineId(MagicShieldEntity.class, EntityDataSerializers.FLOAT);
-    private static final EntityDataAccessor<String> DATA_ELEMENT =
-        SynchedEntityData.defineId(MagicShieldEntity.class, EntityDataSerializers.STRING);
     private static final EntityDataAccessor<Integer> DATA_OWNER_ID =
         SynchedEntityData.defineId(MagicShieldEntity.class, EntityDataSerializers.INT);
 
     private UUID ownerUUID;
     private int maxDuration = 600;
-    private int age;
+
+
 
     public MagicShieldEntity(EntityType<? extends MagicShieldEntity> type, Level level) {
         super(type, level);
-        this.noPhysics = true;
-        this.setNoGravity(true);
+        this.chargeTicks = 0;
+        this.endTicks = 60;
     }
 
     public MagicShieldEntity(Level level, LivingEntity owner, SpellParams params,
@@ -57,18 +43,16 @@ public class MagicShieldEntity extends Entity implements GeoEntity {
         this(ModEntities.MAGIC_SHIELD.get(), level);
         this.ownerUUID = owner.getUUID();
         this.maxDuration = duration;
+        initFromParams(params);
         this.entityData.set(DATA_SHIELD_HEALTH, shieldHealth);
-        this.entityData.set(DATA_SIZE, params.size);
-        this.entityData.set(DATA_ELEMENT, params.element.id().toString());
         this.entityData.set(DATA_OWNER_ID, owner.getId());
         this.setPos(owner.getX(), owner.getY(), owner.getZ());
     }
 
     @Override
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
         builder.define(DATA_SHIELD_HEALTH, 20f);
-        builder.define(DATA_SIZE, 1f);
-        builder.define(DATA_ELEMENT, ModElements.ARCANE.getId().toString());
         builder.define(DATA_OWNER_ID, -1);
     }
 
@@ -81,15 +65,15 @@ public class MagicShieldEntity extends Entity implements GeoEntity {
     }
 
     public float getShieldSize() {
-        return this.entityData.get(DATA_SIZE);
-    }
-
-    public String getElementId() {
-        return this.entityData.get(DATA_ELEMENT);
+        return 1.0f;
     }
 
     public UUID getOwnerUUID() {
         return ownerUUID;
+    }
+
+    public int getOwnerId() {
+        return this.entityData.get(DATA_OWNER_ID);
     }
 
     public void absorbDamage(float amount) {
@@ -97,47 +81,47 @@ public class MagicShieldEntity extends Entity implements GeoEntity {
         setShieldHealth(health);
         if (health <= 0) {
             burstParticles();
-            this.discard();
+            beginEnding();
         }
     }
 
     @Override
-    public void tick() {
-        super.tick();
-        if (!this.level().isClientSide) {
-            if (++this.age > maxDuration) {
-                burstParticles();
-                this.discard();
-                return;
+    protected void onActiveTick() {
+        if (age > maxDuration) {
+            burstParticles();
+            beginEnding();
+            return;
+        }
+        if (ownerUUID == null) {
+            beginEnding();
+            return;
+        }
+        Entity owner = ((ServerLevel) this.level()).getEntity(ownerUUID);
+        if (owner == null || !owner.isAlive()) {
+            beginEnding();
+            return;
+        }
+        snapToOwner(owner);
+    }
+
+    @Override
+    protected void spawnActiveParticles() {
+        int ownerId = this.entityData.get(DATA_OWNER_ID);
+        if (ownerId != -1) {
+            Entity owner = this.level().getEntity(ownerId);
+            if (owner != null) {
+                snapToOwner(owner);
             }
-            if (ownerUUID == null) {
-                this.discard();
-                return;
-            }
-            Entity owner = ((ServerLevel) this.level()).getEntity(ownerUUID);
-            if (owner == null || !owner.isAlive()) {
-                this.discard();
-                return;
-            }
-            snapToOwner(owner);
-        } else {
-            int ownerId = this.entityData.get(DATA_OWNER_ID);
-            if (ownerId != -1) {
-                Entity owner = this.level().getEntity(ownerId);
-                if (owner != null) {
-                    snapToOwner(owner);
-                }
-            }
-            Vec3 pos = this.position();
-            float sz = getShieldSize();
-            for (int i = 0; i < 2; i++) {
-                double angle = this.level().random.nextDouble() * Math.PI * 2;
-                double dx = Math.cos(angle) * sz * 1.2;
-                double dz = Math.sin(angle) * sz * 1.2;
-                this.level().addParticle(ModParticles.FIRE_ELEMENT.get(),
-                    pos.x + dx, pos.y + 0.5 + this.level().random.nextDouble(), pos.z + dz,
-                    0.0, 0.02, 0.0);
-            }
+        }
+        Vec3 pos = this.position();
+        float sz = getShieldSize();
+        for (int i = 0; i < 2; i++) {
+            double angle = this.level().random.nextDouble() * Math.PI * 2;
+            double dx = Math.cos(angle) * sz * 1.2;
+            double dz = Math.sin(angle) * sz * 1.2;
+            this.level().addParticle(ModParticles.FIRE_ELEMENT.get(),
+                pos.x + dx, pos.y + 0.5 + this.level().random.nextDouble(), pos.z + dz,
+                0.0, 0.02, 0.0);
         }
     }
 
@@ -148,7 +132,8 @@ public class MagicShieldEntity extends Entity implements GeoEntity {
         this.zo = owner.zo;
     }
 
-    private void burstParticles() {
+    @Override
+    protected void burstParticles() {
         if (!(this.level() instanceof ServerLevel server)) return;
         Vec3 pos = this.position();
         Element elem = ElementRegistry.get(ResourceLocation.parse(getElementId()));
@@ -170,34 +155,5 @@ public class MagicShieldEntity extends Entity implements GeoEntity {
 
     @Override
     public void lerpTo(double x, double y, double z, float yRot, float xRot, int steps) {
-        // no-op: client-side snapToOwner handles positioning, server sync packets would cause jitter
-    }
-
-    @Override
-    public boolean isPickable() {
-        return false;
-    }
-
-    @Override
-    protected void readAdditionalSaveData(CompoundTag tag) {
-        // transient entity — does not persist
-    }
-
-    @Override
-    protected void addAdditionalSaveData(CompoundTag tag) {
-        // transient entity — does not persist
-    }
-
-    @Override
-    public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<>(this, "idle", 0, state -> {
-            state.setAnimation(IDLE);
-            return PlayState.CONTINUE;
-        }));
-    }
-
-    @Override
-    public AnimatableInstanceCache getAnimatableInstanceCache() {
-        return this.cache;
     }
 }

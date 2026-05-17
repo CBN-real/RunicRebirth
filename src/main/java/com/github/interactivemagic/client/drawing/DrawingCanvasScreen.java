@@ -3,6 +3,7 @@ package com.github.interactivemagic.client.drawing;
 import com.github.interactivemagic.InteractiveMagic;
 import com.github.interactivemagic.api.registry.ElementRegistry;
 import com.github.interactivemagic.api.spells.Element;
+import com.github.interactivemagic.client.ClientMagicData;
 import com.github.interactivemagic.client.input.ModKeyMappings;
 import com.github.interactivemagic.config.ClientConfig;
 import com.github.interactivemagic.magic.recognition.StrokePoint;
@@ -55,7 +56,7 @@ public class DrawingCanvasScreen extends Screen {
 
     private record ShapeRef(String shapeId, String iconName, boolean isModifier) {
         ResourceLocation iconPath() {
-            String suffix = isModifier ? "_icon_small" : "_icon";
+            String suffix = isModifier ? "_icon_small_outline" : "_icon_outline";
             return ResourceLocation.fromNamespaceAndPath(InteractiveMagic.MODID,
                 "textures/gui/shape_icons/" + iconName + suffix + ".png");
         }
@@ -102,7 +103,7 @@ public class DrawingCanvasScreen extends Screen {
 
     private final StrokeBuffer buffer = new StrokeBuffer();
     private boolean drawing;
-    private boolean sentTerminal;
+    private boolean terminalSent;
     private float textureAngle;
 
     private int guiLeft, guiTop, totalW, totalH;
@@ -169,6 +170,8 @@ public class DrawingCanvasScreen extends Screen {
         refPanelX = canvasX + canvasSize + CANVAS_REF_GAP;
         refPanelY = canvasY;
         refPanelH = canvasSize;
+
+        ClientMagicData.setOnStackChanged(this::onStackUpdated);
     }
 
     private Element selectedElement() {
@@ -316,7 +319,7 @@ public class DrawingCanvasScreen extends Screen {
                 return true;
             }
         } else if (button == GLFW.GLFW_MOUSE_BUTTON_RIGHT) {
-            submitAndClose();
+            submitDrawing();
             return true;
         }
         return super.mouseClicked(mx, my, button);
@@ -401,32 +404,42 @@ public class DrawingCanvasScreen extends Screen {
 
     // ---- Submit / Cancel ----
 
-    private void submitAndClose() {
-        if (sentTerminal) return;
-        sentTerminal = true;
-        if (buffer.isEmpty() || buffer.totalPoints() < 4) {
-            PacketDistributor.sendToServer(new CancelDrawC2SPacket());
-        } else {
-            Element el = selectedElement();
-            ResourceLocation elemId = el != null ? el.id()
-                : ResourceLocation.fromNamespaceAndPath(InteractiveMagic.MODID, "arcane");
-            PacketDistributor.sendToServer(new DrawSubmitC2SPacket(buffer.strokes(), elemId));
+    private void submitDrawing() {
+        if (drawing) {
+            buffer.endStroke();
+            drawing = false;
         }
-        if (Minecraft.getInstance().player != null) this.onClose();
+        if (buffer.isEmpty() || buffer.totalPoints() < 4) {
+            buffer.clear();
+            return;
+        }
+        Element el = selectedElement();
+        ResourceLocation elemId = el != null ? el.id()
+            : ResourceLocation.fromNamespaceAndPath(InteractiveMagic.MODID, "arcane");
+        PacketDistributor.sendToServer(new DrawSubmitC2SPacket(buffer.snapshot(), elemId));
+        buffer.clear();
+    }
+
+    private void onStackUpdated() {
+        if (ClientMagicData.isActiveStackValid()) {
+            terminalSent = true;
+            if (Minecraft.getInstance().player != null) this.onClose();
+        }
     }
 
     private void cancelAndClose() {
-        if (sentTerminal) return;
-        sentTerminal = true;
+        if (terminalSent) return;
+        terminalSent = true;
         PacketDistributor.sendToServer(new CancelDrawC2SPacket());
         this.onClose();
     }
 
     @Override
     public void onClose() {
-        if (!sentTerminal) {
+        ClientMagicData.clearOnStackChanged();
+        if (!terminalSent) {
+            terminalSent = true;
             PacketDistributor.sendToServer(new CancelDrawC2SPacket());
-            sentTerminal = true;
         }
         super.onClose();
     }

@@ -94,4 +94,16 @@ public final class Utils {
         double s = ticks / 20.0;
         return String.format("%." + decimals + "f", s);
     }
+
+    public static double randScaled(double scale) {
+      return (2.0D * Math.random() - 1.0D) * scale;
+    }
+
+    public static Vec3 randVec3(double scale) {
+      return new Vec3(
+          randScaled(scale),
+          randScaled(scale),
+          randScaled(scale)
+      );
+    }
 }

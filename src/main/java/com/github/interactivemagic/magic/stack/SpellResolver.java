@@ -4,12 +4,14 @@ import com.github.interactivemagic.api.events.SpellPostCastEvent;
 import com.github.interactivemagic.api.events.SpellPreCastEvent;
 import com.github.interactivemagic.api.item.ISpellEmpowerment;
 import com.github.interactivemagic.api.spells.CastResult;
+import com.github.interactivemagic.api.spells.Element;
 import com.github.interactivemagic.api.spells.SpellCastContext;
 import com.github.interactivemagic.api.spells.SpellParams;
 import com.github.interactivemagic.api.spells.SpellStack;
 import com.github.interactivemagic.api.spells.SpellType;
 import com.github.interactivemagic.capabilities.magic.MagicData;
 import com.github.interactivemagic.config.ServerConfig;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.common.NeoForge;
 import top.theillusivec4.curios.api.CuriosApi;
@@ -32,12 +34,14 @@ public final class SpellResolver {
         SpellType type = stack.resolveType();
         if (data.isOnCooldown(type.id())) return null;
 
+        Element resolvedElement = stack.resolveElement() != null ? stack.resolveElement() : type.defaultElement();
         SpellParams params = new SpellParams(
             type.baseDamage(), type.baseSize(), type.baseSpeed(),
-            type.baseDuration(), 0, type.defaultElement(), type.damageCategory());
+            type.baseDuration(), type.castingDelayTicks(),0, resolvedElement, type.damageCategory());
 
         stack.compose(params);
         applyCurioEmpowerments(ctx, params);
+        applyArmorEmpowerments(ctx, params);
 
         SpellPreCastEvent preEvent = new SpellPreCastEvent(ctx, type, params);
         if (NeoForge.EVENT_BUS.post(preEvent).isCanceled()) return null;
@@ -62,6 +66,16 @@ public final class SpellResolver {
         PreparedCast prepared = prepare(ctx, stack);
         if (prepared == null) return CastResult.FAILED;
         return executeCast(ctx, prepared.type(), prepared.params());
+    }
+
+    private static void applyArmorEmpowerments(SpellCastContext ctx, SpellParams params) {
+        for (EquipmentSlot slot : new EquipmentSlot[]{
+                EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET}) {
+            ItemStack armorStack = ctx.caster().getItemBySlot(slot);
+            if (!armorStack.isEmpty() && armorStack.getItem() instanceof ISpellEmpowerment emp) {
+                emp.contribute(armorStack, ctx).forEach(m -> m.apply(params));
+            }
+        }
     }
 
     private static void applyCurioEmpowerments(SpellCastContext ctx, SpellParams params) {

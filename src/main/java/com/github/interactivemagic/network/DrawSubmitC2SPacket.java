@@ -2,7 +2,9 @@ package com.github.interactivemagic.network;
 
 import com.github.interactivemagic.InteractiveMagic;
 import com.github.interactivemagic.api.events.ShapeRecognizedEvent;
+import com.github.interactivemagic.api.registry.ElementRegistry;
 import com.github.interactivemagic.api.registry.ShapeRegistry;
+import com.github.interactivemagic.api.spells.Element;
 import com.github.interactivemagic.api.spells.SpellComponent;
 import com.github.interactivemagic.api.spells.SpellStack;
 import com.github.interactivemagic.capabilities.magic.MagicData;
@@ -113,6 +115,8 @@ public record DrawSubmitC2SPacket(List<List<StrokePoint>> strokes, ResourceLocat
             }
 
             activeStack.append(component);
+            Element element = ElementRegistry.get(packet.elementId());
+            if (element != null) activeStack.setElement(element);
             if (Log.DRAW_DEBUG) InteractiveMagic.LOGGER.info(
                 String.format("[InteractiveMagic] Recognized shape '%s' (score=%.3f) → appended %s to stack[%d], %d components",
                     id, result.score(), component.id(), data.activeStackIndex(), data.activeStack().components().size()));

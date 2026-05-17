@@ -9,6 +9,7 @@ import com.github.interactivemagic.api.spells.SpellParams;
 import com.github.interactivemagic.api.spells.SpellType;
 import com.github.interactivemagic.damage.DamageSources;
 import com.github.interactivemagic.damage.SpellDamageSource;
+import com.github.interactivemagic.entities.spells.MagicBeamEntity;
 import com.github.interactivemagic.init.ModElements;
 import com.github.interactivemagic.util.RaycastBuilder;
 import net.minecraft.resources.ResourceLocation;
@@ -33,22 +34,31 @@ public class MagicBeam extends SpellType {
     @Override
     public CastResult onCast(SpellCastContext ctx, SpellParams params) {
         double range = 12.0 * params.size;
-        Vec3 start = ctx.aimStart();
-        Vec3 end = start.add(ctx.aimDirection().normalize().scale(range));
+        Vec3 dir = ctx.aimDirection().normalize();
+        Vec3 start = ctx.aimStart().add(dir.scale(0.5));
+        Vec3 end = start.add(dir.scale(range));
         HitResult hit = RaycastBuilder.begin(ctx.level(), ctx.caster())
             .start(start).end(end)
             .checkForBlocks(true)
             .inflate(0.3f)
             .cast();
-        if (hit instanceof EntityHitResult ehr && ehr.getEntity() instanceof LivingEntity target) {
-            SpellDamageSource src = SpellDamageSource.source(ctx.caster(), params.damageCategory, params.element);
-            DamageSources.applyDamage(target, params.damage, src);
+
+        float distance;
+        if (hit.getType() == HitResult.Type.ENTITY && hit instanceof EntityHitResult ehr) {
+            if (ehr.getEntity() instanceof LivingEntity target) {
+                SpellDamageSource src = SpellDamageSource.source(ctx.caster(), params.damageCategory, params.element);
+                DamageSources.applyDamage(target, params.damage, src);
+            }
+            distance = (float) start.distanceTo(hit.getLocation());
+        } else if (hit.getType() == HitResult.Type.BLOCK) {
+            distance = (float) start.distanceTo(hit.getLocation());
+        } else {
+            distance = (float) range;
         }
-        for (int i = 0; i < 20 * params.size; i++) {
-            double t = i / (20.0 * params.size);
-            Vec3 p = start.lerp(end, t);
-            ctx.level().sendParticles(params.element.particle(), p.x, p.y, p.z, 1, 0, 0, 0, 0);
-        }
+
+        MagicBeamEntity beam = new MagicBeamEntity(ctx.level(), ctx.caster(), start, distance, dir, params);
+        ctx.level().addFreshEntity(beam);
+
         return CastResult.SUCCESS;
     }
 }

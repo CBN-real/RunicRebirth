@@ -1,112 +1,74 @@
 package com.github.interactivemagic.entities.spells;
 
-import com.github.interactivemagic.api.registry.ElementRegistry;
-import com.github.interactivemagic.api.spells.Element;
 import com.github.interactivemagic.api.spells.MagicDamageType;
 import com.github.interactivemagic.api.spells.SpellParams;
 import com.github.interactivemagic.damage.DamageSources;
 import com.github.interactivemagic.damage.SpellDamageSource;
-import com.github.interactivemagic.init.ModElements;
 import com.github.interactivemagic.init.ModEntities;
 import com.github.interactivemagic.init.ModParticles;
-import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.network.syncher.EntityDataSerializers;
-import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerLevel;
+import com.github.interactivemagic.util.Utils;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.projectile.ThrowableProjectile;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
-import software.bernie.geckolib.animatable.GeoEntity;
-import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.animation.AnimatableManager;
-import software.bernie.geckolib.animation.AnimationController;
-import software.bernie.geckolib.animation.PlayState;
-import software.bernie.geckolib.animation.RawAnimation;
-import software.bernie.geckolib.util.GeckoLibUtil;
 
-public class MagicArrowEntity extends ThrowableProjectile implements GeoEntity {
-
-    private static final RawAnimation IDLE = RawAnimation.begin().thenLoop("idle_animation");
-    private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
+public class MagicArrowEntity extends AbstractProjectileSpellEntity {
 
     private static final int MAX_LIFETIME_TICKS = 200;
-
-    private static final EntityDataAccessor<String> DATA_ELEMENT =
-        SynchedEntityData.defineId(MagicArrowEntity.class, EntityDataSerializers.STRING);
-    private static final EntityDataAccessor<Float> DATA_SIZE =
-        SynchedEntityData.defineId(MagicArrowEntity.class, EntityDataSerializers.FLOAT);
-
-    private int age;
-    private float damage = 1f;
-    private float size = 1f;
-    private Element element;
-    private MagicDamageType damageCategory = MagicDamageType.SHARP;
+    private Vec3 storedDirection;
+    private float storedSpeed;
 
     public MagicArrowEntity(EntityType<? extends MagicArrowEntity> type, Level level) {
         super(type, level);
+        this.damageCategory = MagicDamageType.SHARP;
     }
 
-    public MagicArrowEntity(Level level, LivingEntity owner, SpellParams params) {
+    public MagicArrowEntity(Level level, LivingEntity owner, SpellParams params, Vec3 direction,
+        float xRot, float yRot) {
         super(ModEntities.MAGIC_ARROW.get(), owner, level);
-        this.damage = params.damage;
-        this.size = params.size;
-        this.element = params.element;
-        this.damageCategory = params.damageCategory;
-        this.entityData.set(DATA_ELEMENT, params.element.id().toString());
-        this.entityData.set(DATA_SIZE, params.size);
+        initFromParams(params);
+        this.storedDirection = direction;
+        this.storedSpeed = params.speed;
+        this.shoot(storedDirection.x, storedDirection.y, storedDirection.z, 0.001F, 0.0F);
     }
+
 
     @Override
-    protected double getDefaultGravity() {
-        return 0.0;
-    }
-
-    @Override
-    protected void defineSynchedData(SynchedEntityData.Builder builder) {
-        builder.define(DATA_ELEMENT, ModElements.ARCANE.getId().toString());
-        builder.define(DATA_SIZE, 1f);
-    }
-
-    public String getElementId() {
-        return this.entityData.get(DATA_ELEMENT);
-    }
-
-    public float getProjectileSize() {
-        return this.entityData.get(DATA_SIZE);
-    }
-
-    private Element element() {
-        if (this.level().isClientSide) {
-            Element resolved = ElementRegistry.get(ResourceLocation.parse(this.entityData.get(DATA_ELEMENT)));
-            return resolved != null ? resolved : ModElements.ARCANE.get();
+    protected void onActiveTick() {
+        if (age > MAX_LIFETIME_TICKS) {
+            beginEnding();
         }
-        return element != null ? element : ModElements.ARCANE.get();
     }
 
     @Override
-    public void tick() {
-        super.tick();
-        if (!this.level().isClientSide) {
-            if (++this.age > MAX_LIFETIME_TICKS) {
-                this.discard();
-                return;
-            }
-        } else {
-            Vec3 pos = this.position();
-            this.level().addParticle(ModParticles.FIRE_ELEMENT.get(), pos.x, pos.y - 0.2, pos.z, 0.0, 0.0, 0.0);
+    protected void onActivated() {
+      if (storedDirection != null) {
+        this.shoot(storedDirection.x, storedDirection.y, storedDirection.z, this.storedSpeed, 0.0F);
+      }
+    }
+
+  @Override
+    protected void spawnActiveParticles() {
+        var vec = getDeltaMovement();
+        var length = vec.length();
+        int count = (int) Math.min(20, Math.round(length) * 2) + 1;
+        float f = (float) length / count;
+        for (int i = 0; i < count; i++) {
+          Vec3 rand = Utils.randVec3(0.025);
+          Vec3 particleVec = vec.scale(f * i);
+          this.level().addParticle(element().particle(), this.getX() + rand.x + particleVec.x,
+              this.getY() + rand.y + particleVec.y,
+              this.getZ() + rand.z + particleVec.z, rand.x, rand.y, rand.z);
         }
     }
 
     @Override
     protected void onHitEntity(EntityHitResult result) {
         super.onHitEntity(result);
-        if (this.level().isClientSide) return;
+        if (this.level().isClientSide || getPhase() != SpellPhase.ACTIVE) return;
         Entity target = result.getEntity();
         Entity owner = this.getOwner();
         if (owner instanceof LivingEntity living) {
@@ -116,34 +78,14 @@ public class MagicArrowEntity extends ThrowableProjectile implements GeoEntity {
             target.hurt(this.damageSources().magic(), damage);
         }
         burstParticles();
-        this.discard();
+        beginEnding();
     }
 
     @Override
     protected void onHitBlock(BlockHitResult result) {
         super.onHitBlock(result);
-        if (this.level().isClientSide) return;
+        if (this.level().isClientSide || getPhase() != SpellPhase.ACTIVE) return;
         burstParticles();
-        this.discard();
-    }
-
-    private void burstParticles() {
-        if (!(this.level() instanceof ServerLevel server)) return;
-        Vec3 pos = this.position();
-        int count = (int) (18 * size);
-        server.sendParticles(element().particle(), pos.x, pos.y, pos.z, count, 0.2 * size, 0.2 * size, 0.2 * size, 0.05);
-    }
-
-    @Override
-    public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<>(this, "idle", 0, state -> {
-            state.setAnimation(IDLE);
-            return PlayState.CONTINUE;
-        }));
-    }
-
-    @Override
-    public AnimatableInstanceCache getAnimatableInstanceCache() {
-        return this.cache;
+        beginEnding();
     }
 }

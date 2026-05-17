@@ -11,7 +11,6 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
-import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.Nullable;
@@ -29,7 +28,16 @@ public class MagicArrowRenderer extends GeoEntityRenderer<MagicArrowEntity> {
     @Override
     public RenderType getRenderType(MagicArrowEntity entity, ResourceLocation texture,
         @Nullable MultiBufferSource bufferSource, float partialTick) {
-        return ModRenderTypes.entityTranslucentNoDepth(texture);
+        return RenderType.entityTranslucentEmissive(texture);
+    }
+
+    @Override
+    protected void applyRotations(MagicArrowEntity entity, PoseStack poseStack,
+        float ageInTicks, float rotationYaw, float partialTick, float nativeScale) {
+        float yRot = Mth.rotLerp(partialTick, entity.yRotO, entity.getYRot());
+        float xRot = Mth.rotLerp(partialTick, entity.xRotO, entity.getXRot());
+        poseStack.mulPose(Axis.YP.rotationDegrees(yRot));
+        poseStack.mulPose(Axis.XP.rotationDegrees(180-xRot));
     }
 
     @Override
@@ -37,14 +45,10 @@ public class MagicArrowRenderer extends GeoEntityRenderer<MagicArrowEntity> {
         @Nullable MultiBufferSource bufferSource, @Nullable VertexConsumer buffer,
         boolean isReRender, float partialTick, int packedLight, int packedOverlay,
         int colour) {
-        Vec3 motion = entity.getDeltaMovement();
-        if (motion.lengthSqr() > 0.001) {
-            float xRot = (float) (Mth.atan2(motion.y, motion.horizontalDistance()) * Mth.RAD_TO_DEG);
-            poseStack.mulPose(Axis.XP.rotationDegrees(xRot));
-        }
         float scale = entity.getProjectileSize();
         poseStack.scale(scale, scale, scale);
         super.preRender(poseStack, entity, model, bufferSource, buffer, isReRender,
             partialTick, packedLight, packedOverlay, colour);
     }
+
 }

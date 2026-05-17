@@ -52,6 +52,12 @@ public class StrokeBuffer {
 
     public List<List<StrokePoint>> strokes() { return strokes; }
 
+    public List<List<StrokePoint>> snapshot() {
+        List<List<StrokePoint>> copy = new ArrayList<>(strokes.size());
+        for (List<StrokePoint> s : strokes) copy.add(List.copyOf(s));
+        return copy;
+    }
+
     public void clear() {
         strokes.clear();
         current = null;

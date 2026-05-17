@@ -10,5 +10,7 @@ public record SpellCastContext(
     ServerPlayer caster,
     ItemStack item,
     Vec3 aimStart,
-    Vec3 aimDirection
+    Vec3 aimDirection,
+    float xRot,
+    float yRot
 ) {}

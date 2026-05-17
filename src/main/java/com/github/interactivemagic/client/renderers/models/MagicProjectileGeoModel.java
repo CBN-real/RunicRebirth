@@ -10,7 +10,7 @@ public class MagicProjectileGeoModel extends GeoModel<MagicProjectileEntity> {
     private static final ResourceLocation MODEL =
         ResourceLocation.fromNamespaceAndPath(InteractiveMagic.MODID, "geo/spell/magic_projectile.geo.json");
     private static final ResourceLocation TEXTURE =
-        ResourceLocation.fromNamespaceAndPath(InteractiveMagic.MODID, "textures/spell_boundary/arcane_boundary_texture.png");
+        ResourceLocation.fromNamespaceAndPath(InteractiveMagic.MODID, "textures/entity/magic_projectile/arcane_magic_projectile_texture.png");
     private static final ResourceLocation ANIMATIONS =
         ResourceLocation.fromNamespaceAndPath(InteractiveMagic.MODID, "animations/spell/magic_projectile.animation.json");
 
@@ -27,7 +27,7 @@ public class MagicProjectileGeoModel extends GeoModel<MagicProjectileEntity> {
             if (parsed != null) {
                 return ResourceLocation.fromNamespaceAndPath(
                     InteractiveMagic.MODID,
-                    "textures/spell_boundary/" + parsed.getPath() + "_boundary_texture.png"
+                    "textures/entity/magic_projectile/" + parsed.getPath() + "_magic_projectile_texture.png"
                 );
             }
         }

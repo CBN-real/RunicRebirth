@@ -1,5 +1,6 @@
 package com.github.interactivemagic.client.renderers.entities;
 
+import com.github.interactivemagic.client.renderers.ModRenderTypes;
 import com.github.interactivemagic.client.renderers.models.BasicCircleGeoModel;
 import com.github.interactivemagic.entities.spells.BasicCircleEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -27,7 +28,7 @@ public class BasicCircleRenderer extends GeoEntityRenderer<BasicCircleEntity> {
     @Override
     public RenderType getRenderType(BasicCircleEntity entity, ResourceLocation texture,
         @Nullable MultiBufferSource bufferSource, float partialTick) {
-        return RenderType.entityTranslucent(texture);
+        return RenderType.entityTranslucentEmissive(texture);
     }
 
     @Override
@@ -36,6 +37,6 @@ public class BasicCircleRenderer extends GeoEntityRenderer<BasicCircleEntity> {
         float yRot = Mth.rotLerp(partialTick, entity.yRotO, entity.getYRot());
         float xRot = Mth.rotLerp(partialTick, entity.xRotO, entity.getXRot());
         poseStack.mulPose(Axis.YP.rotationDegrees(180f - yRot));
-        poseStack.mulPose(Axis.XP.rotationDegrees(xRot));
+        poseStack.mulPose(Axis.XP.rotationDegrees(-xRot));
     }
 }

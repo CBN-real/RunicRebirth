@@ -24,5 +24,11 @@ public final class ModParticles {
   public static final Supplier<SimpleParticleType> ARCANE_ELEMENT =
       PARTICLES.register("arcane_element", () -> new SimpleParticleType(false));
 
+  public static final Supplier<SimpleParticleType> ICE_ELEMENT =
+      PARTICLES.register("ice_element", () -> new SimpleParticleType(false));
+
+  public static final Supplier<SimpleParticleType> ARCANE_TINY =
+      PARTICLES.register("arcane_tiny", () -> new SimpleParticleType(false));
+
     private ModParticles() {}
 }

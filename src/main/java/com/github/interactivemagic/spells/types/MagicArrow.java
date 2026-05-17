@@ -32,10 +32,13 @@ public class MagicArrow extends SpellType {
     @Override
     public CastResult onCast(SpellCastContext ctx, SpellParams params) {
         Vec3 dir = ctx.aimDirection().normalize();
-        MagicArrowEntity arrow = new MagicArrowEntity(ctx.level(), ctx.caster(), params);
+        MagicArrowEntity arrow = new MagicArrowEntity(ctx.level(), ctx.caster(), params, dir,
+            ctx.xRot(), ctx.yRot());
         Vec3 spawn = ctx.aimStart().add(dir.scale(0.5));
         arrow.setPos(spawn.x, spawn.y, spawn.z);
-        arrow.shoot(dir.x, dir.y, dir.z, params.speed, 0.0F);
+        arrow.setYRot(ctx.yRot());
+        arrow.setXRot(ctx.xRot());
+        //arrow.shoot(dir.x, dir.y, dir.z, params.speed, 0.0F);
         ctx.level().addFreshEntity(arrow);
         return CastResult.SUCCESS;
     }

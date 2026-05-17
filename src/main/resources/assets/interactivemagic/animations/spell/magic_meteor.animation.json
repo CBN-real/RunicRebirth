@@ -1,32 +1,75 @@
 {
 	"format_version": "1.8.0",
 	"animations": {
-		"idle_animation": {
+		"hold_spell": {
 			"loop": true,
 			"animation_length": 1,
 			"bones": {
-				"spell_boundary": {
+				"inner_cubes": {
 					"position": {
-						"vector": ["-math.sin(query.anim_time * 720) * 0.06", "math.sin(query.anim_time * 360) * 0.4", 0]
+						"vector": [0, -3.3, 0.5],
+						"easing": "easeInOutSine"
 					},
 					"scale": {
 						"vector": [
-							"math.sin(query.anim_time * 360) * 0.04 + 1.0",
-							"math.sin(query.anim_time * 360) * 0.04 + 1.0",
-							"math.sin(query.anim_time * 360) * 0.04 + 1.0"
+							"2.5 + math.sin(query.anim_time * 720) * 0.1",
+							"2.5 + math.sin(query.anim_time * 720) * 0.1",
+							"2.5 + math.sin(query.anim_time * 720) * 0.1"
 						]
 					}
 				},
-				"inner_spell": {
-					"rotation": {
-						"vector": [-3.8717, -57.1151, 4.2662]
-					},
+				"inner_inner_cubes": {
 					"scale": {
 						"vector": [
-							"math.sin(query.anim_time * 360 + 90) * 0.03 + 1.0",
-							"math.sin(query.anim_time * 360 + 90) * 0.03 + 1.0",
-							"math.sin(query.anim_time * 360 + 90) * 0.03 + 1.0"
-						]
+							"math.sin(query.anim_time * 720) * 0.15 + 1.5",
+							"math.sin(query.anim_time * 720) * 0.15 + 1.5",
+							"math.sin(query.anim_time * 720) * 0.15 + 1.5"
+						],
+						"easing": "easeOutSine"
+					}
+				},
+				"rot_x": {
+					"rotation": {
+						"vector": ["-query.anim_time * 600", 0, "query.anim_time * 120"],
+						"easing": "linear"
+					}
+				},
+				"rot_x2": {
+					"scale": {
+						"vector": [1.9, 1.9, 1.9],
+						"easing": "linear"
+					}
+				},
+				"rot_y": {
+					"rotation": {
+						"vector": [0, "-query.anim_time * 600", "query.anim_time * 60"],
+						"easing": "linear"
+					}
+				},
+				"rot_y2": {
+					"scale": {
+						"vector": [1.9, 1.9, 1.9],
+						"easing": "linear"
+					}
+				},
+				"rot_x1": {
+					"rotation": {
+						"vector": ["-query.anim_time * -750", 0, "query.anim_time * 90"]
+					}
+				},
+				"rot_y1": {
+					"rotation": {
+						"vector": [0, "-query.anim_time * -450", "query.anim_time * 90"]
+					}
+				},
+				"rot_x3": {
+					"rotation": {
+						"vector": ["-query.anim_time * -450", 0, "query.anim_time * -90"]
+					}
+				},
+				"rot_y3": {
+					"rotation": {
+						"vector": [0, "-query.anim_time * -450", "query.anim_time * -90"]
 					}
 				}
 			}

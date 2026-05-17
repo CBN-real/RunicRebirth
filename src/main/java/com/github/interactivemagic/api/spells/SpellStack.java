@@ -7,6 +7,7 @@ import java.util.List;
 public class SpellStack {
 
     private final List<SpellComponent> components = new ArrayList<>();
+    private Element element;
 
     public List<SpellComponent> components() {
         return Collections.unmodifiableList(components);
@@ -53,6 +54,10 @@ public class SpellStack {
         }
         return null;
     }
+
+    public Element resolveElement() { return element; }
+
+    public void setElement(Element element) { this.element = element; }
 
     public void compose(SpellParams params) {
         for (SpellComponent c : components) {

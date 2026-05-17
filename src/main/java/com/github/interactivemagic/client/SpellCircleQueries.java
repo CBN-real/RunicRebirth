@@ -1,6 +1,6 @@
 package com.github.interactivemagic.client;
 
-import com.github.interactivemagic.entities.spells.BasicCircleEntity;
+import com.github.interactivemagic.entities.spells.SpellCircleEntity;
 import software.bernie.geckolib.loading.math.MolangQueries;
 
 public final class SpellCircleQueries {
@@ -21,11 +21,11 @@ public final class SpellCircleQueries {
         registerTypeQuery("query.is_ballista", "magic_ballista");
 
         MolangQueries.<Object>setActorVariable("query.is_plus", actor -> {
-            if (!(actor.animatable() instanceof BasicCircleEntity circle)) return 0;
+            if (!(actor.animatable() instanceof SpellCircleEntity circle)) return 0;
             if (circle.hasModifier("size_plus_four")) return 3.0;
             if (circle.hasModifier("size_plus_two")) return 2.0;
             if (circle.hasModifier("size_plus")) return 1.5;
-            return 0;
+            return 1.0;
         });
 
         registerModifierQuery("query.is_additive_size", "additive_size");
@@ -34,7 +34,7 @@ public final class SpellCircleQueries {
         registerModifierQuery("query.is_charges", "charges");
 
         MolangQueries.<Object>setActorVariable("query.is_multicast", actor -> {
-            if (!(actor.animatable() instanceof BasicCircleEntity circle)) return 0;
+            if (!(actor.animatable() instanceof SpellCircleEntity circle)) return 0;
             if (circle.hasModifier("four_casts")) return 4.0;
             if (circle.hasModifier("two_casts")) return 2.0;
             return 0;
@@ -43,13 +43,13 @@ public final class SpellCircleQueries {
 
     private static void registerTypeQuery(String queryName, String typeId) {
         MolangQueries.<Object>setActorVariable(queryName, actor ->
-            actor.animatable() instanceof BasicCircleEntity circle
+            actor.animatable() instanceof SpellCircleEntity circle
                 && circle.getSpellTypeId().equals(typeId) ? 1 : 0);
     }
 
     private static void registerModifierQuery(String queryName, String modifierId) {
         MolangQueries.<Object>setActorVariable(queryName, actor ->
-            actor.animatable() instanceof BasicCircleEntity circle
+            actor.animatable() instanceof SpellCircleEntity circle
                 && circle.hasModifier(modifierId) ? 1 : 0);
     }
 }

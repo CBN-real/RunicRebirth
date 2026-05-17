@@ -23,7 +23,7 @@ public class MagicProjectile extends SpellType {
     @Override public int cooldownTicks() { return 40; }
     @Override public float baseDamage() { return 5f; }
     @Override public float baseSize() { return 1f; }
-    @Override public float baseSpeed() { return 0.01f; }
+    @Override public float baseSpeed() { return 0.75f; }
 
     @Override public String iconName() { return "line"; }
     @Override public Element defaultElement() { return ModElements.ARCANE.get(); }
@@ -32,10 +32,10 @@ public class MagicProjectile extends SpellType {
     @Override
     public CastResult onCast(SpellCastContext ctx, SpellParams params) {
         Vec3 dir = ctx.aimDirection().normalize();
-        MagicProjectileEntity bolt = new MagicProjectileEntity(ctx.level(), ctx.caster(), params);
+        MagicProjectileEntity bolt = new MagicProjectileEntity(ctx.level(), ctx.caster(), params, dir);
         Vec3 spawn = ctx.aimStart().add(dir.scale(0.5));
         bolt.setPos(spawn.x, spawn.y, spawn.z);
-        bolt.shoot(dir.x, dir.y, dir.z, params.speed, 0.0F);
+        //bolt.shoot(dir.x, dir.y, dir.z, params.speed, 0.0F);
         ctx.level().addFreshEntity(bolt);
         return CastResult.SUCCESS;
     }

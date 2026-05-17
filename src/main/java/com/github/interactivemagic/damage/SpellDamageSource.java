@@ -72,6 +72,6 @@ public class SpellDamageSource extends DamageSource implements ISpellDamageSourc
 
     @Override
     public boolean hasPostHitEffects() {
-        return lifesteal > 0 || fireTime > 0 || freezeTicks > 0;
+        return lifesteal > 0 || fireTime > 0 || freezeTicks > 0 || element != null;
     }
 }

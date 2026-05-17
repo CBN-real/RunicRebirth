@@ -27,7 +27,6 @@ public final class SpellWriterClientEvents {
         if (event.getEntity().isShiftKeyDown()) return;
         if (ClientMagicData.isActiveStackValid()) return;
         if (ClientMagicData.hasCharges()) return;
-        if (ClientMagicData.isCastingInProgress()) return;
 
         Minecraft mc = Minecraft.getInstance();
         if (mc.screen != null) return;

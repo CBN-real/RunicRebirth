@@ -33,8 +33,6 @@ public class MagicData {
     private int charges;
     private ResourceLocation chargedSpellId;
     private SpellParams chargedParams;
-    private boolean castingInProgress;
-
     public MagicData() {
         this.cooldowns = new HashMap<>();
         this.stacks = null;
@@ -104,10 +102,6 @@ public class MagicData {
     public void setActiveStackIndex(int i) {
         if (stacks != null && i >= 0 && i < stacks.length) activeStackIndex = i;
     }
-
-    // Casting state
-    public boolean isCastingInProgress() { return castingInProgress; }
-    public void setCastingInProgress(boolean v) { this.castingInProgress = v; }
 
     // Charges
     public int charges() { return charges; }

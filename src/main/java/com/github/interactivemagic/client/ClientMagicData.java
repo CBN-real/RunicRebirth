@@ -8,6 +8,7 @@ import com.github.interactivemagic.util.Log;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import net.minecraft.resources.ResourceLocation;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 
@@ -21,12 +22,15 @@ public final class ClientMagicData {
     private static final int CAST_ANIM_TICKS = 20;
 
     private static List<List<SpellComponent>> stacks = Collections.emptyList();
+    private static List<ResourceLocation> stackElements = Collections.emptyList();
     private static int activeIndex = 0;
     private static int castAnimTicksRemaining = 0;
     private static int charges = 0;
-    private static boolean castingInProgress = false;
-
+    private static Runnable onStackChanged;
     private ClientMagicData() {}
+
+    public static void setOnStackChanged(Runnable listener) { onStackChanged = listener; }
+    public static void clearOnStackChanged() { onStackChanged = null; }
 
     public static void apply(StackChangedS2CPacket packet) {
         // Detect "cast" transition: previous active stack had a SpellType; new active stack doesn't.
@@ -55,9 +59,9 @@ public final class ClientMagicData {
         }
 
         stacks = newStacks;
+        stackElements = packet.stackElements() != null ? packet.stackElements() : Collections.emptyList();
         activeIndex = newActive;
         charges = packet.charges();
-        castingInProgress = packet.castingInProgress();
 
         if (Log.STACK_DEBUG) {
             StringBuilder sb = new StringBuilder();
@@ -68,6 +72,8 @@ public final class ClientMagicData {
             }
             InteractiveMagic.LOGGER.info("[InteractiveMagic] ClientMagicData synced: active={} | {}", activeIndex, sb);
         }
+
+        if (onStackChanged != null) onStackChanged.run();
     }
 
     private static List<SpellComponent> activeStackFor(List<List<SpellComponent>> src, int idx) {
@@ -100,9 +106,13 @@ public final class ClientMagicData {
         return isStackValid(activeStack());
     }
 
+    public static ResourceLocation elementForStack(int idx) {
+        if (idx < 0 || idx >= stackElements.size()) return null;
+        return stackElements.get(idx);
+    }
+
     public static int charges() { return charges; }
 
     public static boolean hasCharges() { return charges > 0; }
 
-    public static boolean isCastingInProgress() { return castingInProgress; }
 }

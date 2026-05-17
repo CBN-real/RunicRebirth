@@ -9,6 +9,7 @@ public class SpellParams {
     public float size;
     public float speed;
     public int duration;
+    public int castingDelayTicks;
     public int piercing;
     public Element element;
     public MagicDamageType damageCategory;
@@ -19,21 +20,22 @@ public class SpellParams {
     public boolean useCharges;
     public float rangeMultiplier = 1.0f;
     public int cooldownOverrideTicks = -1;
-    public int castingDelayTicks = 40;
 
-    public SpellParams(float damage, float size, float speed, int duration, int piercing,
+
+    public SpellParams(float damage, float size, float speed, int duration, int castingDelayTicks, int piercing,
                        Element element, MagicDamageType damageCategory) {
         this.damage = damage;
         this.size = size;
         this.speed = speed;
         this.duration = duration;
+        this.castingDelayTicks = castingDelayTicks;
         this.piercing = piercing;
         this.element = element;
         this.damageCategory = damageCategory;
     }
 
     public static SpellParams base(Element defaultElement, MagicDamageType damageCategory) {
-        return new SpellParams(1f, 1f, 1f, 20, 0, defaultElement, damageCategory);
+        return new SpellParams(1f, 1f, 1f, 20, 15, 0, defaultElement, damageCategory);
     }
 
     public void addPostHitEffect(PostHitEffect effect) {
@@ -41,7 +43,7 @@ public class SpellParams {
     }
 
     public SpellParams copy() {
-        SpellParams c = new SpellParams(damage, size, speed, duration, piercing, element, damageCategory);
+        SpellParams c = new SpellParams(damage, size, speed, duration, piercing, castingDelayTicks, element, damageCategory);
         c.postHitEffects.addAll(this.postHitEffects);
         c.modifierIds.addAll(this.modifierIds);
         c.extraCasts = this.extraCasts;

@@ -5,6 +5,7 @@ import com.github.interactivemagic.api.registry.ModifierRegistry;
 import com.github.interactivemagic.api.registry.SpellTypeRegistry;
 import com.github.interactivemagic.config.ClientConfig;
 import com.github.interactivemagic.config.ServerConfig;
+import com.github.interactivemagic.init.ModArmorMaterials;
 import com.github.interactivemagic.init.ModAttachments;
 import com.github.interactivemagic.init.ModBlocks;
 import com.github.interactivemagic.init.ModDataComponents;
@@ -37,6 +38,7 @@ public class InteractiveMagic {
         modEventBus.addListener(ModPackets::register);
 
         // Vanilla-style registries
+        ModArmorMaterials.ARMOR_MATERIALS.register(modEventBus);
         ModItems.ITEMS.register(modEventBus);
         ModBlocks.BLOCKS.register(modEventBus);
         ModEntities.ENTITIES.register(modEventBus);
@@ -69,6 +71,10 @@ public class InteractiveMagic {
             event.accept(ModItems.BASIC_WAND.get());
             event.accept(ModItems.INSCRIBED_WAND.get());
             event.accept(ModItems.RING_OF_EXPANSION.get());
+            event.accept(ModItems.APPRENTICE_SET_HELMET.get());
+            event.accept(ModItems.APPRENTICE_SET_CHESTPLATE.get());
+            event.accept(ModItems.APPRENTICE_SET_LEGGINGS.get());
+            event.accept(ModItems.APPRENTICE_SET_BOOTS.get());
         }
 
     }

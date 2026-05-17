@@ -82,7 +82,7 @@ public class MagicBallistaEntity extends ThrowableProjectile implements GeoEntit
 
     @Override
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
-        builder.define(DATA_ELEMENT, ModElements.ARCANE.getId().toString());
+        builder.define(DATA_ELEMENT, this.entityData.get(DATA_ELEMENT));
         builder.define(DATA_SIZE, 1f);
     }
 
@@ -144,7 +144,7 @@ public class MagicBallistaEntity extends ThrowableProjectile implements GeoEntit
             }
         } else {
             Vec3 pos = this.position();
-            this.level().addParticle(ModParticles.FIRE_ELEMENT.get(), pos.x, pos.y, pos.z, 0.0, 0.0, 0.0);
+            this.level().addParticle(this.element.particle(), pos.x, pos.y, pos.z, 0.0, 0.0, 0.0);
         }
         super.tick();
     }

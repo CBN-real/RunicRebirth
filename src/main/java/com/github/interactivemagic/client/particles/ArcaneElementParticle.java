@@ -22,20 +22,20 @@ public class ArcaneElementParticle extends TextureSheetParticle {
         this.xd = xd;
         this.yd = yd;
         this.zd = zd;
-        this.scale(this.random.nextFloat() + 0.25f);
+        this.scale(this.random.nextFloat() + 0.45f);
         this.lifetime = 10 + (int) (Math.random() * 10);
         this.sprites = spriteSet;
         this.setSpriteFromAge(spriteSet);
-        this.gravity = -0.015F;
+        this.gravity = 0.000F;
         this.mirrored = this.random.nextBoolean();
     }
 
     @Override
     public void tick() {
         super.tick();
-        this.xd += this.random.nextFloat() / 500.0F * (this.random.nextBoolean() ? 1 : -1);
-        this.yd += this.random.nextFloat() / 500.0F * (this.random.nextBoolean() ? 1 : -1);
-        this.zd += this.random.nextFloat() / 500.0F * (this.random.nextBoolean() ? 1 : -1);
+        this.xd += this.random.nextFloat() / 200.0F * (this.random.nextBoolean() ? 1 : -1);
+        this.yd += this.random.nextFloat() / 200.0F * (this.random.nextBoolean() ? 1 : -1);
+        this.zd += this.random.nextFloat() / 200.0F * (this.random.nextBoolean() ? 1 : -1);
         this.setSpriteFromAge(this.sprites);
     }
 

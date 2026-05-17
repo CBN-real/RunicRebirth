@@ -3,6 +3,7 @@ package com.github.interactivemagic.init;
 import com.github.interactivemagic.InteractiveMagic;
 import com.github.interactivemagic.entities.spells.MagicArrowEntity;
 import com.github.interactivemagic.entities.spells.MagicBallistaEntity;
+import com.github.interactivemagic.entities.spells.MagicBeamEntity;
 import com.github.interactivemagic.entities.spells.MagicBindingEntity;
 import com.github.interactivemagic.entities.spells.MagicHammerEntity;
 import com.github.interactivemagic.entities.spells.BasicCircleEntity;
@@ -27,7 +28,6 @@ import net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent.Operatio
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
-@EventBusSubscriber(modid = InteractiveMagic.MODID)
 public class ModEntities {
 
     public static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(
@@ -99,6 +99,15 @@ public class ModEntities {
             .clientTrackingRange(4)
             .updateInterval(10)
             .build("magic_ballista"));
+
+    public static final DeferredHolder<EntityType<?>, EntityType<MagicBeamEntity>> MAGIC_BEAM = ENTITIES.register(
+        "magic_beam",
+        () -> EntityType.Builder.<MagicBeamEntity>of(MagicBeamEntity::new, MobCategory.MISC)
+            .sized(0.1F, 0.1F)
+            .clientTrackingRange(8)
+            .updateInterval(3)
+            .noSave()
+            .build("magic_beam"));
 
     public static final DeferredHolder<EntityType<?>, EntityType<BasicCircleEntity>> BASIC_CIRCLE = ENTITIES.register(
         "basic_circle",

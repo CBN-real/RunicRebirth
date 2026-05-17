@@ -1,5 +1,6 @@
 package com.github.interactivemagic.client.overlays;
 
+import com.github.interactivemagic.InteractiveMagic;
 import com.github.interactivemagic.api.spells.SpellComponent;
 import com.github.interactivemagic.api.spells.SpellModifier;
 import com.github.interactivemagic.api.spells.SpellType;
@@ -100,7 +101,8 @@ public class SpellStackOverlay implements LayeredDraw.Layer {
         RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
 
         // Active stack (full size, selected border)
-        drawStackRow(graphics, stacks.get(active), rowLeftX, activeTopY, true, maxSmallSlots);
+        drawStackRow(graphics, stacks.get(active), rowLeftX, activeTopY, true, maxSmallSlots,
+            ClientMagicData.elementForStack(active));
 
         // Non-active stacks in 2-wide mini rows below active
         for (int i = 0; i < miniCount; i++) {
@@ -113,7 +115,8 @@ public class SpellStackOverlay implements LayeredDraw.Layer {
             graphics.pose().pushPose();
             graphics.pose().translate(miniX, miniY, 0);
             graphics.pose().scale(MINI_SCALE, MINI_SCALE, 1f);
-            drawStackRow(graphics, stacks.get(stackIdx), 0, 0, false, maxSmallSlots);
+            drawStackRow(graphics, stacks.get(stackIdx), 0, 0, false, maxSmallSlots,
+                ClientMagicData.elementForStack(stackIdx));
             graphics.pose().popPose();
         }
 
@@ -132,7 +135,8 @@ public class SpellStackOverlay implements LayeredDraw.Layer {
     }
 
     private static void drawStackRow(GuiGraphics g, List<SpellComponent> stack,
-                                     int rowLeftX, int rowTopY, boolean isActive, int maxSmallSlots) {
+                                     int rowLeftX, int rowTopY, boolean isActive, int maxSmallSlots,
+                                     ResourceLocation elementId) {
         SpellType typeInStack = null;
         List<SpellModifier> modifiers = new ArrayList<>();
         boolean hasCharges = false;
@@ -147,7 +151,15 @@ public class SpellStackOverlay implements LayeredDraw.Layer {
         }
 
         // Big slot background
-        ResourceLocation bigSlotSprite = typeInStack != null ? typeInStack.getOverlaySlotPath() : SLOT_BIG_EMPTY;
+        ResourceLocation bigSlotSprite;
+        if (typeInStack != null) {
+            ResourceLocation elemId = elementId != null ? elementId
+                : (typeInStack.defaultElement() != null ? typeInStack.defaultElement().id() : null);
+            String elemPath = elemId != null ? elemId.getPath() : "arcane";
+            bigSlotSprite = ResourceLocation.fromNamespaceAndPath(InteractiveMagic.MODID, "hud/" + elemPath + "_overlay_slot_border");
+        } else {
+            bigSlotSprite = SLOT_BIG_EMPTY;
+        }
         g.blitSprite(bigSlotSprite, rowLeftX, rowTopY, BIG_SIZE, BIG_SIZE);
 
         // Big icon

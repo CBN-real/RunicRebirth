@@ -10,7 +10,7 @@ public class MagicShieldGeoModel extends GeoModel<MagicShieldEntity> {
     private static final ResourceLocation MODEL =
         ResourceLocation.fromNamespaceAndPath(InteractiveMagic.MODID, "geo/spell/magic_shield.geo.json");
     private static final ResourceLocation TEXTURE =
-        ResourceLocation.fromNamespaceAndPath(InteractiveMagic.MODID, "textures/spell_boundary/arcane_boundary_texture.png");
+        ResourceLocation.fromNamespaceAndPath(InteractiveMagic.MODID, "textures/entity/magic_shield/fire_magic_shield_texture.png");
     private static final ResourceLocation ANIMATIONS =
         ResourceLocation.fromNamespaceAndPath(InteractiveMagic.MODID, "animations/spell/magic_shield.animation.json");
 
@@ -27,7 +27,7 @@ public class MagicShieldGeoModel extends GeoModel<MagicShieldEntity> {
             if (parsed != null) {
                 return ResourceLocation.fromNamespaceAndPath(
                     InteractiveMagic.MODID,
-                    "textures/spell_boundary/" + parsed.getPath() + "_boundary_texture.png"
+                    "textures/entity/magic_shield/" + parsed.getPath() + "_magic_shield_texture.png"
                 );
             }
         }

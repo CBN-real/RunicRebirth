@@ -26,6 +26,9 @@ public final class DamageSources {
             SpellDamageEvent e = new SpellDamageEvent(living, base, sds);
             if (NeoForge.EVENT_BUS.post(e).isCanceled()) return false;
             float amount = e.getAmount();
+            if (sds.element() != null) {
+                amount += sds.element().bonusDamage(sds.magicDamageType());
+            }
             if (sds.getEntity() instanceof LivingEntity attacker) {
                 if (isFriendlyFireBetween(attacker, living)) return false;
                 attacker.setLastHurtMob(target);
@@ -70,6 +73,9 @@ public final class DamageSources {
             }
             if (sds.fireTicks() > 0) {
                 target.igniteForTicks(sds.fireTicks());
+            }
+            if (sds.element() != null) {
+                sds.element().applyStatusEffects(target);
             }
         }
     }
