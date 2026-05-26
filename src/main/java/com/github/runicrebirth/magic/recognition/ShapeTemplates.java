@@ -1,0 +1,327 @@
+package com.github.runicrebirth.magic.recognition;
+
+import com.github.runicrebirth.RunicRebirth;
+import java.util.ArrayList;
+import java.util.List;
+import net.minecraft.resources.ResourceLocation;
+
+/**
+ * Hand-defined templates. Coordinates in arbitrary units — recognizer normalizes to 250x250.
+ * +X is right, +Y is down (screen-space).
+ */
+public final class ShapeTemplates {
+
+    public static final ResourceLocation ID_CIRCLE     = id("circle");
+    public static final ResourceLocation ID_TRIANGLE   = id("triangle");
+    public static final ResourceLocation ID_LINE_DOWN  = id("line_down");
+    public static final ResourceLocation ID_PLUS       = id("plus");
+    public static final ResourceLocation ID_V          = id("v_shape");
+    public static final ResourceLocation ID_ARROW      = id("arrow");
+    public static final ResourceLocation ID_EXPLOSION  = id("explosion");
+    public static final ResourceLocation ID_SLASH      = id("slash");
+    public static final ResourceLocation ID_METEOR     = id("meteor");
+    public static final ResourceLocation ID_SHIELD     = id("shield");
+    public static final ResourceLocation ID_HAMMER     = id("hammer");
+    public static final ResourceLocation ID_BINDING    = id("binding");
+    public static final ResourceLocation ID_BALLISTA   = id("ballista");
+    public static final ResourceLocation ID_COOLDOWN   = id("cooldown");
+    public static final ResourceLocation ID_RANGE      = id("range");
+    public static final ResourceLocation ID_TWO_CASTS  = id("two_casts");
+    public static final ResourceLocation ID_FOUR_CASTS = id("four_casts");
+    public static final ResourceLocation ID_CHARGES    = id("charges");
+    public static final ResourceLocation ID_PLUS_TWO   = id("plus_two");
+    public static final ResourceLocation ID_PLUS_FOUR  = id("plus_four");
+
+    private ShapeTemplates() {}
+
+    // BASIC SPELL FORMS
+
+    public static List<StrokePoint> lineDown() {
+        List<StrokePoint> points = new ArrayList<>();
+        segment(points, 0.0, -100.0, 0.0, 100.0, 32);
+        points.add(new StrokePoint(0.0, 100.0));
+        return points;
+    }
+
+    public static List<StrokePoint> circle() {
+        List<StrokePoint> points = new ArrayList<>();
+        double r = 100.0;
+        for (int i = 0; i <= 32; i++) {
+            double t = (i / 32.0) * Math.PI * 2.0;
+            points.add(new StrokePoint(Math.cos(t) * r, Math.sin(t) * r));
+        }
+        return points;
+    }
+
+    public static List<StrokePoint> vShape() {
+        List<StrokePoint> points = new ArrayList<>();
+        segment(points, -100.0, -80.0, 0.0, 80.0, 16);
+        segment(points,    0.0,  80.0, 100.0, -80.0, 16);
+        return points;
+    }
+
+    public static List<StrokePoint> arrow() {
+        return pts(
+            0.0,-77.8,  0.0,-66.7,  -11.1,-66.7,  -22.2,-55.6,
+            -33.3,-44.4,  -44.4,-33.3,  -44.4,-22.2,  -55.6,-22.2,
+            -33.3,-22.2,  -22.2,-22.2,  -11.1,-22.2,  0.0,-22.2,
+            0.0,-33.3,  0.0,-44.4,  0.0,-55.6,  11.1,-66.7,
+            22.2,-55.6,  33.3,-44.4,  44.4,-33.3,  44.4,-22.2,
+            33.3,-22.2,  22.2,-22.2,  11.1,-22.2,  0.0,-11.1,
+            0.0,0.0,  0.0,11.1,  0.0,22.2,  0.0,33.3,
+            0.0,44.4,  0.0,55.6,  0.0,66.7,  0.0,77.8,
+            55.6,-22.2
+        );
+    }
+
+    // INTERMEDIATE SPELL FORMS
+
+    public static List<StrokePoint> explosion() {
+        return pts(
+            -22.2,-66.7,  -11.1,-66.7,  0.0,-66.7,  11.1,-66.7,
+            22.2,-66.7,  33.3,-55.6,  44.4,-44.4,  55.6,-33.3,
+            66.7,-22.2,  66.7,-11.1,  66.7,0.0,  66.7,11.1,
+            66.7,22.2,  55.6,33.3,  44.4,44.4,  33.3,55.6,
+            22.2,66.7,  11.1,66.7,  0.0,66.7,  -11.1,66.7,
+            -22.2,66.7,  -33.3,55.6,  -44.4,44.4,  -55.6,33.3,
+            -66.7,22.2,  -66.7,11.1,  -66.7,0.0,  -66.7,-11.1,
+            -66.7,-22.2,  -55.6,-33.3,  -44.4,-44.4,  -33.3,-55.6,
+            -11.1,-44.4,  0.0,-44.4,  11.1,-44.4,  22.2,-33.3,
+            33.3,-22.2,  44.4,-11.1,  44.4,0.0,  44.4,11.1,
+            33.3,22.2,  22.2,33.3,  11.1,44.4,  0.0,44.4,
+            -11.1,44.4,  -22.2,33.3,  -33.3,22.2,  -44.4,11.1,
+            -44.4,0.0,  -44.4,-11.1,  -33.3,-22.2,  -22.2,-33.3,
+            -22.2,0.0,  -33.3,0.0,  -55.6,0.0,  -77.8,0.0,
+            -88.9,0.0,  -11.1,0.0,  0.0,0.0,  11.1,0.0
+        );
+    }
+
+    public static List<StrokePoint> slash() {
+        return pts(
+            0.0,-88.9,  11.1,-88.9,  22.2,-88.9,  33.3,-88.9,
+            0.0,-77.8,  -11.1,-77.8,  -22.2,-77.8,  -22.2,-66.7,
+            -33.3,-66.7,  -44.4,-66.7,  -44.4,-55.6,  -44.4,-44.4,
+            -55.6,-44.4,  -55.6,-33.3,  -55.6,-22.2,  -66.7,-22.2,
+            -66.7,-11.1,  -66.7,0.0,  -66.7,11.1,  -22.2,55.6,
+            -11.1,66.7,  0.0,66.7,  0.0,55.6,  0.0,44.4,
+            0.0,33.3,  11.1,33.3,  11.1,22.2,  11.1,11.1,
+            11.1,0.0,  22.2,0.0,  22.2,-11.1,  22.2,-22.2,
+            22.2,-33.3,  33.3,-33.3,  33.3,-44.4,  44.4,-44.4,
+            44.4,-55.6,  55.6,-55.6,  11.1,66.7,  0.0,77.8,
+            0.0,88.9,  22.2,77.8
+        );
+    }
+
+    public static List<StrokePoint> meteor() {
+        return pts(
+            0.0,-66.7,  -11.1,-55.6,  -22.2,-44.4,  -33.3,-33.3,
+            -11.1,-11.1,  0.0,-22.2,  11.1,-33.3,  22.2,-44.4,
+            33.3,-55.6,  44.4,-66.7,  66.7,-44.4,  55.6,-33.3,
+            44.4,-22.2,  33.3,-11.1,  22.2,0.0,  11.1,11.1,
+            0.0,22.2,  -22.2,0.0,  -66.7,0.0,  -66.7,-11.1,
+            -77.8,11.1,  -77.8,22.2,  -77.8,33.3,  -77.8,44.4,
+            -66.7,55.6,  -66.7,66.7,  -55.6,66.7,  -44.4,77.8,
+            -33.3,77.8,  -22.2,77.8,  -11.1,66.7,  0.0,66.7,
+            11.1,55.6,  22.2,55.6,  44.4,22.2,  55.6,11.1,
+            66.7,0.0
+        );
+    }
+
+  public static List<StrokePoint> shield() {
+    return pts(
+        -11.1,-33.3,  0.0,-33.3,  11.1,-33.3,  22.2,-22.2,
+        33.3,-22.2,  44.4,-11.1,  55.6,0.0,  55.6,11.1,
+        66.7,22.2,  77.8,33.3,  77.8,44.4,  33.3,22.2,
+        33.3,11.1,  22.2,11.1,  22.2,0.0,  11.1,11.1,
+        0.0,22.2,  -11.1,11.1,  -22.2,11.1,  -22.2,0.0,
+        -33.3,11.1, -33.3,22.2,  -22.2,33.3,  -22.2,44.4,
+        -11.1,55.6,  -11.1,66.7, 0.0,66.7,  11.1,66.7,
+        11.1,55.6,  22.2,44.4,  22.2,33.3,  0.0,77.8,
+        -77.8,44.4,  -77.8,33.3,  -66.7,22.2,  -55.6,11.1,
+        -55.6,0.0,  -44.4,-11.1  -33.3,-22.2,  -22.2,-22.2
+        );
+  }
+
+    // ADVANCED SPELL FORMS
+
+  public static List<StrokePoint> hammer() {
+    return pts(
+        -66.7,-66.7, -55.6,-66.7, -44.4,-66.7, -33.3,-66.7,
+        -22.2,-66.7, -11.1,-66.7, 0.0,-66.7, 11.1,-66.7,
+        22.2,-66.7, 33.3,-66.7, 44.4,-66.7, 55.6,-66.7,
+        66.7,-66.7, 66.7,-55.6, 66.7,-44.4, 66.7,-33.3,
+        66.7,-22.2, 66.7,-11.1, 66.7,0.0, 55.6,0.0,
+        44.4,0.0, 33.3,0.0, 22.2,0.0, 11.1,0.0,
+        0.0,0.0, -11.1,0.0, -22.2,0.0, -33.3,0.0,
+        -44.4,0.0, -55.6,0.0, -66.7,0.0, -66.7,-11.1,
+        -66.7,-22.2, -66.7,-33.3, -66.7,-44.4, -66.7,-55.6,
+        -11.1,11.1, -11.1,22.2, -11.1,33.3, -11.1,44.4,
+        -11.1,55.6, -11.1,66.7, -11.1,77.8, -11.1,88.9,
+        0.0,88.9, 11.1,88.9, 11.1,77.8, 11.1,66.7,
+        11.1,55.6, 11.1,44.4, 11.1,33.3, 11.1,22.2,
+        11.1,11.1
+    );
+  }
+
+    public static List<StrokePoint> binding() {
+        return pts(
+            -88.9,-22.2,  -77.8,-22.2,  -66.7,-22.2,  -66.7,-11.1,
+            -55.6,-11.1,  -44.4,0.0,  -22.2,0.0,  -11.1,-11.1,
+            0.0,-11.1,  0.0,-22.2,  11.1,-22.2,  22.2,-22.2,
+            22.2,-11.1,  33.3,-11.1,  44.4,0.0,  66.7,0.0,
+            77.8,-11.1,  88.9,-11.1,  88.9,-22.2,  100.0,-22.2,
+            88.9,11.1,  77.8,22.2,  66.7,22.2,  66.7,33.3,
+            55.6,33.3,  44.4,33.3,  44.4,22.2,  33.3,22.2,
+            22.2,11.1,  0.0,11.1,  -11.1,22.2,  -22.2,22.2,
+            -22.2,33.3,  -33.3,33.3,  -44.4,33.3,  -44.4,22.2,
+            -55.6,22.2,  -66.7,11.1,  -88.9,11.1,  -100.0,22.2,
+            -100.0,-11.1,  -88.9,-11.1
+        );
+    }
+
+    public static List<StrokePoint> ballista() {
+        return pts(
+            0.0,-77.8,  -11.1,-66.7,  -22.2,-55.6,  -33.3,-44.4,
+            -44.4,-33.3,  -44.4,-22.2,  -33.3,-22.2,  -22.2,-33.3,
+            -11.1,-33.3,  0.0,-33.3,  11.1,-33.3,  22.2,-33.3,
+            33.3,-44.4,  22.2,-55.6,  11.1,-66.7,  11.1,-22.2,
+            11.1,-11.1,  11.1,0.0,  11.1,11.1,  11.1,22.2,
+            11.1,33.3,  11.1,44.4,  11.1,55.6,  0.0,66.7,
+            0.0,77.8,  0.0,88.9,  -22.2,66.7,  -11.1,55.6,
+            -11.1,44.4,  -11.1,33.3,  -11.1,22.2,  -11.1,11.1,
+            -11.1,0.0,  -11.1,-11.1,  -11.1,-22.2,  33.3,-22.2,
+            44.4,-22.2,  44.4,-33.3,  22.2,66.7,  33.3,77.8,
+            44.4,88.9,  -33.3,77.8,  -44.4,88.9
+        );
+    }
+
+    // BASIC SPELL MODIFIERS
+
+    public static List<StrokePoint> plus() {
+        return pts(
+            0.0,-88.9,  0.0,-77.8,  0.0,-66.7,  0.0,-55.6,
+            0.0,-44.4,  0.0,-33.3,  0.0,-22.2,  0.0,-11.1,
+            0.0,0.0,  -11.1,0.0,  -22.2,0.0,  -33.3,0.0,
+            -44.4,0.0,  -55.6,0.0,  -66.7,0.0,  -77.8,0.0,
+            -88.9,0.0,  0.0,11.1,  0.0,22.2,  0.0,33.3,
+            0.0,44.4,  0.0,55.6,  0.0,66.7,  0.0,77.8,
+            0.0,88.9,  11.1,0.0,  22.2,0.0,  33.3,0.0,
+            44.4,0.0,  55.6,0.0,  66.7,0.0,  77.8,0.0,
+            88.9,0.0
+        );
+    }
+
+    public static List<StrokePoint> triangle() {
+        List<StrokePoint> points = new ArrayList<>();
+        segment(points,   0.0, -100.0, 100.0,  80.0, 16);
+        segment(points, 100.0,   80.0, -100.0, 80.0, 16);
+        segment(points, -100.0,  80.0,   0.0, -100.0, 16);
+        return points;
+    }
+
+    public static List<StrokePoint> range() {
+        return pts(
+            -20.0,-80.0,  0.0,-80.0,  20.0,-80.0,  0.0,-60.0,
+            0.0,-40.0,  0.0,-20.0,  0.0,0.0,  -20.0,0.0,
+            -40.0,0.0,  -60.0,0.0,  -80.0,0.0,  -80.0,-20.0,
+            -60.0,-40.0,  -40.0,-60.0,  40.0,-60.0,  60.0,-40.0,
+            80.0,-20.0,  80.0,0.0,  60.0,0.0,  40.0,0.0,
+            20.0,0.0,  0.0,20.0,  0.0,40.0,  0.0,60.0,
+            0.0,80.0,  -20.0,80.0,  -40.0,60.0,  -60.0,40.0,
+            -80.0,20.0,  20.0,80.0,  40.0,60.0,  60.0,40.0,
+            80.0,20.0
+        );
+    }
+
+    public static List<StrokePoint> two_casts() {
+        return pts(
+            0.0,-80.0,  0.0,-60.0,  0.0,-40.0,  0.0,-20.0,
+            0.0,0.0,  0.0,20.0,  0.0,40.0,  0.0,60.0,
+            0.0,80.0,  -60.0,20.0,  -40.0,0.0,  -60.0,-20.0,
+            -80.0,-40.0,  -80.0,40.0,  40.0,0.0,  60.0,-20.0,
+            80.0,-40.0,  60.0,20.0,  80.0,40.0
+        );
+    }
+
+    // INTERMEDIATE SPELL MODIFIERS
+
+    public static List<StrokePoint> cooldown() {
+        return pts(
+            -60.0,-80.0,  -40.0,-80.0,  -20.0,-80.0,  0.0,-80.0,
+            20.0,-80.0,  40.0,-80.0,  60.0,-80.0,  40.0,-60.0,
+            40.0,-40.0,  20.0,-20.0,  0.0,0.0,  -20.0,-20.0,
+            -40.0,-40.0,  -40.0,-60.0,  -20.0,20.0,  -40.0,40.0,
+            -40.0,60.0,  -40.0,80.0,  -60.0,80.0,  -20.0,80.0,
+            0.0,80.0,  20.0,80.0,  40.0,80.0,  40.0,60.0,
+            40.0,40.0,  20.0,20.0,  60.0,80.0
+        );
+    }
+
+    public static List<StrokePoint> charges() {
+        return pts(
+            0.0,-80.0,  0.0,-60.0,  0.0,-40.0,  -20.0,-40.0,
+            -40.0,-20.0,  -60.0,0.0,  -40.0,20.0,  -20.0,40.0,
+            0.0,40.0,  0.0,20.0,  0.0,0.0,  0.0,-20.0,
+            20.0,-40.0,  40.0,-20.0,  60.0,0.0,  40.0,20.0,
+            20.0,40.0,  0.0,60.0,  0.0,80.0
+        );
+    }
+
+    public static List<StrokePoint> plus_two() {
+        return pts(
+            -40.0,-40.0,  -40.0,-20.0,  -40.0,0.0,  -60.0,0.0,
+            -80.0,0.0,  -40.0,20.0,  -40.0,40.0,  -20.0,0.0,
+            0.0,0.0,  20.0,0.0,  40.0,0.0,  40.0,-20.0,
+            40.0,-40.0,  60.0,0.0,  80.0,0.0,  40.0,20.0,
+            40.0,40.0
+        );
+    }
+
+    // ADVANCED SPELL MODIFIERS
+
+    public static List<StrokePoint> four_casts() {
+        return pts(
+            -80.0,-80.0,  -60.0,-60.0,  -40.0,-40.0,  -20.0,-20.0,
+            0.0,0.0,  20.0,-20.0,  40.0,-40.0,  60.0,-60.0,
+            80.0,-80.0,  20.0,-80.0,  0.0,-60.0,  -20.0,-80.0,
+            -80.0,-20.0,  -60.0,0.0,  -80.0,20.0,  -40.0,40.0,
+            -20.0,20.0,  20.0,20.0,  40.0,40.0,  60.0,60.0,
+            80.0,80.0,  80.0,20.0,  60.0,0.0,  80.0,-20.0,
+            0.0,60.0,  -20.0,80.0,  20.0,80.0,  -60.0,60.0,
+            -80.0,80.0
+        );
+    }
+
+    public static List<StrokePoint> plus_four() {
+        return pts(
+            0.0,-80.0,  0.0,-60.0,  -20.0,-60.0,  0.0,-40.0,
+            0.0,-20.0,  0.0,0.0,  -20.0,0.0,  -40.0,0.0,
+            -60.0,0.0,  -60.0,-20.0,  -80.0,0.0,  -60.0,20.0,
+            -20.0,60.0,  0.0,60.0,  0.0,40.0,  0.0,20.0,
+            20.0,0.0,  40.0,0.0,  60.0,0.0,  60.0,-20.0,
+            80.0,0.0,  60.0,20.0,  20.0,60.0,  0.0,80.0,
+            20.0,-60.0
+        );
+    }
+
+    // UNIQUE
+
+    private static ResourceLocation id(String path) {
+        return ResourceLocation.fromNamespaceAndPath(RunicRebirth.MODID, path);
+    }
+
+    private static List<StrokePoint> pts(double... coords) {
+        List<StrokePoint> points = new ArrayList<>(coords.length / 2);
+        for (int i = 0; i < coords.length - 1; i += 2) {
+            points.add(new StrokePoint(coords[i], coords[i + 1]));
+        }
+        return points;
+    }
+
+    private static void segment(List<StrokePoint> out, double x1, double y1, double x2, double y2, int steps) {
+        for (int i = 0; i < steps; i++) {
+            double t = i / (double) steps;
+            out.add(new StrokePoint(x1 + (x2 - x1) * t, y1 + (y2 - y1) * t));
+        }
+    }
+}

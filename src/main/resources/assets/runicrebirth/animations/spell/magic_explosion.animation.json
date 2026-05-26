@@ -1,0 +1,101 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"initiate_spell": {
+			"animation_length": 1.0833,
+			"bones": {
+				"inner_cubes": {
+					"position": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.75": {
+							"vector": [0, 18, 0],
+							"easing": "easeOutBack",
+							"easingArgs": [6]
+						}
+					},
+					"scale": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.25": {
+							"vector": [2, 2, 2]
+						},
+						"0.75": {
+							"vector": [3, 3, 3],
+							"easing": "easeOutBack",
+							"easingArgs": [3]
+						},
+						"0.9167": {
+							"vector": [10, 10, 10],
+							"easing": "easeOutBack",
+							"easingArgs": [5]
+						},
+						"1.0833": {
+							"vector": [0, 0, 0],
+							"easing": "easeInSine"
+						}
+					}
+				},
+				"rot_x": {
+					"rotation": {
+						"vector": ["-query.anim_time * 420", 0, "query.anim_time * 60"]
+					}
+				},
+				"rot_y": {
+					"rotation": {
+						"vector": [0, "-query.anim_time * 420", "query.anim_time * 60"]
+					}
+				},
+				"spawn_circle2": {
+					"scale": {
+						"0.375": {
+							"vector": [1, 1, 1]
+						},
+						"0.75": {
+							"vector": [0, 0, 0],
+							"easing": "easeInBack"
+						}
+					}
+				},
+				"hexagon2": {
+					"position": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.75": {
+							"vector": [0, 0, -2],
+							"easing": "easeOutBack",
+							"easingArgs": [2]
+						}
+					}
+				},
+				"lil_circle2": {
+					"position": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.75": {
+							"vector": [0, 0, -4],
+							"easing": "easeOutBack",
+							"easingArgs": [2]
+						}
+					}
+				},
+				"magic_explosion": {
+					"scale": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.375": {
+							"vector": [1, 1, 1],
+							"easing": "easeOutBack",
+							"easingArgs": [1]
+						}
+					}
+				}
+			}
+		}
+	}
+}

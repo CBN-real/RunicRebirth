@@ -1,0 +1,28 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"initiate_spell": {
+			"animation_length": 4,
+			"bones": {
+				"magic_slash": {
+					"position": {
+						"vector": [0, "math.sin(query.anim_time * 360) * 0.4", 0]
+					},
+					"scale": {
+						"0.0": {
+							"vector": [0, 1, 1]
+						},
+						"0.1667": {
+							"vector": [1, 1, 1],
+							"easing": "easeOutBack"
+						},
+						"4.0": {
+							"vector": [1, 1, "1 + math.sin(query.anim_time * 240) * 0.15"],
+							"easing": "linear"
+						}
+					}
+				}
+			}
+		}
+	}
+}
