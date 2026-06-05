@@ -2,6 +2,7 @@ package com.github.runicrebirth.client;
 
 import com.github.runicrebirth.RunicRebirth;
 import com.github.runicrebirth.client.input.ModKeyMappings;
+import com.github.runicrebirth.client.overlays.InfusionAltarOverlay;
 import com.github.runicrebirth.client.overlays.SpellStackOverlay;
 import com.github.runicrebirth.client.particles.ArcaneElementParticle;
 import com.github.runicrebirth.client.particles.ArcaneInkParticle;
@@ -18,15 +19,24 @@ import com.github.runicrebirth.client.particles.IceTinyParticle;
 import com.github.runicrebirth.client.particles.WindElementParticle;
 import com.github.runicrebirth.client.particles.WindInkParticle;
 import com.github.runicrebirth.client.particles.WindTinyParticle;
+import com.github.runicrebirth.client.renderers.blocks.InfusionAltarRenderer;
+import com.github.runicrebirth.client.renderers.blocks.OculusControllerRenderer;
+import com.github.runicrebirth.client.renderers.blocks.OculusPillarRenderer;
+import com.github.runicrebirth.client.renderers.blocks.OculusPortalRenderer;
+import com.github.runicrebirth.client.renderers.blocks.RunesteelPylonRenderer;
 import com.github.runicrebirth.client.renderers.entities.DrawingCanvasRenderer;
+import com.github.runicrebirth.client.renderers.entities.InfusionCircleRenderer;
 import com.github.runicrebirth.client.renderers.entities.MagicArrowRenderer;
 import com.github.runicrebirth.client.renderers.entities.MagicBallistaCircleRenderer;
 import com.github.runicrebirth.client.renderers.entities.MagicBallistaRenderer;
 import com.github.runicrebirth.client.renderers.entities.MagicBeamRenderer;
 import com.github.runicrebirth.client.renderers.entities.MagicBlastRenderer;
 import com.github.runicrebirth.client.renderers.entities.MagicBindingRenderer;
+import com.github.runicrebirth.client.renderers.entities.MagicBallistaDemoRenderer;
 import com.github.runicrebirth.client.renderers.entities.MagicExplosionRenderer;
 import com.github.runicrebirth.client.renderers.entities.MagicHammerRenderer;
+import com.github.runicrebirth.client.renderers.entities.MagicMeteorDemoRenderer;
+import com.github.runicrebirth.client.renderers.entities.MagicSlashDemoRenderer;
 import com.github.runicrebirth.client.renderers.entities.MagicMeteorCircleRenderer;
 import com.github.runicrebirth.client.renderers.entities.MagicMeteorRenderer;
 import com.github.runicrebirth.client.renderers.entities.MagicProjectileRenderer;
@@ -38,6 +48,8 @@ import com.github.runicrebirth.client.renderers.entities.BasicCircleRenderer;
 import com.github.runicrebirth.client.renderers.entities.IntermediateCircleRenderer;
 import com.github.runicrebirth.client.effects.CameraShakeHandler;
 import com.github.runicrebirth.client.effects.CrackManager;
+import com.github.runicrebirth.compat.modonomicon.ModonomiconCompat;
+import com.github.runicrebirth.init.ModBlockEntities;
 import com.github.runicrebirth.init.ModEntities;
 import com.github.runicrebirth.init.ModParticles;
 import com.github.runicrebirth.network.SwitchStackC2SPacket;
@@ -66,7 +78,7 @@ import net.neoforged.neoforge.network.PacketDistributor;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.component.DyedItemColor;
 import com.github.runicrebirth.init.ModItems;
-import com.github.runicrebirth.items.armor.ApprenticeSetItem;
+import com.github.runicrebirth.items.armor.AcolyteSetItem;
 
 @Mod(value = RunicRebirth.MODID, dist = Dist.CLIENT)
 @EventBusSubscriber(modid = RunicRebirth.MODID, value = Dist.CLIENT)
@@ -89,6 +101,7 @@ public class RunicRebirthClient {
         NeoForge.EVENT_BUS.addListener(CameraShakeHandler::onCameraSetup);
         NeoForge.EVENT_BUS.addListener(CrackManager::onRenderLevel);
         NeoForge.EVENT_BUS.addListener(TremorBlockParticle::renderAll);
+        event.enqueueWork(ModonomiconCompat::registerPageRenderers);
         RunicRebirth.LOGGER.info("[RunicRebirth] Client setup complete");
     }
 
@@ -114,7 +127,17 @@ public class RunicRebirthClient {
         event.registerEntityRenderer(ModEntities.MAGIC_SLASH_CIRCLE.get(), MagicSlashCircleRenderer::new);
         event.registerEntityRenderer(ModEntities.MAGIC_METEOR_CIRCLE.get(), MagicMeteorCircleRenderer::new);
         event.registerEntityRenderer(ModEntities.MAGIC_EXPLOSION.get(), MagicExplosionRenderer::new);
+        event.registerEntityRenderer(ModEntities.MAGIC_SLASH_DEMO.get(), MagicSlashDemoRenderer::new);
+        event.registerEntityRenderer(ModEntities.MAGIC_METEOR_DEMO.get(), MagicMeteorDemoRenderer::new);
+        event.registerEntityRenderer(ModEntities.MAGIC_BALLISTA_DEMO.get(), MagicBallistaDemoRenderer::new);
+        event.registerEntityRenderer(ModEntities.INFUSION_CIRCLE.get(), InfusionCircleRenderer::new);
         event.registerEntityRenderer(ModEntities.DRAWING_CANVAS.get(), DrawingCanvasRenderer::new);
+
+        event.registerBlockEntityRenderer(ModBlockEntities.OCULUS_PORTAL.get(), OculusPortalRenderer::new);
+        event.registerBlockEntityRenderer(ModBlockEntities.OCULUS_CONTROLLER.get(), OculusControllerRenderer::new);
+        event.registerBlockEntityRenderer(ModBlockEntities.OCULUS_PILLAR.get(), OculusPillarRenderer::new);
+        event.registerBlockEntityRenderer(ModBlockEntities.RUNESTEEL_PYLON.get(), RunesteelPylonRenderer::new);
+        event.registerBlockEntityRenderer(ModBlockEntities.INFUSION_ALTAR.get(), InfusionAltarRenderer::new);
     }
 
     public void registerKeyMappings(RegisterKeyMappingsEvent event) {
@@ -142,11 +165,11 @@ public class RunicRebirthClient {
 
     public void registerItemColors(RegisterColorHandlersEvent.Item event) {
         event.register(
-            (stack, layer) -> layer > 0 ? -1 : DyedItemColor.getOrDefault(stack, ApprenticeSetItem.DEFAULT_DYE_COLOR),
-            ModItems.APPRENTICE_SET_HELMET.get(),
-            ModItems.APPRENTICE_SET_CHESTPLATE.get(),
-            ModItems.APPRENTICE_SET_LEGGINGS.get(),
-            ModItems.APPRENTICE_SET_BOOTS.get()
+            (stack, layer) -> layer > 0 ? -1 : DyedItemColor.getOrDefault(stack, AcolyteSetItem.DEFAULT_DYE_COLOR),
+            ModItems.ACOLYTE_WIZARD_HAT.get(),
+            ModItems.ACOLYTE_ROBES.get(),
+            ModItems.ACOLYTE_PANTS.get(),
+            ModItems.ACOLYTE_BOOTS.get()
         );
     }
 
@@ -155,6 +178,10 @@ public class RunicRebirthClient {
             net.neoforged.neoforge.client.gui.VanillaGuiLayers.HOTBAR,
             ResourceLocation.fromNamespaceAndPath(RunicRebirth.MODID, "spell_stacks"),
             SpellStackOverlay.INSTANCE);
+        event.registerAbove(
+            ResourceLocation.fromNamespaceAndPath(RunicRebirth.MODID, "spell_stacks"),
+            ResourceLocation.fromNamespaceAndPath(RunicRebirth.MODID, "infusion_altar"),
+            InfusionAltarOverlay.INSTANCE);
     }
 
     @SubscribeEvent

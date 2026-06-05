@@ -7,6 +7,7 @@ import com.github.runicrebirth.api.spells.Element;
 import com.github.runicrebirth.api.spells.SpellCastContext;
 import com.github.runicrebirth.api.spells.SpellParams;
 import com.github.runicrebirth.api.spells.SpellType;
+import com.github.runicrebirth.client.BookDisplayState;
 import com.github.runicrebirth.init.ModElements;
 import com.github.runicrebirth.network.StackChangedS2CPacket;
 import com.github.runicrebirth.util.Log;
@@ -37,10 +38,20 @@ public abstract class AbstractCircleEntity extends Entity implements GeoEntity {
 
     private static final int FINISH_TICKS = 40;
 
-
     private static final RawAnimation INITIATE_SPELL = RawAnimation.begin().thenPlay("initiate_spell").thenLoop("hold_spell");
     private static final RawAnimation END_SPELL = RawAnimation.begin().thenPlayAndHold("end_spell");
+    private static final RawAnimation CODEX_INTRO = RawAnimation.begin().thenPlay("initiate_spell").thenPlay("hold_spell");
+    private static final RawAnimation CODEX_END = RawAnimation.begin().thenPlayAndHold("end_spell");
+    private static final int CODEX_INITIATE_TICKS = 40;
+    private static final int CODEX_HOLD_TICKS = 60;
+    private static final int CODEX_END_TICKS = 40;
+
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
+    private long displayStartNanos;
+    private int displayPhase;
+    private double holdStartTick;
+    private double phaseStartTick;
+    private boolean phaseAnimSet;
 
     private static final EntityDataAccessor<String> DATA_SPELL_TYPE_ID =
         SynchedEntityData.defineId(AbstractCircleEntity.class, EntityDataSerializers.STRING);
@@ -117,6 +128,10 @@ public abstract class AbstractCircleEntity extends Entity implements GeoEntity {
     }
 
     public String getElementId() {
+        if (!this.isAddedToLevel()) {
+            String override = BookDisplayState.getSelectedElement();
+            if (override != null) return override;
+        }
         return this.entityData.get(DATA_ELEMENT);
     }
 
@@ -225,7 +240,7 @@ public abstract class AbstractCircleEntity extends Entity implements GeoEntity {
 
     private void fireCast() {
         if (!(level() instanceof ServerLevel serverLevel)) return;
-        SpellCastContext ctx = new SpellCastContext(serverLevel, caster, wandItem, getCircleCenterCast(spellType.baseSize()), aimDirection, spellXRot, spellYRot);
+        SpellCastContext ctx = new SpellCastContext(serverLevel, caster, wandItem, getCircleCenterCast(spellType.spellHeight()), aimDirection, spellXRot, spellYRot);
         spellType.onCast(ctx, params);
         NeoForge.EVENT_BUS.post(new SpellPostCastEvent(ctx, spellType, params));
     }
@@ -255,6 +270,46 @@ public abstract class AbstractCircleEntity extends Entity implements GeoEntity {
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
         controllers.add(new AnimationController<>(this, "form", 0, state -> {
+            if (!this.isAddedToLevel()) {
+                double currentTick = this.getTick(this);
+                var controller = state.getController();
+                switch (displayPhase) {
+                    case 0:
+                        if (!phaseAnimSet) {
+                            state.setAnimation(CODEX_INTRO);
+                            phaseAnimSet = true;
+                            phaseStartTick = currentTick;
+                        }
+                        if (currentTick - phaseStartTick > CODEX_INITIATE_TICKS) {
+                            displayPhase = 1;
+                            holdStartTick = currentTick;
+                            phaseAnimSet = false;
+                        }
+                        break;
+                    case 1:
+                        if (!phaseAnimSet) {
+                            phaseAnimSet = true;
+                        }
+                        if (currentTick - holdStartTick >= CODEX_HOLD_TICKS) {
+                            displayPhase = 2;
+                            phaseAnimSet = false;
+                        }
+                        break;
+                    case 2:
+                        if (!phaseAnimSet) {
+                            state.setAnimation(CODEX_END);
+                            phaseAnimSet = true;
+                            phaseStartTick = currentTick;
+                        }
+                        if (currentTick - phaseStartTick > CODEX_END_TICKS) {
+                            displayPhase = 0;
+                            phaseAnimSet = false;
+                            controller.forceAnimationReset();
+                        }
+                        break;
+                }
+                return PlayState.CONTINUE;
+            }
             if (state.getAnimatable().entityData.get(DATA_FINISHING)) {
                 state.setAnimation(END_SPELL);
             } else {
@@ -262,6 +317,16 @@ public abstract class AbstractCircleEntity extends Entity implements GeoEntity {
             }
             return PlayState.CONTINUE;
         }));
+    }
+
+    @Override
+    public double getTick(Object entity) {
+        if (!this.isAddedToLevel()) {
+            long now = System.nanoTime();
+            if (displayStartNanos == 0L) displayStartNanos = now;
+            return (now - displayStartNanos) / 50_000_000.0;
+        }
+        return this.tickCount;
     }
 
     @Override

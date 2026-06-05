@@ -26,7 +26,8 @@ public class MagicMeteor extends SpellType {
 
     @Override public int cooldownTicks() { return 160; }
     @Override public float baseDamage() { return 10f; }
-    @Override public float baseSize() { return 1f; }
+    @Override public float baseSize() { return 1.0f; }
+  @Override public float spellHeight() { return 0.8f * this.baseSize(); }
 
     @Override public String iconName() { return "meteor"; }
     @Override public Element defaultElement() { return ModElements.ARCANE.get(); }

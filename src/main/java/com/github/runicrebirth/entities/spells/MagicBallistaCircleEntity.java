@@ -9,7 +9,7 @@ import net.minecraft.world.phys.Vec3;
 
 public class MagicBallistaCircleEntity extends AbstractSpellCircleEntity {
 
-    private static final int LIFESPAN = 120;
+    private static final int LIFESPAN = 84;
 
     private Vec3 direction;
     private float xRot;

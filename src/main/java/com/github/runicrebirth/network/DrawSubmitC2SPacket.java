@@ -1,13 +1,16 @@
 package com.github.runicrebirth.network;
 
 import com.github.runicrebirth.RunicRebirth;
+import com.github.runicrebirth.advancement.SpellAdvancementHelper;
 import com.github.runicrebirth.api.events.ShapeRecognizedEvent;
 import com.github.runicrebirth.api.registry.ElementRegistry;
 import com.github.runicrebirth.api.registry.ShapeRegistry;
 import com.github.runicrebirth.api.spells.Element;
 import com.github.runicrebirth.api.spells.SpellComponent;
 import com.github.runicrebirth.api.spells.SpellStack;
+import com.github.runicrebirth.api.spells.SpellType;
 import com.github.runicrebirth.capabilities.magic.MagicData;
+import com.github.runicrebirth.init.ModSounds;
 import com.github.runicrebirth.items.SpellWriter;
 import com.github.runicrebirth.magic.recognition.Recognizers;
 import com.github.runicrebirth.magic.recognition.ShapeRecognizer;
@@ -20,6 +23,7 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.common.NeoForge;
@@ -32,7 +36,7 @@ import net.neoforged.neoforge.network.handling.IPayloadContext;
 public record DrawSubmitC2SPacket(List<List<StrokePoint>> strokes, ResourceLocation elementId) implements CustomPacketPayload {
 
     public static final int MAX_STROKES = 16;
-    public static final int MAX_POINTS_PER_STROKE = 512;
+    public static final int MAX_POINTS_PER_STROKE = 256;
     // Per-shape recognition thresholds live on ShapeRegistry.Shape now; see ModShapes.init.
 
     public static final Type<DrawSubmitC2SPacket> TYPE =
@@ -92,15 +96,17 @@ public record DrawSubmitC2SPacket(List<List<StrokePoint>> strokes, ResourceLocat
             ShapeRecognizer.Result result = Recognizers.get().recognizeStrokes(packet.strokes);
             if (result == null || result.id() == null) {
                 if (Log.DRAW_DEBUG) RunicRebirth.LOGGER.info("[RunicRebirth] No shape match (no result)");
+                player.playNotifySound(ModSounds.CANVAS_FAILED.get(), SoundSource.PLAYERS, 1.0f, 1.0f);
                 return;
             }
 
             ResourceLocation id = ResourceLocation.parse(result.id());
             double threshold = ShapeRegistry.thresholdFor(id);
-            if (result.score() < threshold) {
+            if (result.score() / 10 < threshold) {
                 if (Log.DRAW_DEBUG) RunicRebirth.LOGGER.info(
                     String.format("[RunicRebirth] Rejected shape '%s' (score=%.3f < min=%.3f)",
-                        id, result.score(), threshold));
+                        id, result.score() / 10, threshold));
+                player.playNotifySound(ModSounds.CANVAS_FAILED.get(), SoundSource.PLAYERS, 1.0f, 1.0f);
                 return;
             }
 
@@ -108,6 +114,17 @@ public record DrawSubmitC2SPacket(List<List<StrokePoint>> strokes, ResourceLocat
             if (component == null) {
                 if (Log.DRAW_DEBUG) RunicRebirth.LOGGER.info(
                     String.format("[RunicRebirth] Recognized shape '%s' but no registered component", id));
+                player.playNotifySound(ModSounds.CANVAS_FAILED.get(), SoundSource.PLAYERS, 1.0f, 1.0f);
+                return;
+            }
+
+            if (component instanceof SpellType spellType && !SpellAdvancementHelper.hasSpellUnlocked(player, spellType)) {
+                player.displayClientMessage(
+                    net.minecraft.network.chat.Component.translatable("runicrebirth.spell.locked",
+                        spellType.displayName()), true);
+                if (Log.DRAW_DEBUG) RunicRebirth.LOGGER.info(
+                    String.format("[RunicRebirth] Rejected locked spell '%s' for player %s", id, player.getName().getString()));
+                player.playNotifySound(ModSounds.CANVAS_FAILED.get(), SoundSource.PLAYERS, 1.0f, 1.0f);
                 return;
             }
 
@@ -118,6 +135,7 @@ public record DrawSubmitC2SPacket(List<List<StrokePoint>> strokes, ResourceLocat
                 String.format("[RunicRebirth] Recognized shape '%s' (score=%.3f) → appended %s to stack[%d], %d components",
                     id, result.score(), component.id(), data.activeStackIndex(), data.activeStack().components().size()));
 
+            player.playNotifySound(ModSounds.CANVAS_SUCCESS.get(), SoundSource.PLAYERS, 1.0f, 1.0f);
             NeoForge.EVENT_BUS.post(new ShapeRecognizedEvent(player, id, result.score(), component));
             StackChangedS2CPacket.sendTo(player);
         });

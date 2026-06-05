@@ -1,0 +1,19 @@
+{
+  "parent": "runicrebirth:spells/magic_projectile",
+  "display": {
+    "icon": {
+      "id": "minecraft:shield"
+    },
+    "title": {"translate": "advancement.runicrebirth.spells.magic_shield.title"},
+    "description": {"translate": "advancement.runicrebirth.spells.magic_shield.description"},
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": true
+  },
+  "criteria": {
+    "placeholder": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

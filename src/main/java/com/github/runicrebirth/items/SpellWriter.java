@@ -11,6 +11,7 @@ import com.github.runicrebirth.capabilities.magic.MagicData;
 import com.github.runicrebirth.entities.spells.AbstractCircleEntity;
 import com.github.runicrebirth.magic.stack.SpellResolver;
 import com.github.runicrebirth.network.StackChangedS2CPacket;
+import com.github.runicrebirth.spells.types.Infusion;
 import com.github.runicrebirth.util.RaycastBuilder;
 import com.github.runicrebirth.util.RaycastTarget;
 import net.minecraft.server.level.ServerLevel;

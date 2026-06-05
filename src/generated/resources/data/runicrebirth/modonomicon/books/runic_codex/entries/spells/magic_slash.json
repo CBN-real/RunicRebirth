@@ -1,0 +1,61 @@
+{
+  "background_u_index": 0,
+  "background_v_index": 0,
+  "category": "spells",
+  "condition": {
+    "type": "runicrebirth:spell_unlock",
+    "advancement_id": "runicrebirth:spells/magic_slash",
+    "spell_name": "Magic Slash",
+    "unlock_hint": "Unlock conditions coming soon"
+  },
+  "description": "book.runicrebirth.runic_codex.spells.magic_slash.description",
+  "hide_while_locked": false,
+  "icon": {
+    "height": 16,
+    "texture": "runicrebirth:textures/gui/shape_icons/slash_icon.png",
+    "width": 16
+  },
+  "name": "book.runicrebirth.runic_codex.spells.magic_slash.name",
+  "pages": [
+    {
+      "type": "runicrebirth:spell_page",
+      "anchor": "",
+      "condition": {
+        "type": "modonomicon:none"
+      },
+      "damage": "4",
+      "damage_type": "SHARP",
+      "offset_x": 1.1,
+      "offset_y": 0.4,
+      "offset_z": 0.0,
+      "range": "16",
+      "spell_name": "Magic Slash"
+    },
+    {
+      "type": "modonomicon:entity",
+      "anchor": "",
+      "condition": {
+        "type": "modonomicon:none"
+      },
+      "default_rotation": -45.0,
+      "entity_id": "runicrebirth:magic_slash_demo",
+      "name": "",
+      "offset": 0.0,
+      "rotate": false,
+      "scale": 0.5,
+      "text": "book.runicrebirth.runic_codex.spells.magic_slash.entity.text"
+    }
+  ],
+  "parents": [
+    {
+      "draw_arrow": true,
+      "entry": "spells/magic_shield",
+      "line_enabled": true,
+      "line_reversed": false
+    }
+  ],
+  "show_when_any_parent_unlocked": false,
+  "sort_number": 18,
+  "x": -2,
+  "y": -1
+}

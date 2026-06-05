@@ -37,6 +37,22 @@ repositories {
         name = 'Curios'
         url = 'https://maven.theillusivec4.top/'
     }
+    // Modonomicon — data-driven guidebook
+    maven {
+        name = 'Modonomicon'
+        url = 'https://dl.cloudsmith.io/public/klikli-dev/mods/maven/'
+        content {
+            includeGroup "com.klikli_dev"
+        }
+    }
+    // Athena — connected texture models (CTM)
+    maven {
+        name = 'Athena'
+        url = 'https://maven.teamresourceful.com/repository/maven-public/'
+        content {
+            includeGroup "earth.terrarium.athena"
+        }
+    }
 }
 
 base {
@@ -129,6 +145,8 @@ configurations {
 dependencies {
     implementation "software.bernie.geckolib:geckolib-neoforge-${minecraft_version}:${geckolib_version}"
     implementation "top.theillusivec4.curios:curios-neoforge:${curios_version}"
+    implementation("com.klikli_dev:modonomicon-${minecraft_version}-neoforge:${modonomicon_version}") { transitive = false }
+    implementation "earth.terrarium.athena:athena-neoforge-1.21:${athena_version}"
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.

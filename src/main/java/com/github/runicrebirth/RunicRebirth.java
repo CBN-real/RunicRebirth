@@ -1,5 +1,6 @@
 package com.github.runicrebirth;
 
+import com.github.runicrebirth.advancement.triggers.ModCriteriaTriggers;
 import com.github.runicrebirth.api.registry.ElementRegistry;
 import com.github.runicrebirth.api.registry.ModifierRegistry;
 import com.github.runicrebirth.api.registry.SpellTypeRegistry;
@@ -7,6 +8,7 @@ import com.github.runicrebirth.config.ClientConfig;
 import com.github.runicrebirth.config.ServerConfig;
 import com.github.runicrebirth.init.ModArmorMaterials;
 import com.github.runicrebirth.init.ModAttachments;
+import com.github.runicrebirth.init.ModBlockEntities;
 import com.github.runicrebirth.init.ModBlocks;
 import com.github.runicrebirth.init.ModDataComponents;
 import com.github.runicrebirth.init.ModElements;
@@ -14,8 +16,12 @@ import com.github.runicrebirth.init.ModEntities;
 import com.github.runicrebirth.init.ModItems;
 import com.github.runicrebirth.init.ModModifiers;
 import com.github.runicrebirth.init.ModParticles;
+import com.github.runicrebirth.init.ModRecipeSerializers;
+import com.github.runicrebirth.init.ModRecipeTypes;
 import com.github.runicrebirth.init.ModShapes;
+import com.github.runicrebirth.init.ModSounds;
 import com.github.runicrebirth.init.ModSpellTypes;
+import com.github.runicrebirth.compat.modonomicon.ModonomiconCompat;
 import com.github.runicrebirth.network.ModPackets;
 import com.mojang.logging.LogUtils;
 import net.minecraft.world.item.CreativeModeTabs;
@@ -41,10 +47,15 @@ public class RunicRebirth {
         ModArmorMaterials.ARMOR_MATERIALS.register(modEventBus);
         ModItems.ITEMS.register(modEventBus);
         ModBlocks.BLOCKS.register(modEventBus);
+        ModBlockEntities.BLOCK_ENTITIES.register(modEventBus);
         ModEntities.ENTITIES.register(modEventBus);
         ModAttachments.ATTACHMENTS.register(modEventBus);
         ModDataComponents.COMPONENTS.register(modEventBus);
         ModParticles.PARTICLES.register(modEventBus);
+        ModCriteriaTriggers.TRIGGERS.register(modEventBus);
+        ModSounds.SOUNDS.register(modEventBus);
+        ModRecipeTypes.RECIPE_TYPES.register(modEventBus);
+        ModRecipeSerializers.RECIPE_SERIALIZERS.register(modEventBus);
 
         // Custom registries
         SpellTypeRegistry.register(modEventBus);
@@ -55,6 +66,8 @@ public class RunicRebirth {
         ModSpellTypes.init();
         ModModifiers.init();
         ModElements.init();
+        ModCriteriaTriggers.init();
+        ModSounds.init();
 
         // Configs
         ServerConfig.register(modContainer);
@@ -64,6 +77,7 @@ public class RunicRebirth {
     private void commonSetup(FMLCommonSetupEvent event) {
         LOGGER.info("[RunicRebirth] Common setup");
         event.enqueueWork(ModShapes::init);
+        event.enqueueWork(ModonomiconCompat::registerPageLoaders);
     }
 
     private void buildContents(BuildCreativeModeTabContentsEvent event) {
@@ -71,11 +85,27 @@ public class RunicRebirth {
             event.accept(ModItems.BASIC_WAND.get());
             event.accept(ModItems.INSCRIBED_WAND.get());
             event.accept(ModItems.RING_OF_EXPANSION.get());
-            event.accept(ModItems.APPRENTICE_SET_HELMET.get());
-            event.accept(ModItems.APPRENTICE_SET_CHESTPLATE.get());
-            event.accept(ModItems.APPRENTICE_SET_LEGGINGS.get());
-            event.accept(ModItems.APPRENTICE_SET_BOOTS.get());
+            event.accept(ModItems.ACOLYTE_WIZARD_HAT.get());
+            event.accept(ModItems.ACOLYTE_ROBES.get());
+            event.accept(ModItems.ACOLYTE_PANTS.get());
+            event.accept(ModItems.ACOLYTE_BOOTS.get());
+            event.accept(ModItems.ACOLYTE_ARTIFICER_HEADGEAR.get());
+            event.accept(ModItems.ACOLYTE_MAGE_HOOD.get());
+            event.accept(ModItems.ACOLYTE_RUNEBLADE_HELMET.get());
+            event.accept(ModItems.RUNIC_CODEX.get());
+            event.accept(ModItems.ARCANE_SPIRIT.get());
+            event.accept(ModItems.ARCANE_GEMSTONE.get());
         }
-
+        if (event.getTabKey() == CreativeModeTabs.BUILDING_BLOCKS) {
+            event.accept(ModItems.RUNIC_STONE.get());
+            event.accept(ModItems.RUNIC_STONE_SLAB.get());
+            event.accept(ModItems.RUNIC_STONE_STAIRS.get());
+            event.accept(ModItems.RUNIC_STONE_PILLAR.get());
+            event.accept(ModItems.OCULUS_PORTAL.get());
+            event.accept(ModItems.OCULUS_CONTROLLER.get());
+            event.accept(ModItems.OCULUS_PILLAR.get());
+            event.accept(ModItems.RUNESTEEL_PYLON.get());
+            event.accept(ModItems.INFUSION_ALTAR.get());
+        }
     }
 }

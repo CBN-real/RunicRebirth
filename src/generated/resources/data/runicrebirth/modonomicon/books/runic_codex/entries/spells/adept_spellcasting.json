@@ -1,0 +1,54 @@
+{
+  "background_u_index": 0,
+  "background_v_index": 1,
+  "category": "spells",
+  "description": "book.runicrebirth.runic_codex.spells.adept_spellcasting.description",
+  "hide_while_locked": false,
+  "icon": {
+    "item": "minecraft:nether_star"
+  },
+  "name": "book.runicrebirth.runic_codex.spells.adept_spellcasting.name",
+  "pages": [
+    {
+      "type": "runicrebirth:spell_page",
+      "anchor": "",
+      "condition": {
+        "type": "modonomicon:none"
+      },
+      "damage": "0",
+      "damage_type": "BLUNT",
+      "hide_stats": true,
+      "offset_x": 0.0,
+      "offset_y": 0.0,
+      "offset_z": 0.0,
+      "range": "0",
+      "spell_name": "Adept Spellcasting"
+    },
+    {
+      "type": "modonomicon:entity",
+      "anchor": "",
+      "condition": {
+        "type": "modonomicon:none"
+      },
+      "default_rotation": -45.0,
+      "entity_id": "runicrebirth:intermediate_circle",
+      "name": "",
+      "offset": 0.0,
+      "rotate": false,
+      "scale": 0.8,
+      "text": "book.runicrebirth.runic_codex.spells.adept_spellcasting.entity.text"
+    }
+  ],
+  "parents": [
+    {
+      "draw_arrow": true,
+      "entry": "spells/magic_arrow",
+      "line_enabled": true,
+      "line_reversed": false
+    }
+  ],
+  "show_when_any_parent_unlocked": false,
+  "sort_number": 16,
+  "x": -7,
+  "y": -1
+}

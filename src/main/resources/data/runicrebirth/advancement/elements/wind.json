@@ -1,0 +1,22 @@
+{
+  "parent": "runicrebirth:elements/root",
+  "display": {
+    "icon": {
+      "id": "minecraft:feather"
+    },
+    "title": {"translate": "advancement.runicrebirth.elements.wind.title"},
+    "description": {"translate": "advancement.runicrebirth.elements.wind.description"},
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "element_trial": {
+      "trigger": "runicrebirth:element_trial",
+      "conditions": {
+        "element": "runicrebirth:wind"
+      }
+    }
+  }
+}

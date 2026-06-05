@@ -4,6 +4,7 @@ import com.github.runicrebirth.api.registry.ElementRegistry;
 import com.github.runicrebirth.api.spells.Element;
 import com.github.runicrebirth.api.spells.MagicDamageType;
 import com.github.runicrebirth.api.spells.SpellParams;
+import com.github.runicrebirth.client.BookDisplayState;
 import com.github.runicrebirth.init.ModElements;
 import com.github.runicrebirth.util.ParticleHelper;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -27,7 +28,11 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 public abstract class AbstractProjectileSpellEntity extends ThrowableProjectile implements GeoEntity {
 
     protected static final RawAnimation INITIATE_AND_HOLD = RawAnimation.begin().thenPlay("initiate_spell").thenLoop("hold_spell");
+    protected static final RawAnimation HOLD_SPELL = RawAnimation.begin().thenLoop("hold_spell");
     protected static final RawAnimation END_SPELL = RawAnimation.begin().thenPlayAndHold("end_spell");
+    private static final RawAnimation SPELLBOOK_INTRO = RawAnimation.begin().thenPlay("initiate_spell").thenPlay("hold_spell");
+    private static final RawAnimation SPELLBOOK_END = RawAnimation.begin().thenPlayAndHold("end_spell");
+    protected static final int SPELLBOOK_HOLD_TICKS = 60;
 
     private static final EntityDataAccessor<String> DATA_ELEMENT =
         SynchedEntityData.defineId(AbstractProjectileSpellEntity.class, EntityDataSerializers.STRING);
@@ -37,14 +42,19 @@ public abstract class AbstractProjectileSpellEntity extends ThrowableProjectile 
         SynchedEntityData.defineId(AbstractProjectileSpellEntity.class, EntityDataSerializers.INT);
 
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
+    private long displayStartNanos;
+    private int displayPhase;
+    private double holdStartTick;
+    private double phaseStartTick;
+    private boolean phaseAnimSet;
 
     protected int age;
     protected float damage = 1f;
     protected float size = 1f;
     protected Element element;
     protected MagicDamageType damageCategory = MagicDamageType.BLUNT;
-    protected int chargeTicks = 10;
-    protected int endTicks = 10;
+    protected int chargeTicks = 41;
+    protected int endTicks = 15;
     protected int phaseAge;
     private Vec3 storedDirection;
     private float storedSpeed;
@@ -106,6 +116,10 @@ public abstract class AbstractProjectileSpellEntity extends ThrowableProjectile 
     }
 
     public String getElementId() {
+        if (!this.isAddedToLevel()) {
+            String override = BookDisplayState.getSelectedElement();
+            if (override != null) return override;
+        }
         return this.entityData.get(DATA_ELEMENT);
     }
 
@@ -176,6 +190,46 @@ public abstract class AbstractProjectileSpellEntity extends ThrowableProjectile 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
         controllers.add(new AnimationController<>(this, "spell_phase", 0, state -> {
+            if (!this.isAddedToLevel()) {
+                double currentTick = this.getTick(this);
+                var controller = state.getController();
+                switch (displayPhase) {
+                    case 0:
+                        if (!phaseAnimSet) {
+                            state.setAnimation(SPELLBOOK_INTRO);
+                            phaseAnimSet = true;
+                            phaseStartTick = currentTick;
+                        }
+                        if (currentTick - phaseStartTick > this.chargeTicks) {
+                            displayPhase = 1;
+                            holdStartTick = currentTick;
+                            phaseAnimSet = false;
+                        }
+                        break;
+                    case 1:
+                        if (!phaseAnimSet) {
+                            phaseAnimSet = true;
+                        }
+                        if (currentTick - holdStartTick >= SPELLBOOK_HOLD_TICKS) {
+                            displayPhase = 2;
+                            phaseAnimSet = false;
+                        }
+                        break;
+                    case 2:
+                        if (!phaseAnimSet) {
+                            state.setAnimation(SPELLBOOK_END);
+                            phaseAnimSet = true;
+                            phaseStartTick = currentTick;
+                        }
+                        if (currentTick - phaseStartTick > this.endTicks) {
+                            displayPhase = 0;
+                            phaseAnimSet = false;
+                            controller.forceAnimationReset();
+                        }
+                        break;
+                }
+                return PlayState.CONTINUE;
+            }
             if (state.getAnimatable().getPhase() == SpellPhase.ENDING) {
                 state.setAnimation(END_SPELL);
             } else {
@@ -183,6 +237,16 @@ public abstract class AbstractProjectileSpellEntity extends ThrowableProjectile 
             }
             return PlayState.CONTINUE;
         }));
+    }
+
+    @Override
+    public double getTick(Object entity) {
+        if (!this.isAddedToLevel()) {
+            long now = System.nanoTime();
+            if (displayStartNanos == 0L) displayStartNanos = now;
+            return (now - displayStartNanos) / 50_000_000.0;
+        }
+        return this.tickCount;
     }
 
     @Override

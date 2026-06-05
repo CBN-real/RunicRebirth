@@ -18,12 +18,9 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.UUID;
-import software.bernie.geckolib.animation.AnimatableManager;
-import software.bernie.geckolib.animation.AnimationController;
-import software.bernie.geckolib.animation.PlayState;
-import software.bernie.geckolib.animation.RawAnimation;
 
-public class MagicHammerEntity extends AbstractSpellEntity {
+
+public class MagicHammerEntity extends AbstractInstantSpellEntity {
 
     private static final float HOVER_HEIGHT = 1.0f;
 
@@ -129,19 +126,14 @@ public class MagicHammerEntity extends AbstractSpellEntity {
     public void lerpTo(double x, double y, double z, float yRot, float xRot, int steps) {
     }
 
-    @Override
-    public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-      controllers.add(new AnimationController<>(this, "spell_phase", 0,
-          state -> state.setAndContinue(RawAnimation.begin().thenPlay("initiate_spell"))));
-    }
-
     private void impact(Vec3 center, boolean hasDirectTarget) {
         if (!(this.level() instanceof ServerLevel server)) return;
         Entity caster = server.getEntity(casterUUID);
 
         if (hasDirectTarget && trackedEntity instanceof LivingEntity target) {
             if (caster instanceof LivingEntity living) {
-                SpellDamageSource source = SpellDamageSource.source(this, living, damageCategory, element());
+                SpellDamageSource source = SpellDamageSource.source(this, living, damageCategory, element())
+                    .withSpellType(com.github.runicrebirth.spells.types.MagicHammer.ID);
                 DamageSources.applyDamage(target, directDamage, source);
             } else {
                 target.hurt(this.damageSources().magic(), directDamage);
@@ -151,7 +143,8 @@ public class MagicHammerEntity extends AbstractSpellEntity {
         for (LivingEntity target : Utils.entitiesInRange(server, center, splashRadius, this)) {
             if (hasDirectTarget && target == trackedEntity) continue;
             if (caster instanceof LivingEntity living) {
-                SpellDamageSource source = SpellDamageSource.source(this, living, damageCategory, element());
+                SpellDamageSource source = SpellDamageSource.source(this, living, damageCategory, element())
+                    .withSpellType(com.github.runicrebirth.spells.types.MagicHammer.ID);
                 DamageSources.applyDamage(target, splashDamage, source);
             } else {
                 target.hurt(this.damageSources().magic(), splashDamage);

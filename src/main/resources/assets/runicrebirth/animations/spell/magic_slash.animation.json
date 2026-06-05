@@ -2,23 +2,52 @@
 	"format_version": "1.8.0",
 	"animations": {
 		"initiate_spell": {
-			"animation_length": 4,
+			"animation_length": 2.2083,
 			"bones": {
 				"magic_slash": {
 					"position": {
-						"vector": [0, "math.sin(query.anim_time * 360) * 0.4", 0]
+						"2.0417": {
+							"vector": [0, "math.sin(query.anim_time * 360) * 0.4", 3]
+						},
+						"2.2083": {
+							"vector": [0, "math.sin(query.anim_time * 360) * 0.4", -3],
+							"easing": "easeOutQuad"
+						}
 					},
 					"scale": {
-						"0.0": {
+						"2.0417": {
 							"vector": [0, 1, 1]
 						},
-						"0.1667": {
+						"2.2083": {
 							"vector": [1, 1, 1],
 							"easing": "easeOutBack"
+						}
+					}
+				}
+			}
+		},
+		"hold_spell": {
+			"loop": true,
+			"animation_length": 1.5,
+			"bones": {
+				"magic_slash": {
+					"scale": {
+						"vector": [1, 1, "1 + math.sin(query.anim_time * 240) * 0.15"],
+						"easing": "linear"
+					}
+				}
+			}
+		},
+		"end_spell": {
+			"animation_length": 0.0417,
+			"bones": {
+				"magic_slash": {
+					"scale": {
+						"0.0": {
+							"vector": [1, 1, 1]
 						},
-						"4.0": {
-							"vector": [1, 1, "1 + math.sin(query.anim_time * 240) * 0.15"],
-							"easing": "linear"
+						"0.0417": {
+							"vector": [0, 0, 0]
 						}
 					}
 				}

@@ -1,0 +1,100 @@
+{
+	"format_version": "1.9.0",
+	"credit": "Made with Blockbench",
+	"ambientocclusion": false,
+	"textures": {
+		"0": "runicrebirth:block/runic_stone",
+		"particle": "runicrebirth:block/runic_stone"
+	},
+	"elements": [
+		{
+			"name": "octagon",
+			"from": [5.50329, 0.02813, 1.7168],
+			"to": [10.70846, 16.05938, 14.2832],
+			"rotation": {"angle": 45, "axis": "y", "origin": [8.10587, 0.27813, 8]},
+			"faces": {
+				"north": {"uv": [1, 0, 8, 16], "texture": "#0"},
+				"east": {"uv": [0, 0, 16, 16], "texture": "#0"},
+				"south": {"uv": [1, 0, 8, 16], "texture": "#0"},
+				"west": {"uv": [0, 0, 16, 16], "texture": "#0"},
+				"up": {"uv": [1, 0, 15, 16], "texture": "#0"},
+				"down": {"uv": [1, 0, 15, 16], "texture": "#0"}
+			}
+		},
+		{
+			"name": "octagon",
+			"from": [5.50329, 0.02813, 1.7168],
+			"to": [10.70846, 16.02813, 14.2832],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8.10587, 0.27813, 8]},
+			"faces": {
+				"north": {"uv": [8, 0, 15, 16], "texture": "#0"},
+				"east": {"uv": [0, 0, 16, 16], "texture": "#0"},
+				"south": {"uv": [8, 0, 15, 16], "texture": "#0"},
+				"west": {"uv": [0, 0, 16, 16], "texture": "#0"},
+				"up": {"uv": [0, 0, 16, 16], "texture": "#0"},
+				"down": {"uv": [0, 0, 16, 16], "texture": "#0"}
+			}
+		},
+		{
+			"name": "octagon",
+			"from": [1.82268, 0.02813, 5.39742],
+			"to": [14.38907, 16.04376, 10.60258],
+			"rotation": {"angle": 45, "axis": "y", "origin": [8.10587, 0.27813, 8]},
+			"faces": {
+				"north": {"uv": [0, 0, 16, 16], "texture": "#0"},
+				"east": {"uv": [1, 0, 8, 16], "texture": "#0"},
+				"south": {"uv": [0, 0, 16, 16], "texture": "#0"},
+				"west": {"uv": [1, 0, 8, 16], "texture": "#0"},
+				"up": {"uv": [0, 1, 16, 15], "texture": "#0"},
+				"down": {"uv": [0, 1, 16, 15], "texture": "#0"}
+			}
+		},
+		{
+			"name": "octagon",
+			"from": [1.82268, 0.02813, 5.39742],
+			"to": [14.38907, 16.02813, 10.60258],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8.10587, 0.27813, 8]},
+			"faces": {
+				"north": {"uv": [0, 0, 16, 16], "texture": "#0"},
+				"east": {"uv": [8, 0, 15, 16], "texture": "#0"},
+				"south": {"uv": [0, 0, 16, 16], "texture": "#0"},
+				"west": {"uv": [8, 0, 15, 16], "texture": "#0"},
+				"up": {"uv": [0, 0, 16, 16], "texture": "#0"},
+				"down": {"uv": [0, 0, 16, 16], "texture": "#0"}
+			}
+		}
+	],
+	"display": {
+		"thirdperson_righthand": {
+			"rotation": [75, 45, 0],
+			"translation": [0, 2.5, 0],
+			"scale": [0.375, 0.375, 0.375]
+		},
+		"thirdperson_lefthand": {
+			"rotation": [75, 45, 0],
+			"translation": [0, 2.5, 0],
+			"scale": [0.375, 0.375, 0.375]
+		},
+		"firstperson_righthand": {
+			"rotation": [0, 45, 0],
+			"scale": [0.4, 0.4, 0.4]
+		},
+		"firstperson_lefthand": {
+			"rotation": [0, -135, 0],
+			"scale": [0.4, 0.4, 0.4]
+		},
+		"gui": {
+			"rotation": [30, -135, 0],
+			"scale": [0.625, 0.625, 0.625]
+		}
+	},
+	"groups": [
+		{
+			"name": "runic_stone_pillar",
+			"origin": [7.89412, 0, 8],
+			"scope": 0,
+			"color": 0,
+			"children": [0, 1, 2, 3]
+		}
+	]
+}

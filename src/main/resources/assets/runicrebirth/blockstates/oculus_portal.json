@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=north": { "model": "runicrebirth:block/oculus_portal" },
+    "facing=south": { "model": "runicrebirth:block/oculus_portal" },
+    "facing=west": { "model": "runicrebirth:block/oculus_portal" },
+    "facing=east": { "model": "runicrebirth:block/oculus_portal" }
+  }
+}

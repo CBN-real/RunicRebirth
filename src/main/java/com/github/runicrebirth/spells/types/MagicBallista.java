@@ -23,6 +23,7 @@ public class MagicBallista extends SpellType {
     @Override public int cooldownTicks() { return 120; }
     @Override public float baseDamage() { return 8f; }
     @Override public float baseSize() { return 1f; }
+  @Override public float spellHeight() { return 0.4375f * this.baseSize(); }
     @Override public float baseSpeed() { return 1.5f; }
 
     @Override public String iconName() { return "ballista"; }

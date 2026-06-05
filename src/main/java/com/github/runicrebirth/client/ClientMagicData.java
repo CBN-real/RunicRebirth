@@ -7,7 +7,9 @@ import com.github.runicrebirth.network.StackChangedS2CPacket;
 import com.github.runicrebirth.util.Log;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
@@ -26,6 +28,7 @@ public final class ClientMagicData {
     private static int activeIndex = 0;
     private static int castAnimTicksRemaining = 0;
     private static int charges = 0;
+    private static Set<ResourceLocation> unlockedSpells = new HashSet<>();
     private static Runnable onStackChanged;
     private ClientMagicData() {}
 
@@ -114,5 +117,13 @@ public final class ClientMagicData {
     public static int charges() { return charges; }
 
     public static boolean hasCharges() { return charges > 0; }
+
+    public static void setUnlockedSpells(Set<ResourceLocation> spells) {
+        unlockedSpells = new HashSet<>(spells);
+    }
+
+    public static boolean isSpellUnlocked(ResourceLocation spellTypeId) {
+        return unlockedSpells.contains(spellTypeId);
+    }
 
 }

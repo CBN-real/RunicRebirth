@@ -1,0 +1,13 @@
+{
+  "type": "runicrebirth:infusion",
+  "ingredients": [
+    { "item": "minecraft:stone" },
+    { "item": "minecraft:stone" },
+    { "item": "runicrebirth:arcane_spirit" }
+  ],
+  "result": {
+    "id": "runicrebirth:runic_stone",
+    "count": 2
+  },
+  "crafting_time": 165
+}

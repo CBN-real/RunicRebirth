@@ -22,7 +22,8 @@ public class MagicArrow extends SpellType {
 
     @Override public int cooldownTicks() { return 60; }
     @Override public float baseDamage() { return 6f; }
-    @Override public float baseSize() { return 0.125f; }
+    @Override public float baseSize() { return 1.0f; }
+    @Override public float spellHeight() { return 0.125f * this.baseSize(); }
     @Override public float baseSpeed() { return 1.5f; }
 
     @Override public String iconName() { return "arrow"; }

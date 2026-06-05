@@ -15,9 +15,10 @@ import software.bernie.geckolib.animation.AnimationController;
 import software.bernie.geckolib.animation.PlayState;
 import software.bernie.geckolib.animation.RawAnimation;
 
-public class MagicBeamEntity extends AbstractSpellEntity {
+public class MagicBeamEntity extends AbstractInstantSpellEntity {
 
     private static final RawAnimation INITIATE_SPELL = RawAnimation.begin().thenPlayAndHold("initiate_spell");
+    private static final RawAnimation CODEX_ANIM = RawAnimation.begin().thenLoop("initiate_spell");
 
     private static final EntityDataAccessor<Float> DATA_DISTANCE =
         SynchedEntityData.defineId(MagicBeamEntity.class, EntityDataSerializers.FLOAT);
@@ -65,6 +66,14 @@ public class MagicBeamEntity extends AbstractSpellEntity {
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
         controllers.add(new AnimationController<>(this, "beam", 0, state -> {
+          if (!this.isAddedToLevel()) {
+            double currentTick = this.getTick(this);
+            var controller = state.getController();
+            var animState = controller.getAnimationState();
+            state.setAnimation(CODEX_ANIM);
+            return PlayState.CONTINUE;
+          }
+
             state.setAnimation(INITIATE_SPELL);
             return PlayState.CONTINUE;
         }));

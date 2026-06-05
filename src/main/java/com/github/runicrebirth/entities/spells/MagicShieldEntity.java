@@ -22,32 +22,24 @@ import net.minecraft.world.phys.Vec3;
 
 import java.util.UUID;
 
-public class MagicShieldEntity extends AbstractSpellEntity {
+public class MagicShieldEntity extends AbstractEffectSpellEntity {
 
     private static final EntityDataAccessor<Float> DATA_SHIELD_HEALTH =
         SynchedEntityData.defineId(MagicShieldEntity.class, EntityDataSerializers.FLOAT);
-    private static final EntityDataAccessor<Integer> DATA_OWNER_ID =
-        SynchedEntityData.defineId(MagicShieldEntity.class, EntityDataSerializers.INT);
-
-    private UUID ownerUUID;
-    private int maxDuration = 600;
-
-
 
     public MagicShieldEntity(EntityType<? extends MagicShieldEntity> type, Level level) {
         super(type, level);
-        this.chargeTicks = 0;
+        this.chargeTicks = 30;
         this.endTicks = 60;
     }
 
     public MagicShieldEntity(Level level, LivingEntity owner, SpellParams params,
                              float shieldHealth, int duration) {
         this(ModEntities.MAGIC_SHIELD.get(), level);
-        this.ownerUUID = owner.getUUID();
         this.maxDuration = duration;
         initFromParams(params);
+        setFollowedEntity(owner);
         this.entityData.set(DATA_SHIELD_HEALTH, shieldHealth);
-        this.entityData.set(DATA_OWNER_ID, owner.getId());
         this.setPos(owner.getX(), owner.getY(), owner.getZ());
     }
 
@@ -55,7 +47,6 @@ public class MagicShieldEntity extends AbstractSpellEntity {
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder);
         builder.define(DATA_SHIELD_HEALTH, 20f);
-        builder.define(DATA_OWNER_ID, -1);
     }
 
     public float getShieldHealth() {
@@ -71,11 +62,11 @@ public class MagicShieldEntity extends AbstractSpellEntity {
     }
 
     public UUID getOwnerUUID() {
-        return ownerUUID;
+        return followedUUID;
     }
 
     public int getOwnerId() {
-        return this.entityData.get(DATA_OWNER_ID);
+        return getFollowedEntityId();
     }
 
     public void absorbDamage(float amount) {
@@ -94,25 +85,25 @@ public class MagicShieldEntity extends AbstractSpellEntity {
             beginEnding();
             return;
         }
-        if (ownerUUID == null) {
+        if (followedUUID == null) {
             beginEnding();
             return;
         }
-        Entity owner = ((ServerLevel) this.level()).getEntity(ownerUUID);
+        Entity owner = ((ServerLevel) this.level()).getEntity(followedUUID);
         if (owner == null || !owner.isAlive()) {
             beginEnding();
             return;
         }
-        snapToOwner(owner);
+        snapToFollowed(owner);
     }
 
     @Override
     protected void spawnActiveParticles() {
-        int ownerId = this.entityData.get(DATA_OWNER_ID);
+        int ownerId = getFollowedEntityId();
         if (ownerId != -1) {
             Entity owner = this.level().getEntity(ownerId);
             if (owner != null) {
-                snapToOwner(owner);
+                snapToFollowed(owner);
             }
         }
         Vec3 pos = this.position();
@@ -125,13 +116,6 @@ public class MagicShieldEntity extends AbstractSpellEntity {
                 pos.x + dx, pos.y + 0.5 + this.level().random.nextDouble(), pos.z + dz,
                 0.0, 0.02, 0.0);
         }
-    }
-
-    private void snapToOwner(Entity owner) {
-        this.setPos(owner.getX(), owner.getY(), owner.getZ());
-        this.xo = owner.xo;
-        this.yo = owner.yo;
-        this.zo = owner.zo;
     }
 
     @Override
@@ -153,9 +137,5 @@ public class MagicShieldEntity extends AbstractSpellEntity {
             }
         }
         return null;
-    }
-
-    @Override
-    public void lerpTo(double x, double y, double z, float yRot, float xRot, int steps) {
     }
 }

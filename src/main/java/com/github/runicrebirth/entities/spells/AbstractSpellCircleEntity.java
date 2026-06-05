@@ -21,7 +21,7 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 
 public abstract class AbstractSpellCircleEntity extends Entity implements GeoEntity {
 
-    private static final int FINISH_TICKS = 40;
+    private static final int FINISH_TICKS = 0;
 
     private static final RawAnimation INITIATE_SPELL = RawAnimation.begin().thenPlay("initiate_spell").thenLoop("hold_spell");
     private static final RawAnimation END_SPELL = RawAnimation.begin().thenPlayAndHold("end_spell");

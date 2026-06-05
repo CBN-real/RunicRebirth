@@ -1,0 +1,61 @@
+{
+  "background_u_index": 0,
+  "background_v_index": 0,
+  "category": "spells",
+  "condition": {
+    "type": "runicrebirth:spell_unlock",
+    "advancement_id": "runicrebirth:spells/magic_blast",
+    "spell_name": "Magic Blast",
+    "unlock_hint": "Kill an entity with magic from less than 5 blocks away"
+  },
+  "description": "book.runicrebirth.runic_codex.spells.magic_blast.description",
+  "hide_while_locked": false,
+  "icon": {
+    "height": 16,
+    "texture": "runicrebirth:textures/gui/shape_icons/v_icon.png",
+    "width": 16
+  },
+  "name": "book.runicrebirth.runic_codex.spells.magic_blast.name",
+  "pages": [
+    {
+      "type": "runicrebirth:spell_page",
+      "anchor": "",
+      "condition": {
+        "type": "modonomicon:none"
+      },
+      "damage": "2.5",
+      "damage_type": "BLUNT",
+      "offset_x": 0.2,
+      "offset_y": 0.65,
+      "offset_z": 0.0,
+      "range": "Size-based",
+      "spell_name": "Magic Blast"
+    },
+    {
+      "type": "modonomicon:entity",
+      "anchor": "",
+      "condition": {
+        "type": "modonomicon:none"
+      },
+      "default_rotation": -45.0,
+      "entity_id": "runicrebirth:magic_blast",
+      "name": "",
+      "offset": 0.0,
+      "rotate": false,
+      "scale": 0.8,
+      "text": "book.runicrebirth.runic_codex.spells.magic_blast.entity.text"
+    }
+  ],
+  "parents": [
+    {
+      "draw_arrow": true,
+      "entry": "spells/magic_beam",
+      "line_enabled": true,
+      "line_reversed": false
+    }
+  ],
+  "show_when_any_parent_unlocked": false,
+  "sort_number": 14,
+  "x": -12,
+  "y": 0
+}

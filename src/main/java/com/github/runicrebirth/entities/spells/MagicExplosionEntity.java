@@ -13,13 +13,10 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-import software.bernie.geckolib.animation.AnimatableManager;
-import software.bernie.geckolib.animation.AnimationController;
-import software.bernie.geckolib.animation.RawAnimation;
 
 import java.util.UUID;
 
-public class MagicExplosionEntity extends AbstractSpellEntity {
+public class MagicExplosionEntity extends AbstractInstantSpellEntity {
 
     private float aoeRadius = 1.5f;
     private UUID casterUUID;
@@ -45,7 +42,8 @@ public class MagicExplosionEntity extends AbstractSpellEntity {
 
         for (LivingEntity target : Utils.entitiesInRange(server, center, aoeRadius, this)) {
             if (caster instanceof LivingEntity living) {
-                SpellDamageSource source = SpellDamageSource.source(this, living, damageCategory, element());
+                SpellDamageSource source = SpellDamageSource.source(this, living, damageCategory, element())
+                    .withSpellType(com.github.runicrebirth.spells.types.MagicExplosion.ID);
                 DamageSources.applyDamage(target, damage, source);
             } else {
                 target.hurt(this.damageSources().magic(), damage);
@@ -69,9 +67,4 @@ public class MagicExplosionEntity extends AbstractSpellEntity {
         this.level().addParticle(element().particle(), pos.x, pos.y + 0.3, pos.z, 0.0, 0.05, 0.0);
     }
 
-    @Override
-    public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<>(this, "spell_phase", 0,
-            state -> state.setAndContinue(RawAnimation.begin().thenPlay("initiate_spell"))));
-    }
 }

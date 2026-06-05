@@ -17,12 +17,11 @@ import net.minecraft.world.phys.Vec3;
 
 import java.util.UUID;
 
-public class MagicBindingEntity extends AbstractSpellEntity {
+public class MagicBindingEntity extends AbstractEffectSpellEntity {
 
     private static final int BIND_DURATION_TICKS = 60;
 
     private UUID casterUUID;
-    private UUID boundEntityUUID;
     private Vec3 bindPosition;
     private float totalDamage;
 
@@ -35,10 +34,10 @@ public class MagicBindingEntity extends AbstractSpellEntity {
     public MagicBindingEntity(Level level, LivingEntity caster, LivingEntity target, SpellParams params) {
         this(ModEntities.MAGIC_BINDING.get(), level);
         this.casterUUID = caster.getUUID();
-        this.boundEntityUUID = target.getUUID();
         this.bindPosition = target.position();
         this.totalDamage = params.damage;
         initFromParams(params);
+        setFollowedEntity(target);
         this.setPos(target.getX(), target.getY(), target.getZ());
     }
 
@@ -51,7 +50,7 @@ public class MagicBindingEntity extends AbstractSpellEntity {
             return;
         }
 
-        Entity bound = server.getEntity(boundEntityUUID);
+        Entity bound = server.getEntity(followedUUID);
         if (bound == null || !bound.isAlive()) {
             beginEnding();
             return;
@@ -67,6 +66,7 @@ public class MagicBindingEntity extends AbstractSpellEntity {
             Entity caster = server.getEntity(casterUUID);
             if (caster instanceof LivingEntity casterLiving) {
                 SpellDamageSource source = SpellDamageSource.source(this, casterLiving, damageCategory, element())
+                    .withSpellType(com.github.runicrebirth.spells.types.MagicBinding.ID)
                     .setIFrames(0);
                 DamageSources.ignoreNextKnockback(living);
                 DamageSources.applyDamage(living, tickDamage, source);

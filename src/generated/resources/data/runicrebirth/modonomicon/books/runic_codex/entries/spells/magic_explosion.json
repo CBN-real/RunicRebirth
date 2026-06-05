@@ -1,0 +1,61 @@
+{
+  "background_u_index": 0,
+  "background_v_index": 0,
+  "category": "spells",
+  "condition": {
+    "type": "runicrebirth:spell_unlock",
+    "advancement_id": "runicrebirth:spells/magic_explosion",
+    "spell_name": "Magic Explosion",
+    "unlock_hint": "Unlock conditions coming soon"
+  },
+  "description": "book.runicrebirth.runic_codex.spells.magic_explosion.description",
+  "hide_while_locked": false,
+  "icon": {
+    "height": 16,
+    "texture": "runicrebirth:textures/gui/shape_icons/explosion_icon.png",
+    "width": 16
+  },
+  "name": "book.runicrebirth.runic_codex.spells.magic_explosion.name",
+  "pages": [
+    {
+      "type": "runicrebirth:spell_page",
+      "anchor": "",
+      "condition": {
+        "type": "modonomicon:none"
+      },
+      "damage": "7",
+      "damage_type": "BLUNT",
+      "offset_x": 0.4,
+      "offset_y": -0.8,
+      "offset_z": 0.0,
+      "range": "16",
+      "spell_name": "Magic Explosion"
+    },
+    {
+      "type": "modonomicon:entity",
+      "anchor": "",
+      "condition": {
+        "type": "modonomicon:none"
+      },
+      "default_rotation": -45.0,
+      "entity_id": "runicrebirth:magic_explosion",
+      "name": "",
+      "offset": 0.0,
+      "rotate": false,
+      "scale": 0.4,
+      "text": "book.runicrebirth.runic_codex.spells.magic_explosion.entity.text"
+    }
+  ],
+  "parents": [
+    {
+      "draw_arrow": true,
+      "entry": "spells/magic_slash",
+      "line_enabled": true,
+      "line_reversed": false
+    }
+  ],
+  "show_when_any_parent_unlocked": false,
+  "sort_number": 19,
+  "x": -2,
+  "y": 0
+}

@@ -1,6 +1,7 @@
 package com.github.runicrebirth.init;
 
 import com.github.runicrebirth.api.registry.ModifierRegistry;
+import com.github.runicrebirth.api.spells.MagicDamageType;
 import com.github.runicrebirth.api.spells.SpellModifier;
 import com.github.runicrebirth.config.ServerConfig;
 import com.github.runicrebirth.spells.modifiers.*;
@@ -40,6 +41,18 @@ public final class ModModifiers {
 
     public static final DeferredHolder<SpellModifier, ChargesModifier> CHARGES =
         ModifierRegistry.MODIFIERS.register("charges", ChargesModifier::new);
+
+    public static final DeferredHolder<SpellModifier, DamageTypeBoostModifier> SHARP_BOOST =
+        ModifierRegistry.MODIFIERS.register("sharp_boost",
+            () -> new DamageTypeBoostModifier(DamageTypeBoostModifier.ID_SHARP_BOOST, MagicDamageType.SHARP, 1.5f));
+
+    public static final DeferredHolder<SpellModifier, DamageTypeBoostModifier> BLUNT_BOOST =
+        ModifierRegistry.MODIFIERS.register("blunt_boost",
+            () -> new DamageTypeBoostModifier(DamageTypeBoostModifier.ID_BLUNT_BOOST, MagicDamageType.BLUNT, 1.5f));
+
+    public static final DeferredHolder<SpellModifier, DamageTypeBoostModifier> MAGIC_BOOST =
+        ModifierRegistry.MODIFIERS.register("magic_boost",
+            () -> new DamageTypeBoostModifier(DamageTypeBoostModifier.ID_MAGIC_BOOST, MagicDamageType.SPIRIT, 1.5f));
 
     private ModModifiers() {}
 

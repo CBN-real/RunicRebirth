@@ -8,6 +8,7 @@ import com.github.runicrebirth.entities.spells.MagicBallistaEntity;
 import com.github.runicrebirth.entities.spells.MagicBeamEntity;
 import com.github.runicrebirth.entities.spells.MagicBlastEntity;
 import com.github.runicrebirth.entities.spells.MagicBindingEntity;
+import com.github.runicrebirth.entities.spells.InfusionCircleEntity;
 import com.github.runicrebirth.entities.spells.MagicExplosionEntity;
 import com.github.runicrebirth.entities.spells.MagicHammerEntity;
 import com.github.runicrebirth.entities.spells.AdvancedCircleEntity;
@@ -19,6 +20,7 @@ import com.github.runicrebirth.entities.spells.MagicProjectileEntity;
 import com.github.runicrebirth.entities.spells.MagicShieldEntity;
 import com.github.runicrebirth.entities.spells.MagicSlashCircleEntity;
 import com.github.runicrebirth.entities.spells.MagicSlashEntity;
+import com.github.runicrebirth.entities.spells.demo.SpellDemoEntity;
 import java.util.function.Function;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.entity.Entity;
@@ -86,7 +88,7 @@ public class ModEntities {
     public static final DeferredHolder<EntityType<?>, EntityType<MagicHammerEntity>> MAGIC_HAMMER = ENTITIES.register(
         "magic_hammer",
         () -> EntityType.Builder.<MagicHammerEntity>of(MagicHammerEntity::new, MobCategory.MISC)
-            .sized(0.8F, 0.8F)
+            .sized(1.0F, 2.0F)
             .clientTrackingRange(8)
             .updateInterval(5)
             .build("magic_hammer"));
@@ -138,7 +140,7 @@ public class ModEntities {
     public static final DeferredHolder<EntityType<?>, EntityType<IntermediateCircleEntity>> INTERMEDIATE_CIRCLE = ENTITIES.register(
         "intermediate_circle",
         () -> EntityType.Builder.<IntermediateCircleEntity>of(IntermediateCircleEntity::new, MobCategory.MISC)
-            .sized(0.7F, 0.7F)
+            .sized(0.6F, 0.6F)
             .clientTrackingRange(8)
             .updateInterval(5)
             .noSave()
@@ -147,7 +149,7 @@ public class ModEntities {
     public static final DeferredHolder<EntityType<?>, EntityType<AdvancedCircleEntity>> ADVANCED_CIRCLE = ENTITIES.register(
         "advanced_circle",
         () -> EntityType.Builder.<AdvancedCircleEntity>of(AdvancedCircleEntity::new, MobCategory.MISC)
-            .sized(0.7F, 0.7F)
+            .sized(0.8F, 0.8F)
             .clientTrackingRange(8)
             .updateInterval(5)
             .noSave()
@@ -180,6 +182,15 @@ public class ModEntities {
             .noSave()
             .build("magic_meteor_circle"));
 
+    public static final DeferredHolder<EntityType<?>, EntityType<InfusionCircleEntity>> INFUSION_CIRCLE = ENTITIES.register(
+        "infusion_circle",
+        () -> EntityType.Builder.<InfusionCircleEntity>of(InfusionCircleEntity::new, MobCategory.MISC)
+            .sized(1.0F, 1.0F)
+            .clientTrackingRange(8)
+            .updateInterval(5)
+            .noSave()
+            .build("infusion_circle"));
+
     public static final DeferredHolder<EntityType<?>, EntityType<MagicExplosionEntity>> MAGIC_EXPLOSION = ENTITIES.register(
         "magic_explosion",
         () -> EntityType.Builder.<MagicExplosionEntity>of(MagicExplosionEntity::new, MobCategory.MISC)
@@ -188,6 +199,30 @@ public class ModEntities {
             .updateInterval(5)
             .noSave()
             .build("magic_explosion"));
+
+    public static final DeferredHolder<EntityType<?>, EntityType<SpellDemoEntity>> MAGIC_SLASH_DEMO = ENTITIES.register(
+        "magic_slash_demo",
+        () -> EntityType.Builder.<SpellDemoEntity>of(SpellDemoEntity::new, MobCategory.MISC)
+            .sized(0.5F, 0.5F)
+            .clientTrackingRange(0)
+            .noSave()
+            .build("magic_slash_demo"));
+
+    public static final DeferredHolder<EntityType<?>, EntityType<SpellDemoEntity>> MAGIC_METEOR_DEMO = ENTITIES.register(
+        "magic_meteor_demo",
+        () -> EntityType.Builder.<SpellDemoEntity>of(SpellDemoEntity::new, MobCategory.MISC)
+            .sized(0.5F, 0.5F)
+            .clientTrackingRange(0)
+            .noSave()
+            .build("magic_meteor_demo"));
+
+    public static final DeferredHolder<EntityType<?>, EntityType<SpellDemoEntity>> MAGIC_BALLISTA_DEMO = ENTITIES.register(
+        "magic_ballista_demo",
+        () -> EntityType.Builder.<SpellDemoEntity>of(SpellDemoEntity::new, MobCategory.MISC)
+            .sized(0.5F, 0.5F)
+            .clientTrackingRange(0)
+            .noSave()
+            .build("magic_ballista_demo"));
 
     public static final DeferredHolder<EntityType<?>, EntityType<DrawingCanvasEntity>> DRAWING_CANVAS = ENTITIES.register(
         "drawing_canvas",

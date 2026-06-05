@@ -104,6 +104,22 @@ Best Cat
     ordering="AFTER"
     side="BOTH"
 
+# Modonomicon — data-driven guidebook
+[[dependencies.${mod_id}]]
+    modId="modonomicon"
+    type="required"
+    versionRange="[1.110.0,)"
+    ordering="AFTER"
+    side="BOTH"
+
+# Athena — connected texture models (client-side, optional)
+[[dependencies.${mod_id}]]
+    modId="athena"
+    type="required"
+    versionRange="[4.0.1,)"
+    ordering="AFTER"
+    side="CLIENT"
+
 # Features are specific properties of the game environment, that you may want to declare you require. This example declares
 # that your mod requires GL version 3.2 or higher. Other features will be added. They are side aware so declaring this won't
 # stop your mod loading on the server for example.

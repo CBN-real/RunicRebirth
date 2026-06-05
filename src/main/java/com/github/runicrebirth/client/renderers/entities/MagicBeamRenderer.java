@@ -37,10 +37,12 @@ public class MagicBeamRenderer extends AbstractSpellRenderer<MagicBeamEntity> {
         @Nullable MultiBufferSource bufferSource, @Nullable VertexConsumer buffer,
         boolean isReRender, float partialTick, int packedLight, int packedOverlay, int colour) {
 
-        float yaw = entity.getYRot();
-        float pitch = entity.getXRot();
-        poseStack.mulPose(Axis.YP.rotationDegrees(yaw));
-        poseStack.mulPose(Axis.XP.rotationDegrees(180+pitch));
+        if (entity.isAddedToLevel()) {
+            float yaw = entity.getYRot();
+            float pitch = entity.getXRot();
+            poseStack.mulPose(Axis.YP.rotationDegrees(yaw));
+            poseStack.mulPose(Axis.XP.rotationDegrees(180 + pitch));
+        }
 
         super.preRender(poseStack, entity, model, bufferSource, buffer, isReRender,
             partialTick, packedLight, OverlayTexture.NO_OVERLAY, colour);
@@ -50,6 +52,11 @@ public class MagicBeamRenderer extends AbstractSpellRenderer<MagicBeamEntity> {
     public void renderRecursively(PoseStack poseStack, MagicBeamEntity animatable, GeoBone bone,
         RenderType renderType, MultiBufferSource bufferSource, VertexConsumer buffer,
         boolean isReRender, float partialTick, int packedLight, int packedOverlay, int colour) {
+        if (!animatable.isAddedToLevel()) {
+            super.renderRecursively(poseStack, animatable, bone, renderType, bufferSource, buffer,
+                isReRender, partialTick, packedLight, packedOverlay, colour);
+            return;
+        }
         if ("inner".equals(bone.getName())) {
             ResourceLocation texture = getTextureLocation(animatable);
             RenderType swirlType = RenderType.energySwirl(texture, 0, 0);
@@ -66,6 +73,12 @@ public class MagicBeamRenderer extends AbstractSpellRenderer<MagicBeamEntity> {
     public void actuallyRender(PoseStack poseStack, MagicBeamEntity entity, BakedGeoModel model,
         @Nullable RenderType renderType, MultiBufferSource bufferSource, @Nullable VertexConsumer buffer,
         boolean isReRender, float partialTick, int packedLight, int packedOverlay, int colour) {
+
+        if (!entity.isAddedToLevel()) {
+            super.actuallyRender(poseStack, entity, model, renderType, bufferSource, buffer,
+                isReRender, partialTick, packedLight, packedOverlay, colour);
+            return;
+        }
 
         float distance = entity.getBeamDistance();
         if (distance <= 0) return;

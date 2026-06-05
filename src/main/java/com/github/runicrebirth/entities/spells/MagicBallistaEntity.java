@@ -21,7 +21,7 @@ import software.bernie.geckolib.animation.RawAnimation;
 
 public class MagicBallistaEntity extends AbstractProjectileSpellEntity {
 
-    private static final int CHARGE_TICKS = 84;
+    private static final int CHARGE_TICKS = 57;
     private static final int PIN_TICKS = 30;
     private static final int MAX_LIFETIME_TICKS = 200;
 
@@ -80,7 +80,8 @@ public class MagicBallistaEntity extends AbstractProjectileSpellEntity {
         Entity target = result.getEntity();
         Entity owner = this.getOwner();
         if (owner instanceof LivingEntity living) {
-            SpellDamageSource source = SpellDamageSource.source(this, living, damageCategory, element());
+            SpellDamageSource source = SpellDamageSource.source(this, living, damageCategory, element())
+                .withSpellType(com.github.runicrebirth.spells.types.MagicBallista.ID);
             DamageSources.applyDamage(target, damage, source);
         } else {
             target.hurt(this.damageSources().magic(), damage);

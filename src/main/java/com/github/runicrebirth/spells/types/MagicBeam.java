@@ -27,7 +27,12 @@ public class MagicBeam extends SpellType {
     @Override public int cooldownTicks() { return 80; }
     @Override public float baseDamage() { return 3f; }
 
-    @Override public String iconName() { return "v"; }
+    @Override
+    public float spellHeight() {
+      return 0.3F;
+    }
+
+  @Override public String iconName() { return "v"; }
     @Override public Element defaultElement() { return ModElements.ARCANE.get(); }
     @Override public MagicDamageType damageCategory() { return MagicDamageType.SPIRIT; }
 
@@ -46,7 +51,8 @@ public class MagicBeam extends SpellType {
         float distance;
         if (hit.getType() == HitResult.Type.ENTITY && hit instanceof EntityHitResult ehr) {
             if (ehr.getEntity() instanceof LivingEntity target) {
-                SpellDamageSource src = SpellDamageSource.source(ctx.caster(), params.damageCategory, params.element);
+                SpellDamageSource src = SpellDamageSource.source(ctx.caster(), params.damageCategory, params.element)
+                    .withSpellType(ID);
                 DamageSources.applyDamage(target, params.damage, src);
             }
             distance = (float) start.distanceTo(hit.getLocation());

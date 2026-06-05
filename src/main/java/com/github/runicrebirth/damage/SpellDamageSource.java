@@ -7,6 +7,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.entity.Entity;
@@ -19,6 +20,7 @@ public class SpellDamageSource extends DamageSource implements ISpellDamageSourc
 
     private final MagicDamageType magicDamageType;
     private final Element element;
+    private ResourceLocation spellTypeId;
     private float lifesteal;
     private int freezeTicks;
     private int fireTime;
@@ -57,6 +59,9 @@ public class SpellDamageSource extends DamageSource implements ISpellDamageSourc
                                            MagicDamageType damageType, Element element) {
         return new SpellDamageSource(direct, causing, null, damageType, element);
     }
+
+    public SpellDamageSource withSpellType(ResourceLocation id) { this.spellTypeId = id; return this; }
+    public ResourceLocation spellTypeId() { return spellTypeId; }
 
     public SpellDamageSource setLifestealPercent(float v) { this.lifesteal = v; return this; }
     public SpellDamageSource setFireTicks(int v) { this.fireTime = v; return this; }

@@ -3,6 +3,7 @@ package com.github.runicrebirth.init;
 import com.github.runicrebirth.api.registry.SpellTypeRegistry;
 import com.github.runicrebirth.api.spells.SpellType;
 import com.github.runicrebirth.spells.types.MagicArrow;
+import com.github.runicrebirth.spells.types.Infusion;
 import com.github.runicrebirth.spells.types.MagicBallista;
 import com.github.runicrebirth.spells.types.MagicBeam;
 import com.github.runicrebirth.spells.types.MagicBinding;
@@ -49,6 +50,9 @@ public final class ModSpellTypes {
 
     public static final DeferredHolder<SpellType, MagicBallista> MAGIC_BALLISTA =
         SpellTypeRegistry.SPELL_TYPES.register("magic_ballista", MagicBallista::new);
+
+    public static final DeferredHolder<SpellType, Infusion> INFUSION =
+        SpellTypeRegistry.SPELL_TYPES.register("infusion", Infusion::new);
 
     private ModSpellTypes() {}
 

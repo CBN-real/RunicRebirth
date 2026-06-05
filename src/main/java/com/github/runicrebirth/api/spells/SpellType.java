@@ -81,6 +81,8 @@ public abstract non-sealed class SpellType implements SpellComponent {
         return 1f;
     }
 
+    public float spellHeight() { return 1f * this.baseSize();}
+
     public float baseSpeed() {
         return 1.0f;
     }

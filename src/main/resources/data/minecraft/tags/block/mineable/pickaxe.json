@@ -1,0 +1,13 @@
+{
+  "replace": false,
+  "values": [
+    "runicrebirth:runic_stone",
+    "runicrebirth:runic_stone_slab",
+    "runicrebirth:runic_stone_stairs",
+    "runicrebirth:runic_stone_pillar",
+    "runicrebirth:oculus_portal",
+    "runicrebirth:oculus_controller",
+    "runicrebirth:runesteel_pylon",
+    "runicrebirth:infusion_altar"
+  ]
+}

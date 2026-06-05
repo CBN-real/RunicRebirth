@@ -18,6 +18,8 @@ public class MagicProjectileEntity extends AbstractProjectileSpellEntity {
 
     public MagicProjectileEntity(EntityType<? extends MagicProjectileEntity> type, Level level) {
         super(type, level);
+        this.endTicks = 20;
+        this.chargeTicks = 12;
     }
 
     public MagicProjectileEntity(Level level, LivingEntity owner, SpellParams params, Vec3 direction) {
@@ -39,7 +41,8 @@ public class MagicProjectileEntity extends AbstractProjectileSpellEntity {
         Entity target = result.getEntity();
         Entity owner = this.getOwner();
         if (owner instanceof LivingEntity living) {
-            SpellDamageSource source = SpellDamageSource.source(this, living, damageCategory, element());
+            SpellDamageSource source = SpellDamageSource.source(this, living, damageCategory, element())
+                .withSpellType(com.github.runicrebirth.spells.types.MagicProjectile.ID);
             DamageSources.applyDamage(target, damage, source);
         } else {
             target.hurt(this.damageSources().magic(), damage);

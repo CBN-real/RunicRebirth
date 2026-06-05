@@ -1,0 +1,22 @@
+{
+  "parent": "runicrebirth:elements/root",
+  "display": {
+    "icon": {
+      "id": "minecraft:blaze_powder"
+    },
+    "title": {"translate": "advancement.runicrebirth.elements.fire.title"},
+    "description": {"translate": "advancement.runicrebirth.elements.fire.description"},
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "element_trial": {
+      "trigger": "runicrebirth:element_trial",
+      "conditions": {
+        "element": "runicrebirth:fire"
+      }
+    }
+  }
+}

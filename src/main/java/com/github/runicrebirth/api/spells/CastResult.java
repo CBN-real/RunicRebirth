@@ -5,5 +5,6 @@ public enum CastResult {
     ON_COOLDOWN,
     ON_LOCKOUT,
     NOT_VALID,
+    NOT_UNLOCKED,
     FAILED
 }

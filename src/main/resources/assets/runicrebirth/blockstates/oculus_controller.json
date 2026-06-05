@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=north": { "model": "runicrebirth:block/oculus_controller" },
+    "facing=south": { "model": "runicrebirth:block/oculus_controller" },
+    "facing=west": { "model": "runicrebirth:block/oculus_controller" },
+    "facing=east": { "model": "runicrebirth:block/oculus_controller" }
+  }
+}

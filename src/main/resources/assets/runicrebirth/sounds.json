@@ -1,0 +1,42 @@
+{
+    "canvas.success": {
+        "sounds": [
+            "runicrebirth:canvas/success"
+        ]
+    },
+    "canvas.failed": {
+        "sounds": [
+            "runicrebirth:canvas/failed"
+        ]
+    },
+    "canvas.canvas_ambient": {
+        "sounds": [
+            "runicrebirth:canvas/canvas_ambient"
+        ]
+    },
+    "oculus.controller_open": {
+        "sounds": [
+            "runicrebirth:dimensional_oculus/controller_open"
+        ]
+    },
+    "oculus.portal_open": {
+        "sounds": [
+            "runicrebirth:dimensional_oculus/open_portal"
+        ]
+    },
+    "infusion.altar_activating": {
+        "sounds": [
+            "runicrebirth:infusion/altar_activating"
+        ]
+    },
+    "infusion.add_item": {
+        "sounds": [
+            "runicrebirth:infusion/add_item"
+        ]
+    },
+    "infusion.infusing": {
+        "sounds": [
+            "runicrebirth:infusion/infusing"
+        ]
+    }
+}

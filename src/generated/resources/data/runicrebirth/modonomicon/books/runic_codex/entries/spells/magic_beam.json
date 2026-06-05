@@ -1,0 +1,61 @@
+{
+  "background_u_index": 0,
+  "background_v_index": 0,
+  "category": "spells",
+  "condition": {
+    "type": "runicrebirth:spell_unlock",
+    "advancement_id": "runicrebirth:spells/magic_beam",
+    "spell_name": "Magic Beam",
+    "unlock_hint": "Kill an entity with Magic Projectile from over 10 blocks away"
+  },
+  "description": "book.runicrebirth.runic_codex.spells.magic_beam.description",
+  "hide_while_locked": false,
+  "icon": {
+    "height": 16,
+    "texture": "runicrebirth:textures/gui/shape_icons/circle_icon.png",
+    "width": 16
+  },
+  "name": "book.runicrebirth.runic_codex.spells.magic_beam.name",
+  "pages": [
+    {
+      "type": "runicrebirth:spell_page",
+      "anchor": "",
+      "condition": {
+        "type": "modonomicon:none"
+      },
+      "damage": "3",
+      "damage_type": "SPIRIT",
+      "offset_x": -0.2,
+      "offset_y": 0.55,
+      "offset_z": 0.0,
+      "range": "12",
+      "spell_name": "Magic Beam"
+    },
+    {
+      "type": "modonomicon:entity",
+      "anchor": "",
+      "condition": {
+        "type": "modonomicon:none"
+      },
+      "default_rotation": -45.0,
+      "entity_id": "runicrebirth:magic_beam",
+      "name": "",
+      "offset": 0.0,
+      "rotate": false,
+      "scale": 1.0,
+      "text": "book.runicrebirth.runic_codex.spells.magic_beam.entity.text"
+    }
+  ],
+  "parents": [
+    {
+      "draw_arrow": true,
+      "entry": "spells/magic_projectile",
+      "line_enabled": true,
+      "line_reversed": false
+    }
+  ],
+  "show_when_any_parent_unlocked": false,
+  "sort_number": 13,
+  "x": -12,
+  "y": -1
+}

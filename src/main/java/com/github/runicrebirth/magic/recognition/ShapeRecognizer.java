@@ -12,7 +12,7 @@ import java.util.List;
  */
 public final class ShapeRecognizer {
 
-    private static final int N = 32;
+    private static final int N = 128;
     private static final double SCALE_SIZE = 250.0;
     private static final double HALF_DIAGONAL = 0.5 * Math.sqrt(SCALE_SIZE * SCALE_SIZE + SCALE_SIZE * SCALE_SIZE);
 

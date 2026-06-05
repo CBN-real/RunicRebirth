@@ -23,4 +23,9 @@ public class IntermediateCircleEntity extends AbstractCircleEntity {
         super(ModEntities.INTERMEDIATE_CIRCLE.get(), level, caster, spellType, params,
             aimDirection, wandItem, totalCasts, castingDelayTicks, lifespan, xRot, yRot, target);
     }
+
+  @Override
+  protected float getCircleHeight() {
+    return 0.6f;
+  }
 }

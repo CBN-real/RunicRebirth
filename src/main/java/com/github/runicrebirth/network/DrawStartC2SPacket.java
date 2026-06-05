@@ -1,6 +1,7 @@
 package com.github.runicrebirth.network;
 
 import com.github.runicrebirth.RunicRebirth;
+import com.github.runicrebirth.advancement.triggers.ModCriteriaTriggers;
 import com.github.runicrebirth.capabilities.magic.MagicData;
 import com.github.runicrebirth.entities.DrawingCanvasEntity;
 import net.minecraft.network.FriendlyByteBuf;
@@ -25,12 +26,14 @@ public record DrawStartC2SPacket() implements CustomPacketPayload {
     public static void handle(DrawStartC2SPacket packet, IPayloadContext ctx) {
         ctx.enqueueWork(() -> {
             if (!(ctx.player() instanceof ServerPlayer player)) return;
+            ModCriteriaTriggers.HELD_SPELL_WRITER.get().trigger(player);
             MagicData data = MagicData.of(player);
             data.setDrawing(true);
             DrawingCanvasEntity canvas = DrawingCanvasEntity.spawnFor(player);
             if (canvas != null) {
                 data.setCanvasEntityId(canvas.getId());
             }
+            SpellUnlockSyncS2CPacket.sendTo(player);
         });
     }
 }

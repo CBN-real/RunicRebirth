@@ -50,6 +50,25 @@ public class ModRenderTypes extends RenderStateShard {
         );
     }
 
+    public static RenderType entityUnlit(ResourceLocation texture) {
+        return RenderType.create(
+            "magic_unlit",
+            DefaultVertexFormat.NEW_ENTITY,
+            VertexFormat.Mode.QUADS,
+            1536,
+            true,
+            true,
+            RenderType.CompositeState.builder()
+                .setShaderState(RENDERTYPE_EYES_SHADER)
+                .setTextureState(new TextureStateShard(texture, false, false))
+                .setTransparencyState(TRANSLUCENT_TRANSPARENCY)
+                .setCullState(NO_CULL)
+                .setOverlayState(OVERLAY)
+                .setWriteMaskState(COLOR_WRITE)
+                .createCompositeState(false)
+        );
+    }
+
     private ModRenderTypes() {
         super("unused", () -> {}, () -> {});
     }

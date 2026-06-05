@@ -6,7 +6,7 @@
 				"identifier": "geometry.magic_projectile",
 				"texture_width": 512,
 				"texture_height": 512,
-				"visible_bounds_width": 3,
+				"visible_bounds_width": 4,
 				"visible_bounds_height": 3.5,
 				"visible_bounds_offset": [0, 1.25, 0]
 			},
@@ -36,17 +36,17 @@
 				{
 					"name": "inner_cubes",
 					"parent": "magic_meteor",
-					"pivot": [1.70624, 9.21876, -2.1075]
+					"pivot": [0.00624, 9.21876, -0.5075]
 				},
 				{
 					"name": "inner_inner_cubes",
 					"parent": "inner_cubes",
-					"pivot": [1.70624, 9.21876, -2.1075]
+					"pivot": [0.00624, 9.21876, -0.445]
 				},
 				{
 					"name": "rot_x",
 					"parent": "inner_inner_cubes",
-					"pivot": [1.70624, 9.21876, -2.1075],
+					"pivot": [0.03399, 9.25379, -0.37663],
 					"cubes": [
 						{
 							"origin": [0.5528, 8.32156, -0.66156],
@@ -101,7 +101,7 @@
 				{
 					"name": "rot_x2",
 					"parent": "rot_x",
-					"pivot": [1.66999, 9.2127, -2.10689],
+					"pivot": [-0.03001, 9.2127, -0.40689],
 					"cubes": [
 						{
 							"origin": [0.09238, 9.35643, -0.62356],
@@ -160,7 +160,7 @@
 				{
 					"name": "rot_y",
 					"parent": "inner_inner_cubes",
-					"pivot": [1.70624, 9.21876, -2.1075],
+					"pivot": [0.00624, 9.21876, -0.4075],
 					"cubes": [
 						{
 							"origin": [0.77938, 9.09189, -0.66156],
@@ -215,7 +215,7 @@
 				{
 					"name": "rot_y2",
 					"parent": "rot_y",
-					"pivot": [1.70624, 9.21876, -2.1075],
+					"pivot": [-0.09376, 9.21876, -0.5075],
 					"cubes": [
 						{
 							"origin": [0.09238, 9.08456, -0.62356],
@@ -274,7 +274,7 @@
 				{
 					"name": "rot_x1",
 					"parent": "inner_cubes",
-					"pivot": [1.70624, 9.21876, -2.1075],
+					"pivot": [0.00624, 9.21876, -0.4075],
 					"cubes": [
 						{
 							"origin": [-1.90312, 10.26093, -0.66156],
@@ -377,7 +377,7 @@
 				{
 					"name": "rot_x3",
 					"parent": "inner_cubes",
-					"pivot": [1.70624, 9.21876, -2.1075],
+					"pivot": [0.00624, 9.21876, -0.3075],
 					"cubes": [
 						{
 							"origin": [-1.43187, 10.44218, -0.66156],
@@ -480,7 +480,7 @@
 				{
 					"name": "rot_y1",
 					"parent": "inner_cubes",
-					"pivot": [1.70624, 9.21876, -2.1075],
+					"pivot": [0.00624, 9.21876, -0.4075],
 					"cubes": [
 						{
 							"origin": [-2.37437, 8.80188, -0.66156],
@@ -535,7 +535,7 @@
 				{
 					"name": "rot_y3",
 					"parent": "inner_cubes",
-					"pivot": [1.70624, 9.21876, -2.1075],
+					"pivot": [0.00624, 9.21876, -0.4075],
 					"cubes": [
 						{
 							"origin": [-2.37437, 9.38189, -0.66156],

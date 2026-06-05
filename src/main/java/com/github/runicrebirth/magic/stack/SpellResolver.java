@@ -1,5 +1,6 @@
 package com.github.runicrebirth.magic.stack;
 
+import com.github.runicrebirth.advancement.SpellAdvancementHelper;
 import com.github.runicrebirth.api.events.SpellPostCastEvent;
 import com.github.runicrebirth.api.events.SpellPreCastEvent;
 import com.github.runicrebirth.api.item.ISpellEmpowerment;
@@ -32,6 +33,7 @@ public final class SpellResolver {
         if (data.globalCastLockoutTicks() > 0) return null;
 
         SpellType type = stack.resolveType();
+        if (!SpellAdvancementHelper.hasSpellUnlocked(ctx.caster(), type)) return null;
         if (data.isOnCooldown(type.id())) return null;
 
         Element resolvedElement = stack.resolveElement() != null ? stack.resolveElement() : type.defaultElement();

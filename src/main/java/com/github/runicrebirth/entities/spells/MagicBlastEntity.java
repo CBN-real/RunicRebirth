@@ -14,7 +14,7 @@ import net.minecraft.world.phys.Vec3;
 
 import java.util.UUID;
 
-public class MagicBlastEntity extends AbstractSpellEntity {
+public class MagicBlastEntity extends AbstractInstantSpellEntity {
 
     private UUID ownerUUID;
     private Vec3 aimDirection = Vec3.ZERO;
@@ -53,7 +53,8 @@ public class MagicBlastEntity extends AbstractSpellEntity {
         Vec3 pos = this.position();
         Vec3 knockbackDir = aimDirection.normalize();
         for (LivingEntity target : Utils.entitiesInCone(server, pos, aimDirection, range, halfAngle, owner)) {
-            SpellDamageSource src = SpellDamageSource.source(owner, damageCategory, element());
+            SpellDamageSource src = SpellDamageSource.source(owner, damageCategory, element())
+                .withSpellType(com.github.runicrebirth.spells.types.MagicBlast.ID);
             DamageSources.applyDamage(target, damage, src);
             target.setDeltaMovement(target.getDeltaMovement().add(
                 knockbackDir.x * 1.5, knockbackDir.y * 1.25, knockbackDir.z * 1.5));

@@ -13,6 +13,7 @@ import com.github.runicrebirth.network.CanvasSelectTierC2SPacket;
 import com.github.runicrebirth.network.DrawSubmitC2SPacket;
 import com.github.runicrebirth.client.particles.InkParticle;
 import com.github.runicrebirth.init.ModParticles;
+import com.github.runicrebirth.init.ModSounds;
 import com.mojang.blaze3d.systems.RenderSystem;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,9 +22,12 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import com.github.runicrebirth.particle.ScaledParticleOption;
+import net.minecraft.client.resources.sounds.AbstractTickableSoundInstance;
+import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -67,42 +71,56 @@ public class DrawingCanvasScreen extends Screen {
         "wind", ResourceLocation.fromNamespaceAndPath(RunicRebirth.MODID, "wind")
     );
 
-    private record ShapeRef(String shapeId, String iconName, boolean isModifier) {
+    private static final ResourceLocation LOCKED_OVERLAY = ResourceLocation.fromNamespaceAndPath(
+        RunicRebirth.MODID, "textures/gui/locked_spell_overlay.png");
+
+    private record ShapeRef(String shapeId, String iconName, boolean isModifier, String spellTypeId) {
+        ShapeRef(String shapeId, String iconName, boolean isModifier) {
+            this(shapeId, iconName, isModifier, null);
+        }
         ResourceLocation iconPath() {
             String suffix = isModifier ? "_icon_small_outline" : "_icon_outline";
             return ResourceLocation.fromNamespaceAndPath(RunicRebirth.MODID,
                 "textures/gui/shape_icons/" + iconName + suffix + ".png");
         }
         int iconSize() { return isModifier ? 11 : 19; }
+        boolean isLocked() {
+            if (spellTypeId == null) return false;
+            return !ClientMagicData.isSpellUnlocked(ResourceLocation.parse(spellTypeId));
+        }
     }
 
     private record RefSection(String titleKey, List<ShapeRef> spells, List<ShapeRef> modifiers) {}
 
     private static final List<RefSection> SECTIONS = List.of(
         new RefSection("gui.runicrebirth.beg_spells", List.of(
-            new ShapeRef("line_down", "line", false),
-            new ShapeRef("circle", "circle", false),
-            new ShapeRef("v_shape", "v", false),
-            new ShapeRef("arrow", "arrow", false)
+            new ShapeRef("line_down", "line", false, "runicrebirth:magic_projectile"),
+            new ShapeRef("circle", "circle", false, "runicrebirth:magic_blast"),
+            new ShapeRef("v_shape", "v", false, "runicrebirth:magic_beam"),
+            new ShapeRef("arrow", "arrow", false, "runicrebirth:magic_arrow"),
+            new ShapeRef("infusion", "infusion", false, "runicrebirth:infusion")
         ), List.of(
             new ShapeRef("plus", "plus", true),
             new ShapeRef("range", "range", true),
-            new ShapeRef("two_casts", "two_casts", true)
+            new ShapeRef("two_casts", "two_casts", true),
+            new ShapeRef("sharp_boost", "sharp_boost", true),
+            new ShapeRef("blunt_boost", "blunt_boost", true),
+            new ShapeRef("magic_boost", "magic_boost", true)
         )),
         new RefSection("gui.runicrebirth.int_spells", List.of(
-            new ShapeRef("shield", "shield", false),
-            new ShapeRef("slash", "slash", false),
-            new ShapeRef("explosion", "explosion", false),
-            new ShapeRef("meteor", "meteor", false)
+            new ShapeRef("shield", "shield", false, "runicrebirth:magic_shield"),
+            new ShapeRef("slash", "slash", false, "runicrebirth:magic_slash"),
+            new ShapeRef("explosion", "explosion", false, "runicrebirth:magic_explosion"),
+            new ShapeRef("meteor", "meteor", false, "runicrebirth:magic_meteor")
         ), List.of(
             new ShapeRef("plus_two", "plus_two", true),
             new ShapeRef("cooldown", "cooldown", true),
             new ShapeRef("charges", "charges", true)
         )),
         new RefSection("gui.runicrebirth.adv_spells", List.of(
-            new ShapeRef("binding", "binding", false),
-            new ShapeRef("hammer", "hammer", false),
-            new ShapeRef("ballista", "ballista", false)
+            new ShapeRef("binding", "binding", false, "runicrebirth:magic_binding"),
+            new ShapeRef("hammer", "hammer", false, "runicrebirth:magic_hammer"),
+            new ShapeRef("ballista", "ballista", false, "runicrebirth:magic_ballista")
         ), List.of(
             new ShapeRef("plus_four", "plus_four", true),
             new ShapeRef("four_casts", "four_casts", true)
@@ -126,6 +144,7 @@ public class DrawingCanvasScreen extends Screen {
     private int openRadialTier = -1;
     private float radialAnimProgress = 0f;
     private List<RadialSlot> activeRadialSlots = new ArrayList<>();
+    private CanvasAmbientSound ambientSound;
 
     public DrawingCanvasScreen() {
         super(Component.translatable("screen.runicrebirth.drawing_canvas"));
@@ -151,6 +170,9 @@ public class DrawingCanvasScreen extends Screen {
         drawRadius = (int) (height * DRAWING_RADIUS_FRAC);
 
         ClientMagicData.setOnStackChanged(this::onStackUpdated);
+
+        ambientSound = new CanvasAmbientSound();
+        Minecraft.getInstance().getSoundManager().play(ambientSound);
     }
 
     private Element selectedElement() {
@@ -201,8 +223,8 @@ public class DrawingCanvasScreen extends Screen {
 
         //renderDebugZones(g);
 
-        if (selectedRef != null) renderReferenceOverlay(g);
-        //renderStrokes(g);
+        if (selectedRef != null && !selectedRef.isLocked()) renderReferenceOverlay(g);
+        renderStrokes(g);
         renderRadialMenu(g);
 
         g.drawCenteredString(font, Component.translatable("screen.runicrebirth.canvas_hint"),
@@ -263,6 +285,16 @@ public class DrawingCanvasScreen extends Screen {
             int iy = (int) cy - iconSize / 2;
             g.blit(slot.shape.iconPath(), ix, iy, iconSize, iconSize,
                 0, 0, src, src, src, src);
+
+            if (slot.shape.isLocked()) {
+                int lockSize = iconSize;
+                int lx = (int) cx - lockSize / 2;
+                int ly = (int) cy - lockSize / 2;
+                RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 0.7f);
+                g.blit(LOCKED_OVERLAY, lx, ly, lockSize, lockSize,
+                    0, 0, 32, 32, 32, 32);
+                RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
+            }
 
             if (selectedRef != null && selectedRef.shapeId().equals(slot.shape.shapeId())) {
                 drawCircle(g, (int) cx, (int) cy, bgRadius, RADIAL_HIGHLIGHT);
@@ -452,6 +484,7 @@ public class DrawingCanvasScreen extends Screen {
             double dx = mx - cx;
             double dy = my - cy;
             if (dx * dx + dy * dy <= hitRadius * hitRadius) {
+                if (slot.shape.isLocked()) return true;
                 if (selectedRef != null && selectedRef.shapeId().equals(slot.shape.shapeId())) {
                     selectedRef = null;
                 } else {
@@ -496,6 +529,10 @@ public class DrawingCanvasScreen extends Screen {
 
     @Override
     public void onClose() {
+        if (ambientSound != null) {
+            Minecraft.getInstance().getSoundManager().stop(ambientSound);
+            ambientSound = null;
+        }
         InkParticle.removeAll();
         ClientMagicData.clearOnStackChanged();
         if (!terminalSent) {
@@ -602,5 +639,19 @@ public class DrawingCanvasScreen extends Screen {
             case "wind" -> new ScaledParticleOption(ModParticles.WIND_INK.get(), 1.0f);
             default -> new ScaledParticleOption(ModParticles.ARCANE_INK.get(), 1.0f);
         };
+    }
+
+    private static class CanvasAmbientSound extends AbstractTickableSoundInstance {
+        CanvasAmbientSound() {
+            super(ModSounds.CANVAS_AMBIENT.get(), SoundSource.AMBIENT, SoundInstance.createUnseededRandom());
+            this.looping = true;
+            this.delay = 0;
+            this.volume = 1.0f;
+            this.pitch = 1.0f;
+            this.relative = true;
+        }
+
+        @Override
+        public void tick() {}
     }
 }

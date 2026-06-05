@@ -25,5 +25,12 @@ public final class ModPackets {
         // S2C
         registrar.playToClient(StackChangedS2CPacket.TYPE, StackChangedS2CPacket.STREAM_CODEC, StackChangedS2CPacket::handle);
         registrar.playToClient(ImpactEffectS2CPacket.TYPE, ImpactEffectS2CPacket.STREAM_CODEC, ImpactEffectS2CPacket::handle);
+        registrar.playToClient(SpellUnlockSyncS2CPacket.TYPE, SpellUnlockSyncS2CPacket.STREAM_CODEC, SpellUnlockSyncS2CPacket::handle);
+
+        // Dungeon system
+        registrar.playToServer(EnterDungeonC2SPacket.TYPE, EnterDungeonC2SPacket.STREAM_CODEC, EnterDungeonC2SPacket::handle);
+        registrar.playToServer(SelectDungeonC2SPacket.TYPE, SelectDungeonC2SPacket.STREAM_CODEC, SelectDungeonC2SPacket::handle);
+        registrar.playToClient(DungeonDataSyncS2CPacket.TYPE, DungeonDataSyncS2CPacket.STREAM_CODEC, DungeonDataSyncS2CPacket::handle);
+        registrar.playToClient(OpenDungeonScreenS2CPacket.TYPE, OpenDungeonScreenS2CPacket.STREAM_CODEC, OpenDungeonScreenS2CPacket::handle);
     }
 }

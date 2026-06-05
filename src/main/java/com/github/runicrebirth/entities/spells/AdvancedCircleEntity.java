@@ -23,4 +23,9 @@ public class AdvancedCircleEntity extends AbstractCircleEntity {
         super(ModEntities.ADVANCED_CIRCLE.get(), level, caster, spellType, params,
             aimDirection, wandItem, totalCasts, castingDelayTicks, lifespan, xRot, yRot, target);
     }
+
+  @Override
+  protected float getCircleHeight() {
+    return 0.8f;
+  }
 }

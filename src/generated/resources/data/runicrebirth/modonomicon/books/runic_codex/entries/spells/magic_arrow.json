@@ -1,0 +1,61 @@
+{
+  "background_u_index": 0,
+  "background_v_index": 0,
+  "category": "spells",
+  "condition": {
+    "type": "runicrebirth:spell_unlock",
+    "advancement_id": "runicrebirth:spells/magic_arrow",
+    "spell_name": "Magic Arrow",
+    "unlock_hint": "Kill a skeleton with magic"
+  },
+  "description": "book.runicrebirth.runic_codex.spells.magic_arrow.description",
+  "hide_while_locked": false,
+  "icon": {
+    "height": 16,
+    "texture": "runicrebirth:textures/gui/shape_icons/arrow_icon.png",
+    "width": 16
+  },
+  "name": "book.runicrebirth.runic_codex.spells.magic_arrow.name",
+  "pages": [
+    {
+      "type": "runicrebirth:spell_page",
+      "anchor": "",
+      "condition": {
+        "type": "modonomicon:none"
+      },
+      "damage": "6",
+      "damage_type": "SHARP",
+      "offset_x": 0.29,
+      "offset_y": 0.6,
+      "offset_z": 0.0,
+      "range": "64",
+      "spell_name": "Magic Arrow"
+    },
+    {
+      "type": "modonomicon:entity",
+      "anchor": "",
+      "condition": {
+        "type": "modonomicon:none"
+      },
+      "default_rotation": -45.0,
+      "entity_id": "runicrebirth:magic_arrow",
+      "name": "",
+      "offset": 0.0,
+      "rotate": false,
+      "scale": 2.5,
+      "text": "book.runicrebirth.runic_codex.spells.magic_arrow.entity.text"
+    }
+  ],
+  "parents": [
+    {
+      "draw_arrow": true,
+      "entry": "spells/magic_blast",
+      "line_enabled": true,
+      "line_reversed": false
+    }
+  ],
+  "show_when_any_parent_unlocked": false,
+  "sort_number": 15,
+  "x": -12,
+  "y": 1
+}

@@ -1,0 +1,159 @@
+/*
+ * SPDX-FileCopyrightText: 2022 klikli-dev
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
+package com.klikli_dev.modonomicon.book.page;
+
+import com.google.gson.JsonObject;
+import com.klikli_dev.modonomicon.api.ModonomiconConstants.Data.Page;
+import com.klikli_dev.modonomicon.book.BookTextHolder;
+import com.klikli_dev.modonomicon.book.RenderedBookTextHolder;
+import com.klikli_dev.modonomicon.book.conditions.BookCondition;
+import com.klikli_dev.modonomicon.book.conditions.BookNoneCondition;
+import com.klikli_dev.modonomicon.book.entries.BookContentEntry;
+import com.klikli_dev.modonomicon.client.gui.book.markdown.BookTextRenderer;
+import com.klikli_dev.modonomicon.util.BookGsonHelper;
+import com.klikli_dev.modonomicon.util.EntityUtil;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.Style;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.world.level.Level;
+
+public class BookEntityPage extends BookPage {
+
+    protected BookTextHolder entityName;
+    protected BookTextHolder text;
+
+    //is string, because we allow appending nbt 
+    protected String entityId;
+    protected float scale = 1.0f;
+    protected float offset = 0f;
+    protected boolean rotate = true;
+    protected float defaultRotation = -45f;
+
+
+    public BookEntityPage(BookTextHolder entityName, BookTextHolder text, String entityId, float scale, float offset, boolean rotate, float defaultRotation, String anchor, BookCondition condition) {
+        super(anchor, condition);
+        this.entityName = entityName;
+        this.text = text;
+        this.entityId = entityId;
+        this.scale = scale;
+        this.offset = offset;
+        this.rotate = rotate;
+        this.defaultRotation = defaultRotation;
+    }
+
+    public static BookEntityPage fromJson(ResourceLocation entryId, JsonObject json, HolderLookup.Provider provider) {
+        var entityName = BookGsonHelper.getAsBookTextHolder(json, "name", BookTextHolder.EMPTY, provider);
+        var text = BookGsonHelper.getAsBookTextHolder(json, "text", BookTextHolder.EMPTY, provider);
+        var entityId = GsonHelper.getAsString(json, "entity_id");
+        var scale = GsonHelper.getAsFloat(json, "scale", 1.0f);
+        var offset = GsonHelper.getAsFloat(json, "offset", 0.0f);
+        var rotate = GsonHelper.getAsBoolean(json, "rotate", true);
+        var defaultRotation = GsonHelper.getAsFloat(json, "default_rotation", -45.0f);
+
+        var anchor = GsonHelper.getAsString(json, "anchor", "");
+        var condition = json.has("condition")
+                ? BookCondition.fromJson(entryId, json.getAsJsonObject("condition"), provider)
+                : new BookNoneCondition();
+        return new BookEntityPage(entityName, text, entityId, scale, offset, rotate, defaultRotation, anchor, condition);
+    }
+
+    public static BookEntityPage fromNetwork(RegistryFriendlyByteBuf buffer) {
+        var entityName = BookTextHolder.fromNetwork(buffer);
+        var text = BookTextHolder.fromNetwork(buffer);
+        var entityId = buffer.readUtf();
+        var scale = buffer.readFloat();
+        var offset = buffer.readFloat();
+        var rotate = buffer.readBoolean();
+        var defaultRotation = buffer.readFloat();
+        var anchor = buffer.readUtf();
+        var condition = BookCondition.fromNetwork(buffer);
+        return new BookEntityPage(entityName, text, entityId, scale, offset, rotate, defaultRotation, anchor, condition);
+    }
+
+    public String getEntityId() {
+        return this.entityId;
+    }
+
+    public float getScale() {
+        return this.scale;
+    }
+
+    public float getOffset() {
+        return this.offset;
+    }
+
+    public boolean doesRotate() {
+        return this.rotate;
+    }
+
+    public float getDefaultRotation() {
+        return this.defaultRotation;
+    }
+
+    public BookTextHolder getEntityName() {
+        return this.entityName;
+    }
+
+    public BookTextHolder getText() {
+        return this.text;
+    }
+
+    @Override
+    public ResourceLocation getType() {
+        return Page.ENTITY;
+    }
+
+    @Override
+    public void build(Level level, BookContentEntry parentEntry, int pageNum) {
+        super.build(level, parentEntry, pageNum);
+
+        if (this.entityName.isEmpty()) {
+            //use entity name if we don't have a custom title
+            this.entityName = new BookTextHolder(Component.translatable(EntityUtil.getEntityName(this.entityId))
+                    .withStyle(Style.EMPTY
+                            .withBold(true)
+                            .withColor(this.getParentEntry().getBook().getDefaultTitleColor())
+                    ));
+        }
+    }
+
+    @Override
+    public void prerenderMarkdown(BookTextRenderer textRenderer) {
+        super.prerenderMarkdown(textRenderer);
+
+        if (!this.entityName.hasComponent()) {
+            this.entityName = new BookTextHolder(Component.translatable(this.entityName.getKey())
+                    .withStyle(Style.EMPTY
+                            .withBold(true)
+                            .withColor(this.getParentEntry().getBook().getDefaultTitleColor())));
+        }
+        if (!this.text.hasComponent()) {
+            this.text = new RenderedBookTextHolder(this.text, textRenderer.render(this.text.getString()));
+        }
+    }
+
+    @Override
+    public void toNetwork(RegistryFriendlyByteBuf buffer) {
+        this.entityName.toNetwork(buffer);
+        this.text.toNetwork(buffer);
+        buffer.writeUtf(this.entityId);
+        buffer.writeFloat(this.scale);
+        buffer.writeFloat(this.offset);
+        buffer.writeBoolean(this.rotate);
+        buffer.writeFloat(this.defaultRotation);
+        super.toNetwork(buffer);
+    }
+
+    @Override
+    public boolean matchesQuery(String query) {
+        return this.entityName.getString().toLowerCase().contains(query)
+                || this.text.getString().toLowerCase().contains(query);
+    }
+}

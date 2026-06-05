@@ -26,6 +26,8 @@ public class MagicMeteorEntity extends AbstractProjectileSpellEntity {
 
     public MagicMeteorEntity(EntityType<? extends MagicMeteorEntity> type, Level level) {
         super(type, level);
+        this.chargeTicks = 70;
+        this.endTicks = 20;
     }
 
     public MagicMeteorEntity(Level level, LivingEntity owner, SpellParams params,
@@ -62,7 +64,8 @@ public class MagicMeteorEntity extends AbstractProjectileSpellEntity {
         Entity target = result.getEntity();
         Entity owner = this.getOwner();
         if (owner instanceof LivingEntity living) {
-            SpellDamageSource source = SpellDamageSource.source(this, living, damageCategory, element());
+            SpellDamageSource source = SpellDamageSource.source(this, living, damageCategory, element())
+                .withSpellType(com.github.runicrebirth.spells.types.MagicMeteor.ID);
             DamageSources.applyDamage(target, directDamage, source);
         } else {
             target.hurt(this.damageSources().magic(), directDamage);
@@ -84,7 +87,8 @@ public class MagicMeteorEntity extends AbstractProjectileSpellEntity {
         Entity owner = this.getOwner();
         for (LivingEntity target : Utils.entitiesInRange(server, center, splashRadius, this)) {
             if (owner instanceof LivingEntity living) {
-                SpellDamageSource source = SpellDamageSource.source(this, living, damageCategory, element());
+                SpellDamageSource source = SpellDamageSource.source(this, living, damageCategory, element())
+                .withSpellType(com.github.runicrebirth.spells.types.MagicMeteor.ID);
                 DamageSources.applyDamage(target, splashDamage, source);
             } else {
                 target.hurt(this.damageSources().magic(), splashDamage);

@@ -1,0 +1,62 @@
+{
+  "background_u_index": 0,
+  "background_v_index": 0,
+  "category": "spells",
+  "condition": {
+    "type": "runicrebirth:spell_unlock",
+    "advancement_id": "runicrebirth:spells/magic_projectile",
+    "spell_name": "Infusion",
+    "unlock_hint": "Hold a spell writer for the first time"
+  },
+  "description": "book.runicrebirth.runic_codex.spells.infusion.description",
+  "hide_while_locked": false,
+  "icon": {
+    "height": 16,
+    "texture": "runicrebirth:textures/gui/shape_icons/infusion_icon.png",
+    "width": 16
+  },
+  "name": "book.runicrebirth.runic_codex.spells.infusion.name",
+  "pages": [
+    {
+      "type": "runicrebirth:spell_page",
+      "anchor": "",
+      "condition": {
+        "type": "modonomicon:none"
+      },
+      "damage": "N/A",
+      "damage_type": "N/A",
+      "hide_stats": true,
+      "offset_x": 0.0,
+      "offset_y": 0.0,
+      "offset_z": 0.0,
+      "range": "N/A",
+      "spell_name": "Infusion"
+    },
+    {
+      "type": "modonomicon:entity",
+      "anchor": "",
+      "condition": {
+        "type": "modonomicon:none"
+      },
+      "default_rotation": -45.0,
+      "entity_id": "runicrebirth:infusion_circle",
+      "name": "",
+      "offset": 0.0,
+      "rotate": false,
+      "scale": 0.5,
+      "text": "book.runicrebirth.runic_codex.spells.infusion.entity.text"
+    }
+  ],
+  "parents": [
+    {
+      "draw_arrow": true,
+      "entry": "spells/magic_projectile",
+      "line_enabled": true,
+      "line_reversed": false
+    }
+  ],
+  "show_when_any_parent_unlocked": false,
+  "sort_number": 12,
+  "x": -8,
+  "y": -2
+}

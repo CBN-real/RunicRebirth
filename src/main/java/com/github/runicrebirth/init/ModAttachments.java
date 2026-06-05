@@ -1,6 +1,7 @@
 package com.github.runicrebirth.init;
 
 import com.github.runicrebirth.RunicRebirth;
+import com.github.runicrebirth.capabilities.dungeon.DungeonData;
 import com.github.runicrebirth.capabilities.magic.MagicData;
 import java.util.function.Supplier;
 import net.neoforged.neoforge.attachment.AttachmentType;
@@ -16,6 +17,14 @@ public final class ModAttachments {
         "magic_data",
         () -> AttachmentType.builder(MagicData::new)
             .serialize(MagicData.CODEC)
+            .copyOnDeath()
+            .build()
+    );
+
+    public static final Supplier<AttachmentType<DungeonData>> DUNGEON_DATA = ATTACHMENTS.register(
+        "dungeon_data",
+        () -> AttachmentType.builder(DungeonData::new)
+            .serialize(DungeonData.CODEC)
             .copyOnDeath()
             .build()
     );

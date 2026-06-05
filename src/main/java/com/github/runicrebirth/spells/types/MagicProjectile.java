@@ -22,7 +22,8 @@ public class MagicProjectile extends SpellType {
 
     @Override public int cooldownTicks() { return 40; }
     @Override public float baseDamage() { return 5f; }
-    @Override public float baseSize() { return 0.3f; }
+    @Override public float baseSize() { return 1.0f; }
+    @Override public float spellHeight() { return 0.3f * this.baseSize(); }
     @Override public float baseSpeed() { return 0.75f; }
 
     @Override public String iconName() { return "line"; }

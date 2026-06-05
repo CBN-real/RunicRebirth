@@ -1,0 +1,19 @@
+{
+  "parent": "runicrebirth:spells/magic_projectile",
+  "display": {
+    "icon": {
+      "id": "minecraft:magma_block"
+    },
+    "title": {"translate": "advancement.runicrebirth.spells.magic_meteor.title"},
+    "description": {"translate": "advancement.runicrebirth.spells.magic_meteor.description"},
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": true
+  },
+  "criteria": {
+    "placeholder": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

@@ -23,8 +23,8 @@ public final class ModArmorMaterials {
     public static final DeferredRegister<ArmorMaterial> ARMOR_MATERIALS =
             DeferredRegister.create(Registries.ARMOR_MATERIAL, RunicRebirth.MODID);
 
-    public static final DeferredHolder<ArmorMaterial, ArmorMaterial> APPRENTICE = register(
-            "apprentice",
+    public static final DeferredHolder<ArmorMaterial, ArmorMaterial> ACOLYTE = register(
+            "acolyte",
             makeArmorMap(1, 3, 2, 1),
             15,
             SoundEvents.ARMOR_EQUIP_LEATHER,

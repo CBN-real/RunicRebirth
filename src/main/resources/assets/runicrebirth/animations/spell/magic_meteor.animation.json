@@ -222,7 +222,8 @@
 						},
 						"0.2917": {
 							"vector": [0.2, 0.2, 0.2],
-							"easing": "easeInBack"
+							"easing": "easeInBack",
+							"easingArgs": [2]
 						},
 						"0.625": {
 							"vector": [7.5, 7.5, 7.5],
