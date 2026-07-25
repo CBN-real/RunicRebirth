@@ -15,12 +15,16 @@ public class MagicArmorGeoModel<T extends MagicArmorItem> extends GeoModel<T> {
     private final ResourceLocation animation;
 
     public MagicArmorGeoModel(String name) {
+        this(name, name);
+    }
+
+    public MagicArmorGeoModel(String modelName, String textureName) {
         this.model = ResourceLocation.fromNamespaceAndPath(
-                RunicRebirth.MODID, "geo/armor/" + name + ".geo.json");
+                RunicRebirth.MODID, "geo/armor/" + modelName + ".geo.json");
         this.texture = ResourceLocation.fromNamespaceAndPath(
-                RunicRebirth.MODID, "textures/models/armor/" + name + "_texture.png");
+                RunicRebirth.MODID, "textures/models/armor/" + textureName + "_texture.png");
         this.animation = ResourceLocation.fromNamespaceAndPath(
-                RunicRebirth.MODID, "animations/armor/" + name + ".animation.json");
+                RunicRebirth.MODID, "animations/armor/" + modelName + ".animation.json");
     }
 
     @Override

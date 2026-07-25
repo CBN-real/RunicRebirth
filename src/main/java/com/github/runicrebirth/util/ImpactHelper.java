@@ -1,11 +1,13 @@
 package com.github.runicrebirth.util;
 
 import com.github.runicrebirth.api.spells.Element;
+import com.github.runicrebirth.init.ModSounds;
 import com.github.runicrebirth.network.ImpactEffectS2CPacket;
 import com.github.runicrebirth.particle.TremorBlockParticleOption;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.network.PacketDistributor;
@@ -23,6 +25,8 @@ public final class ImpactHelper {
 
     public static void createImpact(ServerLevel level, Vec3 pos, float radius, Element element,
                                     float shakeIntensity, int shakeDurationTicks) {
+        level.playSound(null, pos.x, pos.y, pos.z, ModSounds.SPELLS_EXPLOSION.get(), SoundSource.PLAYERS, 1.0f, 1.0f);
+
         ImpactEffectS2CPacket packet = new ImpactEffectS2CPacket(
             pos, radius, element.displayColor(), shakeIntensity, shakeDurationTicks);
         for (ServerPlayer player : level.players()) {

@@ -54,6 +54,7 @@ public abstract class AbstractMultiblockValidator {
             case RUNESTEEL_PYLON   -> state.is(ModBlocks.RUNESTEEL_PYLON.get());
             case INFUSION_ALTAR    -> state.is(ModBlocks.INFUSION_ALTAR.get());
           case INFUSION_ALTAR_PROXY ->  state.is(ModBlocks.INFUSION_ALTAR_PROXY.get());
+            case RUNIC_ANVIL       -> state.is(ModBlocks.RUNIC_ANVIL.get());
             case AIR               -> state.isAir();
         };
     }

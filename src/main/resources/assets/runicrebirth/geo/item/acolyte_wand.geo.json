@@ -3,7 +3,7 @@
 	"minecraft:geometry": [
 		{
 			"description": {
-				"identifier": "geometry.basic_wand",
+				"identifier": "geometry.acolyte_wand",
 				"texture_width": 32,
 				"texture_height": 32,
 				"visible_bounds_width": 2,
@@ -19,24 +19,29 @@
 					}
 				},
 				{
-					"name": "basic_wand",
-					"pivot": [0, 9, 0]
+					"name": "circle_rotation",
+					"pivot": [0, 0, -7]
+				},
+				{
+					"name": "acolyte_wand",
+					"parent": "circle_rotation",
+					"pivot": [0, 0, 0]
 				},
 				{
 					"name": "tip",
-					"parent": "basic_wand",
-					"pivot": [0, 0, 0]
+					"parent": "acolyte_wand",
+					"pivot": [0, -0.2, 0]
 				},
 				{
 					"name": "gem",
 					"parent": "tip",
-					"pivot": [0, 9, 0],
+					"pivot": [0, 8.8, 0],
 					"cubes": [
 						{
-							"origin": [-1, 8, -1],
+							"origin": [-1, 7.8, -1],
 							"size": [2, 2, 2],
 							"inflate": -0.35,
-							"pivot": [0, 9, 0],
+							"pivot": [0, 8.8, 0],
 							"rotation": [-7.5, 45, 45],
 							"uv": {
 								"north": {"uv": [0, 16], "uv_size": [4, 4]},
@@ -48,10 +53,10 @@
 							}
 						},
 						{
-							"origin": [-1, 8, -1],
+							"origin": [-1, 7.8, -1],
 							"size": [2, 2, 2],
 							"inflate": -0.61562,
-							"pivot": [0, 9, 0],
+							"pivot": [0, 8.8, 0],
 							"rotation": [-7.5, 45, 45],
 							"uv": {
 								"north": {"uv": [0, 28], "uv_size": [4, 4]},
@@ -67,13 +72,18 @@
 				{
 					"name": "orbit",
 					"parent": "tip",
-					"pivot": [0, 9, 0],
+					"pivot": [0, 8.8, 0]
+				},
+				{
+					"name": "small_gem",
+					"parent": "orbit",
+					"pivot": [-2.08534, 7.84395, -0.05606],
 					"cubes": [
 						{
-							"origin": [-3.08534, 7.04395, -1.05606],
+							"origin": [-3.08534, 6.84395, -1.05606],
 							"size": [2, 2, 2],
 							"inflate": -0.85,
-							"pivot": [-2.08534, 8.04395, -0.05606],
+							"pivot": [-2.08534, 7.84395, -0.05606],
 							"rotation": [-5, -17.5, -12.5],
 							"uv": {
 								"north": {"uv": [4, 20], "uv_size": [4, 4]},
@@ -88,7 +98,7 @@
 				},
 				{
 					"name": "shaft",
-					"parent": "basic_wand",
+					"parent": "acolyte_wand",
 					"pivot": [0, 9, 0]
 				},
 				{
@@ -100,6 +110,7 @@
 						{
 							"origin": [-4, 3.79289, -0.5],
 							"size": [7, 0.41422, 1],
+							"inflate": 0.001,
 							"pivot": [0, 4, 0],
 							"rotation": [-45, 0, 0],
 							"uv": {
@@ -114,6 +125,7 @@
 						{
 							"origin": [-4, 3.79289, -0.5],
 							"size": [7, 0.41422, 1],
+							"inflate": 0.002,
 							"uv": {
 								"north": {"uv": [0, 8], "uv_size": [14, 2]},
 								"east": {"uv": [4, 24], "uv_size": [2, 2]},
@@ -126,6 +138,7 @@
 						{
 							"origin": [-4, 3.5, -0.20711],
 							"size": [7, 1, 0.41422],
+							"inflate": -0.001,
 							"pivot": [0, 4, 0],
 							"rotation": [-45, 0, 0],
 							"uv": {
@@ -140,6 +153,7 @@
 						{
 							"origin": [-4, 3.5, -0.20711],
 							"size": [7, 1, 0.41422],
+							"inflate": -0.002,
 							"uv": {
 								"north": {"uv": [14, 8], "uv_size": [14, 2]},
 								"east": {"uv": [12, 24], "uv_size": [2, 2]},
@@ -163,7 +177,7 @@
 					"cubes": [
 						{
 							"origin": [-0.59375, 6.5, -0.66961],
-							"size": [0.25, 0.85, 0.42563],
+							"size": [0.25, 0.85, 0.42562],
 							"inflate": 0.04688,
 							"pivot": [-0.46875, 7.25, -0.40399],
 							"rotation": [26.56505, -37.76124, -39.23152],
@@ -178,7 +192,7 @@
 						},
 						{
 							"origin": [-0.59914, 6.5, 0.14063],
-							"size": [0.25, 0.85, 0.44125],
+							"size": [0.25, 0.85, 0.44124],
 							"inflate": 0.04688,
 							"pivot": [-0.47414, 7.25, 0.40625],
 							"rotation": [-153.43495, -37.76124, 140.76848],
@@ -193,7 +207,7 @@
 						},
 						{
 							"origin": [0.20786, 6.54354, -0.52131],
-							"size": [0.25, 0.85, 0.41938],
+							"size": [0.25, 0.85, 0.41937],
 							"inflate": 0.04688,
 							"pivot": [0.33286, 6.96854, -0.31944],
 							"rotation": [153.43495, -37.76124, -140.76848],
@@ -285,6 +299,10 @@
 							}
 						}
 					]
+				},
+				{
+					"name": "hexadecagon",
+					"pivot": [0, 0, 0]
 				}
 			]
 		}

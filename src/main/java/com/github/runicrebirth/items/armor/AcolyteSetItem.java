@@ -18,7 +18,7 @@ public class AcolyteSetItem extends MagicArmorItem {
     private final boolean dyeable;
 
     public AcolyteSetItem(Type type, Properties props, String armorName, boolean dyeable, List<SpellModifier> modifiers) {
-        super(ModArmorMaterials.ACOLYTE, type, props, armorName, 0f, 0f, 0f, modifiers);
+        super(ModArmorMaterials.ACOLYTE, type, props, armorName, armorName, 0f, 0f, 0f, modifiers);
         this.dyeable = dyeable;
     }
 
@@ -26,8 +26,8 @@ public class AcolyteSetItem extends MagicArmorItem {
     @OnlyIn(Dist.CLIENT)
     protected GeoArmorRenderer<?> supplyRenderer() {
         if (dyeable) {
-            return new DyeableMagicArmorRenderer<>(new MagicArmorGeoModel<>(armorName), DEFAULT_DYE_COLOR);
+            return new DyeableMagicArmorRenderer<>(new MagicArmorGeoModel<>(armorName, textureName), DEFAULT_DYE_COLOR);
         }
-        return new MagicArmorRenderer<>(new MagicArmorGeoModel<>(armorName));
+        return new MagicArmorRenderer<>(new MagicArmorGeoModel<>(armorName, textureName));
     }
 }

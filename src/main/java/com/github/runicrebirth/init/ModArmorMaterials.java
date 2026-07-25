@@ -32,6 +32,24 @@ public final class ModArmorMaterials {
             0f, 0f
     );
 
+    public static final DeferredHolder<ArmorMaterial, ArmorMaterial> ADEPT = register(
+            "adept",
+            makeArmorMap(3, 8, 6, 3),
+            10,
+            SoundEvents.ARMOR_EQUIP_DIAMOND,
+            () -> Ingredient.of(ModItems.ARCANE_GEMSTONE.get()),
+            2f, 0f
+    );
+
+    public static final DeferredHolder<ArmorMaterial, ArmorMaterial> ADEPT_RUNEBLADE = register(
+            "adept_runeblade",
+            makeArmorMap(4, 9, 7, 4),
+            10,
+            SoundEvents.ARMOR_EQUIP_DIAMOND,
+            () -> Ingredient.of(ModItems.ARCANE_GEMSTONE.get()),
+            3f, 0f
+    );
+
     private ModArmorMaterials() {}
 
     private static DeferredHolder<ArmorMaterial, ArmorMaterial> register(

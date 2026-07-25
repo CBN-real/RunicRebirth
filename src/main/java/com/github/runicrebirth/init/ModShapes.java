@@ -13,7 +13,7 @@ public final class ModShapes {
     private ModShapes() {}
 
     public static void init() {
-        ShapeRegistry.register(ShapeTemplates.ID_LINE_DOWN, ShapeTemplates.lineDown(), 0.1,
+        ShapeRegistry.register(ShapeTemplates.ID_LINE_DOWN, ShapeTemplates.lineDown(), -0.1,
             ModSpellTypes.MAGIC_PROJECTILE::get);
         ShapeRegistry.register(ShapeTemplates.ID_CIRCLE, ShapeTemplates.circle(), -0.5,
             ModSpellTypes.MAGIC_BLAST::get);

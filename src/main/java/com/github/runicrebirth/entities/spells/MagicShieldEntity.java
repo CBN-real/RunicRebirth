@@ -6,6 +6,7 @@ import com.github.runicrebirth.api.spells.SpellParams;
 import com.github.runicrebirth.init.ModElements;
 import com.github.runicrebirth.init.ModEntities;
 import com.github.runicrebirth.init.ModParticles;
+import com.github.runicrebirth.init.ModSounds;
 import com.github.runicrebirth.particle.ScaledParticleOption;
 import com.github.runicrebirth.util.ParticleHelper;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -13,6 +14,7 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -69,9 +71,29 @@ public class MagicShieldEntity extends AbstractEffectSpellEntity {
         return getFollowedEntityId();
     }
 
+    @Override
+    protected void onChargingTick() {
+        if (phaseAge == 1) {
+            level().playSound(null, this.getX(), this.getY(), this.getZ(),
+                ModSounds.SPELLS_SHIELD_INITIATE.get(), SoundSource.PLAYERS, 1.0f, 1.0f);
+        }
+    }
+
+    @Override
+    protected void onEndingTick() {
+        if (phaseAge == 1) {
+            level().playSound(null, this.getX(), this.getY(), this.getZ(),
+                ModSounds.SPELLS_SHIELD_END.get(), SoundSource.PLAYERS, 1.0f, 1.0f);
+        }
+    }
+
     public void absorbDamage(float amount) {
         float health = getShieldHealth() - amount;
         setShieldHealth(health);
+        if (!this.level().isClientSide()) {
+            level().playSound(null, this.getX(), this.getY(), this.getZ(),
+                ModSounds.SPELLS_SHIELD_HIT.get(), SoundSource.PLAYERS, 1.0f, 1.0f);
+        }
         if (health <= 0) {
             burstParticles();
             beginEnding();

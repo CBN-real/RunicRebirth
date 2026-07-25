@@ -21,7 +21,7 @@ public class MagicBlast extends SpellType {
 
     @Override public int cooldownTicks() { return 120; }
     @Override public float baseDamage() { return 2.5f; }
-    @Override public float baseSize() { return 6f; }
+    @Override public float baseSize() { return 2f; }
 
     @Override public String iconName() { return "circle"; }
     @Override public Element defaultElement() { return ModElements.ARCANE.get(); }
@@ -29,9 +29,8 @@ public class MagicBlast extends SpellType {
 
     @Override
     public CastResult onCast(SpellCastContext ctx, SpellParams params) {
-        double range = params.size;
         Vec3 dir = ctx.aimDirection().normalize();
-        Vec3 spawnPos = ctx.aimStart().add(dir.scale(range));
+        Vec3 spawnPos = ctx.aimStart().add(dir.scale(1.0));
 
         MagicBlastEntity blast = new MagicBlastEntity(
             ModEntities.MAGIC_BLAST.get(), ctx.level());

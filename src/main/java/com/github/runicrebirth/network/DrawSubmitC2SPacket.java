@@ -84,11 +84,16 @@ public record DrawSubmitC2SPacket(List<List<StrokePoint>> strokes, ResourceLocat
             if (!(ctx.player() instanceof ServerPlayer player)) return;
 
             ItemStack heldStack = player.getItemInHand(InteractionHand.MAIN_HAND);
-            if (!(heldStack.getItem() instanceof SpellWriter)) return;
+            boolean isCircuit = heldStack.getItem() instanceof com.github.runicrebirth.items.RunicCircuitItem;
+            if (!(heldStack.getItem() instanceof SpellWriter) && !isCircuit) return;
 
-            MagicData data = MagicData.of(player);
-            SpellStack activeStack = data.activeStack();
-            if (activeStack == null || activeStack.validSpell()) return;
+            if (isCircuit) {
+                handleCircuitSubmit(packet, player, heldStack);
+                return;
+            }
+
+            SpellStack activeStack = SpellWriter.resolveActiveStack(heldStack);
+            if (activeStack.validSpell()) return;
 
             ResourceLocation selectedElement = packet.elementId();
             if (Log.DRAW_DEBUG) RunicRebirth.LOGGER.info("[RunicRebirth] Selected element: {}", selectedElement);
@@ -103,6 +108,12 @@ public record DrawSubmitC2SPacket(List<List<StrokePoint>> strokes, ResourceLocat
             ResourceLocation id = ResourceLocation.parse(result.id());
             double threshold = ShapeRegistry.thresholdFor(id);
             if (result.score() / 10 < threshold) {
+                SpellComponent nearComp = ShapeRegistry.componentFor(id);
+                net.minecraft.network.chat.Component shapeName = nearComp != null
+                    ? nearComp.displayName()
+                    : net.minecraft.network.chat.Component.literal(id.getPath());
+                player.displayClientMessage(
+                    shapeName.copy().withStyle(net.minecraft.ChatFormatting.RED), true);
                 if (Log.DRAW_DEBUG) RunicRebirth.LOGGER.info(
                     String.format("[RunicRebirth] Rejected shape '%s' (score=%.3f < min=%.3f)",
                         id, result.score() / 10, threshold));
@@ -128,16 +139,127 @@ public record DrawSubmitC2SPacket(List<List<StrokePoint>> strokes, ResourceLocat
                 return;
             }
 
-            activeStack.append(component);
+            boolean added = activeStack.append(component);
+            if (!added) {
+                player.displayClientMessage(
+                    component.displayName().copy()
+                        .append(net.minecraft.network.chat.Component.literal(" cannot be added"))
+                        .withStyle(net.minecraft.ChatFormatting.RED), true);
+                player.playNotifySound(ModSounds.CANVAS_FAILED.get(), SoundSource.PLAYERS, 1.0f, 1.0f);
+                return;
+            }
+
             Element element = ElementRegistry.get(packet.elementId());
             if (element != null) activeStack.setElement(element);
-            if (Log.DRAW_DEBUG) RunicRebirth.LOGGER.info(
-                String.format("[RunicRebirth] Recognized shape '%s' (score=%.3f) → appended %s to stack[%d], %d components",
-                    id, result.score(), component.id(), data.activeStackIndex(), data.activeStack().components().size()));
 
+            SpellWriter.writeActiveStack(heldStack, activeStack);
+
+            if (Log.DRAW_DEBUG) {
+                int idx = SpellWriter.getActiveIndex(heldStack);
+                RunicRebirth.LOGGER.info(
+                    String.format("[RunicRebirth] Recognized shape '%s' (score=%.3f) → appended %s to stack[%d], %d components",
+                        id, result.score(), component.id(), idx, activeStack.components().size()));
+            }
+
+            player.displayClientMessage(
+                component.displayName().copy().withStyle(net.minecraft.ChatFormatting.GREEN), true);
             player.playNotifySound(ModSounds.CANVAS_SUCCESS.get(), SoundSource.PLAYERS, 1.0f, 1.0f);
             NeoForge.EVENT_BUS.post(new ShapeRecognizedEvent(player, id, result.score(), component));
             StackChangedS2CPacket.sendTo(player);
         });
+    }
+
+    private static void handleCircuitSubmit(DrawSubmitC2SPacket packet, ServerPlayer player, ItemStack circuitStack) {
+        com.github.runicrebirth.items.RunicCircuitItem circuit = (com.github.runicrebirth.items.RunicCircuitItem) circuitStack.getItem();
+        if (circuit.isInscribed(circuitStack)) return;
+
+        MagicData data = MagicData.of(player);
+        SpellStack building = data.getOrCreatePendingCircuit();
+
+        int maxSlots = circuit.getModifierSlots(circuitStack);
+        if (building.size() >= maxSlots) return;
+
+        ShapeRecognizer.Result result = Recognizers.get().recognizeStrokes(packet.strokes);
+        if (result == null || result.id() == null) {
+            player.playNotifySound(ModSounds.CANVAS_FAILED.get(), SoundSource.PLAYERS, 1.0f, 1.0f);
+            return;
+        }
+
+        ResourceLocation id = ResourceLocation.parse(result.id());
+        double threshold = ShapeRegistry.thresholdFor(id);
+        if (result.score() / 10 < threshold) {
+            SpellComponent nearComp = ShapeRegistry.componentFor(id);
+            net.minecraft.network.chat.Component shapeName = nearComp != null
+                ? nearComp.displayName()
+                : net.minecraft.network.chat.Component.literal(id.getPath());
+            player.displayClientMessage(
+                shapeName.copy().withStyle(net.minecraft.ChatFormatting.RED), true);
+            player.playNotifySound(ModSounds.CANVAS_FAILED.get(), SoundSource.PLAYERS, 1.0f, 1.0f);
+            return;
+        }
+
+        SpellComponent component = ShapeRegistry.componentFor(id);
+        if (component == null) {
+            player.playNotifySound(ModSounds.CANVAS_FAILED.get(), SoundSource.PLAYERS, 1.0f, 1.0f);
+            return;
+        }
+
+        if (component instanceof SpellType spellType && !SpellAdvancementHelper.hasSpellUnlocked(player, spellType)) {
+            player.displayClientMessage(
+                net.minecraft.network.chat.Component.translatable("runicrebirth.spell.locked",
+                    spellType.displayName()), true);
+            player.playNotifySound(ModSounds.CANVAS_FAILED.get(), SoundSource.PLAYERS, 1.0f, 1.0f);
+            return;
+        }
+
+        if (component instanceof SpellType && building.validSpell()) {
+            player.displayClientMessage(
+                net.minecraft.network.chat.Component.literal("Circuit already has a spell.")
+                    .withStyle(net.minecraft.ChatFormatting.RED), true);
+            player.playNotifySound(ModSounds.CANVAS_FAILED.get(), SoundSource.PLAYERS, 1.0f, 1.0f);
+            return;
+        }
+
+        boolean added = building.append(component);
+        if (!added) {
+            player.displayClientMessage(
+                component.displayName().copy()
+                    .append(net.minecraft.network.chat.Component.literal(" cannot be added"))
+                    .withStyle(net.minecraft.ChatFormatting.RED), true);
+            player.playNotifySound(ModSounds.CANVAS_FAILED.get(), SoundSource.PLAYERS, 1.0f, 1.0f);
+            return;
+        }
+
+        Element element = ElementRegistry.get(packet.elementId());
+        if (element != null) building.setElement(element);
+
+        player.displayClientMessage(
+            component.displayName().copy().withStyle(net.minecraft.ChatFormatting.GREEN), true);
+        player.playNotifySound(ModSounds.CANVAS_SUCCESS.get(), SoundSource.PLAYERS, 1.0f, 1.0f);
+        NeoForge.EVENT_BUS.post(new ShapeRecognizedEvent(player, id, result.score(), component));
+        StackChangedS2CPacket.sendTo(player);
+    }
+
+    public static void finalizeCircuit(ServerPlayer player) {
+        MagicData data = MagicData.of(player);
+        if (!data.hasPendingCircuit()) return;
+
+        ItemStack circuitStack = player.getItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND);
+        if (!(circuitStack.getItem() instanceof com.github.runicrebirth.items.RunicCircuitItem circuit)) {
+            data.clearPendingCircuit();
+            return;
+        }
+        if (circuit.isInscribed(circuitStack)) {
+            data.clearPendingCircuit();
+            return;
+        }
+
+        SpellStack pending = data.pendingCircuitSpell();
+        com.github.runicrebirth.api.spells.WandStacksData.StackEntry entry =
+            SpellWriter.toEntry(pending, true, pending.size());
+        circuitStack.set(com.github.runicrebirth.init.ModDataComponents.CIRCUIT_SPELL.get(), entry);
+        data.clearPendingCircuit();
+
+        player.playNotifySound(ModSounds.CANVAS_SUCCESS.get(), SoundSource.PLAYERS, 1.0f, 1.0f);
     }
 }

@@ -9,6 +9,7 @@ import com.github.runicrebirth.api.spells.SpellParams;
 import com.github.runicrebirth.api.spells.SpellType;
 import com.github.runicrebirth.client.BookDisplayState;
 import com.github.runicrebirth.init.ModElements;
+import com.github.runicrebirth.init.ModSounds;
 import com.github.runicrebirth.network.StackChangedS2CPacket;
 import com.github.runicrebirth.util.Log;
 import com.github.runicrebirth.util.RaycastTarget;
@@ -20,6 +21,7 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.ItemStack;
@@ -164,6 +166,10 @@ public abstract class AbstractCircleEntity extends Entity implements GeoEntity {
         }
 
         age++;
+        if (age == 1) {
+            level().playSound(null, this.getX(), this.getY(), this.getZ(),
+                ModSounds.SPELLS_SPAWN_CIRCLE.get(), SoundSource.PLAYERS, 1.0f, 1.0f);
+        }
         if (age >= lifespan || caster == null || caster.isRemoved() || !caster.isAlive()) {
             beginFinishing();
             return;

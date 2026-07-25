@@ -1,0 +1,33 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"idle": {
+			"loop": true,
+			"animation_length": 18,
+			"bones": {
+				"right_ring": {
+					"rotation": {
+						"vector": [0, "-query.anim_time * 20", 0]
+					}
+				},
+				"left_ring": {
+					"rotation": {
+						"vector": [0, "-query.anim_time * -20", 0]
+					}
+				}
+			}
+		},
+		"walk": {
+			"loop": true,
+			"animation_length": 0.5,
+			"blend_weight": 0.5,
+			"bones": {
+				"dye_cape": {
+					"rotation": {
+						"vector": ["-math.sin(query.anim_time * 720) * 5 + 15", 0, 0]
+					}
+				}
+			}
+		}
+	}
+}

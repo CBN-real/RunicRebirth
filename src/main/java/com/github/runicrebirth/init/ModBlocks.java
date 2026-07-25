@@ -8,6 +8,7 @@ import com.github.runicrebirth.blocks.OculusPortalBlock;
 import com.github.runicrebirth.blocks.ReturnPortalBlock;
 import com.github.runicrebirth.blocks.RunesteelPylonBlock;
 import com.github.runicrebirth.blocks.OculusControllerBlock;
+import com.github.runicrebirth.blocks.RunicAnvilBlock;
 import com.github.runicrebirth.blocks.TrialSpawnerBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -50,6 +51,9 @@ public class ModBlocks {
 
     public static final DeferredBlock<InfusionAltarProxyBlock> INFUSION_ALTAR_PROXY = BLOCKS.register("infusion_altar_proxy",
             () -> new InfusionAltarProxyBlock(BlockBehaviour.Properties.of().noCollission().noOcclusion().noLootTable().replaceable()));
+
+    public static final DeferredBlock<RunicAnvilBlock> RUNIC_ANVIL = BLOCKS.register("runic_anvil",
+            () -> new RunicAnvilBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE).noOcclusion().lightLevel(s -> 5)));
 
     // Dungeon blocks
     public static final DeferredBlock<ReturnPortalBlock> RETURN_PORTAL = BLOCKS.register("return_portal",

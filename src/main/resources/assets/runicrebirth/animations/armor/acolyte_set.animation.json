@@ -4,6 +4,10 @@
     "idle": {
       "loop": true,
       "animation_length": 1.0
+    },
+    "walk": {
+      "loop": true,
+      "animation_length": 1.0
     }
   },
   "geckolib_format_version": 2

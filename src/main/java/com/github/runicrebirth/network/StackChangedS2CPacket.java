@@ -82,23 +82,27 @@ public record StackChangedS2CPacket(
     public Type<? extends CustomPacketPayload> type() { return TYPE; }
 
     public static void sendTo(ServerPlayer player) {
+        net.minecraft.world.item.ItemStack heldItem = player.getItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND);
         MagicData data = MagicData.of(player);
-        SpellStack[] stacks = data.stacks();
-        if (stacks == null) return;
-        List<List<Entry>> snapshot = new ArrayList<>(stacks.length);
-        List<ResourceLocation> elementIds = new ArrayList<>(stacks.length);
-        for (SpellStack s : stacks) {
-            List<Entry> list = new ArrayList<>(s.size());
-            for (SpellComponent c : s.components()) {
-                byte kind = c instanceof com.github.runicrebirth.api.spells.SpellType
-                    ? Entry.KIND_TYPE : Entry.KIND_MODIFIER;
-                list.add(new Entry(kind, c.id()));
+
+        if (!(heldItem.getItem() instanceof com.github.runicrebirth.items.SpellWriter)) {
+            PacketDistributor.sendToPlayer(player, new StackChangedS2CPacket(0, List.of(), data.charges(), List.of()));
+            return;
+        }
+
+        com.github.runicrebirth.api.spells.WandStacksData wandData = com.github.runicrebirth.items.SpellWriter.getStacks(heldItem);
+        List<List<Entry>> snapshot = new ArrayList<>(wandData.stacks().size());
+        List<ResourceLocation> elementIds = new ArrayList<>(wandData.stacks().size());
+
+        for (com.github.runicrebirth.api.spells.WandStacksData.StackEntry entry : wandData.stacks()) {
+            List<Entry> list = new ArrayList<>(entry.components().size());
+            for (com.github.runicrebirth.api.spells.WandStacksData.ComponentRef ref : entry.components()) {
+                list.add(new Entry((byte) ref.kind(), ref.id()));
             }
             snapshot.add(list);
-            com.github.runicrebirth.api.spells.Element el = s.resolveElement();
-            elementIds.add(el != null ? el.id() : null);
+            elementIds.add(entry.elementId());
         }
-        PacketDistributor.sendToPlayer(player, new StackChangedS2CPacket(data.activeStackIndex(), snapshot, data.charges(), elementIds));
+        PacketDistributor.sendToPlayer(player, new StackChangedS2CPacket(wandData.activeIndex(), snapshot, data.charges(), elementIds));
     }
 
     public static void handle(StackChangedS2CPacket packet, IPayloadContext ctx) {

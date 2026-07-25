@@ -25,6 +25,10 @@ public class SpellStack {
         components.clear();
     }
 
+    public void forceAppend(SpellComponent component) {
+        components.add(component);
+    }
+
     public boolean append(SpellComponent component) {
         if (component instanceof SpellModifier mod) {
             if (!mod.canAppendTo(components)) return false;

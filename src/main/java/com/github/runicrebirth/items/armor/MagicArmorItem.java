@@ -21,6 +21,7 @@ import software.bernie.geckolib.animation.AnimatableManager;
 import software.bernie.geckolib.animation.AnimationController;
 import software.bernie.geckolib.animation.PlayState;
 import software.bernie.geckolib.animation.RawAnimation;
+import software.bernie.geckolib.constant.DataTickets;
 import software.bernie.geckolib.renderer.GeoArmorRenderer;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
@@ -35,14 +36,16 @@ public class MagicArmorItem extends ArmorItem implements GeoItem, ISpellEmpowerm
     private final float sharpResistance;
     private final List<SpellModifier> modifiers;
     protected final String armorName;
+    protected final String textureName;
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
     public MagicArmorItem(Holder<ArmorMaterial> material, Type type, Properties props,
-                          String armorName,
+                          String armorName, String textureName,
                           float magicRes, float bluntRes, float sharpRes,
                           List<SpellModifier> modifiers) {
         super(material, type, props);
         this.armorName = armorName;
+        this.textureName = textureName;
         this.magicResistance = magicRes;
         this.bluntResistance = bluntRes;
         this.sharpResistance = sharpRes;
@@ -77,13 +80,19 @@ public class MagicArmorItem extends ArmorItem implements GeoItem, ISpellEmpowerm
 
     @OnlyIn(Dist.CLIENT)
     protected GeoArmorRenderer<?> supplyRenderer() {
-        return new MagicArmorRenderer<>(new MagicArmorGeoModel<>(armorName));
+        return new MagicArmorRenderer<>(new MagicArmorGeoModel<>(armorName, textureName));
     }
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<>(this, "controller", 20, state -> {
-            state.getController().setAnimation(RawAnimation.begin().thenLoop("idle"));
+        controllers.add(new AnimationController<>(this, "controller", 10, state -> {
+            LivingEntity entity = (LivingEntity) state.getData(DataTickets.ENTITY);
+            boolean moving = entity != null && entity.walkAnimation.speed() > 0.01f;
+            if (moving) {
+                state.getController().setAnimation(RawAnimation.begin().thenLoop("walk"));
+            } else {
+                state.getController().setAnimation(RawAnimation.begin().thenLoop("idle"));
+            }
             return PlayState.CONTINUE;
         }));
     }

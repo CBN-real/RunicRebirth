@@ -1,0 +1,13 @@
+{
+  "entries": [
+    {
+      "enum": "net/minecraft/client/model/HumanoidModel$ArmPose",
+      "name": "RUNICREBIRTH_CASTING",
+      "constructor": "(ZLnet/neoforged/neoforge/client/IArmPoseTransformer;)V",
+      "parameters": {
+        "class": "com/github/runicrebirth/client/SpellWriterArmPose",
+        "field": "CASTING"
+      }
+    }
+  ]
+}

@@ -62,7 +62,7 @@ public abstract non-sealed class SpellType implements SpellComponent {
     }
 
     public int defaultCircleLifespan() {
-        return 60;
+        return 40;
     }
 
     public int cooldownTicks() {

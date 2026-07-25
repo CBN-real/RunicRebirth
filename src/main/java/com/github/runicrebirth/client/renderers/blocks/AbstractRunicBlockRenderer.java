@@ -37,6 +37,7 @@ public abstract class AbstractRunicBlockRenderer<T extends BlockEntity & GeoBloc
         return ModRenderTypes.entityTranslucentNoCullNoShade(texture);
     }
 
+
     protected int getPackedLight(T animatable, int packedLight) {
         return packedLight;
     }

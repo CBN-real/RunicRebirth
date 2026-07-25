@@ -3,6 +3,7 @@ package com.github.runicrebirth.client;
 import com.github.runicrebirth.RunicRebirth;
 import com.github.runicrebirth.client.input.ModKeyMappings;
 import com.github.runicrebirth.client.overlays.InfusionAltarOverlay;
+import com.github.runicrebirth.client.overlays.RunicAnvilOverlay;
 import com.github.runicrebirth.client.overlays.SpellStackOverlay;
 import com.github.runicrebirth.client.particles.ArcaneElementParticle;
 import com.github.runicrebirth.client.particles.ArcaneInkParticle;
@@ -20,6 +21,7 @@ import com.github.runicrebirth.client.particles.WindElementParticle;
 import com.github.runicrebirth.client.particles.WindInkParticle;
 import com.github.runicrebirth.client.particles.WindTinyParticle;
 import com.github.runicrebirth.client.renderers.blocks.InfusionAltarRenderer;
+import com.github.runicrebirth.client.renderers.blocks.RunicAnvilRenderer;
 import com.github.runicrebirth.client.renderers.blocks.OculusControllerRenderer;
 import com.github.runicrebirth.client.renderers.blocks.OculusPillarRenderer;
 import com.github.runicrebirth.client.renderers.blocks.OculusPortalRenderer;
@@ -65,6 +67,7 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
+import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
@@ -92,6 +95,7 @@ public class RunicRebirthClient {
         modBus.addListener(this::registerGuiLayers);
         modBus.addListener(this::registerParticles);
         modBus.addListener(this::registerItemColors);
+        modBus.addListener(this::registerClientExtensions);
     }
 
     @SubscribeEvent
@@ -138,6 +142,7 @@ public class RunicRebirthClient {
         event.registerBlockEntityRenderer(ModBlockEntities.OCULUS_PILLAR.get(), OculusPillarRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.RUNESTEEL_PYLON.get(), RunesteelPylonRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.INFUSION_ALTAR.get(), InfusionAltarRenderer::new);
+        event.registerBlockEntityRenderer(ModBlockEntities.RUNIC_ANVIL.get(), RunicAnvilRenderer::new);
     }
 
     public void registerKeyMappings(RegisterKeyMappingsEvent event) {
@@ -173,6 +178,13 @@ public class RunicRebirthClient {
         );
     }
 
+    public void registerClientExtensions(RegisterClientExtensionsEvent event) {
+        var castingExtensions = new SpellWriterClientExtensions();
+        event.registerItem(castingExtensions,
+            ModItems.ACOLYTE_WAND.get(),
+            ModItems.ADEPT_STAFF.get());
+    }
+
     public void registerGuiLayers(RegisterGuiLayersEvent event) {
         event.registerAbove(
             net.neoforged.neoforge.client.gui.VanillaGuiLayers.HOTBAR,
@@ -182,6 +194,10 @@ public class RunicRebirthClient {
             ResourceLocation.fromNamespaceAndPath(RunicRebirth.MODID, "spell_stacks"),
             ResourceLocation.fromNamespaceAndPath(RunicRebirth.MODID, "infusion_altar"),
             InfusionAltarOverlay.INSTANCE);
+        event.registerAbove(
+            ResourceLocation.fromNamespaceAndPath(RunicRebirth.MODID, "infusion_altar"),
+            ResourceLocation.fromNamespaceAndPath(RunicRebirth.MODID, "runic_anvil"),
+            RunicAnvilOverlay.INSTANCE);
     }
 
     @SubscribeEvent

@@ -5,8 +5,10 @@ import com.github.runicrebirth.api.spells.SpellParams;
 import com.github.runicrebirth.damage.DamageSources;
 import com.github.runicrebirth.damage.SpellDamageSource;
 import com.github.runicrebirth.init.ModEntities;
+import com.github.runicrebirth.init.ModSounds;
 import com.github.runicrebirth.util.ParticleHelper;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -32,6 +34,7 @@ public class MagicBallistaEntity extends AbstractProjectileSpellEntity {
 
     public MagicBallistaEntity(EntityType<? extends MagicBallistaEntity> type, Level level) {
         super(type, level);
+        this.damageCategory = MagicDamageType.SHARP;
         this.chargeTicks = CHARGE_TICKS;
         this.endTicks = PIN_TICKS;
     }
@@ -43,6 +46,21 @@ public class MagicBallistaEntity extends AbstractProjectileSpellEntity {
         this.damageCategory = MagicDamageType.SHARP;
         this.chargeTicks = CHARGE_TICKS;
         this.endTicks = PIN_TICKS;
+    }
+
+    @Override
+    protected void onChargingTick() {
+        if (phaseAge == 1) {
+            level().playSound(null, this.getX(), this.getY(), this.getZ(),
+                ModSounds.SPELLS_LOAD_BALLISTA.get(), SoundSource.PLAYERS, 1.0f, 1.0f);
+        }
+    }
+
+    @Override
+    protected void onActivated() {
+        super.onActivated();
+        level().playSound(null, this.getX(), this.getY(), this.getZ(),
+            ModSounds.SPELLS_SHOOT_BALLISTA.get(), SoundSource.PLAYERS, 1.0f, 1.0f);
     }
 
     @Override

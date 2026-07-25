@@ -38,5 +38,85 @@
         "sounds": [
             "runicrebirth:infusion/infusing"
         ]
-    }
+    },
+  "forging.forging": {
+    "sounds": [
+      "runicrebirth:forging/forging"
+    ]
+  },
+  "forging.forge_active": {
+    "sounds": [
+      "runicrebirth:forging/forge_active"
+    ]
+  },
+  "spells.explosion": {
+    "sounds": [
+      "runicrebirth:spells/explosion"
+    ]
+  },
+  "spells.fuse": {
+    "sounds": [
+      "runicrebirth:spells/fuse"
+    ]
+  },
+  "spells.hammer_spell": {
+    "sounds": [
+      "runicrebirth:spells/hammer_spell"
+    ]
+  },
+  "spells.laser_shot": {
+    "sounds": [
+      "runicrebirth:spells/laser-shot"
+    ]
+  },
+  "spells.load_arrow": {
+    "sounds": [
+      "runicrebirth:spells/load_arrow"
+    ]
+  },
+  "spells.shoot_arrow": {
+    "sounds": [
+      "runicrebirth:spells/shoot_arrow"
+    ]
+  },
+  "spells.load_ballista": {
+    "sounds": [
+      "runicrebirth:spells/load_ballista"
+    ]
+  },
+  "spells.shoot_ballista": {
+    "sounds": [
+      "runicrebirth:spells/shoot_ballista"
+    ]
+  },
+  "spells.projectile_shoot": {
+    "sounds": [
+      "runicrebirth:spells/projectile_shoot"
+    ]
+  },
+  "spells.shield_initiate": {
+    "sounds": [
+      "runicrebirth:spells/shield_initiate"
+    ]
+  },
+  "spells.shield_hit": {
+    "sounds": [
+      "runicrebirth:spells/shield_hit"
+    ]
+  },
+  "spells.shield_end": {
+    "sounds": [
+      "runicrebirth:spells/shield_end"
+    ]
+  },
+  "spells.slash_spell": {
+    "sounds": [
+      "runicrebirth:spells/slash_spell"
+    ]
+  },
+  "spells.spawn_circle": {
+    "sounds": [
+      "runicrebirth:spells/spawn_circle"
+    ]
+  }
 }

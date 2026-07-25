@@ -2,9 +2,11 @@ package com.github.runicrebirth.entities.spells;
 
 import com.github.runicrebirth.api.spells.SpellParams;
 import com.github.runicrebirth.init.ModEntities;
+import com.github.runicrebirth.init.ModSounds;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -54,6 +56,14 @@ public class MagicBeamEntity extends AbstractInstantSpellEntity {
 
     public float getBeamDistance() {
         return this.entityData.get(DATA_DISTANCE);
+    }
+
+    @Override
+    protected void onChargingTick() {
+        if (phaseAge == 1) {
+            level().playSound(null, this.getX(), this.getY(), this.getZ(),
+                ModSounds.SPELLS_LASER_SHOT.get(), SoundSource.PLAYERS, 1.0f, 1.0f);
+        }
     }
 
     @Override

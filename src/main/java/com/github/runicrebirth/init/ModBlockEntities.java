@@ -6,6 +6,7 @@ import com.github.runicrebirth.blocks.entity.OculusPillarBlockEntity;
 import com.github.runicrebirth.blocks.entity.RunesteelPylonBlockEntity;
 import com.github.runicrebirth.blocks.entity.OculusControllerBlockEntity;
 import com.github.runicrebirth.blocks.entity.OculusPortalBlockEntity;
+import com.github.runicrebirth.blocks.entity.RunicAnvilBlockEntity;
 import com.github.runicrebirth.blocks.entity.TrialSpawnerBlockEntity;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -40,6 +41,10 @@ public final class ModBlockEntities {
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<InfusionAltarBlockEntity>> INFUSION_ALTAR =
             BLOCK_ENTITIES.register("infusion_altar",
                     () -> BlockEntityType.Builder.of(InfusionAltarBlockEntity::new, ModBlocks.INFUSION_ALTAR.get()).build(null));
+
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<RunicAnvilBlockEntity>> RUNIC_ANVIL =
+            BLOCK_ENTITIES.register("runic_anvil",
+                    () -> BlockEntityType.Builder.of(RunicAnvilBlockEntity::new, ModBlocks.RUNIC_ANVIL.get()).build(null));
 
     private ModBlockEntities() {}
 }

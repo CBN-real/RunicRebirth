@@ -2,6 +2,7 @@ package com.github.runicrebirth.init;
 
 import com.github.runicrebirth.RunicRebirth;
 import com.github.runicrebirth.crafting.InfusionRecipeSerializer;
+import com.github.runicrebirth.crafting.RunicAnvilRecipeSerializer;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.neoforged.neoforge.registries.DeferredHolder;
@@ -14,6 +15,9 @@ public final class ModRecipeSerializers {
 
     public static final DeferredHolder<RecipeSerializer<?>, InfusionRecipeSerializer> INFUSION =
             RECIPE_SERIALIZERS.register("infusion", InfusionRecipeSerializer::new);
+
+    public static final DeferredHolder<RecipeSerializer<?>, RunicAnvilRecipeSerializer> RUNIC_ANVIL =
+            RECIPE_SERIALIZERS.register("runic_anvil", RunicAnvilRecipeSerializer::new);
 
     private ModRecipeSerializers() {}
 }

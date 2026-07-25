@@ -3,7 +3,9 @@ package com.github.runicrebirth.network;
 import com.github.runicrebirth.RunicRebirth;
 import com.github.runicrebirth.capabilities.magic.MagicData;
 import com.github.runicrebirth.entities.DrawingCanvasEntity;
+import com.github.runicrebirth.items.SpellWriter;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
@@ -26,6 +28,7 @@ public record CancelDrawC2SPacket() implements CustomPacketPayload {
             if (!(ctx.player() instanceof ServerPlayer player)) return;
             MagicData data = MagicData.of(player);
             data.setDrawing(false);
+            data.clearPendingCircuit();
             int entityId = data.canvasEntityId();
             if (entityId != -1) {
                 Entity entity = player.level().getEntity(entityId);
@@ -34,6 +37,8 @@ public record CancelDrawC2SPacket() implements CustomPacketPayload {
                 }
                 data.clearCanvasEntityId();
             }
+            CastAnimBroadcastS2CPacket.broadcast(player, 0);
+            ItemStack held = player.getItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND);
         });
     }
 }

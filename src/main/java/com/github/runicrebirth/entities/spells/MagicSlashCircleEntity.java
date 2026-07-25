@@ -2,6 +2,8 @@ package com.github.runicrebirth.entities.spells;
 
 import com.github.runicrebirth.api.spells.SpellParams;
 import com.github.runicrebirth.init.ModEntities;
+import com.github.runicrebirth.init.ModSounds;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
@@ -9,7 +11,7 @@ import net.minecraft.world.phys.Vec3;
 
 public class MagicSlashCircleEntity extends AbstractSpellCircleEntity {
 
-    private static final int LIFESPAN = 60;
+    private static final int LIFESPAN = 90;
 
     private Vec3 direction;
     private float speed;
@@ -28,8 +30,10 @@ public class MagicSlashCircleEntity extends AbstractSpellCircleEntity {
 
     @Override
     protected void spawnProjectile() {
+        level().playSound(null, this.getX(), this.getY(), this.getZ(),
+            ModSounds.SPELLS_SLASH_SPELL.get(), SoundSource.PLAYERS, 1.0f, 1.0f);
         MagicSlashEntity slash = new MagicSlashEntity(level(), owner, params, direction);
-        slash.setPos(this.getX(), this.getY(), this.getZ());
+        slash.setPos(this.getX(), this.getY() + 0.5f, this.getZ());
 
         level().addFreshEntity(slash);
     }

@@ -146,8 +146,18 @@ public class DrawingCanvasScreen extends Screen {
     private List<RadialSlot> activeRadialSlots = new ArrayList<>();
     private CanvasAmbientSound ambientSound;
 
+    private final boolean circuitMode;
+    private final int circuitModifierSlots;
+    private final java.util.List<com.github.runicrebirth.api.spells.WandStacksData.ComponentRef> pendingCircuitRefs = new ArrayList<>();
+
     public DrawingCanvasScreen() {
+        this(false, 0);
+    }
+
+    public DrawingCanvasScreen(boolean circuitMode, int circuitModifierSlots) {
         super(Component.translatable("screen.runicrebirth.drawing_canvas"));
+        this.circuitMode = circuitMode;
+        this.circuitModifierSlots = circuitModifierSlots;
     }
 
     @Override
@@ -226,6 +236,7 @@ public class DrawingCanvasScreen extends Screen {
         if (selectedRef != null && !selectedRef.isLocked()) renderReferenceOverlay(g);
         renderStrokes(g);
         renderRadialMenu(g);
+        renderInscribedSlots(g);
 
         g.drawCenteredString(font, Component.translatable("screen.runicrebirth.canvas_hint"),
             width / 2, 4, 0xAAFFFFFF);
@@ -298,6 +309,61 @@ public class DrawingCanvasScreen extends Screen {
 
             if (selectedRef != null && selectedRef.shapeId().equals(slot.shape.shapeId())) {
                 drawCircle(g, (int) cx, (int) cy, bgRadius, RADIAL_HIGHLIGHT);
+            }
+        }
+    }
+
+    private void renderInscribedSlots(GuiGraphics g) {
+        Minecraft mc = Minecraft.getInstance();
+        if (mc.player == null) return;
+        net.minecraft.world.item.ItemStack held = mc.player.getMainHandItem();
+
+        java.util.List<com.github.runicrebirth.api.spells.WandStacksData.ComponentRef> refs = null;
+        int totalSlots = 0;
+
+        if (circuitMode) {
+            totalSlots = circuitModifierSlots;
+            if (!pendingCircuitRefs.isEmpty()) {
+                refs = pendingCircuitRefs;
+            }
+        } else if (!circuitMode && held.getItem() instanceof com.github.runicrebirth.items.SpellWriter) {
+            var wandData = held.get(com.github.runicrebirth.init.ModDataComponents.WAND_STACKS.get());
+            if (wandData != null && !wandData.stacks().isEmpty()) {
+                var entry = wandData.stacks().get(wandData.activeIndex());
+                if (entry.inscribed() && entry.permanentCount() > 0) {
+                    refs = entry.components().subList(0, Math.min(entry.permanentCount(), entry.components().size()));
+                    totalSlots = refs.size();
+                }
+            }
+        }
+
+        if (circuitMode && totalSlots == 0) return;
+        if (!circuitMode && (refs == null || refs.isEmpty())) return;
+
+        int displayCount = circuitMode ? totalSlots : refs.size();
+        int iconSize = 11;
+        int gap = 2;
+        int totalW = displayCount * iconSize + (displayCount - 1) * gap;
+        int startX = width / 2 - totalW / 2;
+        int y = 16;
+
+        ResourceLocation slotBg = ResourceLocation.fromNamespaceAndPath(RunicRebirth.MODID, "hud/overlay_slot_border_small");
+        ResourceLocation emptySlot = ResourceLocation.fromNamespaceAndPath(RunicRebirth.MODID, "hud/overlay_slot_border_small_unavail");
+
+        int filledCount = refs != null ? refs.size() : 0;
+        for (int i = 0; i < displayCount; i++) {
+            int x = startX + i * (iconSize + gap);
+            if (i < filledCount) {
+                var ref = refs.get(i);
+                com.github.runicrebirth.api.spells.SpellComponent comp = ref.kind() == com.github.runicrebirth.api.spells.WandStacksData.ComponentRef.KIND_TYPE
+                    ? com.github.runicrebirth.api.registry.SpellTypeRegistry.get(ref.id())
+                    : com.github.runicrebirth.api.registry.ModifierRegistry.get(ref.id());
+                g.blitSprite(comp != null ? comp.getOverlaySlotPath() : slotBg, x, y, iconSize, iconSize);
+                if (comp != null) {
+                    g.blit(comp.getSpellIconPath(), x, y, 0, 0, iconSize, iconSize, iconSize, iconSize);
+                }
+            } else {
+                g.blitSprite(emptySlot, x, y, iconSize, iconSize);
             }
         }
     }
@@ -504,19 +570,48 @@ public class DrawingCanvasScreen extends Screen {
         if (buffer.isEmpty() || buffer.totalPoints() < 4) {
             buffer.clear();
             InkParticle.removeAll();
+            if (circuitMode) {
+                PacketDistributor.sendToServer(new com.github.runicrebirth.network.FinalizeCircuitC2SPacket());
+                this.onClose();
+            }
             return;
         }
         Element el = selectedElement();
         ResourceLocation elemId = el != null ? el.id()
             : ResourceLocation.fromNamespaceAndPath(RunicRebirth.MODID, "arcane");
+
+        if (circuitMode && pendingCircuitRefs.size() < circuitModifierSlots) {
+            var recognizer = com.github.runicrebirth.magic.recognition.Recognizers.get();
+            var result = recognizer.recognizeStrokes(buffer.snapshot());
+            if (result != null && result.id() != null) {
+                ResourceLocation shapeId = ResourceLocation.parse(result.id());
+                double threshold = com.github.runicrebirth.api.registry.ShapeRegistry.thresholdFor(shapeId);
+                if (result.score() / 10 >= threshold) {
+                    com.github.runicrebirth.api.spells.SpellComponent comp =
+                        com.github.runicrebirth.api.registry.ShapeRegistry.componentFor(shapeId);
+                    if (comp != null) {
+                        int kind = comp instanceof com.github.runicrebirth.api.spells.SpellType
+                            ? com.github.runicrebirth.api.spells.WandStacksData.ComponentRef.KIND_TYPE
+                            : com.github.runicrebirth.api.spells.WandStacksData.ComponentRef.KIND_MODIFIER;
+                        pendingCircuitRefs.add(new com.github.runicrebirth.api.spells.WandStacksData.ComponentRef(kind, comp.id()));
+                    }
+                }
+            }
+        }
+
         PacketDistributor.sendToServer(new DrawSubmitC2SPacket(buffer.snapshot(), elemId));
         buffer.clear();
         InkParticle.removeAll();
     }
 
     private void onStackUpdated() {
+        Minecraft mc = Minecraft.getInstance();
+        if (mc.player == null) return;
+
+        if (circuitMode) return;
+
         if (ClientMagicData.isActiveStackValid()) {
-            if (Minecraft.getInstance().player != null) this.onClose();
+            this.onClose();
         }
     }
 

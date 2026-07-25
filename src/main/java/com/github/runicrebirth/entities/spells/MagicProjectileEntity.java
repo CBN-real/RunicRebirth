@@ -4,6 +4,8 @@ import com.github.runicrebirth.api.spells.SpellParams;
 import com.github.runicrebirth.damage.DamageSources;
 import com.github.runicrebirth.damage.SpellDamageSource;
 import com.github.runicrebirth.init.ModEntities;
+import com.github.runicrebirth.init.ModSounds;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -25,6 +27,13 @@ public class MagicProjectileEntity extends AbstractProjectileSpellEntity {
     public MagicProjectileEntity(Level level, LivingEntity owner, SpellParams params, Vec3 direction) {
         super(ModEntities.MAGIC_PROJECTILE.get(), owner, level, direction, params.speed);
         initFromParams(params);
+    }
+
+    @Override
+    protected void onActivated() {
+        super.onActivated();
+        level().playSound(null, this.getX(), this.getY(), this.getZ(),
+            ModSounds.SPELLS_PROJECTILE_SHOOT.get(), SoundSource.PLAYERS, 1.0f, 1.0f);
     }
 
     @Override

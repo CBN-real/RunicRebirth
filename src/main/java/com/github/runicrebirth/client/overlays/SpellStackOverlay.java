@@ -1,14 +1,19 @@
 package com.github.runicrebirth.client.overlays;
 
 import com.github.runicrebirth.RunicRebirth;
+import com.github.runicrebirth.api.registry.ModifierRegistry;
+import com.github.runicrebirth.api.registry.SpellTypeRegistry;
 import com.github.runicrebirth.api.spells.SpellComponent;
 import com.github.runicrebirth.api.spells.SpellModifier;
 import com.github.runicrebirth.api.spells.SpellType;
+import com.github.runicrebirth.api.spells.WandStacksData;
 import com.github.runicrebirth.client.ClientMagicData;
 import com.github.runicrebirth.config.ClientConfig;
+import com.github.runicrebirth.init.ModDataComponents;
 import com.github.runicrebirth.items.SpellWriter;
 import com.github.runicrebirth.spells.modifiers.ChargesModifier;
 import com.github.runicrebirth.spells.modifiers.MultiCastModifier;
+import net.minecraft.world.item.ItemStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import java.util.ArrayList;
 import java.util.List;
@@ -66,6 +71,9 @@ public class SpellStackOverlay implements LayeredDraw.Layer {
     private static final int CHARGE_ICON_SIZE = 7;
     private static final int CHARGE_ICON_GAP = 1;
     private static final int CHARGE_TEX_SIZE = 16;
+    private static final ResourceLocation LOCK_ICON =
+        ResourceLocation.fromNamespaceAndPath("runicrebirth", "textures/gui/locked_spell_overlay.png");
+    private static final int LOCK_SIZE = 7;
 
     @Override
     public void render(GuiGraphics graphics, DeltaTracker delta) {
@@ -73,11 +81,15 @@ public class SpellStackOverlay implements LayeredDraw.Layer {
         if (mc.player == null || mc.options.hideGui) return;
         if (!isHoldingSpellWriter(mc)) return;
 
-        List<List<SpellComponent>> stacks = ClientMagicData.stacks();
-        if (stacks == null || stacks.isEmpty()) return;
+        ItemStack heldItem = mc.player.getMainHandItem();
+        WandStacksData wandData = heldItem.get(ModDataComponents.WAND_STACKS.get());
+        if (wandData == null || wandData.stacks().isEmpty()) return;
+
+        List<List<SpellComponent>> stacks = resolveStacks(wandData);
+        if (stacks.isEmpty()) return;
 
         int screenHeight = graphics.guiHeight();
-        int active = ClientMagicData.activeIndex();
+        int active = wandData.activeIndex();
         int maxSmallSlots = ClientConfig.HUD_MAX_SLOTS.get();
         int N = stacks.size();
 
@@ -102,7 +114,7 @@ public class SpellStackOverlay implements LayeredDraw.Layer {
 
         // Active stack (full size, selected border)
         drawStackRow(graphics, stacks.get(active), rowLeftX, activeTopY, true, maxSmallSlots,
-            ClientMagicData.elementForStack(active));
+            elementForEntry(wandData, active), wandData.stacks().get(active));
 
         // Non-active stacks in 2-wide mini rows below active
         for (int i = 0; i < miniCount; i++) {
@@ -116,7 +128,7 @@ public class SpellStackOverlay implements LayeredDraw.Layer {
             graphics.pose().translate(miniX, miniY, 0);
             graphics.pose().scale(MINI_SCALE, MINI_SCALE, 1f);
             drawStackRow(graphics, stacks.get(stackIdx), 0, 0, false, maxSmallSlots,
-                ClientMagicData.elementForStack(stackIdx));
+                elementForEntry(wandData, stackIdx), wandData.stacks().get(stackIdx));
             graphics.pose().popPose();
         }
 
@@ -128,6 +140,40 @@ public class SpellStackOverlay implements LayeredDraw.Layer {
             || mc.player.getOffhandItem().getItem() instanceof SpellWriter;
     }
 
+    private static List<List<SpellComponent>> resolveStacks(WandStacksData wandData) {
+        List<List<SpellComponent>> result = new ArrayList<>(wandData.stacks().size());
+        for (WandStacksData.StackEntry entry : wandData.stacks()) {
+            List<SpellComponent> resolved = new ArrayList<>(entry.components().size());
+            for (WandStacksData.ComponentRef ref : entry.components()) {
+                SpellComponent c = ref.kind() == WandStacksData.ComponentRef.KIND_TYPE
+                    ? SpellTypeRegistry.get(ref.id())
+                    : ModifierRegistry.get(ref.id());
+                if (c != null) resolved.add(c);
+            }
+            result.add(resolved);
+        }
+        return result;
+    }
+
+    private static ResourceLocation elementForEntry(WandStacksData wandData, int idx) {
+        if (idx < 0 || idx >= wandData.stacks().size()) return null;
+        return wandData.stacks().get(idx).elementId();
+    }
+
+    private static boolean isModifierPermanent(WandStacksData.StackEntry entry, SpellModifier mod) {
+        int modIdx = 0;
+        for (int i = 0; i < entry.components().size(); i++) {
+            WandStacksData.ComponentRef ref = entry.components().get(i);
+            if (ref.kind() == WandStacksData.ComponentRef.KIND_MODIFIER) {
+                if (ref.id().equals(mod.id())) {
+                    return i < entry.permanentCount();
+                }
+                modIdx++;
+            }
+        }
+        return false;
+    }
+
     private static int fullRowWidth(int maxSmallSlots) {
         int cols = (int) Math.ceil(maxSmallSlots / (double) SMALL_ROWS);
         int smallAreaW = cols * SMALL_SIZE + Math.max(0, cols - 1) * SMALL_COL_GAP;
@@ -136,7 +182,7 @@ public class SpellStackOverlay implements LayeredDraw.Layer {
 
     private static void drawStackRow(GuiGraphics g, List<SpellComponent> stack,
                                      int rowLeftX, int rowTopY, boolean isActive, int maxSmallSlots,
-                                     ResourceLocation elementId) {
+                                     ResourceLocation elementId, WandStacksData.StackEntry rawEntry) {
         SpellType typeInStack = null;
         List<SpellModifier> modifiers = new ArrayList<>();
         boolean hasCharges = false;
@@ -168,6 +214,10 @@ public class SpellStackOverlay implements LayeredDraw.Layer {
                 rowLeftX + BIG_ICON_OFFSET,
                 rowTopY + BIG_ICON_OFFSET,
                 0, 0, BIG_ICON, BIG_ICON, BIG_ICON, BIG_ICON);
+            if (rawEntry.inscribed() && rawEntry.hasPermanentSpellType()) {
+                g.blit(LOCK_ICON, rowLeftX + BIG_SIZE - LOCK_SIZE - 1, rowTopY + 1,
+                    LOCK_SIZE, LOCK_SIZE, 0, 0, 32, 32, 32, 32);
+            }
         }
 
         // Selected border (only for active stack)
@@ -190,6 +240,11 @@ public class SpellStackOverlay implements LayeredDraw.Layer {
                 SpellModifier mod = modifiers.get(i);
                 g.blitSprite(mod.getOverlaySlotPath(), x, y, SMALL_SIZE, SMALL_SIZE);
                 g.blit(mod.getSpellIconPath(), x, y, 0, 0, SMALL_ICON, SMALL_ICON, SMALL_ICON, SMALL_ICON);
+                if (rawEntry.inscribed() && isModifierPermanent(rawEntry, mod)) {
+                    int lockS = LOCK_SIZE - 2;
+                    g.blit(LOCK_ICON, x + SMALL_SIZE - lockS, y, lockS, lockS,
+                        0, 0, 32, 32, 32, 32);
+                }
             } else {
                 g.blitSprite(SLOT_SMALL_UNAVAIL, x, y, SMALL_SIZE, SMALL_SIZE);
             }

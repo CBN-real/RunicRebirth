@@ -82,7 +82,7 @@ public class RunicRebirth {
 
     private void buildContents(BuildCreativeModeTabContentsEvent event) {
         if (event.getTabKey() == CreativeModeTabs.TOOLS_AND_UTILITIES) {
-            event.accept(ModItems.BASIC_WAND.get());
+            event.accept(ModItems.ACOLYTE_WAND.get());
             event.accept(ModItems.INSCRIBED_WAND.get());
             event.accept(ModItems.RING_OF_EXPANSION.get());
             event.accept(ModItems.ACOLYTE_WIZARD_HAT.get());
@@ -92,7 +92,26 @@ public class RunicRebirth {
             event.accept(ModItems.ACOLYTE_ARTIFICER_HEADGEAR.get());
             event.accept(ModItems.ACOLYTE_MAGE_HOOD.get());
             event.accept(ModItems.ACOLYTE_RUNEBLADE_HELMET.get());
+            event.accept(ModItems.ADEPT_RUNEBLADE_HELMET.get());
+            event.accept(ModItems.ADEPT_RUNEBLADE_CHESTPLATE.get());
+            event.accept(ModItems.ADEPT_RUNEBLADE_LEGGINGS.get());
+            event.accept(ModItems.ADEPT_RUNEBLADE_BOOTS.get());
+            event.accept(ModItems.ADEPT_WIZARD_HAT.get());
+            event.accept(ModItems.ADEPT_WIZARD_ROBES.get());
+            event.accept(ModItems.ADEPT_WIZARD_PANTS.get());
+            event.accept(ModItems.ADEPT_WIZARD_BOOTS.get());
+            event.accept(ModItems.ADEPT_MAGE_HOOD.get());
+            event.accept(ModItems.ADEPT_MAGE_ROBES.get());
+            event.accept(ModItems.ADEPT_MAGE_PANTS.get());
+            event.accept(ModItems.ADEPT_MAGE_BOOTS.get());
+            event.accept(ModItems.ADEPT_ARTIFICER_HEADGEAR.get());
+            event.accept(ModItems.ADEPT_ARTIFICER_CHESTGEAR.get());
+            event.accept(ModItems.ADEPT_ARTIFICER_PANTS.get());
+            event.accept(ModItems.ADEPT_ARTIFICER_BOOTS.get());
             event.accept(ModItems.RUNIC_CODEX.get());
+            event.accept(ModItems.ACOLYTE_RUNIC_CIRCUIT.get());
+            event.accept(ModItems.ADEPT_RUNIC_CIRCUIT.get());
+            event.accept(ModItems.ARCH_RUNIC_CIRCUIT.get());
             event.accept(ModItems.ARCANE_SPIRIT.get());
             event.accept(ModItems.ARCANE_GEMSTONE.get());
         }
@@ -106,6 +125,7 @@ public class RunicRebirth {
             event.accept(ModItems.OCULUS_PILLAR.get());
             event.accept(ModItems.RUNESTEEL_PYLON.get());
             event.accept(ModItems.INFUSION_ALTAR.get());
+            event.accept(ModItems.RUNIC_ANVIL.get());
         }
     }
 }

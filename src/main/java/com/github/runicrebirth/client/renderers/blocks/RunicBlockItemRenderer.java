@@ -3,6 +3,8 @@ package com.github.runicrebirth.client.renderers.blocks;
 import com.github.runicrebirth.client.renderers.ModRenderTypes;
 import com.github.runicrebirth.client.renderers.NormalOverrideVertexConsumer;
 import com.github.runicrebirth.items.RunicBlockItem;
+import com.mojang.blaze3d.platform.Lighting;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
@@ -35,6 +37,15 @@ public class RunicBlockItemRenderer extends GeoItemRenderer<RunicBlockItem> {
         if (!isReRender && animatable.getHandRotationY() != 0 && isHandContext()) {
             poseStack.mulPose(Axis.YP.rotationDegrees(animatable.getHandRotationY()));
         }
+        if (!isReRender && this.renderPerspective == ItemDisplayContext.GUI) {
+            if (animatable.getGuiTranslationX() != 0 || animatable.getGuiTranslationY() != 0 || animatable.getGuiTranslationZ() != 0) {
+                poseStack.translate(animatable.getGuiTranslationX(), animatable.getGuiTranslationY(), animatable.getGuiTranslationZ());
+            }
+            if (animatable.getGuiScale() != 1) {
+                float s = animatable.getGuiScale();
+                poseStack.scale(s, s, s);
+            }
+        }
     }
 
     private boolean isHandContext() {
@@ -60,12 +71,15 @@ public class RunicBlockItemRenderer extends GeoItemRenderer<RunicBlockItem> {
         RenderType noShadeType = ModRenderTypes.entityTranslucentNoCullNoShade(texture);
         VertexConsumer finalBuffer;
         if (this.renderPerspective == ItemDisplayContext.GUI) {
-            noShadeType = ModRenderTypes.entityUnlit(texture);
-            finalBuffer = bufferSource.getBuffer(noShadeType);
+            noShadeType = ModRenderTypes.entityTranslucentNoCullNoShade(texture);
+            finalBuffer = bufferSource.getBuffer(ModRenderTypes.entityUnlit(texture));
         } else {
             finalBuffer = new NormalOverrideVertexConsumer(bufferSource.getBuffer(noShadeType));
         }
         super.renderRecursively(poseStack, animatable, bone, noShadeType, bufferSource, finalBuffer,
             isReRender, partialTick, LightTexture.FULL_BRIGHT, packedOverlay, colour);
+
     }
+
+
 }

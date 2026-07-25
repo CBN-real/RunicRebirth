@@ -20,6 +20,10 @@ public class RunicBlockItem extends BlockItem implements GeoItem {
     private final String blockName;
     private String texturePath;
     private float handRotationY = 0;
+    private float guiTranslationX = 0;
+    private float guiTranslationY = 0;
+    private float guiTranslationZ = 0;
+    private float guiScale = 1;
 
     public RunicBlockItem(Block block, Properties properties, String animationName, String blockName) {
         super(block, properties);
@@ -41,11 +45,31 @@ public class RunicBlockItem extends BlockItem implements GeoItem {
         return handRotationY;
     }
 
+    public RunicBlockItem withGuiTranslation(float x, float y, float z) {
+        this.guiTranslationX = x;
+        this.guiTranslationY = y;
+        this.guiTranslationZ = z;
+        return this;
+    }
+
+    public float getGuiTranslationX() { return guiTranslationX; }
+    public float getGuiTranslationY() { return guiTranslationY; }
+    public float getGuiTranslationZ() { return guiTranslationZ; }
+
+    public RunicBlockItem withGuiScale(float scale) {
+        this.guiScale = scale;
+        return this;
+    }
+
+    public float getGuiScale() { return guiScale; }
+
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
         controllers.add(new AnimationController<>(this, "item", 0,
             state -> state.setAndContinue(defaultAnimation)));
     }
+
+
 
     @Override
     public AnimatableInstanceCache getAnimatableInstanceCache() {

@@ -2,11 +2,13 @@ package com.github.runicrebirth.entities.spells;
 
 import com.github.runicrebirth.api.spells.SpellParams;
 import com.github.runicrebirth.init.ModElements;
+import com.github.runicrebirth.init.ModSounds;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -73,6 +75,10 @@ public abstract class AbstractSpellCircleEntity extends Entity implements GeoEnt
         }
 
         age++;
+        if (age == 1) {
+            level().playSound(null, this.getX(), this.getY(), this.getZ(),
+                ModSounds.SPELLS_SPAWN_CIRCLE.get(), SoundSource.PLAYERS, 1.0f, 1.0f);
+        }
         if (age >= lifespan || owner == null || !owner.isAlive()) {
             beginFinishing();
             return;

@@ -9,5 +9,6 @@ public enum StructureBlock {
     RUNESTEEL_PYLON,
     INFUSION_ALTAR,
     INFUSION_ALTAR_PROXY,
+    RUNIC_ANVIL,
     AIR
 }

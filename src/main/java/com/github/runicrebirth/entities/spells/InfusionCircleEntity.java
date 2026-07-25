@@ -5,6 +5,7 @@ import com.github.runicrebirth.api.spells.SpellParams;
 import com.github.runicrebirth.blocks.entity.InfusionAltarBlockEntity;
 import com.github.runicrebirth.blocks.entity.OculusControllerBlockEntity;
 import com.github.runicrebirth.blocks.entity.OculusPortalBlockEntity;
+import com.github.runicrebirth.blocks.entity.RunicAnvilBlockEntity;
 import com.github.runicrebirth.blocks.multiblock.DimensionalOculusValidator;
 import com.github.runicrebirth.init.ModBlocks;
 import com.github.runicrebirth.init.ModEntities;
@@ -69,6 +70,24 @@ public class InfusionCircleEntity extends AbstractInstantSpellEntity {
                         }
                     } else if (altar.tryStartCrafting()) {
                         RunicRebirth.LOGGER.info("[Infusion] Altar crafting started at {}", pos);
+                        didSomething = true;
+                    }
+                }
+                break;
+            }
+        }
+
+        // Check for RunicAnvilBlock at or near center
+        for (BlockPos pos : BlockPos.betweenClosed(centerBlock.offset(-2, -1, -2), centerBlock.offset(2, 1, 2))) {
+            BlockState state = server.getBlockState(pos);
+            if (state.is(ModBlocks.RUNIC_ANVIL.get())) {
+                var be = server.getBlockEntity(pos);
+                if (be instanceof RunicAnvilBlockEntity anvil) {
+                    if (!anvil.isActive()) {
+                        if (anvil.tryActivate()) {
+                            didSomething = true;
+                        }
+                    } else if (anvil.tryStartCrafting()) {
                         didSomething = true;
                     }
                 }

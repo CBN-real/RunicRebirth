@@ -5,6 +5,8 @@ import com.github.runicrebirth.api.spells.SpellParams;
 import com.github.runicrebirth.damage.DamageSources;
 import com.github.runicrebirth.damage.SpellDamageSource;
 import com.github.runicrebirth.init.ModEntities;
+import com.github.runicrebirth.init.ModSounds;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -21,15 +23,32 @@ public class MagicArrowEntity extends AbstractProjectileSpellEntity {
         super(type, level);
         this.damageCategory = MagicDamageType.SHARP;
         this.endTicks = 15;
-        this.chargeTicks = 18;
+        this.chargeTicks = 10;
     }
 
     public MagicArrowEntity(Level level, LivingEntity owner, SpellParams params, Vec3 direction) {
         super(ModEntities.MAGIC_ARROW.get(), owner, level, direction, params.speed);
+        this.damageCategory = MagicDamageType.SHARP;
+        this.endTicks = 15;
+        this.chargeTicks = 10;
         initFromParams(params);
-
     }
 
+
+    @Override
+    protected void onChargingTick() {
+        if (phaseAge == 1) {
+            level().playSound(null, this.getX(), this.getY(), this.getZ(),
+                ModSounds.SPELLS_LOAD_ARROW.get(), SoundSource.PLAYERS, 1.0f, 1.0f);
+        }
+    }
+
+    @Override
+    protected void onActivated() {
+        super.onActivated();
+        level().playSound(null, this.getX(), this.getY(), this.getZ(),
+            ModSounds.SPELLS_SHOOT_ARROW.get(), SoundSource.PLAYERS, 1.0f, 1.0f);
+    }
 
     @Override
     protected void onActiveTick() {

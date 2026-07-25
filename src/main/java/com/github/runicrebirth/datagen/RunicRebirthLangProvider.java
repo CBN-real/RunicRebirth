@@ -19,7 +19,8 @@ public class RunicRebirthLangProvider extends LanguageProvider {
         cache.data().forEach(this::add);
 
         add("itemGroup.runicrebirth", "Interactive Magic Tab");
-        add("item.runicrebirth.basic_wand", "Basic Wand");
+        add("item.runicrebirth.acolyte_wand", "Acolyte Wand");
+        add("item.runicrebirth.adept_staff", "Adept Staff");
         add("item.runicrebirth.inscribed_wand", "Inscribed Wand");
         add("item.runicrebirth.ring_of_expansion", "Ring of Expansion");
         add("item.runicrebirth.runic_codex", "Runic Codex");
@@ -30,6 +31,23 @@ public class RunicRebirthLangProvider extends LanguageProvider {
         add("item.runicrebirth.acolyte_artificer_headgear", "Acolyte Artificer Headgear");
         add("item.runicrebirth.acolyte_mage_hood", "Acolyte Mage Hood");
         add("item.runicrebirth.acolyte_runeblade_helmet", "Acolyte Runeblade Helm");
+
+        add("item.runicrebirth.adept_runeblade_helmet", "Adept Runeblade Helmet");
+        add("item.runicrebirth.adept_runeblade_chestplate", "Adept Runeblade Chestplate");
+        add("item.runicrebirth.adept_runeblade_leggings", "Adept Runeblade Leggings");
+        add("item.runicrebirth.adept_runeblade_boots", "Adept Runeblade Boots");
+        add("item.runicrebirth.adept_wizard_hat", "Adept Wizard Hat");
+        add("item.runicrebirth.adept_wizard_robes", "Adept Wizard Robes");
+        add("item.runicrebirth.adept_wizard_pants", "Adept Wizard Pants");
+        add("item.runicrebirth.adept_wizard_boots", "Adept Wizard Boots");
+        add("item.runicrebirth.adept_mage_hood", "Adept Mage Hood");
+        add("item.runicrebirth.adept_mage_robes", "Adept Mage Robes");
+        add("item.runicrebirth.adept_mage_pants", "Adept Mage Pants");
+        add("item.runicrebirth.adept_mage_boots", "Adept Mage Boots");
+        add("item.runicrebirth.adept_artificer_headgear", "Adept Artificer Headgear");
+        add("item.runicrebirth.adept_artificer_chestgear", "Adept Artificer Chestgear");
+        add("item.runicrebirth.adept_artificer_pants", "Adept Artificer Pants");
+        add("item.runicrebirth.adept_artificer_boots", "Adept Artificer Boots");
 
         add("entity.runicrebirth.magic_projectile", "Magic Projectile");
         add("entity.runicrebirth.magic_arrow", "Magic Arrow");
@@ -90,7 +108,12 @@ public class RunicRebirthLangProvider extends LanguageProvider {
         add("block.runicrebirth.return_portal", "Return Portal");
         add("block.runicrebirth.trial_spawner", "Trial Spawner");
         add("block.runicrebirth.infusion_altar", "Infusion Altar");
+        add("block.runicrebirth.runic_anvil", "Runic Anvil");
 
+        add("item.runicrebirth.acolyte_runic_circuit", "Acolyte Runic Circuit");
+        add("item.runicrebirth.adept_runic_circuit", "Adept Runic Circuit");
+        add("item.runicrebirth.arch_runic_circuit", "Arch Runic Circuit");
+        add("item.runicrebirth.runic_circuit.blank", "Right-click to inscribe");
         add("item.runicrebirth.arcane_spirit", "Arcane Spirit");
         add("item.runicrebirth.arcane_gemstone", "Arcane Gemstone");
 

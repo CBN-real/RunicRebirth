@@ -1,5 +1,6 @@
 package com.github.runicrebirth.capabilities.magic;
 
+import com.github.runicrebirth.api.spells.SpellComponent;
 import com.github.runicrebirth.api.spells.SpellParams;
 import com.github.runicrebirth.api.spells.SpellStack;
 import com.github.runicrebirth.init.ModAttachments;
@@ -25,8 +26,6 @@ public class MagicData {
 
     private final Map<ResourceLocation, Integer> cooldowns;
 
-    private SpellStack[] stacks;
-    private int activeStackIndex;
     private int globalCastLockoutTicks;
     private boolean drawing;
     private int canvasEntityId = -1;
@@ -36,8 +35,6 @@ public class MagicData {
     private SpellParams chargedParams;
     public MagicData() {
         this.cooldowns = new HashMap<>();
-        this.stacks = null;
-        this.activeStackIndex = 0;
         this.globalCastLockoutTicks = 0;
         this.drawing = false;
     }
@@ -81,31 +78,20 @@ public class MagicData {
     public void setCanvasEntityId(int id) { this.canvasEntityId = id; }
     public void clearCanvasEntityId() { this.canvasEntityId = -1; }
 
-    // Stacks
-    public void ensureStacks(int count) {
-        if (stacks == null || stacks.length != count) {
-            SpellStack[] fresh = new SpellStack[count];
-            for (int i = 0; i < count; i++) fresh[i] = new SpellStack();
-            stacks = fresh;
-            activeStackIndex = 0;
-        }
+    // Pending circuit inscription (transient, not persisted)
+    private SpellStack pendingCircuitSpell;
+
+    public SpellStack pendingCircuitSpell() { return pendingCircuitSpell; }
+
+    public SpellStack getOrCreatePendingCircuit() {
+        if (pendingCircuitSpell == null) pendingCircuitSpell = new SpellStack();
+        return pendingCircuitSpell;
     }
 
-    public SpellStack[] stacks() { return stacks; }
+    public void clearPendingCircuit() { pendingCircuitSpell = null; }
 
-    public SpellStack activeStack() {
-        return stacks == null ? null : stacks[activeStackIndex];
-    }
-
-    public int activeStackIndex() { return activeStackIndex; }
-
-    public void cycleActiveStack() {
-        if (stacks == null || stacks.length == 0) return;
-        activeStackIndex = (activeStackIndex + 1) % stacks.length;
-    }
-
-    public void setActiveStackIndex(int i) {
-        if (stacks != null && i >= 0 && i < stacks.length) activeStackIndex = i;
+    public boolean hasPendingCircuit() {
+        return pendingCircuitSpell != null && !pendingCircuitSpell.isEmpty();
     }
 
     // Charges

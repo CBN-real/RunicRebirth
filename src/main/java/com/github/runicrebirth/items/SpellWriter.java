@@ -1,5 +1,7 @@
 package com.github.runicrebirth.items;
 
+import com.github.runicrebirth.api.registry.ElementRegistry;
+import com.github.runicrebirth.api.registry.ModifierRegistry;
 import com.github.runicrebirth.api.registry.SpellTypeRegistry;
 import com.github.runicrebirth.api.spells.SpellCastContext;
 import com.github.runicrebirth.api.spells.SpellComponent;
@@ -7,9 +9,13 @@ import com.github.runicrebirth.api.spells.SpellModifier;
 import com.github.runicrebirth.api.spells.SpellParams;
 import com.github.runicrebirth.api.spells.SpellStack;
 import com.github.runicrebirth.api.spells.SpellType;
+import com.github.runicrebirth.api.spells.WandStacksData;
 import com.github.runicrebirth.capabilities.magic.MagicData;
+import com.github.runicrebirth.config.ServerConfig;
 import com.github.runicrebirth.entities.spells.AbstractCircleEntity;
+import com.github.runicrebirth.init.ModDataComponents;
 import com.github.runicrebirth.magic.stack.SpellResolver;
+import com.github.runicrebirth.network.CastAnimBroadcastS2CPacket;
 import com.github.runicrebirth.network.StackChangedS2CPacket;
 import com.github.runicrebirth.spells.types.Infusion;
 import com.github.runicrebirth.util.RaycastBuilder;
@@ -25,6 +31,10 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+import software.bernie.geckolib.animatable.GeoItem;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class SpellWriter extends MagicItem {
 
@@ -32,18 +42,101 @@ public abstract class SpellWriter extends MagicItem {
         super(properties);
     }
 
+    public static WandStacksData getStacks(ItemStack stack) {
+        WandStacksData data = stack.get(ModDataComponents.WAND_STACKS.get());
+        if (data == null) {
+            data = WandStacksData.createDefault(ServerConfig.SPELL_STACK_COUNT.get());
+            stack.set(ModDataComponents.WAND_STACKS.get(), data);
+        }
+        return data;
+    }
+
+    public static void setStacks(ItemStack stack, WandStacksData data) {
+        stack.set(ModDataComponents.WAND_STACKS.get(), data);
+    }
+
+    public static int getActiveIndex(ItemStack stack) {
+        return getStacks(stack).activeIndex();
+    }
+
+    public static void cycleActiveStack(ItemStack stack) {
+        WandStacksData data = getStacks(stack);
+        int next = (data.activeIndex() + 1) % data.stacks().size();
+        setStacks(stack, data.withActiveIndex(next));
+    }
+
+    public static SpellStack resolveActiveStack(ItemStack stack) {
+        WandStacksData data = getStacks(stack);
+        if (data.stacks().isEmpty()) return new SpellStack();
+        WandStacksData.StackEntry entry = data.stacks().get(data.activeIndex());
+        return fromEntry(entry);
+    }
+
+    public static SpellStack fromEntry(WandStacksData.StackEntry entry) {
+        SpellStack ss = new SpellStack();
+        for (WandStacksData.ComponentRef ref : entry.components()) {
+            SpellComponent c = ref.kind() == WandStacksData.ComponentRef.KIND_TYPE
+                ? SpellTypeRegistry.get(ref.id())
+                : ModifierRegistry.get(ref.id());
+            if (c != null) ss.forceAppend(c);
+        }
+        if (entry.elementId() != null) {
+            var elem = ElementRegistry.get(entry.elementId());
+            if (elem != null) ss.setElement(elem);
+        }
+        return ss;
+    }
+
+    public static WandStacksData.StackEntry toEntry(SpellStack ss, boolean inscribed, int permanentCount) {
+        List<WandStacksData.ComponentRef> refs = new ArrayList<>();
+        for (SpellComponent c : ss.components()) {
+            int kind = c instanceof SpellType
+                ? WandStacksData.ComponentRef.KIND_TYPE
+                : WandStacksData.ComponentRef.KIND_MODIFIER;
+            refs.add(new WandStacksData.ComponentRef(kind, c.id()));
+        }
+        var elem = ss.resolveElement();
+        return new WandStacksData.StackEntry(
+            List.copyOf(refs),
+            elem != null ? elem.id() : null,
+            inscribed,
+            permanentCount
+        );
+    }
+
+    public static void writeActiveStack(ItemStack itemStack, SpellStack ss) {
+        WandStacksData data = getStacks(itemStack);
+        WandStacksData.StackEntry current = data.stacks().get(data.activeIndex());
+        setStacks(itemStack, data.withStack(data.activeIndex(),
+            toEntry(ss, current.inscribed(), current.permanentCount())));
+    }
+
+    public static void clearActiveStack(ItemStack itemStack) {
+        WandStacksData data = getStacks(itemStack);
+        WandStacksData.StackEntry current = data.stacks().get(data.activeIndex());
+        if (current.inscribed()) {
+            setStacks(itemStack, data.withStack(data.activeIndex(), current.withClearedTemporary()));
+            return;
+        }
+        setStacks(itemStack, data.withStack(data.activeIndex(), WandStacksData.StackEntry.EMPTY));
+    }
+
+    public static int getMaxInscriptions(ItemStack stack) {
+        Integer max = stack.get(ModDataComponents.MAX_INSCRIPTIONS.get());
+        return max != null ? max : 0;
+    }
+
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
         if (hand != InteractionHand.MAIN_HAND) return InteractionResultHolder.pass(stack);
-        if (level.isClientSide) return InteractionResultHolder.sidedSuccess(stack, true);
+        if (level.isClientSide) return InteractionResultHolder.consume(stack);
 
         if (!(player instanceof ServerPlayer serverPlayer)) return InteractionResultHolder.pass(stack);
         MagicData data = MagicData.of(serverPlayer);
 
         if (player.isShiftKeyDown()) {
-            SpellStack active = data.activeStack();
-            if (active != null) active.clear();
+            clearActiveStack(stack);
             data.clearCharges();
             StackChangedS2CPacket.sendTo(serverPlayer);
             return InteractionResultHolder.sidedSuccess(stack, false);
@@ -63,18 +156,24 @@ public abstract class SpellWriter extends MagicItem {
                     stack, 1);
                 data.consumeCharge();
                 if (!data.hasCharges()) {
-                    SpellStack active = data.activeStack();
-                    if (active != null) active.clear();
+                    WandStacksData wandData = getStacks(stack);
+                    WandStacksData.StackEntry activeEntry = wandData.stacks().get(wandData.activeIndex());
+                    if (!activeEntry.inscribed()) {
+                        clearActiveStack(stack);
+                    } else if (!activeEntry.hasPermanentSpellType()) {
+                        clearActiveStack(stack);
+                    }
                 }
             } else {
                 data.clearCharges();
             }
             StackChangedS2CPacket.sendTo(serverPlayer);
+            CastAnimBroadcastS2CPacket.broadcast(serverPlayer, 60);
             return InteractionResultHolder.sidedSuccess(stack, false);
         }
 
-        SpellStack active = data.activeStack();
-        if (active != null && active.validSpell()) {
+        SpellStack active = resolveActiveStack(stack);
+        if (active.validSpell()) {
 
             SpellCastContext ctx = new SpellCastContext((ServerLevel) level, serverPlayer, stack,
                 eye, dir, xRot, yRot);
@@ -92,17 +191,28 @@ public abstract class SpellWriter extends MagicItem {
 
             int totalCasts = 1 + params.extraCasts;
 
+            WandStacksData wandData = getStacks(stack);
+            boolean isInscribed = wandData.stacks().get(wandData.activeIndex()).inscribed();
+
             if (params.useCharges && totalCasts > 1) {
                 spawnCircle(serverPlayer, type, params, eye, dir, xRot, yRot, stack, 1);
                 data.setCharges(totalCasts - 1, type.id(), params);
             } else {
                 spawnCircle(serverPlayer, type, params, eye, dir, xRot, yRot, stack, totalCasts);
-                active.clear();
+                if (isInscribed) {
+                    WandStacksData.StackEntry activeEntry = wandData.stacks().get(wandData.activeIndex());
+                    if (!activeEntry.hasPermanentSpellType()) {
+                        clearActiveStack(stack);
+                    }
+                } else {
+                    clearActiveStack(stack);
+                }
             }
 
             int cooldown = params.cooldownOverrideTicks >= 0 ? params.cooldownOverrideTicks : type.cooldownTicks();
             data.startCooldown(type.id(), cooldown);
             StackChangedS2CPacket.sendTo(serverPlayer);
+            CastAnimBroadcastS2CPacket.broadcast(serverPlayer, 60);
             return InteractionResultHolder.sidedSuccess(stack, false);
         }
 

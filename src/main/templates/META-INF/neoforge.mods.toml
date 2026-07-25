@@ -45,6 +45,8 @@ displayName="${mod_name}" #mandatory
 #authors=""
 
 # The description text for the mod (multi line!) (#mandatory)
+enumExtensions="META-INF/enumextensions.json"
+
 description='''
 Best Cat
 '''

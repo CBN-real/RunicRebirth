@@ -21,11 +21,13 @@ public final class ModPackets {
         registrar.playToServer(CanvasSelectTierC2SPacket.TYPE, CanvasSelectTierC2SPacket.STREAM_CODEC, CanvasSelectTierC2SPacket::handle);
         registrar.playToServer(ClearStackC2SPacket.TYPE, ClearStackC2SPacket.STREAM_CODEC, ClearStackC2SPacket::handle);
         registrar.playToServer(SwitchStackC2SPacket.TYPE, SwitchStackC2SPacket.STREAM_CODEC, SwitchStackC2SPacket::handle);
+        registrar.playToServer(FinalizeCircuitC2SPacket.TYPE, FinalizeCircuitC2SPacket.STREAM_CODEC, FinalizeCircuitC2SPacket::handle);
 
         // S2C
         registrar.playToClient(StackChangedS2CPacket.TYPE, StackChangedS2CPacket.STREAM_CODEC, StackChangedS2CPacket::handle);
         registrar.playToClient(ImpactEffectS2CPacket.TYPE, ImpactEffectS2CPacket.STREAM_CODEC, ImpactEffectS2CPacket::handle);
         registrar.playToClient(SpellUnlockSyncS2CPacket.TYPE, SpellUnlockSyncS2CPacket.STREAM_CODEC, SpellUnlockSyncS2CPacket::handle);
+        registrar.playToClient(CastAnimBroadcastS2CPacket.TYPE, CastAnimBroadcastS2CPacket.STREAM_CODEC, CastAnimBroadcastS2CPacket::handle);
 
         // Dungeon system
         registrar.playToServer(EnterDungeonC2SPacket.TYPE, EnterDungeonC2SPacket.STREAM_CODEC, EnterDungeonC2SPacket::handle);
