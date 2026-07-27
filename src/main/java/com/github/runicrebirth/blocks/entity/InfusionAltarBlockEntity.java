@@ -254,6 +254,8 @@ public class InfusionAltarBlockEntity extends BlockEntity implements GeoBlockEnt
         }
 
         resultItem = recipe.getResultItem(level.registryAccess()).copy();
+        level.playSound(null, worldPosition, ModSounds.INFUSION_QUICK_INFUSION.get(),
+                SoundSource.BLOCKS, 1.0f, 1.0f);
         setAnimState(AnimState.HOLDING_RESULT);
         syncToClient();
         return true;

@@ -31,11 +31,14 @@ public abstract class AbstractSpellCircleEntity extends Entity implements GeoEnt
 
     private static final EntityDataAccessor<String> DATA_ELEMENT =
         SynchedEntityData.defineId(AbstractSpellCircleEntity.class, EntityDataSerializers.STRING);
+    private static final EntityDataAccessor<String> DATA_MODIFIER_IDS =
+        SynchedEntityData.defineId(AbstractSpellCircleEntity.class, EntityDataSerializers.STRING);
     private static final EntityDataAccessor<Boolean> DATA_FINISHING =
         SynchedEntityData.defineId(AbstractSpellCircleEntity.class, EntityDataSerializers.BOOLEAN);
 
     protected LivingEntity owner;
     protected SpellParams params;
+    protected LivingEntity target;
     private int age;
     private int lifespan;
     private int finishingTicks;
@@ -47,21 +50,44 @@ public abstract class AbstractSpellCircleEntity extends Entity implements GeoEnt
         this.setNoGravity(true);
     }
 
-    protected void init(LivingEntity owner, SpellParams params, int lifespan) {
+    protected void init(LivingEntity owner, SpellParams params, int lifespan, LivingEntity target) {
         this.owner = owner;
         this.params = params;
         this.lifespan = lifespan;
+        this.target = target;
         this.entityData.set(DATA_ELEMENT, params.element.id().toString());
+        this.entityData.set(DATA_MODIFIER_IDS, String.join(",", params.modifierIds));
     }
 
     @Override
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         builder.define(DATA_ELEMENT, ModElements.ARCANE.getId().toString());
+        builder.define(DATA_MODIFIER_IDS, "");
         builder.define(DATA_FINISHING, false);
     }
 
     public String getElementId() {
         return this.entityData.get(DATA_ELEMENT);
+    }
+
+    public String getModifierIds() {
+        return this.entityData.get(DATA_MODIFIER_IDS);
+    }
+
+    public boolean hasModifier(String modPath) {
+        String mods = getModifierIds();
+        if (mods.isEmpty()) return false;
+        for (String id : mods.split(",")) {
+            if (id.equals(modPath)) return true;
+        }
+        return false;
+    }
+
+    protected float getCircleScale() {
+        if (hasModifier("size_plus_four")) return 3.0f;
+        if (hasModifier("size_plus_two")) return 2.0f;
+        if (hasModifier("size_plus")) return 1.5f;
+        return 1.0f;
     }
 
     @Override
@@ -78,6 +104,7 @@ public abstract class AbstractSpellCircleEntity extends Entity implements GeoEnt
         if (age == 1) {
             level().playSound(null, this.getX(), this.getY(), this.getZ(),
                 ModSounds.SPELLS_SPAWN_CIRCLE.get(), SoundSource.PLAYERS, 1.0f, 1.0f);
+            onSpawn();
         }
         if (age >= lifespan || owner == null || !owner.isAlive()) {
             beginFinishing();
@@ -94,6 +121,8 @@ public abstract class AbstractSpellCircleEntity extends Entity implements GeoEnt
         finishingTicks = FINISH_TICKS;
         entityData.set(DATA_FINISHING, true);
     }
+
+    protected void onSpawn() {}
 
     protected abstract void spawnProjectile();
 

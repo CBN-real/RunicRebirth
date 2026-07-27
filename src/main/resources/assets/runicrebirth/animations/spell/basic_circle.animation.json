@@ -15,7 +15,7 @@
 							},
 							"lerp_mode": "catmullrom"
 						},
-						"0.7083": {
+						"0.25": {
 							"vector": ["query.is_plus", "query.is_plus", "query.is_plus"],
 							"easing": "easeInSine"
 						}
@@ -295,7 +295,7 @@
 							},
 							"lerp_mode": "catmullrom"
 						},
-						"0.5": {
+						"0.25": {
 							"vector": [0, 0, 0],
 							"easing": "easeOutSine"
 						}

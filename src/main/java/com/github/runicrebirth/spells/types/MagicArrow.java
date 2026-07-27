@@ -38,6 +38,7 @@ public class MagicArrow extends SpellType {
         arrow.setPos(spawn.x, spawn.y, spawn.z);
         arrow.setYRot(ctx.yRot());
         arrow.setXRot(ctx.xRot());
+        arrow.setTrackingTarget(ctx.entityTarget());
         //arrow.shoot(dir.x, dir.y, dir.z, params.speed, 0.0F);
         ctx.level().addFreshEntity(arrow);
         return CastResult.SUCCESS;

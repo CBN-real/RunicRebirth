@@ -45,6 +45,8 @@ public final class SpellResolver {
         applyCurioEmpowerments(ctx, params);
         applyArmorEmpowerments(ctx, params);
 
+        params.damage = params.damage * (1.0f + params.size) / 2.0f;
+
         SpellPreCastEvent preEvent = new SpellPreCastEvent(ctx, type, params);
         if (NeoForge.EVENT_BUS.post(preEvent).isCanceled()) return null;
 

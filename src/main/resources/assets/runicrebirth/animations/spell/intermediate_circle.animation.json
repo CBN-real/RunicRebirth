@@ -15,7 +15,7 @@
 							},
 							"lerp_mode": "catmullrom"
 						},
-						"0.7083": {
+						"0.25": {
 							"vector": ["query.is_plus", "query.is_plus", "query.is_plus"],
 							"easing": "easeInSine"
 						}
@@ -962,6 +962,125 @@
 				}
 			}
 		},
+		"end_spell": {
+			"animation_length": 0.5,
+			"bones": {
+				"intermediate_circle": {
+					"position": {
+						"vector": [0, "6.1 * (query.is_plus - 1.0)", "-5 * (query.is_plus - 1.0)"]
+					},
+					"scale": {
+						"0.0": {
+							"post": {
+								"vector": ["query.is_plus", "query.is_plus", "query.is_plus"]
+							},
+							"lerp_mode": "catmullrom"
+						},
+						"0.25": {
+							"vector": [0, 0, 0],
+							"easing": "easeOutSine"
+						}
+					}
+				},
+				"inner_circle": {
+					"position": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.2917": {
+							"vector": [0, 0, 1.5],
+							"easing": "easeOutCubic"
+						}
+					}
+				},
+				"runeslot_N": {
+					"position": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.5": {
+							"vector": [-0.1, -6, -1],
+							"easing": "easeInOutBack"
+						}
+					}
+				},
+				"runeslot_SE": {
+					"position": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.5": {
+							"vector": [4.9, 3.1, -1],
+							"easing": "easeInOutBack"
+						}
+					}
+				},
+				"runeslot_SW": {
+					"position": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.5": {
+							"vector": [-5, 3.1, -1],
+							"easing": "easeInOutBack"
+						}
+					}
+				},
+				"inner_triangle_1": {
+					"position": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.4167": {
+							"vector": [0, 0, 3],
+							"easing": "easeOutCubic"
+						}
+					}
+				},
+				"inner_triangle_2": {
+					"position": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.5": {
+							"vector": [0, 0, 4.5],
+							"easing": "easeOutCubic"
+						}
+					}
+				},
+				"inner_triangle_3": {
+					"position": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.5": {
+							"vector": [0, 0, 5.25],
+							"easing": "easeOutCubic"
+						}
+					}
+				},
+				"explosion": {
+					"scale": {
+						"vector": ["query.is_explosion", "query.is_explosion", "query.is_explosion"]
+					}
+				},
+				"shield": {
+					"scale": {
+						"vector": ["query.is_shield", "query.is_shield", "query.is_shield"]
+					}
+				},
+				"slash": {
+					"scale": {
+						"vector": ["query.is_slash", "query.is_slash", "query.is_slash"]
+					}
+				},
+				"binding": {
+					"scale": {
+						"vector": ["query.is_binding * 1.25", "query.is_binding * 1.25", "query.is_binding * 1.25"]
+					}
+				}
+			}
+		},
 		"hold_spell": {
 			"loop": true,
 			"animation_length": 3,
@@ -1690,125 +1809,6 @@
 					"rotation": {
 						"vector": [0, "-query.anim_time * 90", 0]
 					},
-					"scale": {
-						"vector": ["query.is_binding * 1.25", "query.is_binding * 1.25", "query.is_binding * 1.25"]
-					}
-				}
-			}
-		},
-		"end_spell": {
-			"animation_length": 0.5,
-			"bones": {
-				"intermediate_circle": {
-					"position": {
-						"vector": [0, "6.1 * (query.is_plus - 1.0)", "-5 * (query.is_plus - 1.0)"]
-					},
-					"scale": {
-						"0.0": {
-							"post": {
-								"vector": ["query.is_plus", "query.is_plus", "query.is_plus"]
-							},
-							"lerp_mode": "catmullrom"
-						},
-						"0.5": {
-							"vector": [0, 0, 0],
-							"easing": "easeOutSine"
-						}
-					}
-				},
-				"inner_circle": {
-					"position": {
-						"0.0": {
-							"vector": [0, 0, 0]
-						},
-						"0.2917": {
-							"vector": [0, 0, 1.5],
-							"easing": "easeOutCubic"
-						}
-					}
-				},
-				"runeslot_N": {
-					"position": {
-						"0.0": {
-							"vector": [0, 0, 0]
-						},
-						"0.5": {
-							"vector": [-0.1, -6, -1],
-							"easing": "easeInOutBack"
-						}
-					}
-				},
-				"runeslot_SE": {
-					"position": {
-						"0.0": {
-							"vector": [0, 0, 0]
-						},
-						"0.5": {
-							"vector": [4.9, 3.1, -1],
-							"easing": "easeInOutBack"
-						}
-					}
-				},
-				"runeslot_SW": {
-					"position": {
-						"0.0": {
-							"vector": [0, 0, 0]
-						},
-						"0.5": {
-							"vector": [-5, 3.1, -1],
-							"easing": "easeInOutBack"
-						}
-					}
-				},
-				"inner_triangle_1": {
-					"position": {
-						"0.0": {
-							"vector": [0, 0, 0]
-						},
-						"0.4167": {
-							"vector": [0, 0, 3],
-							"easing": "easeOutCubic"
-						}
-					}
-				},
-				"inner_triangle_2": {
-					"position": {
-						"0.0": {
-							"vector": [0, 0, 0]
-						},
-						"0.5": {
-							"vector": [0, 0, 4.5],
-							"easing": "easeOutCubic"
-						}
-					}
-				},
-				"inner_triangle_3": {
-					"position": {
-						"0.0": {
-							"vector": [0, 0, 0]
-						},
-						"0.5": {
-							"vector": [0, 0, 5.25],
-							"easing": "easeOutCubic"
-						}
-					}
-				},
-				"explosion": {
-					"scale": {
-						"vector": ["query.is_explosion", "query.is_explosion", "query.is_explosion"]
-					}
-				},
-				"shield": {
-					"scale": {
-						"vector": ["query.is_shield", "query.is_shield", "query.is_shield"]
-					}
-				},
-				"slash": {
-					"scale": {
-						"vector": ["query.is_slash", "query.is_slash", "query.is_slash"]
-					}
-				},
-				"binding": {
 					"scale": {
 						"vector": ["query.is_binding * 1.25", "query.is_binding * 1.25", "query.is_binding * 1.25"]
 					}

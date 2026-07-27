@@ -11,6 +11,14 @@ public class ChargesModifier implements SpellModifier {
 
     public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(RunicRebirth.MODID, "charges");
 
+    private final int multiplier;
+
+    public ChargesModifier(int multiplier) {
+        this.multiplier = multiplier;
+    }
+
+    public int multiplier() { return multiplier; }
+
     @Override public ResourceLocation id() { return ID; }
     @Override public String iconName() { return "charges"; }
 
@@ -20,17 +28,8 @@ public class ChargesModifier implements SpellModifier {
     }
 
     @Override
-    public boolean canAppendTo(List<SpellComponent> existing) {
-        for (SpellComponent c : existing) {
-            if (c instanceof SpellModifier m && MultiCastModifier.GROUP.equals(m.exclusivityGroup())) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    @Override
     public void apply(SpellParams params) {
         params.useCharges = true;
+        params.chargesMultiplier = multiplier;
     }
 }

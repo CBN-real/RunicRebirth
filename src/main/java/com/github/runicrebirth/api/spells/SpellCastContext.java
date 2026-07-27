@@ -12,5 +12,6 @@ public record SpellCastContext(
     Vec3 aimStart,
     Vec3 aimDirection,
     float xRot,
-    float yRot
+    float yRot,
+    net.minecraft.world.entity.LivingEntity entityTarget
 ) {}

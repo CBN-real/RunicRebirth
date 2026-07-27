@@ -6,14 +6,14 @@
 				"identifier": "geometry.magic_projectile",
 				"texture_width": 512,
 				"texture_height": 512,
-				"visible_bounds_width": 5,
+				"visible_bounds_width": 4,
 				"visible_bounds_height": 3.5,
 				"visible_bounds_offset": [0, 1.25, 0]
 			},
 			"bones": [
 				{
 					"name": "magic_meteor_circle",
-					"pivot": [0, 24, 0.05511],
+					"pivot": [0, 0, 0.05511],
 					"locators": {
 						"center_particles": [0, 2, 4.05511]
 					}
@@ -1210,6 +1210,10 @@
 							}
 						}
 					]
+				},
+				{
+					"name": "hexadecagon",
+					"pivot": [0, 0, 0]
 				}
 			]
 		}

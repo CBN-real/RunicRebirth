@@ -2,6 +2,8 @@ package com.github.runicrebirth.entities;
 
 import com.github.runicrebirth.capabilities.magic.MagicData;
 import com.github.runicrebirth.init.ModEntities;
+import com.github.runicrebirth.init.ModSounds;
+import net.minecraft.sounds.SoundSource;
 import java.util.UUID;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -57,7 +59,10 @@ public class DrawingCanvasEntity extends Entity implements GeoEntity {
         entity.entityData.set(DATA_OWNER_UUID, player.getUUID().toString());
         entity.entityData.set(DATA_OWNER_ID, player.getId());
         entity.snapToOwner(player);
+        player.level().playSound(null, player.blockPosition(), ModSounds.SPELLS_CHIME2.get(),
+            SoundSource.PLAYERS, 0.5f, 1.2f);
         player.level().addFreshEntity(entity);
+
         return entity;
     }
 

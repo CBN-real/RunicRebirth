@@ -14,6 +14,7 @@ public final class ModPackets {
         PayloadRegistrar registrar = event.registrar(RunicRebirth.MODID).versioned(VERSION);
 
         // C2S
+        registrar.playToServer(ActivateRingC2SPacket.TYPE, ActivateRingC2SPacket.STREAM_CODEC, ActivateRingC2SPacket::handle);
         registrar.playToServer(DrawStartC2SPacket.TYPE, DrawStartC2SPacket.STREAM_CODEC, DrawStartC2SPacket::handle);
         registrar.playToServer(DrawSubmitC2SPacket.TYPE, DrawSubmitC2SPacket.STREAM_CODEC, DrawSubmitC2SPacket::handle);
         registrar.playToServer(CancelDrawC2SPacket.TYPE, CancelDrawC2SPacket.STREAM_CODEC, CancelDrawC2SPacket::handle);

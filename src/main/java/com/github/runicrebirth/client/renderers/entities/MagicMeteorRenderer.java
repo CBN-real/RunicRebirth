@@ -2,6 +2,7 @@ package com.github.runicrebirth.client.renderers.entities;
 
 import com.github.runicrebirth.client.renderers.ModRenderTypes;
 import com.github.runicrebirth.client.renderers.models.MagicMeteorGeoModel;
+import com.github.runicrebirth.entities.spells.MagicMeteorCircleEntity;
 import com.github.runicrebirth.entities.spells.MagicMeteorEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -45,4 +46,13 @@ public class MagicMeteorRenderer extends AbstractSpellRenderer<MagicMeteorEntity
         super.preRender(poseStack, entity, model, bufferSource, buffer, isReRender,
             partialTick, packedLight, packedOverlay, colour);
     }
+
+  @Override
+  protected void applyRotations(MagicMeteorEntity entity, PoseStack poseStack, float ageInTicks,
+      float rotationYaw, float partialTick, float nativeScale) {
+      float yRot = Mth.rotLerp(partialTick, entity.yRotO, entity.getYRot());
+      float xRot = Mth.rotLerp(partialTick, entity.xRotO, entity.getXRot());
+      poseStack.mulPose(Axis.YP.rotationDegrees(yRot));
+      poseStack.mulPose(Axis.XP.rotationDegrees(38f + xRot));
+  }
 }

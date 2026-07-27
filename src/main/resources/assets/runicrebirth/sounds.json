@@ -39,6 +39,11 @@
             "runicrebirth:infusion/infusing"
         ]
     },
+    "infusion.quick_infusion": {
+        "sounds": [
+            "runicrebirth:infusion/quick_infusion"
+        ]
+    },
   "forging.forging": {
     "sounds": [
       "runicrebirth:forging/forging"
@@ -117,6 +122,51 @@
   "spells.spawn_circle": {
     "sounds": [
       "runicrebirth:spells/spawn_circle"
+    ]
+  },
+  "spells.energy_crackling": {
+    "sounds": [
+      "runicrebirth:spells/energy_crackling"
+    ]
+  },
+  "spells.initiate_binding": {
+    "sounds": [
+      "runicrebirth:spells/initiate_binding"
+    ]
+  },
+  "spells.hold_binding": {
+    "sounds": [
+      "runicrebirth:spells/hold_binding"
+    ]
+  },
+  "spells.end_binding": {
+    "sounds": [
+      "runicrebirth:spells/end_binding"
+    ]
+  },
+  "spells.chime2": {
+    "sounds": [
+      "runicrebirth:spells/chime2"
+    ]
+  },
+  "spells.hammer_initiate": {
+    "sounds": [
+      "runicrebirth:spells/hammer_initiate"
+    ]
+  },
+  "spells.meteor_circle_initiate": {
+    "sounds": [
+      "runicrebirth:spells/meteor_circle_initiate"
+    ]
+  },
+  "spells.meteor_initiate": {
+    "sounds": [
+      "runicrebirth:spells/meteor_initiate"
+    ]
+  },
+  "spells.meteor_end": {
+    "sounds": [
+      "runicrebirth:spells/meteor_end"
     ]
   }
 }

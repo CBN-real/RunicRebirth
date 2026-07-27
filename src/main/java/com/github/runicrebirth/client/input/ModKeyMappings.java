@@ -22,10 +22,19 @@ public final class ModKeyMappings {
         CATEGORY
     );
 
+    public static final KeyMapping ACTIVATE_RING = new KeyMapping(
+        "key.runicrebirth.activate_ring",
+        KeyConflictContext.IN_GAME,
+        InputConstants.Type.KEYSYM,
+        GLFW.GLFW_KEY_V,
+        CATEGORY
+    );
+
     private ModKeyMappings() {}
 
     public static void register(RegisterKeyMappingsEvent event) {
         event.register(SWITCH_SPELL_STACK);
+        event.register(ACTIVATE_RING);
     }
 
     public static boolean isMovementKey(int keyCode, int scanCode) {

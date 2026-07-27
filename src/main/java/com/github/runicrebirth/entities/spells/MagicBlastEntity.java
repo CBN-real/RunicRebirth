@@ -4,7 +4,10 @@ import com.github.runicrebirth.api.spells.SpellParams;
 import com.github.runicrebirth.damage.DamageSources;
 import com.github.runicrebirth.damage.SpellDamageSource;
 import com.github.runicrebirth.init.ModEntities;
+import com.github.runicrebirth.init.ModSounds;
+import com.github.runicrebirth.util.ParticleHelper;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -16,7 +19,7 @@ import java.util.UUID;
 
 public class MagicBlastEntity extends AbstractInstantSpellEntity {
 
-    private static final int ACTIVE_DURATION_TICKS = 20;
+    private static final int ACTIVE_DURATION_TICKS = 26;
 
     private UUID ownerUUID;
     private Vec3 aimDirection = Vec3.ZERO;
@@ -44,13 +47,14 @@ public class MagicBlastEntity extends AbstractInstantSpellEntity {
         if (!(this.level() instanceof ServerLevel server)) return;
 
         if (age > ACTIVE_DURATION_TICKS) {
-            burstParticles();
             beginEnding();
             return;
         }
 
         if (hasFired || age < 8) return;
         hasFired = true;
+        level().playSound(null, blockPosition(), ModSounds.SPELLS_SHIELD_HIT.get(),
+                SoundSource.PLAYERS, 1.0f, 1.0f);
 
         if (ownerUUID == null) {
             beginEnding();
@@ -99,18 +103,22 @@ public class MagicBlastEntity extends AbstractInstantSpellEntity {
                 knockbackDir.x * 1.5, knockbackDir.y * 1.25, knockbackDir.z * 1.5));
             target.hurtMarked = true;
         }
+
+        Vec3 center = pos.add(forward.scale(length / 2.0)).add(0.0f, 0.5f, 0.0f);
+        ParticleHelper.burstParticleEvent(server, element().particle(), center,
+            (int) (18 * size), 0.4 * size, 0.4 * size, 0.4 * size, 0.1, 1.0f);
     }
 
     @Override
     protected void spawnActiveParticles() {
-        Vec3 pos = this.position();
-        for (int i = 0; i < 3; i++) {
-            double dx = (this.level().random.nextDouble() - 0.5) * size;
-            double dy = (this.level().random.nextDouble() - 0.5) * size;
-            double dz = (this.level().random.nextDouble() - 0.5) * size;
-            this.level().addParticle(element().particle(),
-                pos.x + dx, pos.y + dy, pos.z + dz,
-                0, 0.02, 0);
-        }
+//        Vec3 pos = this.position();
+//        for (int i = 0; i < 3; i++) {
+//            double dx = (this.level().random.nextDouble() - 0.5) * size;
+//            double dy = (this.level().random.nextDouble() - 0.5) * size;
+//            double dz = (this.level().random.nextDouble() - 0.5) * size;
+//            this.level().addParticle(element().particle(),
+//                pos.x + dx, pos.y + dy, pos.z + dz,
+//                0, 0.02, 0);
+//        }
     }
 }

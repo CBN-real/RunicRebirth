@@ -25,7 +25,7 @@ public final class ImpactHelper {
 
     public static void createImpact(ServerLevel level, Vec3 pos, float radius, Element element,
                                     float shakeIntensity, int shakeDurationTicks) {
-        level.playSound(null, pos.x, pos.y, pos.z, ModSounds.SPELLS_EXPLOSION.get(), SoundSource.PLAYERS, 1.0f, 1.0f);
+        level.playSound(null, pos.x, pos.y, pos.z, ModSounds.SPELLS_EXPLOSION.get(), SoundSource.PLAYERS, 1.0f + radius * 0.05f, 1.0f);
 
         ImpactEffectS2CPacket packet = new ImpactEffectS2CPacket(
             pos, radius, element.displayColor(), shakeIntensity, shakeDurationTicks);

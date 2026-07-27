@@ -36,6 +36,14 @@ public final class ShapeRecognizer {
 
     /** Primary entry: list of strokes, each a list of points. Strokes get concatenated into one cloud. */
     public Result recognizeStrokes(List<List<StrokePoint>> strokes) {
+        return recognizeStrokes(strokes, null, 1.0);
+    }
+
+    /**
+     * Like {@link #recognizeStrokes(List)} but multiplies the distance of {@code hintId}'s template
+     * by {@code hintBias} (0 < bias < 1 makes it easier to match, > 1 harder).
+     */
+    public Result recognizeStrokes(List<List<StrokePoint>> strokes, String hintId, double hintBias) {
         if (strokes == null || strokes.isEmpty()) return null;
         List<StrokePoint> flat = new ArrayList<>();
         for (List<StrokePoint> s : strokes) {
@@ -48,6 +56,7 @@ public final class ShapeRecognizer {
         String bestId = null;
         for (Template t : templates) {
             double d = greedyCloudMatch(points, t.points());
+            if (hintId != null && t.id().equals(hintId)) d *= hintBias;
             if (d < bestDistance) {
                 bestDistance = d;
                 bestId = t.id();

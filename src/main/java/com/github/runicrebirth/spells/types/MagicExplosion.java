@@ -35,7 +35,7 @@ public class MagicExplosion extends SpellType {
 
     @Override
     public CastResult onCast(SpellCastContext ctx, SpellParams params) {
-        double range = 16.0;
+        double range = 16.0 * params.rangeMultiplier;
         Vec3 start = ctx.aimStart();
         Vec3 end = start.add(ctx.aimDirection().normalize().scale(range));
         HitResult hit = RaycastBuilder.begin(ctx.level(), ctx.caster())
@@ -58,7 +58,7 @@ public class MagicExplosion extends SpellType {
         }
 
         MagicExplosionEntity explosion = new MagicExplosionEntity(ctx.level(), ctx.caster(), params);
-        explosion.setPos(hitPos.x, hitPos.y - 1.0f, hitPos.z);
+        explosion.setPos(hitPos.x, hitPos.y + 0.6f, hitPos.z);
         ctx.level().addFreshEntity(explosion);
         return CastResult.SUCCESS;
     }

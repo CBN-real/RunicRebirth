@@ -8,11 +8,9 @@ import com.github.runicrebirth.api.spells.SpellModifier;
 import com.github.runicrebirth.api.spells.SpellType;
 import com.github.runicrebirth.api.spells.WandStacksData;
 import com.github.runicrebirth.client.ClientMagicData;
-import com.github.runicrebirth.config.ClientConfig;
 import com.github.runicrebirth.init.ModDataComponents;
 import com.github.runicrebirth.items.SpellWriter;
 import com.github.runicrebirth.spells.modifiers.ChargesModifier;
-import com.github.runicrebirth.spells.modifiers.MultiCastModifier;
 import net.minecraft.world.item.ItemStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import java.util.ArrayList;
@@ -90,11 +88,12 @@ public class SpellStackOverlay implements LayeredDraw.Layer {
 
         int screenHeight = graphics.guiHeight();
         int active = wandData.activeIndex();
-        int maxSmallSlots = ClientConfig.HUD_MAX_SLOTS.get();
+        int maxSmallSlots = SpellWriter.getMaxModifierSlots(heldItem);
         int N = stacks.size();
 
         int rowLeftX = 10;
         int bottomY = screenHeight - 22;
+        int initialCharges = SpellWriter.getInitialCharges(heldItem);
 
         // Mini layout geometry
         int miniCount = N - 1;
@@ -114,7 +113,7 @@ public class SpellStackOverlay implements LayeredDraw.Layer {
 
         // Active stack (full size, selected border)
         drawStackRow(graphics, stacks.get(active), rowLeftX, activeTopY, true, maxSmallSlots,
-            elementForEntry(wandData, active), wandData.stacks().get(active));
+            elementForEntry(wandData, active), wandData.stacks().get(active), initialCharges);
 
         // Non-active stacks in 2-wide mini rows below active
         for (int i = 0; i < miniCount; i++) {
@@ -128,7 +127,7 @@ public class SpellStackOverlay implements LayeredDraw.Layer {
             graphics.pose().translate(miniX, miniY, 0);
             graphics.pose().scale(MINI_SCALE, MINI_SCALE, 1f);
             drawStackRow(graphics, stacks.get(stackIdx), 0, 0, false, maxSmallSlots,
-                elementForEntry(wandData, stackIdx), wandData.stacks().get(stackIdx));
+                elementForEntry(wandData, stackIdx), wandData.stacks().get(stackIdx), initialCharges);
             graphics.pose().popPose();
         }
 
@@ -182,19 +181,19 @@ public class SpellStackOverlay implements LayeredDraw.Layer {
 
     private static void drawStackRow(GuiGraphics g, List<SpellComponent> stack,
                                      int rowLeftX, int rowTopY, boolean isActive, int maxSmallSlots,
-                                     ResourceLocation elementId, WandStacksData.StackEntry rawEntry) {
+                                     ResourceLocation elementId, WandStacksData.StackEntry rawEntry,
+                                     int initialCharges) {
         SpellType typeInStack = null;
         List<SpellModifier> modifiers = new ArrayList<>();
-        boolean hasCharges = false;
-        int totalCasts = 0;
+        int chargesMultiplier = 1;
         for (SpellComponent c : stack) {
             if (typeInStack == null && c instanceof SpellType t) typeInStack = t;
             else if (c instanceof SpellModifier m) {
                 modifiers.add(m);
-                if (m instanceof ChargesModifier) hasCharges = true;
-                if (m instanceof MultiCastModifier mcm) totalCasts = mcm.totalCasts();
+                if (m instanceof ChargesModifier cm) chargesMultiplier = cm.multiplier();
             }
         }
+        int totalCasts = initialCharges * chargesMultiplier;
 
         // Big slot background
         ResourceLocation bigSlotSprite;
@@ -250,7 +249,7 @@ public class SpellStackOverlay implements LayeredDraw.Layer {
             }
         }
 
-        if (isActive && hasCharges && totalCasts > 0) {
+        if (isActive && totalCasts > 1) {
             int remaining = ClientMagicData.charges();
             if (remaining <= 0 && typeInStack != null) remaining = totalCasts;
             if (remaining > 0) {

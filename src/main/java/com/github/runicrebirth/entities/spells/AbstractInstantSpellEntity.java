@@ -26,9 +26,9 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 
 public abstract class AbstractInstantSpellEntity extends Entity implements GeoEntity {
 
-    protected static final RawAnimation INITIATE_AND_HOLD = RawAnimation.begin().thenPlay("initiate_spell").thenLoop("hold_spell");
+    protected RawAnimation initiate_and_hold = RawAnimation.begin().thenPlay("initiate_spell").thenLoop("hold_spell");
     protected static final RawAnimation HOLD_SPELL = RawAnimation.begin().thenLoop("hold_spell");
-    protected static final RawAnimation END_SPELL = RawAnimation.begin().thenPlayAndHold("end_spell");
+    protected RawAnimation end_spell = RawAnimation.begin().thenPlayAndHold("end_spell");
     private static final RawAnimation BOOK_LOOP = RawAnimation.begin().thenLoop("initiate_spell");
 
     private static final EntityDataAccessor<String> DATA_ELEMENT =
@@ -140,7 +140,7 @@ public abstract class AbstractInstantSpellEntity extends Entity implements GeoEn
     protected abstract void onActiveTick();
     protected void onEndingTick() {}
     protected void spawnActiveParticles() {
-        ParticleHelper.areaParticleEvent(this.level(), element().particle(), this.position(), 16.0, 1, this.size);
+        ParticleHelper.areaParticleEvent(this.level(), element().particle(), this.position(), 3.0, 1, this.size);
     }
 
     protected void burstParticles() {
@@ -177,9 +177,9 @@ public abstract class AbstractInstantSpellEntity extends Entity implements GeoEn
                 return PlayState.CONTINUE;
             }
             if (state.getAnimatable().getPhase() == SpellPhase.ENDING) {
-                state.setAnimation(END_SPELL);
+                state.setAnimation(end_spell);
             } else {
-                state.setAnimation(INITIATE_AND_HOLD);
+                state.setAnimation(initiate_and_hold);
             }
             return PlayState.CONTINUE;
         }));

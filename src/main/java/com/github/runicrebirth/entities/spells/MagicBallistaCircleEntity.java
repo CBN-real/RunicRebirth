@@ -20,9 +20,9 @@ public class MagicBallistaCircleEntity extends AbstractSpellCircleEntity {
     }
 
     public MagicBallistaCircleEntity(Level level, LivingEntity owner, SpellParams params,
-                                     Vec3 direction, float xRot, float yRot) {
+                                     Vec3 direction, float xRot, float yRot, LivingEntity target) {
         super(ModEntities.MAGIC_BALLISTA_CIRCLE.get(), level);
-        init(owner, params, LIFESPAN);
+        init(owner, params, LIFESPAN, target);
         this.direction = direction.normalize();
         this.xRot = xRot;
         this.yRot = yRot;
@@ -34,6 +34,7 @@ public class MagicBallistaCircleEntity extends AbstractSpellCircleEntity {
         ballista.setPos(this.getX(), this.getY(), this.getZ());
         ballista.setYRot(this.getYRot());
         ballista.setXRot(this.getXRot());
+        ballista.setTrackingTarget(this.target);
         level().addFreshEntity(ballista);
     }
 }

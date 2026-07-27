@@ -2,7 +2,7 @@
 	"format_version": "1.8.0",
 	"animations": {
 		"initiate_spell": {
-			"animation_length": 0.875,
+			"animation_length": 1.25,
 			"bones": {
 				"magic_blast": {
 					"position": {
@@ -13,6 +13,10 @@
 							"vector": [0, 0, -8],
 							"easing": "easeOutBack",
 							"easingArgs": [8]
+						},
+						"1.25": {
+							"vector": [0, 0, 0],
+							"easing": "easeOutQuad"
 						}
 					},
 					"scale": {
@@ -221,7 +225,7 @@
 				"magic_blast": {
 					"scale": {
 						"0.0": {
-							"vector": [1, 1, 1]
+							"vector": [1.04, 1.04, 1.04]
 						},
 						"0.5": {
 							"vector": [1.25, 1.25, 1.25],

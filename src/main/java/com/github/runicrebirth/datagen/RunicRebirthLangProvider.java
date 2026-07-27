@@ -23,6 +23,9 @@ public class RunicRebirthLangProvider extends LanguageProvider {
         add("item.runicrebirth.adept_staff", "Adept Staff");
         add("item.runicrebirth.inscribed_wand", "Inscribed Wand");
         add("item.runicrebirth.ring_of_expansion", "Ring of Expansion");
+        add("item.runicrebirth.acolyte_arcane_ring", "Acolyte Arcane Ring");
+        add("key.runicrebirth.activate_ring", "Activate Ring");
+        add("key.categories.runicrebirth", "Interactive Magic");
         add("item.runicrebirth.runic_codex", "Runic Codex");
         add("item.runicrebirth.acolyte_wizard_hat", "Acolyte Wizard Hat");
         add("item.runicrebirth.acolyte_robes", "Acolyte Robes");

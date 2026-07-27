@@ -44,6 +44,10 @@ public final class ModSounds {
         SOUNDS.register("infusion.infusing", () -> SoundEvent.createVariableRangeEvent(
             ResourceLocation.fromNamespaceAndPath(RunicRebirth.MODID, "infusion.infusing")));
 
+    public static final DeferredHolder<SoundEvent, SoundEvent> INFUSION_QUICK_INFUSION =
+        SOUNDS.register("infusion.quick_infusion", () -> SoundEvent.createVariableRangeEvent(
+            ResourceLocation.fromNamespaceAndPath(RunicRebirth.MODID, "infusion.quick_infusion")));
+
     public static final DeferredHolder<SoundEvent, SoundEvent> FORGE_FORGING =
         SOUNDS.register("forging.forging", () -> SoundEvent.createVariableRangeEvent(
             ResourceLocation.fromNamespaceAndPath(RunicRebirth.MODID, "forging.forging")));
@@ -107,6 +111,42 @@ public final class ModSounds {
     public static final DeferredHolder<SoundEvent, SoundEvent> SPELLS_SPAWN_CIRCLE =
         SOUNDS.register("spells.spawn_circle", () -> SoundEvent.createVariableRangeEvent(
             ResourceLocation.fromNamespaceAndPath(RunicRebirth.MODID, "spells.spawn_circle")));
+
+    public static final DeferredHolder<SoundEvent, SoundEvent> SPELLS_ENERGY_CRACKLING =
+        SOUNDS.register("spells.energy_crackling", () -> SoundEvent.createVariableRangeEvent(
+            ResourceLocation.fromNamespaceAndPath(RunicRebirth.MODID, "spells.energy_crackling")));
+
+    public static final DeferredHolder<SoundEvent, SoundEvent> SPELLS_INITIATE_BINDING =
+        SOUNDS.register("spells.initiate_binding", () -> SoundEvent.createVariableRangeEvent(
+            ResourceLocation.fromNamespaceAndPath(RunicRebirth.MODID, "spells.initiate_binding")));
+
+    public static final DeferredHolder<SoundEvent, SoundEvent> SPELLS_HOLD_BINDING =
+        SOUNDS.register("spells.hold_binding", () -> SoundEvent.createVariableRangeEvent(
+            ResourceLocation.fromNamespaceAndPath(RunicRebirth.MODID, "spells.hold_binding")));
+
+    public static final DeferredHolder<SoundEvent, SoundEvent> SPELLS_END_BINDING =
+        SOUNDS.register("spells.end_binding", () -> SoundEvent.createVariableRangeEvent(
+            ResourceLocation.fromNamespaceAndPath(RunicRebirth.MODID, "spells.end_binding")));
+
+    public static final DeferredHolder<SoundEvent, SoundEvent> SPELLS_CHIME2 =
+        SOUNDS.register("spells.chime2", () -> SoundEvent.createVariableRangeEvent(
+            ResourceLocation.fromNamespaceAndPath(RunicRebirth.MODID, "spells.chime2")));
+
+    public static final DeferredHolder<SoundEvent, SoundEvent> SPELLS_HAMMER_INITIATE =
+        SOUNDS.register("spells.hammer_initiate", () -> SoundEvent.createVariableRangeEvent(
+            ResourceLocation.fromNamespaceAndPath(RunicRebirth.MODID, "spells.hammer_initiate")));
+
+    public static final DeferredHolder<SoundEvent, SoundEvent> SPELLS_METEOR_CIRCLE_INITIATE =
+        SOUNDS.register("spells.meteor_circle_initiate", () -> SoundEvent.createVariableRangeEvent(
+            ResourceLocation.fromNamespaceAndPath(RunicRebirth.MODID, "spells.meteor_circle_initiate")));
+
+    public static final DeferredHolder<SoundEvent, SoundEvent> SPELLS_METEOR_INITIATE =
+        SOUNDS.register("spells.meteor_initiate", () -> SoundEvent.createVariableRangeEvent(
+            ResourceLocation.fromNamespaceAndPath(RunicRebirth.MODID, "spells.meteor_initiate")));
+
+    public static final DeferredHolder<SoundEvent, SoundEvent> SPELLS_METEOR_END =
+        SOUNDS.register("spells.meteor_end", () -> SoundEvent.createVariableRangeEvent(
+            ResourceLocation.fromNamespaceAndPath(RunicRebirth.MODID, "spells.meteor_end")));
 
     public static void init() {}
 

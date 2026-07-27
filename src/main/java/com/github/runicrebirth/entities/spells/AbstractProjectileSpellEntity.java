@@ -7,15 +7,25 @@ import com.github.runicrebirth.api.spells.SpellParams;
 import com.github.runicrebirth.client.BookDisplayState;
 import com.github.runicrebirth.init.ModElements;
 import com.github.runicrebirth.util.ParticleHelper;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.projectile.ThrowableProjectile;
+import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
@@ -56,6 +66,8 @@ public abstract class AbstractProjectileSpellEntity extends ThrowableProjectile 
     protected int chargeTicks = 41;
     protected int endTicks = 15;
     protected int phaseAge;
+    protected LivingEntity trackingTarget;
+    protected float homingStrength = 0.05f;
     private Vec3 storedDirection;
     private float storedSpeed;
 
@@ -75,6 +87,8 @@ public abstract class AbstractProjectileSpellEntity extends ThrowableProjectile 
         this.storedDirection = direction;
         this.storedSpeed = speed;
         this.shoot(storedDirection.x, storedDirection.y, storedDirection.z, 0.001F, 0.0F);
+        setYRot(owner.getYRot());
+        setXRot(owner.getXRot());
     }
 
     protected void initFromParams(SpellParams params) {
@@ -84,12 +98,23 @@ public abstract class AbstractProjectileSpellEntity extends ThrowableProjectile 
         this.damageCategory = params.damageCategory;
         this.entityData.set(DATA_ELEMENT, params.element.id().toString());
         this.entityData.set(DATA_SIZE, params.size);
+        this.refreshDimensions();
     }
+
+    @Override
+    public EntityDimensions getDimensions(Pose pose) {
+        return EntityDimensions.scalable(getHitWidth(), getHitHeight());
+    }
+
+    protected float getHitWidth() { return size; }
+    protected float getHitHeight() { return size; }
 
     @Override
     protected double getDefaultGravity() {
         return 0.0;
     }
+
+
 
     @Override
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
@@ -143,6 +168,10 @@ public abstract class AbstractProjectileSpellEntity extends ThrowableProjectile 
             }
             if (phase == SpellPhase.ACTIVE) {
                 onActiveTick();
+                applyHoming();
+                if (getPhase() == SpellPhase.ACTIVE) {
+                    scanWideBoundingBoxHits();
+                }
             } else if (phase == SpellPhase.ENDING) {
                 phaseAge++;
                 onEndingTick();
@@ -156,6 +185,43 @@ public abstract class AbstractProjectileSpellEntity extends ThrowableProjectile 
         }
         super.tick();
 
+    }
+
+    protected void scanWideBoundingBoxHits() {
+        Vec3 movement = this.getDeltaMovement();
+        AABB swept = this.getBoundingBox().expandTowards(movement);
+
+        for (Entity target : this.level().getEntities(this, swept, this::canHitEntity)) {
+            onHitEntity(new EntityHitResult(target));
+            if (getPhase() != SpellPhase.ACTIVE) return;
+        }
+
+        if (getPhase() == SpellPhase.ACTIVE && !this.level().noCollision(this, swept)) {
+            Vec3 from = this.position();
+            Vec3 to = from.add(movement);
+            BlockHitResult blockHit = this.level().clip(
+                new ClipContext(from, to, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this));
+            if (blockHit.getType() != HitResult.Type.MISS) {
+                onHitBlock(blockHit);
+            } else {
+                BlockPos pos = BlockPos.containing(from);
+                Direction dir = Direction.getNearest(-movement.x, -movement.y, -movement.z);
+                onHitBlock(new BlockHitResult(from, dir, pos, false));
+            }
+        }
+    }
+
+    public void setTrackingTarget(LivingEntity target) {
+        this.trackingTarget = target;
+    }
+
+    private void applyHoming() {
+        if (trackingTarget == null || !trackingTarget.isAlive()) return;
+        Vec3 toTarget = trackingTarget.getBoundingBox().getCenter().subtract(this.position()).normalize();
+        Vec3 current = this.getDeltaMovement();
+        double speed = current.length();
+        if (speed < 1e-6) return;
+        this.setDeltaMovement(current.add(toTarget.scale(homingStrength * speed)).normalize().scale(speed));
     }
 
     protected void beginEnding() {
@@ -237,6 +303,11 @@ public abstract class AbstractProjectileSpellEntity extends ThrowableProjectile 
             }
             return PlayState.CONTINUE;
         }));
+    }
+
+    @Override
+    public boolean shouldBeSaved() {
+        return false;
     }
 
     @Override

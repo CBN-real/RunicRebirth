@@ -6,7 +6,9 @@ import com.github.runicrebirth.damage.DamageSources;
 import com.github.runicrebirth.damage.SpellDamageSource;
 import com.github.runicrebirth.init.ModEntities;
 import com.github.runicrebirth.init.ModSounds;
+import com.github.runicrebirth.util.ImpactHelper;
 import com.github.runicrebirth.util.ParticleHelper;
+import com.github.runicrebirth.util.Utils;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
@@ -50,9 +52,9 @@ public class MagicBallistaEntity extends AbstractProjectileSpellEntity {
 
     @Override
     protected void onChargingTick() {
-        if (phaseAge == 1) {
+        if (phaseAge == 15) {
             level().playSound(null, this.getX(), this.getY(), this.getZ(),
-                ModSounds.SPELLS_LOAD_BALLISTA.get(), SoundSource.PLAYERS, 1.0f, 1.0f);
+                ModSounds.SPELLS_LOAD_BALLISTA.get(), SoundSource.PLAYERS, 2f, 1.0f);
         }
     }
 
@@ -60,7 +62,7 @@ public class MagicBallistaEntity extends AbstractProjectileSpellEntity {
     protected void onActivated() {
         super.onActivated();
         level().playSound(null, this.getX(), this.getY(), this.getZ(),
-            ModSounds.SPELLS_SHOOT_BALLISTA.get(), SoundSource.PLAYERS, 1.0f, 1.0f);
+            ModSounds.SPELLS_SHOOT_BALLISTA.get(), SoundSource.PLAYERS, 2f, 0.9f);
     }
 
     @Override
@@ -87,8 +89,28 @@ public class MagicBallistaEntity extends AbstractProjectileSpellEntity {
 
     @Override
     protected void spawnActiveParticles() {
+        if (getPhase() != SpellPhase.ACTIVE) return;
         Vec3 pos = this.position();
         this.level().addParticle(element().particle(), pos.x, pos.y, pos.z, 0.0, 0.0, 0.0);
+    }
+
+    private static final float IMPACT_RADIUS = 4.0f;
+
+    private void applyImpact(ServerLevel server, Vec3 center, Entity directTarget) {
+        Entity owner = this.getOwner();
+        for (LivingEntity nearby : Utils.entitiesInRange(server, center, IMPACT_RADIUS, this)) {
+            if (nearby == directTarget) continue;
+            if (owner instanceof LivingEntity living) {
+                SpellDamageSource source = SpellDamageSource.source(this, living, damageCategory, element())
+                    .withSpellType(com.github.runicrebirth.spells.types.MagicBallista.ID);
+                DamageSources.applyDamage(nearby, damage, source);
+            } else {
+                nearby.hurt(this.damageSources().magic(), damage);
+            }
+        }
+        ImpactHelper.createImpact(server, center, IMPACT_RADIUS, element(), 1.5f);
+        ParticleHelper.burstParticleEvent(server, element().particle(), center,
+            20, 0.4, 0.4, 0.4, 0.06, 1.0f);
     }
 
     @Override
@@ -113,8 +135,7 @@ public class MagicBallistaEntity extends AbstractProjectileSpellEntity {
         this.setPos(pinPosition.x, pinPosition.y, pinPosition.z);
 
         if (this.level() instanceof ServerLevel server) {
-            ParticleHelper.burstParticleEvent(server, element().particle(), hitLoc,
-                10, 0.2, 0.2, 0.2, 0.03, 1.0f);
+            applyImpact(server, hitLoc, target);
         }
     }
 
@@ -122,6 +143,10 @@ public class MagicBallistaEntity extends AbstractProjectileSpellEntity {
     protected void onHitBlock(BlockHitResult result) {
         super.onHitBlock(result);
         if (this.level().isClientSide || getPhase() != SpellPhase.ACTIVE) return;
+        Vec3 hitLoc = result.getLocation();
+        if (this.level() instanceof ServerLevel server) {
+            applyImpact(server, hitLoc, null);
+        }
         burstParticles();
         this.discard();
     }

@@ -1,6 +1,8 @@
 package com.github.runicrebirth.network;
 
 import com.github.runicrebirth.RunicRebirth;
+import com.github.runicrebirth.api.spells.WandStacksData;
+import com.github.runicrebirth.capabilities.magic.MagicData;
 import com.github.runicrebirth.items.SpellWriter;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
@@ -26,7 +28,12 @@ public record SwitchStackC2SPacket() implements CustomPacketPayload {
             if (!(ctx.player() instanceof ServerPlayer player)) return;
             ItemStack held = player.getItemInHand(InteractionHand.MAIN_HAND);
             if (!(held.getItem() instanceof SpellWriter)) return;
+            MagicData data = MagicData.of(player);
+            int oldSlot = SpellWriter.getActiveIndex(held);
             SpellWriter.cycleActiveStack(held);
+            int newSlot = SpellWriter.getActiveIndex(held);
+            data.saveChargesToSlot(oldSlot);
+            data.restoreChargesFromSlot(newSlot);
             StackChangedS2CPacket.sendTo(player);
         });
     }

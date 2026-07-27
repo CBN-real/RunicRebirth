@@ -1472,6 +1472,22 @@
 							}
 						}
 					]
+				},
+				{
+					"name": "magic_ballista2",
+					"pivot": [0.7, 5.83497, -6]
+				},
+				{
+					"name": "tip2",
+					"pivot": [0.7, 5.83497, -6]
+				},
+				{
+					"name": "octagon",
+					"pivot": [0, 0, 0]
+				},
+				{
+					"name": "hexadecagon",
+					"pivot": [0, 0, 0]
 				}
 			]
 		}

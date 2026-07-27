@@ -43,9 +43,11 @@ public class InfusionAltarProxyBlock extends Block {
         return SHAPE;
     }
 
+    private static final VoxelShape COLLISION_SHAPE = box(0, 0, 0, 16, 19, 16);
+
     @Override
     protected VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
-        return Shapes.empty();
+        return COLLISION_SHAPE;
     }
 
     @Override

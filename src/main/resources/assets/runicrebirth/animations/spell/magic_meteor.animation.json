@@ -25,12 +25,12 @@
 							"vector": [0, 3.4, 0.2],
 							"easing": "easeInOutSine"
 						},
-						"2.2083": {
+						"2.375": {
 							"vector": [0, 3.4, 0.5],
 							"easing": "easeInOutSine"
 						},
 						"3.0": {
-							"vector": [0, -3.3, 0.5],
+							"vector": [0, -9.3, 0.5],
 							"easing": "easeInOutSine"
 						}
 					},
@@ -41,7 +41,7 @@
 						"1.5": {
 							"vector": [2.5, 2.5, 2.5]
 						},
-						"2.2083": {
+						"2.375": {
 							"vector": [2.5, 2.5, 2.5]
 						},
 						"3.5": {
@@ -137,7 +137,7 @@
 			"bones": {
 				"inner_cubes": {
 					"position": {
-						"vector": [0, -3.3, 0.5],
+						"vector": [0, -9.3, 0.5],
 						"easing": "easeInOutSine"
 					},
 					"scale": {
@@ -213,7 +213,7 @@
 			"bones": {
 				"inner_cubes": {
 					"position": {
-						"vector": [0, -3.3, 0.5],
+						"vector": [0, -9.3, 0.5],
 						"easing": "easeInOutSine"
 					},
 					"scale": {

@@ -9,6 +9,7 @@ import com.github.runicrebirth.items.RunicCircuitItem;
 import com.github.runicrebirth.items.RunicCodexItem;
 import com.github.runicrebirth.items.armor.AcolyteSetItem;
 import com.github.runicrebirth.items.armor.AdeptSetItem;
+import com.github.runicrebirth.items.curios.AcolyteArcaneRingItem;
 import com.github.runicrebirth.items.curios.RingOfExpansionItem;
 import com.github.runicrebirth.spells.modifiers.AdditiveSizeModifier;
 import com.github.runicrebirth.util.ItemPropertiesHelper;
@@ -27,18 +28,25 @@ public final class ModItems {
     public static final DeferredItem<AcolyteWandItem> ACOLYTE_WAND = ITEMS.register(
         "acolyte_wand", () -> new AcolyteWandItem(ItemPropertiesHelper.wand()
             .component(ModDataComponents.WAND_STACKS.get(), com.github.runicrebirth.api.spells.WandStacksData.createDefault(2))
-            .component(ModDataComponents.MAX_INSCRIPTIONS.get(), 2)));
+            .component(ModDataComponents.MAX_INSCRIPTIONS.get(), 2)
+            .component(ModDataComponents.MAX_MODIFIER_SLOTS.get(), 1)
+            .component(ModDataComponents.INITIAL_CHARGES.get(), 2)));
 
     public static final DeferredItem<AdeptStaffItem> ADEPT_STAFF = ITEMS.register(
         "adept_staff", () -> new AdeptStaffItem(ItemPropertiesHelper.wand()
             .component(ModDataComponents.WAND_STACKS.get(), com.github.runicrebirth.api.spells.WandStacksData.createDefault(2))
-            .component(ModDataComponents.MAX_INSCRIPTIONS.get(), 2)));
+            .component(ModDataComponents.MAX_INSCRIPTIONS.get(), 2)
+            .component(ModDataComponents.MAX_MODIFIER_SLOTS.get(), 3)
+            .component(ModDataComponents.INITIAL_CHARGES.get(), 3)));
 
     public static final DeferredItem<InscribedWandItem> INSCRIBED_WAND = ITEMS.register(
         "inscribed_wand", () -> new InscribedWandItem(ItemPropertiesHelper.wand()));
 
     public static final DeferredItem<RingOfExpansionItem> RING_OF_EXPANSION = ITEMS.registerItem(
         "ring_of_expansion", RingOfExpansionItem::new, ItemPropertiesHelper.equipment().rarity(net.minecraft.world.item.Rarity.UNCOMMON));
+
+    public static final DeferredItem<AcolyteArcaneRingItem> ACOLYTE_ARCANE_RING = ITEMS.registerItem(
+        "acolyte_arcane_ring", AcolyteArcaneRingItem::new, ItemPropertiesHelper.equipment());
 
     public static final DeferredItem<RunicCodexItem> RUNIC_CODEX = ITEMS.registerItem(
         "runic_codex", RunicCodexItem::new, new Item.Properties().stacksTo(1));

@@ -53,9 +53,9 @@ public abstract non-sealed class SpellType implements SpellComponent {
                                          float xRot, float yRot, RaycastTarget target) {
         return switch (circleLevel()) {
             case 1 -> new IntermediateCircleEntity(level, caster, this, params, aimDirection, wandItem,
-                totalCasts, castingDelayTicks, defaultCircleLifespan(), xRot, yRot, target);
+                totalCasts, castingDelayTicks, defaultCircleLifespan() + 20, xRot, yRot, target);
             case 2 -> new AdvancedCircleEntity(level, caster, this, params, aimDirection, wandItem,
-                totalCasts, castingDelayTicks, defaultCircleLifespan(), xRot, yRot, target);
+                totalCasts, castingDelayTicks, defaultCircleLifespan() + 40, xRot, yRot, target);
             default -> new BasicCircleEntity(level, caster, this, params, aimDirection, wandItem,
                 totalCasts, castingDelayTicks, defaultCircleLifespan(), xRot, yRot, target);
         };
@@ -69,9 +69,9 @@ public abstract non-sealed class SpellType implements SpellComponent {
         return 100;
     }
 
-    public int castingDelayTicks() { return 15; }
+    public int castingDelayTicks() { return 6; }
 
-    public int multiCastDelay() { return 15; }
+    public int multiCastDelay() { return 10; }
 
     public float baseDamage() {
         return 4f;

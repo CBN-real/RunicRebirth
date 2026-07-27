@@ -6,6 +6,8 @@ import com.github.runicrebirth.damage.DamageSources;
 import com.github.runicrebirth.damage.SpellDamageSource;
 import com.github.runicrebirth.init.ModEntities;
 import com.github.runicrebirth.init.ModParticles;
+import com.github.runicrebirth.init.ModSounds;
+import net.minecraft.sounds.SoundSource;
 import com.github.runicrebirth.particle.ScaledParticleOption;
 import com.github.runicrebirth.util.ParticleHelper;
 import net.minecraft.server.level.ServerLevel;
@@ -19,7 +21,7 @@ import java.util.UUID;
 
 public class MagicBindingEntity extends AbstractEffectSpellEntity {
 
-    private static final int BIND_DURATION_TICKS = 60;
+    private static final int BIND_DURATION_TICKS = 100;
 
     private UUID casterUUID;
     private Vec3 bindPosition;
@@ -29,6 +31,7 @@ public class MagicBindingEntity extends AbstractEffectSpellEntity {
         super(type, level);
         this.chargeTicks = 0;
         this.damageCategory = MagicDamageType.SPIRIT;
+        this.endTicks = 45;
     }
 
     public MagicBindingEntity(Level level, LivingEntity caster, LivingEntity target, SpellParams params) {
@@ -39,6 +42,21 @@ public class MagicBindingEntity extends AbstractEffectSpellEntity {
         initFromParams(params);
         setFollowedEntity(target);
         this.setPos(target.getX(), target.getY(), target.getZ());
+    }
+
+    @Override
+    protected void onActivated() {
+        level().playSound(null, blockPosition(), ModSounds.SPELLS_INITIATE_BINDING.get(),
+                SoundSource.PLAYERS, 1.0f, 1.0f);
+    }
+
+    @Override
+    protected void beginEnding() {
+        if (getPhase() != SpellPhase.ENDING) {
+            level().playSound(null, blockPosition(), ModSounds.SPELLS_END_BINDING.get(),
+                    SoundSource.PLAYERS, 1.0f, 1.0f);
+        }
+        super.beginEnding();
     }
 
     @Override
@@ -61,7 +79,7 @@ public class MagicBindingEntity extends AbstractEffectSpellEntity {
         bound.hurtMarked = true;
         this.setPos(bindPosition.x, bindPosition.y, bindPosition.z);
 
-        if (age % 3 == 0 && bound instanceof LivingEntity living) {
+        if (age % 10 == 0 && bound instanceof LivingEntity living) {
             float tickDamage = totalDamage / (BIND_DURATION_TICKS / 3f);
             Entity caster = server.getEntity(casterUUID);
             if (caster instanceof LivingEntity casterLiving) {

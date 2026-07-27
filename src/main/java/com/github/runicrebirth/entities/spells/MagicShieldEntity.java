@@ -83,7 +83,7 @@ public class MagicShieldEntity extends AbstractEffectSpellEntity {
     protected void onEndingTick() {
         if (phaseAge == 1) {
             level().playSound(null, this.getX(), this.getY(), this.getZ(),
-                ModSounds.SPELLS_SHIELD_END.get(), SoundSource.PLAYERS, 1.0f, 1.0f);
+                ModSounds.SPELLS_SHIELD_END.get(), SoundSource.PLAYERS, 1.5f, 1.0f);
         }
     }
 

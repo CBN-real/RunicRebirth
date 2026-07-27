@@ -35,6 +35,14 @@ public final class ModDataComponents {
         COMPONENTS.registerComponentType("circuit_tier",
             b -> b.persistent(Codec.INT).networkSynchronized(ByteBufCodecs.INT));
 
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> MAX_MODIFIER_SLOTS =
+        COMPONENTS.registerComponentType("max_modifier_slots",
+            b -> b.persistent(Codec.INT).networkSynchronized(ByteBufCodecs.INT));
+
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> INITIAL_CHARGES =
+        COMPONENTS.registerComponentType("initial_charges",
+            b -> b.persistent(Codec.INT).networkSynchronized(ByteBufCodecs.INT));
+
     private ModDataComponents() {}
 
     public static void init() {}

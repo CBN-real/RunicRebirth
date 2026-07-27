@@ -102,9 +102,9 @@ public abstract class AbstractEffectSpellEntity extends AbstractInstantSpellEnti
                 return PlayState.CONTINUE;
             }
             if (state.getAnimatable().getPhase() == SpellPhase.ENDING) {
-                state.setAnimation(END_SPELL);
+                state.setAnimation(end_spell);
             } else {
-                state.setAnimation(INITIATE_AND_HOLD);
+                state.setAnimation(initiate_and_hold);
             }
             return PlayState.CONTINUE;
         }));

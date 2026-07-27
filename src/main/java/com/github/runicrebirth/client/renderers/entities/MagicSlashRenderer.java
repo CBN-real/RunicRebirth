@@ -2,6 +2,7 @@ package com.github.runicrebirth.client.renderers.entities;
 
 import com.github.runicrebirth.client.renderers.ModRenderTypes;
 import com.github.runicrebirth.client.renderers.models.MagicSlashGeoModel;
+import com.github.runicrebirth.entities.spells.MagicArrowEntity;
 import com.github.runicrebirth.entities.spells.MagicSlashEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;

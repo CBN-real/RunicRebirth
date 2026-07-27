@@ -40,8 +40,8 @@ import org.lwjgl.glfw.GLFW;
 public class DrawingCanvasScreen extends Screen {
 
     private static final int CANVAS_BORDER = 0xFF605040;
-    private static final int RADIAL_BG = 0xC0202030;
-    private static final int RADIAL_HIGHLIGHT = 0xFFFFFFFF;
+    private static final int RADIAL_BG = 0x73FFFFFF;
+    private static final int RADIAL_HIGHLIGHT = 0xFFDBA914;
     private static final float RADIAL_ANIM_SPEED = 0.01f;
     private static final double INK_WORLD_RADIUS = 0.3;
     private static final double INK_PLANE_DISTANCE = 0.7;
@@ -54,10 +54,10 @@ public class DrawingCanvasScreen extends Screen {
     private static final float DRAWING_Y_FRAC = 0.5f;
     private static final float DRAWING_RADIUS_FRAC = 0.3f;
 
-    private static final float[] TIER_X_FRAC = {0.82f, 0.84f, 0.82f};
+    private static final float[] TIER_X_FRAC = {0.813f, 0.84f, 0.81f};
     private static final float[] TIER_Y_FRACS = {0.18f, 0.46f, 0.785f};
 
-    private static final float TIER_SELECTED_X = 0.80f;
+    private static final float TIER_SELECTED_X = 0.847f;
     private static final float TIER_SELECTED_Y = 0.5f;
 
     private static final float ELEMENT_HIT_FRAC = 0.065f;
@@ -74,12 +74,26 @@ public class DrawingCanvasScreen extends Screen {
     private static final ResourceLocation LOCKED_OVERLAY = ResourceLocation.fromNamespaceAndPath(
         RunicRebirth.MODID, "textures/gui/locked_spell_overlay.png");
 
+    private static final ResourceLocation SLOT_SMALL_FILLED =
+        ResourceLocation.fromNamespaceAndPath(RunicRebirth.MODID, "hud/overlay_slot_border_small");
+    private static final ResourceLocation SLOT_SMALL_UNAVAIL =
+        ResourceLocation.fromNamespaceAndPath(RunicRebirth.MODID, "hud/overlay_slot_border_small_unavail");
+    private static final ResourceLocation SLOT_BIG =
+        ResourceLocation.fromNamespaceAndPath(RunicRebirth.MODID, "hud/overlay_slot_border");
+    private static final ResourceLocation SLOT_BIG_SELECTED =
+        ResourceLocation.fromNamespaceAndPath(RunicRebirth.MODID, "hud/overlay_slot_border_selected");
+
     private record ShapeRef(String shapeId, String iconName, boolean isModifier, String spellTypeId) {
         ShapeRef(String shapeId, String iconName, boolean isModifier) {
             this(shapeId, iconName, isModifier, null);
         }
         ResourceLocation iconPath() {
             String suffix = isModifier ? "_icon_small_outline" : "_icon_outline";
+            return ResourceLocation.fromNamespaceAndPath(RunicRebirth.MODID,
+                "textures/gui/shape_icons/" + iconName + suffix + ".png");
+        }
+        ResourceLocation actualIconPath() {
+            String suffix = isModifier ? "_icon_small" : "_icon";
             return ResourceLocation.fromNamespaceAndPath(RunicRebirth.MODID,
                 "textures/gui/shape_icons/" + iconName + suffix + ".png");
         }
@@ -234,12 +248,14 @@ public class DrawingCanvasScreen extends Screen {
         //renderDebugZones(g);
 
         if (selectedRef != null && !selectedRef.isLocked()) renderReferenceOverlay(g);
-        renderStrokes(g);
+        //renderStrokes(g);
         renderRadialMenu(g);
         renderInscribedSlots(g);
 
         g.drawCenteredString(font, Component.translatable("screen.runicrebirth.canvas_hint"),
             width / 2, 4, 0xAAFFFFFF);
+
+        renderHoverTooltip(g, mouseX, mouseY);
 
         RenderSystem.disableBlend();
     }
@@ -250,11 +266,8 @@ public class DrawingCanvasScreen extends Screen {
         int oy = canvasCenterY - overlaySize / 2;
         int src = selectedRef.iconSize();
 
-        RenderSystem.enableBlend();
-        RenderSystem.defaultBlendFunc();
         g.blit(selectedRef.iconPath(), ox, oy, overlaySize, overlaySize,
             0, 0, src, src, src, src);
-        RenderSystem.disableBlend();
     }
 
     private void renderStrokes(GuiGraphics g) {
@@ -280,7 +293,7 @@ public class DrawingCanvasScreen extends Screen {
 
         float selCX = tierSelectedX();
         float selCY = tierSelectedY();
-        int spellIconSize = width / 30;
+        int spellIconSize = width / 25;
         int modIconSize = spellIconSize / 2;
 
         for (RadialSlot slot : activeRadialSlots) {
@@ -288,13 +301,22 @@ public class DrawingCanvasScreen extends Screen {
             float cy = selCY + (slot.targetY - selCY) * t;
 
             int iconSize = slot.shape.isModifier() ? modIconSize : spellIconSize;
-            int bgRadius = iconSize / 2 + 4;
-            drawFilledCircle(g, (int) cx, (int) cy, bgRadius, RADIAL_BG);
-
-            int src = slot.shape.iconSize();
             int ix = (int) cx - iconSize / 2;
             int iy = (int) cy - iconSize / 2;
-            g.blit(slot.shape.iconPath(), ix, iy, iconSize, iconSize,
+            boolean isSelected = selectedRef != null && selectedRef.shapeId().equals(slot.shape.shapeId());
+
+            if (slot.shape.isModifier()) {
+                g.blitSprite(isSelected ? SLOT_SMALL_FILLED : SLOT_SMALL_UNAVAIL, ix, iy, iconSize, iconSize);
+            } else {
+                g.blitSprite(SLOT_BIG, ix, iy, iconSize, iconSize);
+                if (isSelected) g.blitSprite(SLOT_BIG_SELECTED, ix, iy, iconSize, iconSize);
+            }
+
+            int src = slot.shape.iconSize();
+            int drawSize = (int) (iconSize * 0.7f);
+            int iconX = ix + (iconSize - drawSize) / 2;
+            int iconY = iy + (iconSize - drawSize) / 2;
+            g.blit(slot.shape.actualIconPath(), iconX, iconY, drawSize, drawSize,
                 0, 0, src, src, src, src);
 
             if (slot.shape.isLocked()) {
@@ -305,10 +327,6 @@ public class DrawingCanvasScreen extends Screen {
                 g.blit(LOCKED_OVERLAY, lx, ly, lockSize, lockSize,
                     0, 0, 32, 32, 32, 32);
                 RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
-            }
-
-            if (selectedRef != null && selectedRef.shapeId().equals(slot.shape.shapeId())) {
-                drawCircle(g, (int) cx, (int) cy, bgRadius, RADIAL_HIGHLIGHT);
             }
         }
     }
@@ -330,17 +348,14 @@ public class DrawingCanvasScreen extends Screen {
             var wandData = held.get(com.github.runicrebirth.init.ModDataComponents.WAND_STACKS.get());
             if (wandData != null && !wandData.stacks().isEmpty()) {
                 var entry = wandData.stacks().get(wandData.activeIndex());
-                if (entry.inscribed() && entry.permanentCount() > 0) {
-                    refs = entry.components().subList(0, Math.min(entry.permanentCount(), entry.components().size()));
-                    totalSlots = refs.size();
-                }
+                if (!entry.components().isEmpty()) refs = entry.components();
+                totalSlots = com.github.runicrebirth.items.SpellWriter.getMaxModifierSlots(held);
             }
         }
 
-        if (circuitMode && totalSlots == 0) return;
-        if (!circuitMode && (refs == null || refs.isEmpty())) return;
+        if (totalSlots == 0) return;
 
-        int displayCount = circuitMode ? totalSlots : refs.size();
+        int displayCount = totalSlots;
         int iconSize = 11;
         int gap = 2;
         int totalW = displayCount * iconSize + (displayCount - 1) * gap;
@@ -580,9 +595,13 @@ public class DrawingCanvasScreen extends Screen {
         ResourceLocation elemId = el != null ? el.id()
             : ResourceLocation.fromNamespaceAndPath(RunicRebirth.MODID, "arcane");
 
+        String hintShapeId = selectedRef != null
+            ? RunicRebirth.MODID + ":" + selectedRef.shapeId()
+            : null;
+
         if (circuitMode && pendingCircuitRefs.size() < circuitModifierSlots) {
             var recognizer = com.github.runicrebirth.magic.recognition.Recognizers.get();
-            var result = recognizer.recognizeStrokes(buffer.snapshot());
+            var result = recognizer.recognizeStrokes(buffer.snapshot(), hintShapeId, 0.65);
             if (result != null && result.id() != null) {
                 ResourceLocation shapeId = ResourceLocation.parse(result.id());
                 double threshold = com.github.runicrebirth.api.registry.ShapeRegistry.thresholdFor(shapeId);
@@ -599,7 +618,7 @@ public class DrawingCanvasScreen extends Screen {
             }
         }
 
-        PacketDistributor.sendToServer(new DrawSubmitC2SPacket(buffer.snapshot(), elemId));
+        PacketDistributor.sendToServer(new DrawSubmitC2SPacket(buffer.snapshot(), elemId, hintShapeId));
         buffer.clear();
         InkParticle.removeAll();
     }
@@ -635,6 +654,145 @@ public class DrawingCanvasScreen extends Screen {
             PacketDistributor.sendToServer(new CancelDrawC2SPacket());
         }
         super.onClose();
+    }
+
+    private static final String[] ELEMENT_DISPLAY_NAMES = {"Arcane", "Fire", "Ice", "Earth", "Wind"};
+    private static final String[] TIER_DISPLAY_NAMES = {"Acolyte Tier", "Adept Tier", "Arch Tier"};
+    private static final int[] TIER_COLORS = {0xFFCD7F32, 0xFFC0C0C0, 0xFFFFD700};
+
+    private void renderHoverTooltip(GuiGraphics g, int mouseX, int mouseY) {
+        String text = null;
+        int color = 0xFFFFFFFF;
+
+        // Element zones
+        int elemHitR = elementHitRadius();
+        double elemHitR2 = (double) elemHitR * elemHitR;
+        for (int i = 0; i < ELEMENT_IDS.length && i < ELEMENT_Y_FRACS.length; i++) {
+            int ex = elementScreenX(i);
+            int ey = elementScreenY(i);
+            double dx = mouseX - ex;
+            double dy = mouseY - ey;
+            if (dx * dx + dy * dy <= elemHitR2) {
+                ResourceLocation elemId = ELEMENT_ID_MAP.get(ELEMENT_IDS[i]);
+                int elemColor = 0xFFAE78FF;
+                if (elemId != null) {
+                    for (Element e : elements) {
+                        if (e.id().equals(elemId)) { elemColor = 0xFF000000 | e.displayColor(); break; }
+                    }
+                }
+                text = ELEMENT_DISPLAY_NAMES[i] + " Element";
+                color = elemColor;
+                break;
+            }
+        }
+
+        // Tier zones (only when radial closed)
+        if (text == null && openRadialTier < 0) {
+            int tierHitR = tierHitRadius();
+            double tierHitR2 = (double) tierHitR * tierHitR;
+            for (int tier = 0; tier < TIER_Y_FRACS.length; tier++) {
+                int tx = tierScreenX(tier);
+                int ty = tierScreenY(tier);
+                double dx = mouseX - tx;
+                double dy = mouseY - ty;
+                if (dx * dx + dy * dy <= tierHitR2) {
+                    text = TIER_DISPLAY_NAMES[tier];
+                    color = TIER_COLORS[tier];
+                    break;
+                }
+            }
+        }
+
+        // Radial menu slots
+        if (text == null && openRadialTier >= 0 && !activeRadialSlots.isEmpty()) {
+            float selCX = tierSelectedX();
+            float selCY = tierSelectedY();
+            float t = 1f - (1f - radialAnimProgress) * (1f - radialAnimProgress);
+            int iconDisplaySize = width / 30;
+            float hitRadius = iconDisplaySize / 2f + 4;
+            for (RadialSlot slot : activeRadialSlots) {
+                float cx = selCX + (slot.targetX - selCX) * t;
+                float cy = selCY + (slot.targetY - selCY) * t;
+                double dx = mouseX - cx;
+                double dy = mouseY - cy;
+                if (dx * dx + dy * dy <= hitRadius * hitRadius) {
+                    if (slot.shape.spellTypeId() != null) {
+                        com.github.runicrebirth.api.spells.SpellComponent comp =
+                            com.github.runicrebirth.api.registry.SpellTypeRegistry.get(ResourceLocation.parse(slot.shape.spellTypeId()));
+                        text = comp != null ? comp.displayName().getString() : formatId(slot.shape.spellTypeId());
+                    } else {
+                        text = formatId(slot.shape.shapeId());
+                    }
+                    color = 0xFFFFFFFF;
+                    break;
+                }
+            }
+        }
+
+        // Inscribed modifier slots
+        if (text == null) {
+            Minecraft mc = Minecraft.getInstance();
+            if (mc.player != null) {
+                net.minecraft.world.item.ItemStack held = mc.player.getMainHandItem();
+                java.util.List<com.github.runicrebirth.api.spells.WandStacksData.ComponentRef> refs = null;
+                int totalSlots = 0;
+                if (circuitMode) {
+                    totalSlots = circuitModifierSlots;
+                    if (!pendingCircuitRefs.isEmpty()) refs = pendingCircuitRefs;
+                } else if (held.getItem() instanceof com.github.runicrebirth.items.SpellWriter) {
+                    var wandData = held.get(com.github.runicrebirth.init.ModDataComponents.WAND_STACKS.get());
+                    if (wandData != null && !wandData.stacks().isEmpty()) {
+                        var entry = wandData.stacks().get(wandData.activeIndex());
+                        if (!entry.components().isEmpty()) refs = entry.components();
+                        totalSlots = com.github.runicrebirth.items.SpellWriter.getMaxModifierSlots(held);
+                    }
+                }
+                if (totalSlots > 0 && refs != null) {
+                    int iconSize = 11;
+                    int gap = 2;
+                    int totalW = totalSlots * iconSize + (totalSlots - 1) * gap;
+                    int startX = width / 2 - totalW / 2;
+                    int slotY = 16;
+                    int filledCount = refs.size();
+                    for (int i = 0; i < Math.min(filledCount, totalSlots); i++) {
+                        int sx = startX + i * (iconSize + gap);
+                        if (mouseX >= sx && mouseX < sx + iconSize && mouseY >= slotY && mouseY < slotY + iconSize) {
+                            var ref = refs.get(i);
+                            com.github.runicrebirth.api.spells.SpellComponent comp =
+                                ref.kind() == com.github.runicrebirth.api.spells.WandStacksData.ComponentRef.KIND_TYPE
+                                ? com.github.runicrebirth.api.registry.SpellTypeRegistry.get(ref.id())
+                                : com.github.runicrebirth.api.registry.ModifierRegistry.get(ref.id());
+                            text = comp != null ? comp.displayName().getString() : formatId(ref.id().getPath());
+                            color = 0xFFFFFFFF;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        if (text == null) return;
+
+        int tw = font.width(text);
+        int tx = mouseX + 10;
+        int ty = mouseY - font.lineHeight - 2;
+        if (tx + tw + 4 > width) tx = mouseX - tw - 10;
+        if (ty < 0) ty = mouseY + 4;
+        g.fill(tx - 3, ty - 2, tx + tw + 3, ty + font.lineHeight + 2, 0xC0000000);
+        g.drawString(font, text, tx, ty, color, false);
+    }
+
+    private static String formatId(String id) {
+        String path = id.contains(":") ? id.substring(id.indexOf(':') + 1) : id;
+        String[] parts = path.split("_");
+        StringBuilder sb = new StringBuilder();
+        for (String part : parts) {
+            if (!part.isEmpty()) {
+                if (sb.length() > 0) sb.append(' ');
+                sb.append(Character.toUpperCase(part.charAt(0))).append(part.substring(1));
+            }
+        }
+        return sb.toString();
     }
 
     private void renderDebugZones(GuiGraphics g) {

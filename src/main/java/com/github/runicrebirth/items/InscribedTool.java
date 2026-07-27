@@ -62,7 +62,7 @@ public abstract class InscribedTool extends MagicItem implements IInscribedSpell
             Vec3 eye = sp.getEyePosition();
             Vec3 dir = sp.getLookAngle().normalize();
             SpellCastContext ctx = new SpellCastContext((ServerLevel) level, sp, stack, eye, dir,
-                sp.getXRot(), sp.getYRot());
+                sp.getXRot(), sp.getYRot(), null);
 
             SpellStack tmp = new SpellStack();
             tmp.append(type);

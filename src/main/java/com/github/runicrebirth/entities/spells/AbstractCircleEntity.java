@@ -38,7 +38,7 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 
 public abstract class AbstractCircleEntity extends Entity implements GeoEntity {
 
-    private static final int FINISH_TICKS = 40;
+    private static final int FINISH_TICKS = 20;
 
     private static final RawAnimation INITIATE_SPELL = RawAnimation.begin().thenPlay("initiate_spell").thenLoop("hold_spell");
     private static final RawAnimation END_SPELL = RawAnimation.begin().thenPlayAndHold("end_spell");
@@ -63,6 +63,8 @@ public abstract class AbstractCircleEntity extends Entity implements GeoEntity {
         SynchedEntityData.defineId(AbstractCircleEntity.class, EntityDataSerializers.STRING);
     private static final EntityDataAccessor<Boolean> DATA_FINISHING =
         SynchedEntityData.defineId(AbstractCircleEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Integer> DATA_TARGET_ENTITY_ID =
+        SynchedEntityData.defineId(AbstractCircleEntity.class, EntityDataSerializers.INT);
 
     private static final double MAX_TRACK_RANGE_SQR = 64.0 * 64.0;
 
@@ -108,6 +110,7 @@ public abstract class AbstractCircleEntity extends Entity implements GeoEntity {
 
         if (target.hasEntityTarget()) {
             this.trackedEntity = target.entity();
+            this.entityData.set(DATA_TARGET_ENTITY_ID, target.entity().getId());
         } else if (target.hasBlockTarget()) {
             this.targetBlockPos = target.blockPosition();
         }
@@ -123,6 +126,11 @@ public abstract class AbstractCircleEntity extends Entity implements GeoEntity {
         builder.define(DATA_MODIFIER_IDS, "");
         builder.define(DATA_ELEMENT, ModElements.ARCANE.getId().toString());
         builder.define(DATA_FINISHING, false);
+        builder.define(DATA_TARGET_ENTITY_ID, -1);
+    }
+
+    public int getTargetEntityId() {
+        return this.entityData.get(DATA_TARGET_ENTITY_ID);
     }
 
     public String getSpellTypeId() {
@@ -168,7 +176,10 @@ public abstract class AbstractCircleEntity extends Entity implements GeoEntity {
         age++;
         if (age == 1) {
             level().playSound(null, this.getX(), this.getY(), this.getZ(),
-                ModSounds.SPELLS_SPAWN_CIRCLE.get(), SoundSource.PLAYERS, 1.0f, 1.0f);
+                ModSounds.SPELLS_SPAWN_CIRCLE.get(), SoundSource.PLAYERS, 0.75f, 1.0f);
+        }
+        if (age == 5) {
+            spawnCrackling((ServerLevel) level());
         }
         if (age >= lifespan || caster == null || caster.isRemoved() || !caster.isAlive()) {
             beginFinishing();
@@ -189,6 +200,16 @@ public abstract class AbstractCircleEntity extends Entity implements GeoEntity {
         }
     }
 
+    private void spawnCrackling(ServerLevel serverLevel) {
+        float radius = getCircleScale() * 0.15f;
+        int color = params.element.displayColor();
+        EnergyCracklingEntity crackling = new EnergyCracklingEntity(serverLevel, radius, color, lifespan - 10, 0.5f, 1.0f, 0.15f * getCircleScale());
+        var center = getBoundingBox().getCenter();
+        crackling.setPos(center.x, center.y, center.z);
+        crackling.attachTo(this);
+        serverLevel.addFreshEntity(crackling);
+    }
+
     private void beginFinishing() {
         cleanup();
         finishingTicks = FINISH_TICKS;
@@ -201,6 +222,7 @@ public abstract class AbstractCircleEntity extends Entity implements GeoEntity {
         if (trackedEntity.isRemoved() || !trackedEntity.isAlive()
                 || position().distanceToSqr(trackedEntity.position()) > MAX_TRACK_RANGE_SQR) {
             trackedEntity = null;
+            this.entityData.set(DATA_TARGET_ENTITY_ID, -1);
             return;
         }
 
@@ -234,7 +256,7 @@ public abstract class AbstractCircleEntity extends Entity implements GeoEntity {
 
     private Vec3 getCircleCenterCast(float spellHeight) {
         float scale = getCircleScale();
-        Vec3 localCenter = new Vec3(0, (getCircleHeight() - spellHeight) * scale / 2.0f, 0);
+        Vec3 localCenter = new Vec3(0, (getCircleHeight() - spellHeight) / 2.0f, 0);
         float xRad = (float) Math.toRadians(getXRot());
         float yRad = (float) Math.toRadians(-getYRot());
         return position().add(localCenter.xRot(xRad).yRot(yRad));
@@ -246,7 +268,8 @@ public abstract class AbstractCircleEntity extends Entity implements GeoEntity {
 
     private void fireCast() {
         if (!(level() instanceof ServerLevel serverLevel)) return;
-        SpellCastContext ctx = new SpellCastContext(serverLevel, caster, wandItem, getCircleCenterCast(spellType.spellHeight()), aimDirection, spellXRot, spellYRot);
+        SpellCastContext ctx = new SpellCastContext(serverLevel, caster, wandItem, getCircleCenterCast(spellType.spellHeight()), aimDirection, spellXRot, spellYRot,
+            trackedEntity instanceof net.minecraft.world.entity.LivingEntity le ? le : null);
         spellType.onCast(ctx, params);
         NeoForge.EVENT_BUS.post(new SpellPostCastEvent(ctx, spellType, params));
     }

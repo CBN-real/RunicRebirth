@@ -157,6 +157,19 @@ public class InfusionCircleEntity extends AbstractInstantSpellEntity {
     }
 
     @Override
+    protected void onChargingTick() {
+        if (phaseAge == 10 && level() instanceof ServerLevel serverLevel) {
+            EnergyCracklingEntity crackling = new EnergyCracklingEntity(
+                serverLevel, 0.5f, element().displayColor(), chargeTicks - 10, 1f, 0.9f, 0.75f);
+            var center = getBoundingBox().getCenter();
+            crackling.setPos(center.x, center.y - 0.3f, center.z);
+            crackling.setOffset(0.0f, -0.3f, 0.0f);
+            crackling.attachTo(this);
+            serverLevel.addFreshEntity(crackling);
+        }
+    }
+
+    @Override
     protected void onActiveTick() {}
 
     @Override

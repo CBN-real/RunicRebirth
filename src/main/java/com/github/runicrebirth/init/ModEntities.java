@@ -2,6 +2,8 @@ package com.github.runicrebirth.init;
 
 import com.github.runicrebirth.RunicRebirth;
 import com.github.runicrebirth.entities.DrawingCanvasEntity;
+import com.github.runicrebirth.entities.spells.EnergyCracklingEntity;
+import com.github.runicrebirth.entities.spells.TargetCircleEntity;
 import com.github.runicrebirth.entities.spells.MagicArrowEntity;
 import com.github.runicrebirth.entities.spells.MagicBallistaCircleEntity;
 import com.github.runicrebirth.entities.spells.MagicBallistaEntity;
@@ -63,7 +65,7 @@ public class ModEntities {
     public static final DeferredHolder<EntityType<?>, EntityType<MagicSlashEntity>> MAGIC_SLASH = ENTITIES.register(
         "magic_slash",
         () -> EntityType.Builder.<MagicSlashEntity>of(MagicSlashEntity::new, MobCategory.MISC)
-            .sized(1.5F, 0.125F)
+            .sized(2.25F, 0.125F)
             .clientTrackingRange(4)
             .updateInterval(10)
             .build("magic_slash"));
@@ -176,7 +178,7 @@ public class ModEntities {
     public static final DeferredHolder<EntityType<?>, EntityType<MagicMeteorCircleEntity>> MAGIC_METEOR_CIRCLE = ENTITIES.register(
         "magic_meteor_circle",
         () -> EntityType.Builder.<MagicMeteorCircleEntity>of(MagicMeteorCircleEntity::new, MobCategory.MISC)
-            .sized(0.7F, 0.7F)
+            .sized(2F, 2F)
             .clientTrackingRange(8)
             .updateInterval(5)
             .noSave()
@@ -224,6 +226,15 @@ public class ModEntities {
             .noSave()
             .build("magic_ballista_demo"));
 
+    public static final DeferredHolder<EntityType<?>, EntityType<EnergyCracklingEntity>> ENERGY_CRACKLING = ENTITIES.register(
+        "energy_crackling",
+        () -> EntityType.Builder.<EnergyCracklingEntity>of(EnergyCracklingEntity::new, MobCategory.MISC)
+            .sized(0.1F, 0.1F)
+            .clientTrackingRange(8)
+            .updateInterval(5)
+            .noSave()
+            .build("energy_crackling"));
+
     public static final DeferredHolder<EntityType<?>, EntityType<DrawingCanvasEntity>> DRAWING_CANVAS = ENTITIES.register(
         "drawing_canvas",
         () -> EntityType.Builder.<DrawingCanvasEntity>of(DrawingCanvasEntity::new, MobCategory.MISC)
@@ -232,6 +243,14 @@ public class ModEntities {
             .updateInterval(5)
             .noSave()
             .build("drawing_canvas"));
+
+    public static final DeferredHolder<EntityType<?>, EntityType<TargetCircleEntity>> TARGET_CIRCLE = ENTITIES.register(
+        "target_circle",
+        () -> EntityType.Builder.<TargetCircleEntity>of(TargetCircleEntity::new, MobCategory.MISC)
+            .sized(1.0F, 0.1F)
+            .clientTrackingRange(0)
+            .noSave()
+            .build("target_circle"));
 
     private static <T extends Entity> DeferredHolder<EntityType<?>, EntityType<T>> register(
         String key, EntityType.EntityFactory<T> factory, MobCategory category, Function<Builder<T>, Builder<T>> builder) {

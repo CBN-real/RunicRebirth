@@ -40,7 +40,7 @@ public final class ModModifiers {
             () -> new MultiCastModifier(MultiCastModifier.ID_FOUR, "four_casts", 4));
 
     public static final DeferredHolder<SpellModifier, ChargesModifier> CHARGES =
-        ModifierRegistry.MODIFIERS.register("charges", ChargesModifier::new);
+        ModifierRegistry.MODIFIERS.register("charges", () -> new ChargesModifier(2));
 
     public static final DeferredHolder<SpellModifier, DamageTypeBoostModifier> SHARP_BOOST =
         ModifierRegistry.MODIFIERS.register("sharp_boost",

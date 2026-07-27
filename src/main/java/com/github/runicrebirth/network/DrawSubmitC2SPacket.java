@@ -33,7 +33,7 @@ import net.neoforged.neoforge.network.handling.IPayloadContext;
  * Client → server: player submitted a drawing. Payload is a list-of-strokes,
  * each a list of 2D points. Server runs $P, appends recognized component to active stack.
  */
-public record DrawSubmitC2SPacket(List<List<StrokePoint>> strokes, ResourceLocation elementId) implements CustomPacketPayload {
+public record DrawSubmitC2SPacket(List<List<StrokePoint>> strokes, ResourceLocation elementId, @org.jetbrains.annotations.Nullable String hintShapeId) implements CustomPacketPayload {
 
     public static final int MAX_STROKES = 16;
     public static final int MAX_POINTS_PER_STROKE = 256;
@@ -53,6 +53,8 @@ public record DrawSubmitC2SPacket(List<List<StrokePoint>> strokes, ResourceLocat
                 }
             }
             buf.writeResourceLocation(packet.elementId);
+            buf.writeBoolean(packet.hintShapeId != null);
+            if (packet.hintShapeId != null) buf.writeUtf(packet.hintShapeId);
         },
         buf -> {
             int strokeCount = buf.readVarInt();
@@ -72,7 +74,8 @@ public record DrawSubmitC2SPacket(List<List<StrokePoint>> strokes, ResourceLocat
                 strokes.add(stroke);
             }
             ResourceLocation elementId = buf.readResourceLocation();
-            return new DrawSubmitC2SPacket(strokes, elementId);
+            String hintShapeId = buf.readBoolean() ? buf.readUtf() : null;
+            return new DrawSubmitC2SPacket(strokes, elementId, hintShapeId);
         }
     );
 
@@ -98,7 +101,7 @@ public record DrawSubmitC2SPacket(List<List<StrokePoint>> strokes, ResourceLocat
             ResourceLocation selectedElement = packet.elementId();
             if (Log.DRAW_DEBUG) RunicRebirth.LOGGER.info("[RunicRebirth] Selected element: {}", selectedElement);
 
-            ShapeRecognizer.Result result = Recognizers.get().recognizeStrokes(packet.strokes);
+            ShapeRecognizer.Result result = Recognizers.get().recognizeStrokes(packet.strokes, packet.hintShapeId, 0.65);
             if (result == null || result.id() == null) {
                 if (Log.DRAW_DEBUG) RunicRebirth.LOGGER.info("[RunicRebirth] No shape match (no result)");
                 player.playNotifySound(ModSounds.CANVAS_FAILED.get(), SoundSource.PLAYERS, 1.0f, 1.0f);
@@ -179,7 +182,7 @@ public record DrawSubmitC2SPacket(List<List<StrokePoint>> strokes, ResourceLocat
         int maxSlots = circuit.getModifierSlots(circuitStack);
         if (building.size() >= maxSlots) return;
 
-        ShapeRecognizer.Result result = Recognizers.get().recognizeStrokes(packet.strokes);
+        ShapeRecognizer.Result result = Recognizers.get().recognizeStrokes(packet.strokes, packet.hintShapeId, 0.65);
         if (result == null || result.id() == null) {
             player.playNotifySound(ModSounds.CANVAS_FAILED.get(), SoundSource.PLAYERS, 1.0f, 1.0f);
             return;

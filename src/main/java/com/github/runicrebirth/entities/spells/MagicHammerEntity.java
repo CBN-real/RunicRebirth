@@ -20,6 +20,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.UUID;
+import software.bernie.geckolib.animation.RawAnimation;
 
 
 public class MagicHammerEntity extends AbstractInstantSpellEntity {
@@ -40,7 +41,8 @@ public class MagicHammerEntity extends AbstractInstantSpellEntity {
     public MagicHammerEntity(EntityType<? extends MagicHammerEntity> type, Level level) {
         super(type, level);
         this.chargeTicks = 72;
-        this.endTicks = 50;
+        this.endTicks = 47;
+        this.end_spell = this.initiate_and_hold;
     }
 
     public MagicHammerEntity(Level level, LivingEntity caster, SpellParams params,
@@ -77,6 +79,8 @@ public class MagicHammerEntity extends AbstractInstantSpellEntity {
         if (phaseAge == 1) {
             level().playSound(null, this.getX(), this.getY(), this.getZ(),
                 ModSounds.SPELLS_HAMMER_SPELL.get(), SoundSource.PLAYERS, 1.0f, 1.0f);
+            level().playSound(null, this.getX(), this.getY(), this.getZ(),
+                ModSounds.SPELLS_HAMMER_INITIATE.get(), SoundSource.PLAYERS, 1.0f, 1.0f);
         }
         if (trackedEntity != null) {
             if (trackedEntity.isAlive()) {
@@ -162,4 +166,5 @@ public class MagicHammerEntity extends AbstractInstantSpellEntity {
 
         ImpactHelper.createImpact(server, center, splashRadius * 1.5f, element(), 2.0f);
     }
+
 }

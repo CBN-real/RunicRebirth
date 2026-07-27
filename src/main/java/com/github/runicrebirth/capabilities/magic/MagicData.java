@@ -33,6 +33,8 @@ public class MagicData {
     private int charges;
     private ResourceLocation chargedSpellId;
     private SpellParams chargedParams;
+    private record SlotChargeState(int count, ResourceLocation spellId, SpellParams params) {}
+    private final Map<Integer, SlotChargeState> slotCharges = new HashMap<>();
     public MagicData() {
         this.cooldowns = new HashMap<>();
         this.globalCastLockoutTicks = 0;
@@ -118,6 +120,30 @@ public class MagicData {
         charges = 0;
         chargedSpellId = null;
         chargedParams = null;
+    }
+
+    public void saveChargesToSlot(int slot) {
+        if (charges > 0 && chargedSpellId != null) {
+            slotCharges.put(slot, new SlotChargeState(charges, chargedSpellId, chargedParams.copy()));
+        } else {
+            slotCharges.remove(slot);
+        }
+        charges = 0;
+        chargedSpellId = null;
+        chargedParams = null;
+    }
+
+    public void restoreChargesFromSlot(int slot) {
+        SlotChargeState state = slotCharges.remove(slot);
+        if (state != null) {
+            charges = state.count();
+            chargedSpellId = state.spellId();
+            chargedParams = state.params();
+        } else {
+            charges = 0;
+            chargedSpellId = null;
+            chargedParams = null;
+        }
     }
 
     public void tick() {

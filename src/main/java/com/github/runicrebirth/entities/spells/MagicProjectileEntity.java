@@ -21,12 +21,14 @@ public class MagicProjectileEntity extends AbstractProjectileSpellEntity {
     public MagicProjectileEntity(EntityType<? extends MagicProjectileEntity> type, Level level) {
         super(type, level);
         this.endTicks = 20;
-        this.chargeTicks = 12;
+        this.chargeTicks = 7;
     }
 
     public MagicProjectileEntity(Level level, LivingEntity owner, SpellParams params, Vec3 direction) {
         super(ModEntities.MAGIC_PROJECTILE.get(), owner, level, direction, params.speed);
         initFromParams(params);
+        this.endTicks = 20;
+        this.chargeTicks = 7;
     }
 
     @Override

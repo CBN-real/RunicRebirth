@@ -84,7 +84,9 @@ public class RunicRebirth {
         if (event.getTabKey() == CreativeModeTabs.TOOLS_AND_UTILITIES) {
             event.accept(ModItems.ACOLYTE_WAND.get());
             event.accept(ModItems.INSCRIBED_WAND.get());
+            event.accept(ModItems.ADEPT_STAFF.get());
             event.accept(ModItems.RING_OF_EXPANSION.get());
+            event.accept(ModItems.ACOLYTE_ARCANE_RING.get());
             event.accept(ModItems.ACOLYTE_WIZARD_HAT.get());
             event.accept(ModItems.ACOLYTE_ROBES.get());
             event.accept(ModItems.ACOLYTE_PANTS.get());

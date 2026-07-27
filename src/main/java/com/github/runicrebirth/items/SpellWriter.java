@@ -20,12 +20,15 @@ import com.github.runicrebirth.network.StackChangedS2CPacket;
 import com.github.runicrebirth.spells.types.Infusion;
 import com.github.runicrebirth.util.RaycastBuilder;
 import com.github.runicrebirth.util.RaycastTarget;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
@@ -126,6 +129,29 @@ public abstract class SpellWriter extends MagicItem {
         return max != null ? max : 0;
     }
 
+    public static int getMaxModifierSlots(ItemStack stack) {
+        Integer max = stack.get(ModDataComponents.MAX_MODIFIER_SLOTS.get());
+        return max != null ? max : 0;
+    }
+
+    public static int getInitialCharges(ItemStack stack) {
+        Integer charges = stack.get(ModDataComponents.INITIAL_CHARGES.get());
+        return charges != null ? charges : 1;
+    }
+
+    @Override
+    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+        int modSlots = getMaxModifierSlots(stack);
+        if (modSlots > 0) {
+            tooltipComponents.add(Component.literal("+" + modSlots + " Modifier Slots").withStyle(ChatFormatting.GRAY));
+        }
+        Integer charges = stack.get(ModDataComponents.INITIAL_CHARGES.get());
+        if (charges != null && charges > 0) {
+            tooltipComponents.add(Component.literal("+" + charges + " Spell Charges").withStyle(ChatFormatting.GRAY));
+        }
+        super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+    }
+
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
@@ -152,8 +178,13 @@ public abstract class SpellWriter extends MagicItem {
         if (data.hasCharges()) {
             SpellType chargedType = SpellTypeRegistry.get(data.chargedSpellId());
             if (chargedType != null) {
-                spawnCircle(serverPlayer, chargedType, data.chargedParams(), eye, dir, xRot, yRot,
-                    stack, 1);
+                if (data.isOnCooldown(chargedType.id())) return InteractionResultHolder.pass(stack);
+                SpellParams chargedParams = data.chargedParams();
+                spawnCircle(serverPlayer, chargedType, chargedParams, eye, dir, xRot, yRot,
+                    stack, 1 + chargedParams.extraCasts);
+                int chargeCooldown = chargedParams.cooldownOverrideTicks >= 0
+                    ? chargedParams.cooldownOverrideTicks : chargedType.cooldownTicks();
+                data.startCooldown(chargedType.id(), chargeCooldown);
                 data.consumeCharge();
                 if (!data.hasCharges()) {
                     WandStacksData wandData = getStacks(stack);
@@ -176,12 +207,14 @@ public abstract class SpellWriter extends MagicItem {
         if (active.validSpell()) {
 
             SpellCastContext ctx = new SpellCastContext((ServerLevel) level, serverPlayer, stack,
-                eye, dir, xRot, yRot);
+                eye, dir, xRot, yRot, null);
             SpellResolver.PreparedCast prepared = SpellResolver.prepare(ctx, active);
             if (prepared == null) return InteractionResultHolder.pass(stack);
 
             SpellType type = prepared.type();
             SpellParams params = prepared.params();
+
+            if (data.isOnCooldown(type.id())) return InteractionResultHolder.pass(stack);
 
             for (SpellComponent c : active.components()) {
                 if (c instanceof SpellModifier) {
@@ -189,16 +222,19 @@ public abstract class SpellWriter extends MagicItem {
                 }
             }
 
-            int totalCasts = 1 + params.extraCasts;
+            int initialCharges = getInitialCharges(stack);
+            boolean useChargeMode = params.useCharges || initialCharges > 1;
+            int totalCharges = initialCharges * params.chargesMultiplier;
+            int simultaneousCasts = 1 + params.extraCasts;
 
             WandStacksData wandData = getStacks(stack);
             boolean isInscribed = wandData.stacks().get(wandData.activeIndex()).inscribed();
 
-            if (params.useCharges && totalCasts > 1) {
-                spawnCircle(serverPlayer, type, params, eye, dir, xRot, yRot, stack, 1);
-                data.setCharges(totalCasts - 1, type.id(), params);
+            if (useChargeMode && totalCharges > 1) {
+                spawnCircle(serverPlayer, type, params, eye, dir, xRot, yRot, stack, simultaneousCasts);
+                data.setCharges(totalCharges - 1, type.id(), params);
             } else {
-                spawnCircle(serverPlayer, type, params, eye, dir, xRot, yRot, stack, totalCasts);
+                spawnCircle(serverPlayer, type, params, eye, dir, xRot, yRot, stack, simultaneousCasts);
                 if (isInscribed) {
                     WandStacksData.StackEntry activeEntry = wandData.stacks().get(wandData.activeIndex());
                     if (!activeEntry.hasPermanentSpellType()) {

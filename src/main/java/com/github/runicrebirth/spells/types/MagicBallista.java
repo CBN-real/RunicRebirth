@@ -35,7 +35,7 @@ public class MagicBallista extends SpellType {
         Vec3 dir = ctx.aimDirection().normalize();
         Vec3 circlePos = ctx.aimStart().add(dir.scale(1.0)).add(0, 1, 0);
         MagicBallistaCircleEntity circle = new MagicBallistaCircleEntity(
-            ctx.level(), ctx.caster(), params, dir, ctx.xRot(), ctx.yRot());
+            ctx.level(), ctx.caster(), params, dir, ctx.xRot(), ctx.yRot(), ctx.entityTarget());
         circle.setPos(circlePos.x, circlePos.y, circlePos.z);
         circle.setYRot(ctx.yRot());
         circle.setXRot(ctx.xRot());

@@ -27,6 +27,11 @@ import com.github.runicrebirth.client.renderers.blocks.OculusPillarRenderer;
 import com.github.runicrebirth.client.renderers.blocks.OculusPortalRenderer;
 import com.github.runicrebirth.client.renderers.blocks.RunesteelPylonRenderer;
 import com.github.runicrebirth.client.renderers.entities.DrawingCanvasRenderer;
+import com.github.runicrebirth.client.renderers.entities.EnergyCracklingRenderer;
+import com.github.runicrebirth.client.sounds.EnergyCracklingSoundInstance;
+import com.github.runicrebirth.client.sounds.MagicBindingSoundInstance;
+import com.github.runicrebirth.entities.spells.EnergyCracklingEntity;
+import com.github.runicrebirth.entities.spells.MagicBindingEntity;
 import com.github.runicrebirth.client.renderers.entities.InfusionCircleRenderer;
 import com.github.runicrebirth.client.renderers.entities.MagicArrowRenderer;
 import com.github.runicrebirth.client.renderers.entities.MagicBallistaCircleRenderer;
@@ -50,10 +55,13 @@ import com.github.runicrebirth.client.renderers.entities.BasicCircleRenderer;
 import com.github.runicrebirth.client.renderers.entities.IntermediateCircleRenderer;
 import com.github.runicrebirth.client.effects.CameraShakeHandler;
 import com.github.runicrebirth.client.effects.CrackManager;
+import com.github.runicrebirth.client.effects.TargetCircleManager;
+import com.github.runicrebirth.client.renderers.entities.TargetCircleRenderer;
 import com.github.runicrebirth.compat.modonomicon.ModonomiconCompat;
 import com.github.runicrebirth.init.ModBlockEntities;
 import com.github.runicrebirth.init.ModEntities;
 import com.github.runicrebirth.init.ModParticles;
+import com.github.runicrebirth.network.ActivateRingC2SPacket;
 import com.github.runicrebirth.network.SwitchStackC2SPacket;
 import com.github.runicrebirth.particle.TremorBlockParticle;
 import com.github.runicrebirth.util.MinecraftInstanceHelper;
@@ -76,6 +84,7 @@ import net.neoforged.neoforge.client.event.ViewportEvent;
 import net.neoforged.neoforge.client.gui.ConfigurationScreen;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 import net.minecraft.resources.ResourceLocation;
@@ -105,6 +114,7 @@ public class RunicRebirthClient {
         NeoForge.EVENT_BUS.addListener(CameraShakeHandler::onCameraSetup);
         NeoForge.EVENT_BUS.addListener(CrackManager::onRenderLevel);
         NeoForge.EVENT_BUS.addListener(TremorBlockParticle::renderAll);
+        NeoForge.EVENT_BUS.addListener(TargetCircleManager::onRenderLevelStage);
         event.enqueueWork(ModonomiconCompat::registerPageRenderers);
         RunicRebirth.LOGGER.info("[RunicRebirth] Client setup complete");
     }
@@ -135,7 +145,9 @@ public class RunicRebirthClient {
         event.registerEntityRenderer(ModEntities.MAGIC_METEOR_DEMO.get(), MagicMeteorDemoRenderer::new);
         event.registerEntityRenderer(ModEntities.MAGIC_BALLISTA_DEMO.get(), MagicBallistaDemoRenderer::new);
         event.registerEntityRenderer(ModEntities.INFUSION_CIRCLE.get(), InfusionCircleRenderer::new);
+        event.registerEntityRenderer(ModEntities.ENERGY_CRACKLING.get(), EnergyCracklingRenderer::new);
         event.registerEntityRenderer(ModEntities.DRAWING_CANVAS.get(), DrawingCanvasRenderer::new);
+        event.registerEntityRenderer(ModEntities.TARGET_CIRCLE.get(), TargetCircleRenderer::new);
 
         event.registerBlockEntityRenderer(ModBlockEntities.OCULUS_PORTAL.get(), OculusPortalRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.OCULUS_CONTROLLER.get(), OculusControllerRenderer::new);
@@ -201,10 +213,23 @@ public class RunicRebirthClient {
     }
 
     @SubscribeEvent
+    public static void onEntityJoinLevel(EntityJoinLevelEvent event) {
+        if (!event.getLevel().isClientSide()) return;
+        if (event.getEntity() instanceof EnergyCracklingEntity crackle) {
+            Minecraft.getInstance().getSoundManager().play(new EnergyCracklingSoundInstance(crackle));
+        } else if (event.getEntity() instanceof MagicBindingEntity binding) {
+            Minecraft.getInstance().getSoundManager().play(new MagicBindingSoundInstance(binding));
+        }
+    }
+
+    @SubscribeEvent
     public static void onClientPlayerTick(PlayerTickEvent.Post event) {
         if (!(event.getEntity() instanceof net.minecraft.client.player.LocalPlayer)) return;
         while (ModKeyMappings.SWITCH_SPELL_STACK.consumeClick()) {
             PacketDistributor.sendToServer(new SwitchStackC2SPacket());
+        }
+        while (ModKeyMappings.ACTIVATE_RING.consumeClick()) {
+            PacketDistributor.sendToServer(new ActivateRingC2SPacket());
         }
         ClientMagicData.tickCastAnim();
         CameraShakeHandler.tick();

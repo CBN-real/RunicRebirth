@@ -21,17 +21,11 @@ public class MagicMeteorCircleRenderer extends AbstractSpellRenderer<MagicMeteor
     }
 
     @Override
-    public RenderType getRenderType(MagicMeteorCircleEntity entity, ResourceLocation texture,
-        @Nullable MultiBufferSource bufferSource, float partialTick) {
-        return RenderType.entityCutoutNoCull(texture);
-    }
-
-    @Override
     protected void applyRotations(MagicMeteorCircleEntity entity, PoseStack poseStack,
         float ageInTicks, float rotationYaw, float partialTick, float nativeScale) {
         float yRot = Mth.rotLerp(partialTick, entity.yRotO, entity.getYRot());
         float xRot = Mth.rotLerp(partialTick, entity.xRotO, entity.getXRot());
         poseStack.mulPose(Axis.YP.rotationDegrees(180f - yRot));
-        poseStack.mulPose(Axis.XP.rotationDegrees(-xRot));
+        poseStack.mulPose(Axis.XP.rotationDegrees(-38f + xRot));
     }
 }

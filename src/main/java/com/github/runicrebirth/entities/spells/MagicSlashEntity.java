@@ -27,14 +27,14 @@ public class MagicSlashEntity extends AbstractProjectileSpellEntity {
     public MagicSlashEntity(EntityType<? extends MagicSlashEntity> type, Level level) {
         super(type, level);
         this.damageCategory = MagicDamageType.SHARP;
-        this.chargeTicks = 43;
+        this.chargeTicks = 40;
         this.endTicks = 5;
     }
 
     public MagicSlashEntity(Level level, LivingEntity owner, SpellParams params, Vec3 direction) {
         super(ModEntities.MAGIC_SLASH.get(), owner, level, direction, params.speed);
         this.damageCategory = MagicDamageType.SHARP;
-        this.chargeTicks = 43;
+        this.chargeTicks = 40;
         this.endTicks = 5;
         initFromParams(params);
     }
@@ -51,6 +51,7 @@ public class MagicSlashEntity extends AbstractProjectileSpellEntity {
 
     @Override
     protected void spawnActiveParticles() {
+        if (getPhase() != SpellPhase.ACTIVE) return;
         Vec3 pos = this.position();
         this.level().addParticle(element().particle(), pos.x, pos.y, pos.z, 0.0, 0.0, 0.0);
     }

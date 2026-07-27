@@ -4,10 +4,12 @@ import com.github.runicrebirth.api.spells.SpellParams;
 import com.github.runicrebirth.damage.DamageSources;
 import com.github.runicrebirth.damage.SpellDamageSource;
 import com.github.runicrebirth.init.ModEntities;
+import com.github.runicrebirth.init.ModSounds;
 import com.github.runicrebirth.util.ImpactHelper;
 import com.github.runicrebirth.util.ParticleHelper;
 import com.github.runicrebirth.util.Utils;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -18,7 +20,7 @@ import net.minecraft.world.phys.Vec3;
 
 public class MagicMeteorEntity extends AbstractProjectileSpellEntity {
 
-    private static final int MAX_LIFETIME_TICKS = 100;
+    private static final int MAX_LIFETIME_TICKS = 400;
 
     private float directDamage = 10f;
     private float splashDamage = 5f;
@@ -37,6 +39,24 @@ public class MagicMeteorEntity extends AbstractProjectileSpellEntity {
         this.directDamage = directDamage;
         this.splashDamage = splashDamage;
         this.splashRadius = 3f * params.size;
+        this.chargeTicks = 70;
+        this.endTicks = 20;
+    }
+
+    @Override
+    protected void onChargingTick() {
+        if (phaseAge == 1) {
+            level().playSound(null, this.getX(), this.getY(), this.getZ(),
+                ModSounds.SPELLS_METEOR_INITIATE.get(), SoundSource.PLAYERS, 1.0f, 1.0f);
+        }
+    }
+
+    @Override
+    protected void onEndingTick() {
+        if (phaseAge == 1) {
+            level().playSound(null, this.getX(), this.getY(), this.getZ(),
+                ModSounds.SPELLS_METEOR_END.get(), SoundSource.PLAYERS, 1.0f, 1.0f);
+        }
     }
 
     @Override

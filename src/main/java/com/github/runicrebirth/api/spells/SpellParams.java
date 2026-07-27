@@ -18,6 +18,7 @@ public class SpellParams {
 
     public int extraCasts;
     public boolean useCharges;
+    public int chargesMultiplier = 1;
     public float rangeMultiplier = 1.0f;
     public int cooldownOverrideTicks = -1;
 
@@ -48,6 +49,7 @@ public class SpellParams {
         c.modifierIds.addAll(this.modifierIds);
         c.extraCasts = this.extraCasts;
         c.useCharges = this.useCharges;
+        c.chargesMultiplier = this.chargesMultiplier;
         c.rangeMultiplier = this.rangeMultiplier;
         c.cooldownOverrideTicks = this.cooldownOverrideTicks;
         c.castingDelayTicks = this.castingDelayTicks;

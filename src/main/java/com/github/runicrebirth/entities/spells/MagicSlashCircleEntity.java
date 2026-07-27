@@ -11,7 +11,7 @@ import net.minecraft.world.phys.Vec3;
 
 public class MagicSlashCircleEntity extends AbstractSpellCircleEntity {
 
-    private static final int LIFESPAN = 90;
+    private static final int LIFESPAN = 82;
 
     private Vec3 direction;
     private float speed;
@@ -21,9 +21,9 @@ public class MagicSlashCircleEntity extends AbstractSpellCircleEntity {
     }
 
     public MagicSlashCircleEntity(Level level, LivingEntity owner, SpellParams params,
-                                  Vec3 direction, float speed) {
+                                  Vec3 direction, float speed, LivingEntity target) {
         super(ModEntities.MAGIC_SLASH_CIRCLE.get(), level);
-        init(owner, params, LIFESPAN);
+        init(owner, params, LIFESPAN, target);
         this.direction = direction.normalize();
         this.speed = speed;
     }
@@ -34,7 +34,7 @@ public class MagicSlashCircleEntity extends AbstractSpellCircleEntity {
             ModSounds.SPELLS_SLASH_SPELL.get(), SoundSource.PLAYERS, 1.0f, 1.0f);
         MagicSlashEntity slash = new MagicSlashEntity(level(), owner, params, direction);
         slash.setPos(this.getX(), this.getY() + 0.5f, this.getZ());
-
+        slash.setTrackingTarget(this.target);
         level().addFreshEntity(slash);
     }
 }

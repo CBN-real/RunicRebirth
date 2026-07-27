@@ -27,9 +27,10 @@ public class MagicMeteor extends SpellType {
     @Override public int cooldownTicks() { return 160; }
     @Override public float baseDamage() { return 10f; }
     @Override public float baseSize() { return 1.0f; }
-  @Override public float spellHeight() { return 0.8f * this.baseSize(); }
+    @Override public float spellHeight() { return 0.8f * this.baseSize(); }
+    @Override public float baseSpeed() { return 2.0f; }
 
-    @Override public String iconName() { return "meteor"; }
+  @Override public String iconName() { return "meteor"; }
     @Override public Element defaultElement() { return ModElements.ARCANE.get(); }
     @Override public MagicDamageType damageCategory() { return MagicDamageType.BLUNT; }
 
@@ -70,7 +71,7 @@ public class MagicMeteor extends SpellType {
         float xRot = (float) Math.toDegrees(Math.atan2(-toTarget.y, hDist));
 
         MagicMeteorCircleEntity circle = new MagicMeteorCircleEntity(
-            ctx.level(), ctx.caster(), params, directDmg, splashDmg, targetPos);
+            ctx.level(), ctx.caster(), params, directDmg, splashDmg, targetPos, ctx.entityTarget());
         circle.setPos(circlePos.x, circlePos.y, circlePos.z);
         circle.setYRot(yRot);
         circle.setXRot(xRot);

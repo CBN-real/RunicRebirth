@@ -26,7 +26,7 @@ public class MagicExplosionEntity extends AbstractInstantSpellEntity {
     public MagicExplosionEntity(EntityType<? extends MagicExplosionEntity> type, Level level) {
         super(type, level);
         this.chargeTicks = 15;
-        this.endTicks = 10;
+        this.endTicks = 0;
     }
 
     public MagicExplosionEntity(Level level, LivingEntity caster, SpellParams params) {
