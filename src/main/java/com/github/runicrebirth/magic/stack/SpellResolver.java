@@ -12,6 +12,7 @@ import com.github.runicrebirth.api.spells.SpellStack;
 import com.github.runicrebirth.api.spells.SpellType;
 import com.github.runicrebirth.capabilities.magic.MagicData;
 import com.github.runicrebirth.config.ServerConfig;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.common.NeoForge;
@@ -28,12 +29,13 @@ public final class SpellResolver {
 
     public static PreparedCast prepare(SpellCastContext ctx, SpellStack stack) {
         if (stack == null || !stack.validSpell()) return null;
+        if (!(ctx.caster() instanceof ServerPlayer player)) return null;
 
-        MagicData data = MagicData.of(ctx.caster());
+        MagicData data = MagicData.of(player);
         if (data.globalCastLockoutTicks() > 0) return null;
 
         SpellType type = stack.resolveType();
-        if (!SpellAdvancementHelper.hasSpellUnlocked(ctx.caster(), type)) return null;
+        if (!SpellAdvancementHelper.hasSpellUnlocked(player, type)) return null;
         if (data.isOnCooldown(type.id())) return null;
 
         Element resolvedElement = stack.resolveElement() != null ? stack.resolveElement() : type.defaultElement();
@@ -57,13 +59,30 @@ public final class SpellResolver {
         CastResult result = type.onCast(ctx, params);
 
         if (result == CastResult.SUCCESS) {
-            MagicData data = MagicData.of(ctx.caster());
-            int cooldown = params.cooldownOverrideTicks >= 0 ? params.cooldownOverrideTicks : type.cooldownTicks();
-            data.startCooldown(type.id(), cooldown);
-            data.setGlobalCastLockout(ServerConfig.GLOBAL_CAST_LOCKOUT_TICKS.get());
+            if (ctx.caster() instanceof ServerPlayer player) {
+                MagicData data = MagicData.of(player);
+                int cooldown = params.cooldownOverrideTicks >= 0 ? params.cooldownOverrideTicks : type.cooldownTicks();
+                data.startCooldown(type.id(), cooldown);
+                data.setGlobalCastLockout(ServerConfig.GLOBAL_CAST_LOCKOUT_TICKS.get());
+            }
             NeoForge.EVENT_BUS.post(new SpellPostCastEvent(ctx, type, params));
         }
         return result;
+    }
+
+    public static SpellParams buildParams(SpellCastContext ctx, SpellStack stack) {
+        if (stack == null || !stack.validSpell()) return null;
+        SpellType type = stack.resolveType();
+        if (type == null) return null;
+        Element resolvedElement = stack.resolveElement() != null ? stack.resolveElement() : type.defaultElement();
+        SpellParams params = new SpellParams(
+            type.baseDamage(), type.baseSize(), type.baseSpeed(),
+            type.baseDuration(), type.castingDelayTicks(), 0, resolvedElement, type.damageCategory());
+        stack.compose(params);
+        applyCurioEmpowerments(ctx, params);
+        applyArmorEmpowerments(ctx, params);
+        params.damage = params.damage * (1.0f + params.size) / 2.0f;
+        return params;
     }
 
     public static CastResult cast(SpellCastContext ctx, SpellStack stack) {

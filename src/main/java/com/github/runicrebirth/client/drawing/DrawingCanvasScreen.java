@@ -83,9 +83,12 @@ public class DrawingCanvasScreen extends Screen {
     private static final ResourceLocation SLOT_BIG_SELECTED =
         ResourceLocation.fromNamespaceAndPath(RunicRebirth.MODID, "hud/overlay_slot_border_selected");
 
-    private record ShapeRef(String shapeId, String iconName, boolean isModifier, String spellTypeId) {
+    private record ShapeRef(String shapeId, String iconName, boolean isModifier, String spellTypeId, String displayOverride) {
         ShapeRef(String shapeId, String iconName, boolean isModifier) {
-            this(shapeId, iconName, isModifier, null);
+            this(shapeId, iconName, isModifier, null, null);
+        }
+        ShapeRef(String shapeId, String iconName, boolean isModifier, String spellTypeId) {
+            this(shapeId, iconName, isModifier, spellTypeId, null);
         }
         ResourceLocation iconPath() {
             String suffix = isModifier ? "_icon_small_outline" : "_icon_outline";
@@ -119,7 +122,8 @@ public class DrawingCanvasScreen extends Screen {
             new ShapeRef("two_casts", "two_casts", true),
             new ShapeRef("sharp_boost", "sharp_boost", true),
             new ShapeRef("blunt_boost", "blunt_boost", true),
-            new ShapeRef("magic_boost", "magic_boost", true)
+            new ShapeRef("magic_boost", "magic_boost", true),
+            new ShapeRef("charges", "charges", true, null, "2x Charges")
         )),
         new RefSection("gui.runicrebirth.int_spells", List.of(
             new ShapeRef("shield", "shield", false, "runicrebirth:magic_shield"),
@@ -129,7 +133,7 @@ public class DrawingCanvasScreen extends Screen {
         ), List.of(
             new ShapeRef("plus_two", "plus_two", true),
             new ShapeRef("cooldown", "cooldown", true),
-            new ShapeRef("charges", "charges", true)
+            new ShapeRef("charges_three", "charges_three", true, null, "3x Charges")
         )),
         new RefSection("gui.runicrebirth.adv_spells", List.of(
             new ShapeRef("binding", "binding", false, "runicrebirth:magic_binding"),
@@ -137,7 +141,8 @@ public class DrawingCanvasScreen extends Screen {
             new ShapeRef("ballista", "ballista", false, "runicrebirth:magic_ballista")
         ), List.of(
             new ShapeRef("plus_four", "plus_four", true),
-            new ShapeRef("four_casts", "four_casts", true)
+            new ShapeRef("four_casts", "four_casts", true),
+            new ShapeRef("charges_four", "charges_four", true, null, "4x Charges")
         ))
     );
 
@@ -720,6 +725,8 @@ public class DrawingCanvasScreen extends Screen {
                         com.github.runicrebirth.api.spells.SpellComponent comp =
                             com.github.runicrebirth.api.registry.SpellTypeRegistry.get(ResourceLocation.parse(slot.shape.spellTypeId()));
                         text = comp != null ? comp.displayName().getString() : formatId(slot.shape.spellTypeId());
+                    } else if (slot.shape.displayOverride() != null) {
+                        text = slot.shape.displayOverride();
                     } else {
                         text = formatId(slot.shape.shapeId());
                     }

@@ -24,7 +24,7 @@ public class MagicExplosion extends SpellType {
         super(ID);
     }
 
-    @Override public int cooldownTicks() { return 100; }
+    @Override public int cooldownTicks() { return 40; }
     @Override public float baseDamage() { return 7f; }
     @Override public float baseSize() { return 1.0f; }
     @Override public float spellHeight() { return 1.5f * this.baseSize(); }

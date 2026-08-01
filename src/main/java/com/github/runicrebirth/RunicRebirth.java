@@ -14,6 +14,7 @@ import com.github.runicrebirth.init.ModDataComponents;
 import com.github.runicrebirth.init.ModElements;
 import com.github.runicrebirth.init.ModEntities;
 import com.github.runicrebirth.init.ModItems;
+import com.github.runicrebirth.init.ModMenuTypes;
 import com.github.runicrebirth.init.ModModifiers;
 import com.github.runicrebirth.init.ModParticles;
 import com.github.runicrebirth.init.ModRecipeSerializers;
@@ -54,6 +55,7 @@ public class RunicRebirth {
         ModParticles.PARTICLES.register(modEventBus);
         ModCriteriaTriggers.TRIGGERS.register(modEventBus);
         ModSounds.SOUNDS.register(modEventBus);
+        ModMenuTypes.MENU_TYPES.register(modEventBus);
         ModRecipeTypes.RECIPE_TYPES.register(modEventBus);
         ModRecipeSerializers.RECIPE_SERIALIZERS.register(modEventBus);
 
@@ -86,7 +88,10 @@ public class RunicRebirth {
             event.accept(ModItems.INSCRIBED_WAND.get());
             event.accept(ModItems.ADEPT_STAFF.get());
             event.accept(ModItems.RING_OF_EXPANSION.get());
-            event.accept(ModItems.ACOLYTE_ARCANE_RING.get());
+            event.accept(ModItems.ARCANE_ACOLYTE_RING.get());
+            event.accept(ModItems.ARCANE_TETHER_RING.get());
+            event.accept(ModItems.RING_OF_LEAPING_GALES.get());
+            event.accept(ModItems.RING_OF_PHANTOM_MINING.get());
             event.accept(ModItems.ACOLYTE_WIZARD_HAT.get());
             event.accept(ModItems.ACOLYTE_ROBES.get());
             event.accept(ModItems.ACOLYTE_PANTS.get());
@@ -116,6 +121,7 @@ public class RunicRebirth {
             event.accept(ModItems.ARCH_RUNIC_CIRCUIT.get());
             event.accept(ModItems.ARCANE_SPIRIT.get());
             event.accept(ModItems.ARCANE_GEMSTONE.get());
+            event.accept(ModItems.RUNIC_KEY_RING.get());
         }
         if (event.getTabKey() == CreativeModeTabs.BUILDING_BLOCKS) {
             event.accept(ModItems.RUNIC_STONE.get());
@@ -128,6 +134,8 @@ public class RunicRebirth {
             event.accept(ModItems.RUNESTEEL_PYLON.get());
             event.accept(ModItems.INFUSION_ALTAR.get());
             event.accept(ModItems.RUNIC_ANVIL.get());
+            event.accept(ModItems.RUNIC_STONE_BRICKS.get());
+            event.accept(ModItems.ARCANE_RUNIC_STONE_BRICKS.get());
         }
     }
 }

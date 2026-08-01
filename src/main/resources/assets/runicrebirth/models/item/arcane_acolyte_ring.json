@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "runicrebirth:item/acolyte_arcane_ring"
+    "layer0": "runicrebirth:item/arcane_acolyte_ring"
   }
 }

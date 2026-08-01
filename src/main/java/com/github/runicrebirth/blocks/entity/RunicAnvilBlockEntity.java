@@ -398,7 +398,9 @@ public class RunicAnvilBlockEntity extends BlockEntity implements GeoBlockEntity
                 circuitEntry.components(),
                 circuitEntry.elementId(),
                 true,
-                circuitEntry.components().size()
+                circuitEntry.components().size(),
+                0,
+                null
         );
         ItemStack result = wandStack.copy();
         WandStacksData newData = data.withStack(activeIndex, inscribedEntry);

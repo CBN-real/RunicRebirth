@@ -29,6 +29,8 @@ public class EnergyCracklingEntity extends Entity {
         SynchedEntityData.defineId(EnergyCracklingEntity.class, EntityDataSerializers.FLOAT);
     private static final EntityDataAccessor<Float> DATA_OFFSET_Z =
         SynchedEntityData.defineId(EnergyCracklingEntity.class, EntityDataSerializers.FLOAT);
+    private static final EntityDataAccessor<Float> DATA_LENGTH =
+        SynchedEntityData.defineId(EnergyCracklingEntity.class, EntityDataSerializers.FLOAT);
 
     private int duration = 1;
 
@@ -49,6 +51,13 @@ public class EnergyCracklingEntity extends Entity {
         this.entityData.set(DATA_THICKNESS, thickness);
     }
 
+    /** Cylinder variant — bolts render vertically within a cylinder of given radius and length. */
+    public EnergyCracklingEntity(Level level, float radius, float length, int colorRgb, int duration,
+                                  float density, float speed, float thickness) {
+        this(level, radius, colorRgb, duration, density, speed, thickness);
+        this.entityData.set(DATA_LENGTH, length);
+    }
+
     @Override
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         builder.define(DATA_RADIUS, 1.0f);
@@ -60,6 +69,7 @@ public class EnergyCracklingEntity extends Entity {
         builder.define(DATA_OFFSET_X, 0.0f);
         builder.define(DATA_OFFSET_Y, 0.0f);
         builder.define(DATA_OFFSET_Z, 0.0f);
+        builder.define(DATA_LENGTH, 0.0f);
     }
 
     public void setOffset(float x, float y, float z) {
@@ -97,6 +107,11 @@ public class EnergyCracklingEntity extends Entity {
     /** Multiplier for tube width. 1 = default, 2 = twice as thick. */
     public float getThickness() {
         return this.entityData.get(DATA_THICKNESS);
+    }
+
+    /** >0 = cylinder mode (vertical bolts), 0 = sphere mode. */
+    public float getCrackleLength() {
+        return this.entityData.get(DATA_LENGTH);
     }
 
     @Override

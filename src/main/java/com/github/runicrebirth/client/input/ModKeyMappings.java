@@ -22,19 +22,27 @@ public final class ModKeyMappings {
         CATEGORY
     );
 
-    public static final KeyMapping ACTIVATE_RING = new KeyMapping(
-        "key.runicrebirth.activate_ring",
-        KeyConflictContext.IN_GAME,
-        InputConstants.Type.KEYSYM,
-        GLFW.GLFW_KEY_V,
-        CATEGORY
-    );
+    // Index 0=thumb, 1=index, 2=middle, 3=ring, 4=pinkie
+    public static final KeyMapping[] ACTIVATE_SPELL_RINGS = {
+        new KeyMapping("key.runicrebirth.activate_thumb_ring", KeyConflictContext.IN_GAME,
+            InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_Z, CATEGORY),
+        new KeyMapping("key.runicrebirth.activate_index_ring", KeyConflictContext.IN_GAME,
+            InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_V, CATEGORY),
+        new KeyMapping("key.runicrebirth.activate_middle_ring", KeyConflictContext.IN_GAME,
+            InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_B, CATEGORY),
+        new KeyMapping("key.runicrebirth.activate_ring_ring", KeyConflictContext.IN_GAME,
+            InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_G, CATEGORY),
+        new KeyMapping("key.runicrebirth.activate_pinkie_ring", KeyConflictContext.IN_GAME,
+            InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_H, CATEGORY)
+    };
 
     private ModKeyMappings() {}
 
     public static void register(RegisterKeyMappingsEvent event) {
         event.register(SWITCH_SPELL_STACK);
-        event.register(ACTIVATE_RING);
+        for (KeyMapping ring : ACTIVATE_SPELL_RINGS) {
+            event.register(ring);
+        }
     }
 
     public static boolean isMovementKey(int keyCode, int scanCode) {

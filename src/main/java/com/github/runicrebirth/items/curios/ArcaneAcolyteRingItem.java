@@ -7,15 +7,16 @@ import com.github.runicrebirth.config.ServerConfig;
 import com.github.runicrebirth.init.ModElements;
 import com.github.runicrebirth.init.ModSpellTypes;
 import com.github.runicrebirth.items.MagicItem;
+import com.github.runicrebirth.network.RingCastAnimS2CPacket;
 import com.github.runicrebirth.spells.types.MagicProjectile;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 
-public class AcolyteArcaneRingItem extends MagicItem implements IActivatableRing {
+public class ArcaneAcolyteRingItem extends MagicItem implements IActivatableRing {
 
-    public AcolyteArcaneRingItem(Properties properties) {
+    public ArcaneAcolyteRingItem(Properties properties) {
         super(properties.stacksTo(1));
     }
 
@@ -29,7 +30,13 @@ public class AcolyteArcaneRingItem extends MagicItem implements IActivatableRing
         if (data.isOnCooldown(spell.id())) return;
         if (data.globalCastLockoutTicks() > 0) return;
 
-        Vec3 aimStart = player.getEyePosition();
+        double yawRad = Math.toRadians(player.getYRot());
+        Vec3 fwdDir = new Vec3(Math.sin(yawRad), 0, Math.cos(yawRad));
+        Vec3 rightDir = new Vec3(Math.cos(yawRad), 0, Math.sin(yawRad));
+        Vec3 aimStart = player.getEyePosition()
+            .add(rightDir.scale(-0.35))
+            //.add(fwdDir.scale(0.1))
+            .add(0, -0.35, 0);
         Vec3 aimDir = player.getLookAngle();
 
         SpellCastContext ctx = new SpellCastContext(
@@ -39,12 +46,15 @@ public class AcolyteArcaneRingItem extends MagicItem implements IActivatableRing
 
         SpellParams params = new SpellParams(
             spell.baseDamage(), spell.baseSize(), spell.baseSpeed(),
-            spell.baseDuration(), spell.castingDelayTicks(), 0,
+            spell.baseDuration(), spell.castingDelayTicks() / 2, 0,
             ModElements.ARCANE.get(), spell.damageCategory()
         );
+
+        params.damage = params.damage * (1.0f + params.size) / 2.0f;
 
         spell.onCast(ctx, params);
         data.startCooldown(spell.id(), spell.cooldownTicks());
         data.setGlobalCastLockout(ServerConfig.GLOBAL_CAST_LOCKOUT_TICKS.get());
+        RingCastAnimS2CPacket.send(player, 15);
     }
 }

@@ -25,7 +25,7 @@ public class MagicHammer extends SpellType {
         super(ID);
     }
 
-    @Override public int cooldownTicks() { return 200; }
+    @Override public int cooldownTicks() { return 100; }
     @Override public float baseDamage() { return 12f; }
     @Override public float baseSize() { return 1f; }
     @Override public int castingDelayTicks() { return 20; }

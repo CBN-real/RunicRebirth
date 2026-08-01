@@ -11,6 +11,7 @@ import com.github.runicrebirth.client.ClientMagicData;
 import com.github.runicrebirth.init.ModDataComponents;
 import com.github.runicrebirth.items.SpellWriter;
 import com.github.runicrebirth.spells.modifiers.ChargesModifier;
+import java.util.Map;
 import net.minecraft.world.item.ItemStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import java.util.ArrayList;
@@ -66,9 +67,10 @@ public class SpellStackOverlay implements LayeredDraw.Layer {
         ResourceLocation.fromNamespaceAndPath("runicrebirth", "hud/overlay_slot_border_selected");
     private static final ResourceLocation CHARGE_ICONS =
         ResourceLocation.fromNamespaceAndPath("runicrebirth", "textures/gui/sprites/hud/charge_icons.png");
-    private static final int CHARGE_ICON_SIZE = 7;
-    private static final int CHARGE_ICON_GAP = 1;
-    private static final int CHARGE_TEX_SIZE = 16;
+    private static final int CHARGE_ICON_SMALL = 7;
+    private static final int CHARGE_ICON_LARGE = 11;
+    private static final int CHARGE_TEX_W = 64; // 8 icons × 7px
+    private static final int CHARGE_TEX_H = 16;
     private static final ResourceLocation LOCK_ICON =
         ResourceLocation.fromNamespaceAndPath("runicrebirth", "textures/gui/locked_spell_overlay.png");
     private static final int LOCK_SIZE = 7;
@@ -77,6 +79,13 @@ public class SpellStackOverlay implements LayeredDraw.Layer {
     public void render(GuiGraphics graphics, DeltaTracker delta) {
         Minecraft mc = Minecraft.getInstance();
         if (mc.player == null || mc.options.hideGui) return;
+
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
+        RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
+        drawCooldowns(graphics);
+        RenderSystem.disableBlend();
+
         if (!isHoldingSpellWriter(mc)) return;
 
         ItemStack heldItem = mc.player.getMainHandItem();
@@ -112,6 +121,7 @@ public class SpellStackOverlay implements LayeredDraw.Layer {
         RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
 
         // Active stack (full size, selected border)
+
         drawStackRow(graphics, stacks.get(active), rowLeftX, activeTopY, true, maxSmallSlots,
             elementForEntry(wandData, active), wandData.stacks().get(active), initialCharges);
 
@@ -171,6 +181,49 @@ public class SpellStackOverlay implements LayeredDraw.Layer {
             }
         }
         return false;
+    }
+
+    private static final int COOLDOWN_SIZE = 18;
+    private static final int COOLDOWN_ICON_SIZE = 10;
+    private static final int COOLDOWN_ICON_OFFSET = (COOLDOWN_SIZE - COOLDOWN_ICON_SIZE) / 2;
+    private static final int COOLDOWN_GAP = 3;
+    private static final int COOLDOWN_MARGIN = 10;
+
+    private static void drawCooldowns(GuiGraphics graphics) {
+        Map<ResourceLocation, Integer> remaining = ClientMagicData.cooldownRemaining();
+        if (remaining.isEmpty()) return;
+
+        int screenHeight = graphics.guiHeight();
+        int count = remaining.size();
+        int totalH = count * COOLDOWN_SIZE + Math.max(0, count - 1) * COOLDOWN_GAP;
+        int startY = (screenHeight - totalH) / 2;
+        int x = COOLDOWN_MARGIN;
+
+        int i = 0;
+        for (Map.Entry<ResourceLocation, Integer> entry : remaining.entrySet()) {
+            ResourceLocation spellId = entry.getKey();
+            int rem = entry.getValue();
+            int max = ClientMagicData.cooldownMax(spellId);
+            SpellType type = SpellTypeRegistry.get(spellId);
+            if (type == null) { i++; continue; }
+
+            int y = startY + i * (COOLDOWN_SIZE + COOLDOWN_GAP);
+
+            graphics.blitSprite(SLOT_BIG_EMPTY, x, y, COOLDOWN_SIZE, COOLDOWN_SIZE);
+            graphics.blit(type.getSpellIconPath(),
+                x + COOLDOWN_ICON_OFFSET, y + COOLDOWN_ICON_OFFSET,
+                0, 0, COOLDOWN_ICON_SIZE, COOLDOWN_ICON_SIZE, COOLDOWN_ICON_SIZE, COOLDOWN_ICON_SIZE);
+
+            // Dark sweep from top: shrinks as cooldown expires
+            if (max > 0) {
+                int overlayH = Math.round(COOLDOWN_SIZE * ((float) rem / max));
+                if (overlayH > 0) {
+                    graphics.fill(x, y, x + COOLDOWN_SIZE, y + overlayH, 0x99000000);
+                }
+            }
+
+            i++;
+        }
     }
 
     private static int fullRowWidth(int maxSmallSlots) {
@@ -253,15 +306,32 @@ public class SpellStackOverlay implements LayeredDraw.Layer {
             int remaining = ClientMagicData.charges();
             if (remaining <= 0 && typeInStack != null) remaining = totalCasts;
             if (remaining > 0) {
-                int totalWidth = totalCasts * CHARGE_ICON_SIZE + (totalCasts - 1) * CHARGE_ICON_GAP;
-                int chargeX = rowLeftX + (20 - totalWidth) / 2;
-                int chargeY = rowTopY + BIG_SIZE - CHARGE_ICON_SIZE - 2;
-                for (int i = 0; i < totalCasts; i++) {
-                    int u = i < remaining ? 0 : CHARGE_ICON_SIZE;
-                    g.blit(CHARGE_ICONS, chargeX, chargeY, u, 0,
-                        CHARGE_ICON_SIZE, CHARGE_ICON_SIZE, CHARGE_TEX_SIZE, CHARGE_TEX_SIZE);
-                    chargeX += CHARGE_ICON_SIZE + CHARGE_ICON_GAP;
-                }
+                int colorIdx = Math.min((remaining - 1) / 3 + 1, 7);
+                int filledCount = (remaining - 1) % 3 + 1;
+                int uFilled = colorIdx * CHARGE_ICON_SMALL;
+                int uEmpty = (colorIdx - 1) * CHARGE_ICON_SMALL;
+
+                int slotCenterX = rowLeftX + BIG_SIZE / 2;
+                int largeX = slotCenterX - 9 / 2;
+                int largeY = rowTopY + BIG_SIZE - 5;
+                int smallY = largeY + (CHARGE_ICON_LARGE - CHARGE_ICON_SMALL) / 2 + 1;
+                int leftSmallX = largeX - CHARGE_ICON_SMALL + 1;
+                int rightSmallX = largeX + CHARGE_ICON_LARGE - 2;
+
+                // Middle (large, 11x11)
+                int uMid = filledCount >= 1 ? uFilled : uEmpty;
+                g.blit(CHARGE_ICONS, largeX, largeY, 9, 9,
+                    (float) uMid, 0f, CHARGE_ICON_SMALL, CHARGE_ICON_SMALL, CHARGE_TEX_W, CHARGE_TEX_H);
+
+                // Left (small, 7x7)
+                int uLeft = filledCount >= 2 ? uFilled : uEmpty;
+                g.blit(CHARGE_ICONS, leftSmallX, smallY, 6, 6,
+                    (float) uLeft, 0f, CHARGE_ICON_SMALL, CHARGE_ICON_SMALL, CHARGE_TEX_W, CHARGE_TEX_H);
+
+                // Right (small, 7x7)
+                int uRight = filledCount >= 3 ? uFilled : uEmpty;
+                g.blit(CHARGE_ICONS, rightSmallX, smallY, 6, 6,
+                    (float) uRight, 0f, CHARGE_ICON_SMALL, CHARGE_ICON_SMALL, CHARGE_TEX_W, CHARGE_TEX_H);
             }
         }
     }

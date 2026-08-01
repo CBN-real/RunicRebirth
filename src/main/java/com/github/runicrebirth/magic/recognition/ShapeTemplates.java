@@ -29,7 +29,9 @@ public final class ShapeTemplates {
     public static final ResourceLocation ID_RANGE      = id("range");
     public static final ResourceLocation ID_TWO_CASTS  = id("two_casts");
     public static final ResourceLocation ID_FOUR_CASTS = id("four_casts");
-    public static final ResourceLocation ID_CHARGES    = id("charges");
+    public static final ResourceLocation ID_CHARGES       = id("charges");
+    public static final ResourceLocation ID_CHARGES_THREE = id("charges_three");
+    public static final ResourceLocation ID_CHARGES_FOUR  = id("charges_four");
     public static final ResourceLocation ID_PLUS_TWO   = id("plus_two");
     public static final ResourceLocation ID_PLUS_FOUR  = id("plus_four");
     public static final ResourceLocation ID_SHARP_BOOST = id("sharp_boost");

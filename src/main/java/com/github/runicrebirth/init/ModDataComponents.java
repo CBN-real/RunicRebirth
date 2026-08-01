@@ -7,6 +7,7 @@ import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.component.ItemContainerContents;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
@@ -42,6 +43,10 @@ public final class ModDataComponents {
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> INITIAL_CHARGES =
         COMPONENTS.registerComponentType("initial_charges",
             b -> b.persistent(Codec.INT).networkSynchronized(ByteBufCodecs.INT));
+
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<ItemContainerContents>> KEY_RING_INVENTORY =
+        COMPONENTS.registerComponentType("key_ring_inventory",
+            b -> b.persistent(ItemContainerContents.CODEC).networkSynchronized(ItemContainerContents.STREAM_CODEC));
 
     private ModDataComponents() {}
 

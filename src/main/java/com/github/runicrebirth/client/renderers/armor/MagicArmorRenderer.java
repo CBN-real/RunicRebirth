@@ -1,6 +1,8 @@
 package com.github.runicrebirth.client.renderers.armor;
 
 import com.github.runicrebirth.items.armor.MagicArmorItem;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.resources.ResourceLocation;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import software.bernie.geckolib.model.GeoModel;
@@ -11,6 +13,11 @@ public class MagicArmorRenderer<T extends MagicArmorItem> extends GeoArmorRender
 
     public MagicArmorRenderer(GeoModel<T> model) {
         super(model);
+    }
+
+    @Override
+    public RenderType getRenderType(T animatable, ResourceLocation texture, net.minecraft.client.renderer.MultiBufferSource bufferSource, float partialTick) {
+        return RenderType.eyes(texture);
     }
 
 

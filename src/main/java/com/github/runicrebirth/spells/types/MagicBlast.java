@@ -19,7 +19,7 @@ public class MagicBlast extends SpellType {
 
     public MagicBlast() { super(ID); }
 
-    @Override public int cooldownTicks() { return 120; }
+    @Override public int cooldownTicks() { return 20; }
     @Override public float baseDamage() { return 2.5f; }
     @Override public float baseSize() { return 2f; }
 

@@ -2,6 +2,14 @@ package com.github.runicrebirth.init;
 
 import com.github.runicrebirth.RunicRebirth;
 import com.github.runicrebirth.entities.DrawingCanvasEntity;
+import com.github.runicrebirth.entities.MagicHandEntity;
+import com.github.runicrebirth.entities.PhantomMinerEntity;
+import com.github.runicrebirth.entities.mobs.RunesteelGolemEntity;
+import com.github.runicrebirth.entities.mobs.SkeletalMageAcolyteEntity;
+import com.github.runicrebirth.entities.mobs.SkeletalWizardAcolyteEntity;
+import com.github.runicrebirth.entities.mobs.ZombifiedArtificerAcolyteEntity;
+import com.github.runicrebirth.entities.mobs.ZombifiedRunebladeAcolyteEntity;
+import com.github.runicrebirth.entities.spells.ArcaneTetherEntity;
 import com.github.runicrebirth.entities.spells.EnergyCracklingEntity;
 import com.github.runicrebirth.entities.spells.TargetCircleEntity;
 import com.github.runicrebirth.entities.spells.MagicArrowEntity;
@@ -31,6 +39,7 @@ import net.minecraft.world.entity.EntityType.Builder;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.SpawnPlacementTypes;
 import net.minecraft.world.entity.animal.Rabbit;
+import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -40,6 +49,7 @@ import net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent.Operatio
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
+@EventBusSubscriber(modid = RunicRebirth.MODID, bus = EventBusSubscriber.Bus.MOD)
 public class ModEntities {
 
     public static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(
@@ -226,6 +236,15 @@ public class ModEntities {
             .noSave()
             .build("magic_ballista_demo"));
 
+    public static final DeferredHolder<EntityType<?>, EntityType<ArcaneTetherEntity>> ARCANE_TETHER = ENTITIES.register(
+        "arcane_tether",
+        () -> EntityType.Builder.<ArcaneTetherEntity>of(ArcaneTetherEntity::new, MobCategory.MISC)
+            .sized(0.1F, 0.1F)
+            .clientTrackingRange(32)
+            .updateInterval(3)
+            .noSave()
+            .build("arcane_tether"));
+
     public static final DeferredHolder<EntityType<?>, EntityType<EnergyCracklingEntity>> ENERGY_CRACKLING = ENTITIES.register(
         "energy_crackling",
         () -> EntityType.Builder.<EnergyCracklingEntity>of(EnergyCracklingEntity::new, MobCategory.MISC)
@@ -244,6 +263,24 @@ public class ModEntities {
             .noSave()
             .build("drawing_canvas"));
 
+    public static final DeferredHolder<EntityType<?>, EntityType<MagicHandEntity>> MAGIC_HAND = ENTITIES.register(
+        "magic_hand",
+        () -> EntityType.Builder.<MagicHandEntity>of(MagicHandEntity::new, MobCategory.MISC)
+            .sized(0.8F, 0.8F)
+            .clientTrackingRange(8)
+            .updateInterval(2)
+            .noSave()
+            .build("magic_hand"));
+
+    public static final DeferredHolder<EntityType<?>, EntityType<PhantomMinerEntity>> PHANTOM_MINER = ENTITIES.register(
+        "phantom_miner",
+        () -> EntityType.Builder.<PhantomMinerEntity>of(PhantomMinerEntity::new, MobCategory.MISC)
+            .sized(0.1F, 0.1F)
+            .clientTrackingRange(8)
+            .updateInterval(2)
+            .noSave()
+            .build("phantom_miner"));
+
     public static final DeferredHolder<EntityType<?>, EntityType<TargetCircleEntity>> TARGET_CIRCLE = ENTITIES.register(
         "target_circle",
         () -> EntityType.Builder.<TargetCircleEntity>of(TargetCircleEntity::new, MobCategory.MISC)
@@ -251,6 +288,54 @@ public class ModEntities {
             .clientTrackingRange(0)
             .noSave()
             .build("target_circle"));
+
+    public static final DeferredHolder<EntityType<?>, EntityType<RunesteelGolemEntity>> RUNESTEEL_GOLEM = ENTITIES.register(
+        "runesteel_golem",
+        () -> EntityType.Builder.<RunesteelGolemEntity>of(RunesteelGolemEntity::new, MobCategory.MONSTER)
+            .sized(1.4F, 2.7F).clientTrackingRange(10).updateInterval(3).build("runesteel_golem"));
+
+    public static final DeferredHolder<EntityType<?>, EntityType<ZombifiedRunebladeAcolyteEntity>> ZOMBIFIED_RUNEBLADE_ACOLYTE = ENTITIES.register(
+        "zombified_runeblade_acolyte",
+        () -> EntityType.Builder.<ZombifiedRunebladeAcolyteEntity>of(ZombifiedRunebladeAcolyteEntity::new, MobCategory.MONSTER)
+            .sized(0.6F, 1.95F).clientTrackingRange(8).updateInterval(3).build("zombified_runeblade_acolyte"));
+
+    public static final DeferredHolder<EntityType<?>, EntityType<SkeletalMageAcolyteEntity>> SKELETAL_MAGE_ACOLYTE = ENTITIES.register(
+        "skeletal_mage_acolyte",
+        () -> EntityType.Builder.<SkeletalMageAcolyteEntity>of(SkeletalMageAcolyteEntity::new, MobCategory.MONSTER)
+            .sized(0.6F, 1.99F).clientTrackingRange(10).updateInterval(3).build("skeletal_mage_acolyte"));
+
+    public static final DeferredHolder<EntityType<?>, EntityType<SkeletalWizardAcolyteEntity>> SKELETAL_WIZARD_ACOLYTE = ENTITIES.register(
+        "skeletal_wizard_acolyte",
+        () -> EntityType.Builder.<SkeletalWizardAcolyteEntity>of(SkeletalWizardAcolyteEntity::new, MobCategory.MONSTER)
+            .sized(0.6F, 1.99F).clientTrackingRange(10).updateInterval(3).build("skeletal_wizard_acolyte"));
+
+    public static final DeferredHolder<EntityType<?>, EntityType<ZombifiedArtificerAcolyteEntity>> ZOMBIFIED_ARTIFICER_ACOLYTE = ENTITIES.register(
+        "zombified_artificer_acolyte",
+        () -> EntityType.Builder.<ZombifiedArtificerAcolyteEntity>of(ZombifiedArtificerAcolyteEntity::new, MobCategory.MONSTER)
+            .sized(0.6F, 1.95F).clientTrackingRange(8).updateInterval(3).build("zombified_artificer_acolyte"));
+
+    @SubscribeEvent
+    public static void registerAttributes(EntityAttributeCreationEvent event) {
+        event.put(RUNESTEEL_GOLEM.get(), RunesteelGolemEntity.createAttributes().build());
+        event.put(ZOMBIFIED_RUNEBLADE_ACOLYTE.get(), ZombifiedRunebladeAcolyteEntity.createAttributes().build());
+        event.put(SKELETAL_MAGE_ACOLYTE.get(), SkeletalMageAcolyteEntity.createAttributes().build());
+        event.put(SKELETAL_WIZARD_ACOLYTE.get(), SkeletalWizardAcolyteEntity.createAttributes().build());
+        event.put(ZOMBIFIED_ARTIFICER_ACOLYTE.get(), ZombifiedArtificerAcolyteEntity.createAttributes().build());
+    }
+
+    @SubscribeEvent
+    public static void registerSpawnPlacements(RegisterSpawnPlacementsEvent event) {
+        event.register(RUNESTEEL_GOLEM.get(), SpawnPlacementTypes.ON_GROUND,
+            Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Monster::checkMonsterSpawnRules, Operation.OR);
+        event.register(ZOMBIFIED_RUNEBLADE_ACOLYTE.get(), SpawnPlacementTypes.ON_GROUND,
+            Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Monster::checkMonsterSpawnRules, Operation.OR);
+        event.register(SKELETAL_MAGE_ACOLYTE.get(), SpawnPlacementTypes.ON_GROUND,
+            Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Monster::checkMonsterSpawnRules, Operation.OR);
+        event.register(SKELETAL_WIZARD_ACOLYTE.get(), SpawnPlacementTypes.ON_GROUND,
+            Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Monster::checkMonsterSpawnRules, Operation.OR);
+        event.register(ZOMBIFIED_ARTIFICER_ACOLYTE.get(), SpawnPlacementTypes.ON_GROUND,
+            Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Monster::checkMonsterSpawnRules, Operation.OR);
+    }
 
     private static <T extends Entity> DeferredHolder<EntityType<?>, EntityType<T>> register(
         String key, EntityType.EntityFactory<T> factory, MobCategory category, Function<Builder<T>, Builder<T>> builder) {

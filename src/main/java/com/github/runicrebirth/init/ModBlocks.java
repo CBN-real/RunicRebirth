@@ -34,6 +34,12 @@ public class ModBlocks {
     public static final DeferredBlock<Block> RUNIC_STONE_PILLAR = BLOCKS.register("runic_stone_pillar",
             () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE).noOcclusion()));
 
+    public static final DeferredBlock<Block> RUNIC_STONE_BRICKS = BLOCKS.register("runic_stone_bricks",
+        () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE_BRICKS)));
+
+    public static final DeferredBlock<Block> ARCANE_RUNIC_STONE_BRICKS = BLOCKS.register("arcane_runic_stone_bricks",
+        () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE_BRICKS).lightLevel(s -> 4)));
+
     public static final DeferredBlock<OculusPortalBlock> OCULUS_PORTAL = BLOCKS.register("oculus_portal",
             () -> new OculusPortalBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.END_PORTAL).noOcclusion().lightLevel(s -> 12)));
 

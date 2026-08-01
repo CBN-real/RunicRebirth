@@ -9,8 +9,13 @@ import com.github.runicrebirth.items.RunicCircuitItem;
 import com.github.runicrebirth.items.RunicCodexItem;
 import com.github.runicrebirth.items.armor.AcolyteSetItem;
 import com.github.runicrebirth.items.armor.AdeptSetItem;
-import com.github.runicrebirth.items.curios.AcolyteArcaneRingItem;
+import com.github.runicrebirth.items.RunicKeyRingItem;
+import com.github.runicrebirth.items.curios.ArcaneAcolyteRingItem;
+import com.github.runicrebirth.items.curios.ArcaneTetherRingItem;
+import com.github.runicrebirth.items.curios.MagicHandRingItem;
 import com.github.runicrebirth.items.curios.RingOfExpansionItem;
+import com.github.runicrebirth.items.curios.RingOfLeapingGalesItem;
+import com.github.runicrebirth.items.curios.RingOfPhantomMiningItem;
 import com.github.runicrebirth.spells.modifiers.AdditiveSizeModifier;
 import com.github.runicrebirth.util.ItemPropertiesHelper;
 import net.minecraft.world.item.ArmorItem;
@@ -45,8 +50,23 @@ public final class ModItems {
     public static final DeferredItem<RingOfExpansionItem> RING_OF_EXPANSION = ITEMS.registerItem(
         "ring_of_expansion", RingOfExpansionItem::new, ItemPropertiesHelper.equipment().rarity(net.minecraft.world.item.Rarity.UNCOMMON));
 
-    public static final DeferredItem<AcolyteArcaneRingItem> ACOLYTE_ARCANE_RING = ITEMS.registerItem(
-        "acolyte_arcane_ring", AcolyteArcaneRingItem::new, ItemPropertiesHelper.equipment());
+    public static final DeferredItem<ArcaneAcolyteRingItem> ARCANE_ACOLYTE_RING = ITEMS.registerItem(
+        "arcane_acolyte_ring", ArcaneAcolyteRingItem::new, ItemPropertiesHelper.equipment());
+
+    public static final DeferredItem<ArcaneTetherRingItem> ARCANE_TETHER_RING = ITEMS.registerItem(
+        "arcane_tether_ring", ArcaneTetherRingItem::new, ItemPropertiesHelper.equipment());
+
+    public static final DeferredItem<MagicHandRingItem> MAGIC_HAND_RING = ITEMS.registerItem(
+        "magic_hand_ring", MagicHandRingItem::new, ItemPropertiesHelper.equipment());
+
+    public static final DeferredItem<RingOfLeapingGalesItem> RING_OF_LEAPING_GALES = ITEMS.registerItem(
+        "ring_of_leaping_gales", RingOfLeapingGalesItem::new, ItemPropertiesHelper.equipment());
+
+    public static final DeferredItem<RingOfPhantomMiningItem> RING_OF_PHANTOM_MINING = ITEMS.registerItem(
+        "ring_of_phantom_mining", RingOfPhantomMiningItem::new, ItemPropertiesHelper.equipment());
+
+    public static final DeferredItem<RunicKeyRingItem> RUNIC_KEY_RING = ITEMS.registerItem(
+        "runic_key_ring", RunicKeyRingItem::new, new Item.Properties().stacksTo(1));
 
     public static final DeferredItem<RunicCodexItem> RUNIC_CODEX = ITEMS.registerItem(
         "runic_codex", RunicCodexItem::new, new Item.Properties().stacksTo(1));
@@ -136,22 +156,22 @@ public final class ModItems {
     // Adept Mage Set
     public static final DeferredItem<AdeptSetItem> ADEPT_MAGE_HOOD = ITEMS.registerItem(
         "adept_mage_hood",
-        props -> new AdeptSetItem(ModArmorMaterials.ADEPT, ArmorItem.Type.HELMET, props, "adept_mage_set", "adept_armor", false, List.of()),
+        props -> new AdeptSetItem(ModArmorMaterials.ADEPT, ArmorItem.Type.HELMET, props, "adept_mage_set", "adept_armor", true, List.of()),
         new Item.Properties().durability(ArmorItem.Type.HELMET.getDurability(ADEPT_DURABILITY_MULT)));
 
     public static final DeferredItem<AdeptSetItem> ADEPT_MAGE_ROBES = ITEMS.registerItem(
         "adept_mage_robes",
-        props -> new AdeptSetItem(ModArmorMaterials.ADEPT, ArmorItem.Type.CHESTPLATE, props, "adept_mage_set", "adept_armor", false, List.of()),
+        props -> new AdeptSetItem(ModArmorMaterials.ADEPT, ArmorItem.Type.CHESTPLATE, props, "adept_mage_set", "adept_armor", true, List.of()),
         new Item.Properties().durability(ArmorItem.Type.CHESTPLATE.getDurability(ADEPT_DURABILITY_MULT)));
 
     public static final DeferredItem<AdeptSetItem> ADEPT_MAGE_PANTS = ITEMS.registerItem(
         "adept_mage_pants",
-        props -> new AdeptSetItem(ModArmorMaterials.ADEPT, ArmorItem.Type.LEGGINGS, props, "adept_mage_set", "adept_armor", false, List.of()),
+        props -> new AdeptSetItem(ModArmorMaterials.ADEPT, ArmorItem.Type.LEGGINGS, props, "adept_mage_set", "adept_armor", true, List.of()),
         new Item.Properties().durability(ArmorItem.Type.LEGGINGS.getDurability(ADEPT_DURABILITY_MULT)));
 
     public static final DeferredItem<AdeptSetItem> ADEPT_MAGE_BOOTS = ITEMS.registerItem(
         "adept_mage_boots",
-        props -> new AdeptSetItem(ModArmorMaterials.ADEPT, ArmorItem.Type.BOOTS, props, "adept_mage_set", "adept_armor", false, List.of()),
+        props -> new AdeptSetItem(ModArmorMaterials.ADEPT, ArmorItem.Type.BOOTS, props, "adept_mage_set", "adept_armor", true, List.of()),
         new Item.Properties().durability(ArmorItem.Type.BOOTS.getDurability(ADEPT_DURABILITY_MULT)));
 
     // Adept Artificer Set
@@ -195,6 +215,8 @@ public final class ModItems {
     public static final DeferredItem<BlockItem> RUNIC_STONE_SLAB = ITEMS.registerSimpleBlockItem(ModBlocks.RUNIC_STONE_SLAB);
     public static final DeferredItem<BlockItem> RUNIC_STONE_STAIRS = ITEMS.registerSimpleBlockItem(ModBlocks.RUNIC_STONE_STAIRS);
     public static final DeferredItem<BlockItem> RUNIC_STONE_PILLAR = ITEMS.registerSimpleBlockItem(ModBlocks.RUNIC_STONE_PILLAR);
+    public static final DeferredItem<BlockItem> RUNIC_STONE_BRICKS = ITEMS.registerSimpleBlockItem(ModBlocks.RUNIC_STONE_BRICKS);
+    public static final DeferredItem<BlockItem> ARCANE_RUNIC_STONE_BRICKS = ITEMS.registerSimpleBlockItem(ModBlocks.ARCANE_RUNIC_STONE_BRICKS);
     public static final DeferredItem<RunicBlockItem> OCULUS_PORTAL = ITEMS.register("oculus_portal",
             () -> new RunicBlockItem(ModBlocks.OCULUS_PORTAL.get(), new Item.Properties(), "inactive", "oculus_portal").withHandRotationY(90));
     public static final DeferredItem<RunicBlockItem> OCULUS_CONTROLLER = ITEMS.register("oculus_controller",

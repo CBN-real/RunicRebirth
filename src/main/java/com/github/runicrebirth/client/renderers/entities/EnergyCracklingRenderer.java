@@ -50,15 +50,38 @@ public class EnergyCracklingRenderer extends EntityRenderer<EnergyCracklingEntit
         RandomSource rand = RandomSource.create(seed);
 
         int boltCount = Math.max(1, Math.round(BASE_BOLT_COUNT * density));
+        float length = entity.getCrackleLength();
 
         VertexConsumer consumer = buffer.getBuffer(RenderType.lightning());
         Matrix4f pose = poseStack.last().pose();
 
-        for (int i = 0; i < boltCount; i++) {
-            if (rand.nextFloat() < 0.25f) continue;
-            Vec3 start = randomInSphere(rand, radius);
-            Vec3 end   = randomInSphere(rand, radius);
-            drawBolt(consumer, pose, start, end, r, g, b, rand, thickness);
+        if (length > 0) {
+            float lateralSpread = radius * 0.25f;
+            for (int i = 0; i < boltCount; i++) {
+                if (rand.nextFloat() < 0.25f) continue;
+                float anchorAngle = rand.nextFloat() * Mth.TWO_PI;
+                float anchorR = (float) Math.sqrt(rand.nextFloat()) * radius;
+                float ax = anchorR * Mth.cos(anchorAngle);
+                float az = anchorR * Mth.sin(anchorAngle);
+                Vec3 start = new Vec3(
+                    ax + (rand.nextDouble() - 0.5) * lateralSpread,
+                    (rand.nextDouble() - 0.5) * length,
+                    az + (rand.nextDouble() - 0.5) * lateralSpread
+                );
+                Vec3 end = new Vec3(
+                    ax + (rand.nextDouble() - 0.5) * lateralSpread,
+                    (rand.nextDouble() - 0.5) * length,
+                    az + (rand.nextDouble() - 0.5) * lateralSpread
+                );
+                drawBoltCylinder(consumer, pose, start, end, r, g, b, rand, thickness, lateralSpread);
+            }
+        } else {
+            for (int i = 0; i < boltCount; i++) {
+                if (rand.nextFloat() < 0.25f) continue;
+                Vec3 start = randomInSphere(rand, radius);
+                Vec3 end   = randomInSphere(rand, radius);
+                drawBolt(consumer, pose, start, end, r, g, b, rand, thickness);
+            }
         }
 
         super.render(entity, yaw, partialTick, poseStack, buffer, packedLight);
@@ -132,6 +155,60 @@ public class EnergyCracklingRenderer extends EntityRenderer<EnergyCracklingEntit
         }
     }
 
+
+    private static void drawBoltCylinder(VertexConsumer consumer, Matrix4f pose,
+                                          Vec3 start, Vec3 end,
+                                          float r, float g, float b, RandomSource rand,
+                                          float thickness, float lateralSpread) {
+        Vec3 totalDelta = end.subtract(start);
+        double boltLen = totalDelta.length();
+        if (boltLen < 0.05) return;
+
+        int segments = 3 + rand.nextInt(3);
+        Vec3[] points = new Vec3[segments + 1];
+        points[0] = start;
+        for (int i = 1; i < segments; i++) {
+            double t = (double) i / segments;
+            Vec3 straight = start.add(totalDelta.scale(t));
+            double hJitter = lateralSpread * 0.6;
+            double vJitter = boltLen * 0.35;
+            points[i] = straight.add(
+                (rand.nextDouble() - 0.5) * hJitter,
+                (rand.nextDouble() - 0.5) * vJitter,
+                (rand.nextDouble() - 0.5) * hJitter
+            );
+        }
+        points[segments] = end;
+
+        for (int i = 0; i < segments; i++) {
+            Vec3 from = points[i];
+            Vec3 to   = points[i + 1];
+
+            drawTube(consumer, pose, from, to, 0.025f * thickness, 1f, 1f, 1f, 0.9f);
+            drawTube(consumer, pose, from, to, 0.055f * thickness, r,  g,  b,  0.4f);
+            drawTube(consumer, pose, from, to, 0.11f  * thickness, r,  g,  b,  0.15f);
+
+            if (rand.nextFloat() < 0.5f) {
+                Vec3 branch1 = to.add(
+                    (rand.nextDouble() - 0.5) * lateralSpread * 0.8,
+                    (rand.nextDouble() - 0.5) * boltLen * 0.4,
+                    (rand.nextDouble() - 0.5) * lateralSpread * 0.8
+                );
+                drawTube(consumer, pose, to, branch1, 0.015f * thickness, 1f, 1f, 1f, 0.7f);
+                drawTube(consumer, pose, to, branch1, 0.035f * thickness, r,  g,  b,  0.3f);
+
+                if (rand.nextFloat() < 0.35f) {
+                    Vec3 branch2 = branch1.add(
+                        (rand.nextDouble() - 0.5) * lateralSpread * 0.5,
+                        (rand.nextDouble() - 0.5) * boltLen * 0.25,
+                        (rand.nextDouble() - 0.5) * lateralSpread * 0.5
+                    );
+                    drawTube(consumer, pose, branch1, branch2, 0.008f * thickness, 1f, 1f, 1f, 0.5f);
+                    drawTube(consumer, pose, branch1, branch2, 0.02f  * thickness, r,  g,  b,  0.2f);
+                }
+            }
+        }
+    }
 
     private static void drawTube(VertexConsumer consumer, Matrix4f pose,
                                   Vec3 from, Vec3 to, float width,

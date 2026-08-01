@@ -1,7 +1,5 @@
 package com.github.runicrebirth.capabilities.magic;
 
-import com.github.runicrebirth.api.spells.SpellComponent;
-import com.github.runicrebirth.api.spells.SpellParams;
 import com.github.runicrebirth.api.spells.SpellStack;
 import com.github.runicrebirth.init.ModAttachments;
 import com.mojang.serialization.Codec;
@@ -21,7 +19,8 @@ import net.minecraft.world.entity.player.Player;
 public class MagicData {
 
     public static final Codec<MagicData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-        Codec.unboundedMap(ResourceLocation.CODEC, Codec.INT).fieldOf("cooldowns").forGetter(d -> d.cooldowns)
+        Codec.unboundedMap(ResourceLocation.CODEC, Codec.INT).fieldOf("cooldowns").forGetter(d -> d.cooldowns),
+        Codec.INT.optionalFieldOf("phantom_mining_ticks", 0).forGetter(d -> d.phantomMiningTicks)
     ).apply(instance, MagicData::fromCodec));
 
     private final Map<ResourceLocation, Integer> cooldowns;
@@ -29,21 +28,21 @@ public class MagicData {
     private int globalCastLockoutTicks;
     private boolean drawing;
     private int canvasEntityId = -1;
+    private int phantomMiningTicks;
+    private boolean phantomMiningJustExpired;
+    private int magicHandEntityId = -1;
 
-    private int charges;
-    private ResourceLocation chargedSpellId;
-    private SpellParams chargedParams;
-    private record SlotChargeState(int count, ResourceLocation spellId, SpellParams params) {}
-    private final Map<Integer, SlotChargeState> slotCharges = new HashMap<>();
+
     public MagicData() {
         this.cooldowns = new HashMap<>();
         this.globalCastLockoutTicks = 0;
         this.drawing = false;
     }
 
-    private static MagicData fromCodec(Map<ResourceLocation, Integer> cooldowns) {
+    private static MagicData fromCodec(Map<ResourceLocation, Integer> cooldowns, int phantomMiningTicks) {
         MagicData d = new MagicData();
         d.cooldowns.putAll(cooldowns);
+        d.phantomMiningTicks = Math.max(0, phantomMiningTicks);
         return d;
     }
 
@@ -80,6 +79,20 @@ public class MagicData {
     public void setCanvasEntityId(int id) { this.canvasEntityId = id; }
     public void clearCanvasEntityId() { this.canvasEntityId = -1; }
 
+    // Phantom Mining effect
+    public int phantomMiningTicks() { return phantomMiningTicks; }
+    public void setPhantomMiningTicks(int ticks) { this.phantomMiningTicks = Math.max(0, ticks); }
+    public boolean consumePhantomMiningExpired() {
+        boolean v = phantomMiningJustExpired;
+        phantomMiningJustExpired = false;
+        return v;
+    }
+
+    // Magic hand ring — transient, not persisted
+    public int magicHandEntityId() { return magicHandEntityId; }
+    public void setMagicHandEntityId(int id) { magicHandEntityId = id; }
+    public void clearMagicHandEntityId() { magicHandEntityId = -1; }
+
     // Pending circuit inscription (transient, not persisted)
     private SpellStack pendingCircuitSpell;
 
@@ -96,55 +109,6 @@ public class MagicData {
         return pendingCircuitSpell != null && !pendingCircuitSpell.isEmpty();
     }
 
-    // Charges
-    public int charges() { return charges; }
-    public boolean hasCharges() { return charges > 0; }
-    public ResourceLocation chargedSpellId() { return chargedSpellId; }
-    public SpellParams chargedParams() { return chargedParams; }
-
-    public void setCharges(int count, ResourceLocation spellId, SpellParams params) {
-        this.charges = count;
-        this.chargedSpellId = spellId;
-        this.chargedParams = params.copy();
-    }
-
-    public void consumeCharge() {
-        if (charges > 0) charges--;
-        if (charges <= 0) {
-            chargedSpellId = null;
-            chargedParams = null;
-        }
-    }
-
-    public void clearCharges() {
-        charges = 0;
-        chargedSpellId = null;
-        chargedParams = null;
-    }
-
-    public void saveChargesToSlot(int slot) {
-        if (charges > 0 && chargedSpellId != null) {
-            slotCharges.put(slot, new SlotChargeState(charges, chargedSpellId, chargedParams.copy()));
-        } else {
-            slotCharges.remove(slot);
-        }
-        charges = 0;
-        chargedSpellId = null;
-        chargedParams = null;
-    }
-
-    public void restoreChargesFromSlot(int slot) {
-        SlotChargeState state = slotCharges.remove(slot);
-        if (state != null) {
-            charges = state.count();
-            chargedSpellId = state.spellId();
-            chargedParams = state.params();
-        } else {
-            charges = 0;
-            chargedSpellId = null;
-            chargedParams = null;
-        }
-    }
 
     public void tick() {
         if (!cooldowns.isEmpty()) {
@@ -156,5 +120,9 @@ public class MagicData {
             });
         }
         if (globalCastLockoutTicks > 0) globalCastLockoutTicks--;
+        if (phantomMiningTicks > 0) {
+            phantomMiningTicks--;
+            if (phantomMiningTicks == 0) phantomMiningJustExpired = true;
+        }
     }
 }

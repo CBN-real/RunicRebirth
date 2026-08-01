@@ -24,7 +24,7 @@ public class MagicBeam extends SpellType {
 
     public MagicBeam() { super(ID); }
 
-    @Override public int cooldownTicks() { return 80; }
+    @Override public int cooldownTicks() { return 20; }
     @Override public float baseDamage() { return 3f; }
 
     @Override
@@ -38,7 +38,7 @@ public class MagicBeam extends SpellType {
 
     @Override
     public CastResult onCast(SpellCastContext ctx, SpellParams params) {
-        double range = 12.0 * params.size;
+        double range = 16.0 * (1.0 + params.size) / 2;
         Vec3 dir = ctx.aimDirection().normalize();
         Vec3 start = ctx.aimStart().add(dir.scale(0.5));
         Vec3 end = start.add(dir.scale(range));

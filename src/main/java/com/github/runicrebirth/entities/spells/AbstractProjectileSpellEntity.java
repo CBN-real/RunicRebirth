@@ -50,6 +50,8 @@ public abstract class AbstractProjectileSpellEntity extends ThrowableProjectile 
         SynchedEntityData.defineId(AbstractProjectileSpellEntity.class, EntityDataSerializers.FLOAT);
     private static final EntityDataAccessor<Integer> DATA_PHASE =
         SynchedEntityData.defineId(AbstractProjectileSpellEntity.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Integer> DATA_TARGET_ID =
+        SynchedEntityData.defineId(AbstractProjectileSpellEntity.class, EntityDataSerializers.INT);
 
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     private long displayStartNanos;
@@ -67,7 +69,7 @@ public abstract class AbstractProjectileSpellEntity extends ThrowableProjectile 
     protected int endTicks = 15;
     protected int phaseAge;
     protected LivingEntity trackingTarget;
-    protected float homingStrength = 0.05f;
+    protected float homingStrength = 0.12f;
     private Vec3 storedDirection;
     private float storedSpeed;
 
@@ -121,6 +123,7 @@ public abstract class AbstractProjectileSpellEntity extends ThrowableProjectile 
         builder.define(DATA_ELEMENT, ModElements.ARCANE.getId().toString());
         builder.define(DATA_SIZE, 1f);
         builder.define(DATA_PHASE, SpellPhase.CHARGING.ordinal());
+        builder.define(DATA_TARGET_ID, -1);
     }
 
     public SpellPhase getPhase() {
@@ -168,7 +171,6 @@ public abstract class AbstractProjectileSpellEntity extends ThrowableProjectile 
             }
             if (phase == SpellPhase.ACTIVE) {
                 onActiveTick();
-                applyHoming();
                 if (getPhase() == SpellPhase.ACTIVE) {
                     scanWideBoundingBoxHits();
                 }
@@ -182,9 +184,21 @@ public abstract class AbstractProjectileSpellEntity extends ThrowableProjectile 
             }
         } else {
             spawnActiveParticles();
+            resolveClientTarget();
+        }
+        // Applied both sides so client steers its own extrapolated path, preventing position-correction jerk
+        if (getPhase() == SpellPhase.ACTIVE) {
+            applyHoming();
         }
         super.tick();
+    }
 
+    private void resolveClientTarget() {
+        if (trackingTarget != null && trackingTarget.isAlive()) return;
+        int id = this.entityData.get(DATA_TARGET_ID);
+        if (id == -1) return;
+        Entity e = this.level().getEntity(id);
+        if (e instanceof LivingEntity le) trackingTarget = le;
     }
 
     protected void scanWideBoundingBoxHits() {
@@ -213,15 +227,23 @@ public abstract class AbstractProjectileSpellEntity extends ThrowableProjectile 
 
     public void setTrackingTarget(LivingEntity target) {
         this.trackingTarget = target;
+        this.entityData.set(DATA_TARGET_ID, target != null ? target.getId() : -1);
     }
 
     private void applyHoming() {
         if (trackingTarget == null || !trackingTarget.isAlive()) return;
-        Vec3 toTarget = trackingTarget.getBoundingBox().getCenter().subtract(this.position()).normalize();
+        Vec3 toTarget = trackingTarget.getBoundingBox().getCenter().subtract(this.position());
+        double dist = toTarget.length();
+        if (dist < 1e-6) return;
+        Vec3 toTargetDir = toTarget.scale(1.0 / dist);
         Vec3 current = this.getDeltaMovement();
         double speed = current.length();
         if (speed < 1e-6) return;
-        this.setDeltaMovement(current.add(toTarget.scale(homingStrength * speed)).normalize().scale(speed));
+        // Taper off near target to prevent oscillation/jerkiness
+        double strength = homingStrength * Math.min(1.0, dist / 3.0);
+        Vec3 currentDir = current.normalize();
+        Vec3 newDir = currentDir.add(toTargetDir.subtract(currentDir).scale(strength)).normalize();
+        this.setDeltaMovement(newDir.scale(speed));
     }
 
     protected void beginEnding() {

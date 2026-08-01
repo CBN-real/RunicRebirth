@@ -20,11 +20,12 @@ public class MagicSlash extends SpellType {
         super(ID);
     }
 
-    @Override public int cooldownTicks() { return 80; }
+    @Override public int cooldownTicks() { return 40; }
     @Override public float baseDamage() { return 4f; }
     @Override public float baseSize() { return 1.0f; }
     @Override public float spellHeight() { return 0.125f * baseSize(); }
     @Override public float baseSpeed() { return 2.0f; }
+
 
     @Override public String iconName() { return "slash"; }
     @Override public Element defaultElement() { return ModElements.ARCANE.get(); }

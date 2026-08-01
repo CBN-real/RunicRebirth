@@ -23,9 +23,10 @@ public class RunicRebirthLangProvider extends LanguageProvider {
         add("item.runicrebirth.adept_staff", "Adept Staff");
         add("item.runicrebirth.inscribed_wand", "Inscribed Wand");
         add("item.runicrebirth.ring_of_expansion", "Ring of Expansion");
-        add("item.runicrebirth.acolyte_arcane_ring", "Acolyte Arcane Ring");
+        add("item.runicrebirth.arcane_acolyte_ring", "Arcane Acolyte Ring");
+        add("item.runicrebirth.arcane_tether_ring", "Arcane Tether Ring");
+        add("item.runicrebirth.magic_hand_ring", "Ring of the Magic Hand");
         add("key.runicrebirth.activate_ring", "Activate Ring");
-        add("key.categories.runicrebirth", "Interactive Magic");
         add("item.runicrebirth.runic_codex", "Runic Codex");
         add("item.runicrebirth.acolyte_wizard_hat", "Acolyte Wizard Hat");
         add("item.runicrebirth.acolyte_robes", "Acolyte Robes");
@@ -52,6 +53,9 @@ public class RunicRebirthLangProvider extends LanguageProvider {
         add("item.runicrebirth.adept_artificer_pants", "Adept Artificer Pants");
         add("item.runicrebirth.adept_artificer_boots", "Adept Artificer Boots");
 
+        add("item.runicrebirth.ring_of_leaping_gales", "Ring of Leaping Gales");
+        add("item.runicrebirth.ring_of_phantom_mining", "Ring of Phantom Mining");
+
         add("entity.runicrebirth.magic_projectile", "Magic Projectile");
         add("entity.runicrebirth.magic_arrow", "Magic Arrow");
         add("entity.runicrebirth.magic_slash", "Magic Slash");
@@ -63,6 +67,11 @@ public class RunicRebirthLangProvider extends LanguageProvider {
         add("entity.runicrebirth.basic_circle", "Spell Circle");
         add("entity.runicrebirth.magic_blast", "Magic Blast");
         add("entity.runicrebirth.infusion_circle", "Infusion Circle");
+        add("entity.runicrebirth.runesteel_golem", "Runesteel Golem");
+        add("entity.runicrebirth.zombified_runeblade_acolyte", "Zombified Runeblade Acolyte");
+        add("entity.runicrebirth.skeletal_mage_acolyte", "Skeletal Mage Acolyte");
+        add("entity.runicrebirth.skeletal_wizard_acolyte", "Skeletal Wizard Acolyte");
+        add("entity.runicrebirth.zombified_artificer_acolyte", "Zombified Artificer Acolyte");
 
         add("spell_component.runicrebirth.magic_projectile", "Magic Projectile");
         add("spell_component.runicrebirth.magic_beam", "Magic Beam");
@@ -87,7 +96,9 @@ public class RunicRebirthLangProvider extends LanguageProvider {
         add("spell_component.runicrebirth.cooldown", "Cooldown");
         add("spell_component.runicrebirth.two_casts", "Two Casts");
         add("spell_component.runicrebirth.four_casts", "Four Casts");
-        add("spell_component.runicrebirth.charges", "Charges");
+        add("spell_component.runicrebirth.charges", "2x Charges");
+        add("spell_component.runicrebirth.charges_three", "3x Charges");
+        add("spell_component.runicrebirth.charges_four", "4x Charges");
 
         add("magic.runicrebirth.element.arcane", "Arcane");
         add("magic.runicrebirth.element.fire", "Fire");
@@ -95,7 +106,7 @@ public class RunicRebirthLangProvider extends LanguageProvider {
         add("magic.runicrebirth.element.ice", "Ice");
         add("magic.runicrebirth.element.wind", "Wind");
 
-        add("key.categories.runicrebirth", "Interactive Magic");
+        add("key.categories.runicrebirth", "Runic Rebirth");
         add("key.runicrebirth.switch_spell_stack", "Switch Spell Stack");
         add("screen.runicrebirth.drawing_canvas", "Drawing Canvas");
         add("screen.runicrebirth.canvas_hint", "Left-click to draw §f|§7 Right-click to submit §f|§7 Esc to cancel");
@@ -175,5 +186,10 @@ public class RunicRebirthLangProvider extends LanguageProvider {
         add("advancement.runicrebirth.spells.magic_binding.description", "Unlock conditions coming soon");
         add("advancement.runicrebirth.spells.magic_ballista.title", "Magic Ballista");
         add("advancement.runicrebirth.spells.magic_ballista.description", "Unlock conditions coming soon");
+
+        add("item.runicrebirth.runic_key_ring", "Runic Key Ring");
+        add("container.runicrebirth.runic_key_ring", "Runic Key Ring");
+        add("container.runicrebirth.equipped_rings", "Equipped Rings");
+        add("container.runicrebirth.key_ring_storage", "Key Ring");
     }
 }

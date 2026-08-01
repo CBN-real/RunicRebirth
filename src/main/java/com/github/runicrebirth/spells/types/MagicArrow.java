@@ -20,7 +20,7 @@ public class MagicArrow extends SpellType {
         super(ID);
     }
 
-    @Override public int cooldownTicks() { return 60; }
+    @Override public int cooldownTicks() { return 20; }
     @Override public float baseDamage() { return 6f; }
     @Override public float baseSize() { return 1.0f; }
     @Override public float spellHeight() { return 0.125f * this.baseSize(); }

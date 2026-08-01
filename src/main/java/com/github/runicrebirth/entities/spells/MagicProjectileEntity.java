@@ -16,7 +16,7 @@ import net.minecraft.world.phys.Vec3;
 
 public class MagicProjectileEntity extends AbstractProjectileSpellEntity {
 
-    private static final int MAX_LIFETIME_TICKS = 80;
+    private static final int MAX_LIFETIME_TICKS = 60;
 
     public MagicProjectileEntity(EntityType<? extends MagicProjectileEntity> type, Level level) {
         super(type, level);

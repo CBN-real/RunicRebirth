@@ -103,7 +103,9 @@ public abstract class SpellWriter extends MagicItem {
             List.copyOf(refs),
             elem != null ? elem.id() : null,
             inscribed,
-            permanentCount
+            permanentCount,
+            0,
+            null
         );
     }
 
@@ -157,13 +159,12 @@ public abstract class SpellWriter extends MagicItem {
         ItemStack stack = player.getItemInHand(hand);
         if (hand != InteractionHand.MAIN_HAND) return InteractionResultHolder.pass(stack);
         if (level.isClientSide) return InteractionResultHolder.consume(stack);
-
         if (!(player instanceof ServerPlayer serverPlayer)) return InteractionResultHolder.pass(stack);
+
         MagicData data = MagicData.of(serverPlayer);
 
         if (player.isShiftKeyDown()) {
             clearActiveStack(stack);
-            data.clearCharges();
             StackChangedS2CPacket.sendTo(serverPlayer);
             return InteractionResultHolder.sidedSuccess(stack, false);
         }
@@ -175,28 +176,42 @@ public abstract class SpellWriter extends MagicItem {
         float xRot = player.getXRot();
         float yRot = player.getYRot();
 
-        if (data.hasCharges()) {
-            SpellType chargedType = SpellTypeRegistry.get(data.chargedSpellId());
-            if (chargedType != null) {
-                if (data.isOnCooldown(chargedType.id())) return InteractionResultHolder.pass(stack);
-                SpellParams chargedParams = data.chargedParams();
-                spawnCircle(serverPlayer, chargedType, chargedParams, eye, dir, xRot, yRot,
-                    stack, 1 + chargedParams.extraCasts);
-                int chargeCooldown = chargedParams.cooldownOverrideTicks >= 0
-                    ? chargedParams.cooldownOverrideTicks : chargedType.cooldownTicks();
-                data.startCooldown(chargedType.id(), chargeCooldown);
-                data.consumeCharge();
-                if (!data.hasCharges()) {
-                    WandStacksData wandData = getStacks(stack);
-                    WandStacksData.StackEntry activeEntry = wandData.stacks().get(wandData.activeIndex());
-                    if (!activeEntry.inscribed()) {
-                        clearActiveStack(stack);
-                    } else if (!activeEntry.hasPermanentSpellType()) {
-                        clearActiveStack(stack);
-                    }
+        WandStacksData wandData = getStacks(stack);
+        int activeIdx = wandData.activeIndex();
+        WandStacksData.StackEntry activeEntry = wandData.stacks().get(activeIdx);
+
+        if (activeEntry.chargeCount() > 0 && activeEntry.chargedSpellId() != null) {
+            SpellType chargedType = SpellTypeRegistry.get(activeEntry.chargedSpellId());
+            if (chargedType == null) {
+                setStacks(stack, wandData.withStack(activeIdx, activeEntry.withNoCharges()));
+                StackChangedS2CPacket.sendTo(serverPlayer);
+                return InteractionResultHolder.pass(stack);
+            }
+            if (data.isOnCooldown(chargedType.id())) return InteractionResultHolder.pass(stack);
+            SpellStack chargedStack = fromEntry(activeEntry);
+            SpellCastContext ctx = new SpellCastContext((ServerLevel) level, serverPlayer, stack, eye, dir, xRot, yRot, null);
+            SpellParams chargedParams = SpellResolver.buildParams(ctx, chargedStack);
+            if (chargedParams == null) {
+                setStacks(stack, wandData.withStack(activeIdx, activeEntry.withNoCharges()));
+                StackChangedS2CPacket.sendTo(serverPlayer);
+                return InteractionResultHolder.pass(stack);
+            }
+            for (SpellComponent c : chargedStack.components()) {
+                if (c instanceof SpellModifier) chargedParams.modifierIds.add(c.id().getPath());
+            }
+            spawnCircle(serverPlayer, chargedType, chargedParams, eye, dir, xRot, yRot, stack, 1 + chargedParams.extraCasts);
+            int chargeCooldown = chargedParams.cooldownOverrideTicks >= 0
+                ? chargedParams.cooldownOverrideTicks : chargedType.cooldownTicks();
+            data.startCooldown(chargedType.id(), chargeCooldown);
+            int newCount = activeEntry.chargeCount() - 1;
+            if (newCount <= 0) {
+                if (!activeEntry.inscribed() || !activeEntry.hasPermanentSpellType()) {
+                    clearActiveStack(stack);
+                } else {
+                    setStacks(stack, wandData.withStack(activeIdx, activeEntry.withNoCharges()));
                 }
             } else {
-                data.clearCharges();
+                setStacks(stack, wandData.withStack(activeIdx, activeEntry.withCharges(newCount, activeEntry.chargedSpellId())));
             }
             StackChangedS2CPacket.sendTo(serverPlayer);
             CastAnimBroadcastS2CPacket.broadcast(serverPlayer, 60);
@@ -205,9 +220,7 @@ public abstract class SpellWriter extends MagicItem {
 
         SpellStack active = resolveActiveStack(stack);
         if (active.validSpell()) {
-
-            SpellCastContext ctx = new SpellCastContext((ServerLevel) level, serverPlayer, stack,
-                eye, dir, xRot, yRot, null);
+            SpellCastContext ctx = new SpellCastContext((ServerLevel) level, serverPlayer, stack, eye, dir, xRot, yRot, null);
             SpellResolver.PreparedCast prepared = SpellResolver.prepare(ctx, active);
             if (prepared == null) return InteractionResultHolder.pass(stack);
 
@@ -217,9 +230,7 @@ public abstract class SpellWriter extends MagicItem {
             if (data.isOnCooldown(type.id())) return InteractionResultHolder.pass(stack);
 
             for (SpellComponent c : active.components()) {
-                if (c instanceof SpellModifier) {
-                    params.modifierIds.add(c.id().getPath());
-                }
+                if (c instanceof SpellModifier) params.modifierIds.add(c.id().getPath());
             }
 
             int initialCharges = getInitialCharges(stack);
@@ -227,16 +238,12 @@ public abstract class SpellWriter extends MagicItem {
             int totalCharges = initialCharges * params.chargesMultiplier;
             int simultaneousCasts = 1 + params.extraCasts;
 
-            WandStacksData wandData = getStacks(stack);
-            boolean isInscribed = wandData.stacks().get(wandData.activeIndex()).inscribed();
-
             if (useChargeMode && totalCharges > 1) {
                 spawnCircle(serverPlayer, type, params, eye, dir, xRot, yRot, stack, simultaneousCasts);
-                data.setCharges(totalCharges - 1, type.id(), params);
+                setStacks(stack, getStacks(stack).withStack(activeIdx, activeEntry.withCharges(totalCharges - 1, type.id())));
             } else {
                 spawnCircle(serverPlayer, type, params, eye, dir, xRot, yRot, stack, simultaneousCasts);
-                if (isInscribed) {
-                    WandStacksData.StackEntry activeEntry = wandData.stacks().get(wandData.activeIndex());
+                if (activeEntry.inscribed()) {
                     if (!activeEntry.hasPermanentSpellType()) {
                         clearActiveStack(stack);
                     }

@@ -40,9 +40,11 @@ public record WandStacksData(List<StackEntry> stacks, int activeIndex) {
         List<ComponentRef> components,
         @Nullable ResourceLocation elementId,
         boolean inscribed,
-        int permanentCount
+        int permanentCount,
+        int chargeCount,
+        @Nullable ResourceLocation chargedSpellId
     ) {
-        public static final StackEntry EMPTY = new StackEntry(List.of(), null, false, 0);
+        public static final StackEntry EMPTY = new StackEntry(List.of(), null, false, 0, 0, null);
 
         public boolean hasPermanentSpellType() {
             for (int i = 0; i < permanentCount && i < components.size(); i++) {
@@ -54,15 +56,26 @@ public record WandStacksData(List<StackEntry> stacks, int activeIndex) {
         public StackEntry withClearedTemporary() {
             if (!inscribed || permanentCount <= 0) return EMPTY;
             List<ComponentRef> permanent = components.subList(0, Math.min(permanentCount, components.size()));
-            return new StackEntry(List.copyOf(permanent), elementId, true, permanentCount);
+            return new StackEntry(List.copyOf(permanent), elementId, true, permanentCount, 0, null);
+        }
+
+        public StackEntry withCharges(int count, ResourceLocation spellId) {
+            return new StackEntry(components, elementId, inscribed, permanentCount, count, spellId);
+        }
+
+        public StackEntry withNoCharges() {
+            return new StackEntry(components, elementId, inscribed, permanentCount, 0, null);
         }
 
         public static final Codec<StackEntry> CODEC = RecordCodecBuilder.create(i -> i.group(
             ComponentRef.CODEC.listOf().fieldOf("components").forGetter(StackEntry::components),
             ResourceLocation.CODEC.optionalFieldOf("element").forGetter(e -> Optional.ofNullable(e.elementId)),
             Codec.BOOL.optionalFieldOf("inscribed", false).forGetter(StackEntry::inscribed),
-            Codec.INT.optionalFieldOf("permanentCount", 0).forGetter(StackEntry::permanentCount)
-        ).apply(i, (comps, elem, ins, pc) -> new StackEntry(comps, elem.orElse(null), ins, pc)));
+            Codec.INT.optionalFieldOf("permanentCount", 0).forGetter(StackEntry::permanentCount),
+            Codec.INT.optionalFieldOf("chargeCount", 0).forGetter(StackEntry::chargeCount),
+            ResourceLocation.CODEC.optionalFieldOf("chargedSpellId").forGetter(e -> Optional.ofNullable(e.chargedSpellId))
+        ).apply(i, (comps, elem, ins, pc, cc, csid) ->
+            new StackEntry(comps, elem.orElse(null), ins, pc, cc, csid.orElse(null))));
 
         public static final StreamCodec<ByteBuf, StackEntry> STREAM_CODEC = StreamCodec.of(
             (buf, entry) -> {
@@ -76,6 +89,11 @@ public record WandStacksData(List<StackEntry> stacks, int activeIndex) {
                 }
                 buf.writeBoolean(entry.inscribed);
                 ByteBufCodecs.INT.encode(buf, entry.permanentCount);
+                ByteBufCodecs.INT.encode(buf, entry.chargeCount);
+                buf.writeBoolean(entry.chargedSpellId != null);
+                if (entry.chargedSpellId != null) {
+                    ByteBufCodecs.STRING_UTF8.encode(buf, entry.chargedSpellId.toString());
+                }
             },
             buf -> {
                 int count = ByteBufCodecs.INT.decode(buf);
@@ -88,7 +106,11 @@ public record WandStacksData(List<StackEntry> stacks, int activeIndex) {
                     : null;
                 boolean inscribed = buf.readBoolean();
                 int pc = ByteBufCodecs.INT.decode(buf);
-                return new StackEntry(List.copyOf(comps), elem, inscribed, pc);
+                int chargeCount = ByteBufCodecs.INT.decode(buf);
+                ResourceLocation chargedSpellId = buf.readBoolean()
+                    ? ResourceLocation.parse(ByteBufCodecs.STRING_UTF8.decode(buf))
+                    : null;
+                return new StackEntry(List.copyOf(comps), elem, inscribed, pc, chargeCount, chargedSpellId);
             }
         );
     }

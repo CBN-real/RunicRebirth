@@ -31,9 +31,16 @@ public final class ClientMagicData {
     private static List<ResourceLocation> stackElements = Collections.emptyList();
     private static int activeIndex = 0;
     private static int castAnimTicksRemaining = 0;
+    private static int ringCastAnimTicksRemaining = 0;
     private static int charges = 0;
     private static Set<ResourceLocation> unlockedSpells = new HashSet<>();
     private static final Map<Integer, Integer> remoteCastAnimTicks = new HashMap<>();
+    private static final Map<Integer, Integer> remoteRingCastAnimTicks = new HashMap<>();
+    private static final Map<ResourceLocation, Integer> cooldownRemaining = new HashMap<>();
+    private static final Map<ResourceLocation, Integer> cooldownMax = new HashMap<>();
+    private static int phantomMiningTicks = 0;
+    private static int magicHandTicks = 0;
+    private static boolean magicHandIsPassive = false;
     private static Runnable onStackChanged;
     private ClientMagicData() {}
 
@@ -96,11 +103,20 @@ public final class ClientMagicData {
 
     public static void tickCastAnim() {
         if (castAnimTicksRemaining > 0) castAnimTicksRemaining--;
+        if (ringCastAnimTicksRemaining > 0) ringCastAnimTicksRemaining--;
+        if (!magicHandIsPassive && magicHandTicks > 0) magicHandTicks--;
         Iterator<Map.Entry<Integer, Integer>> it = remoteCastAnimTicks.entrySet().iterator();
         while (it.hasNext()) {
             Map.Entry<Integer, Integer> e = it.next();
             int remaining = e.getValue() - 1;
             if (remaining <= 0) it.remove();
+            else e.setValue(remaining);
+        }
+        Iterator<Map.Entry<Integer, Integer>> rit = remoteRingCastAnimTicks.entrySet().iterator();
+        while (rit.hasNext()) {
+            Map.Entry<Integer, Integer> e = rit.next();
+            int remaining = e.getValue() - 1;
+            if (remaining <= 0) rit.remove();
             else e.setValue(remaining);
         }
     }
@@ -116,6 +132,23 @@ public final class ClientMagicData {
 
     public static boolean isCastAnimActiveFor(int entityId) {
         return remoteCastAnimTicks.getOrDefault(entityId, 0) > 0;
+    }
+
+    public static boolean isRingCastAnimActive() {
+        return ringCastAnimTicksRemaining > 0;
+    }
+
+    public static void setRingCastAnim(int ticks) {
+        ringCastAnimTicksRemaining = ticks;
+    }
+
+    public static void setRemoteRingCastAnim(int entityId, int ticks) {
+        if (ticks <= 0) remoteRingCastAnimTicks.remove(entityId);
+        else remoteRingCastAnimTicks.put(entityId, ticks);
+    }
+
+    public static boolean isRingCastAnimActiveFor(int entityId) {
+        return remoteRingCastAnimTicks.getOrDefault(entityId, 0) > 0;
     }
 
     public static List<List<SpellComponent>> stacks() { return stacks; }
@@ -164,12 +197,41 @@ public final class ClientMagicData {
 
     public static boolean hasCharges() { return charges > 0; }
 
+    public static int phantomMiningTicks() { return phantomMiningTicks; }
+    public static void setPhantomMiningTicks(int ticks) { phantomMiningTicks = Math.max(0, ticks); }
+
+    public static int magicHandTicks() { return magicHandTicks; }
+    public static boolean magicHandIsPassive() { return magicHandIsPassive; }
+    public static void setMagicHandSync(int ticks, boolean passive) {
+        magicHandTicks = ticks;
+        magicHandIsPassive = passive;
+    }
+
     public static void setUnlockedSpells(Set<ResourceLocation> spells) {
         unlockedSpells = new HashSet<>(spells);
     }
 
     public static boolean isSpellUnlocked(ResourceLocation spellTypeId) {
         return unlockedSpells.contains(spellTypeId);
+    }
+
+    public static void applyCooldowns(Map<ResourceLocation, Integer> incoming) {
+        for (Map.Entry<ResourceLocation, Integer> e : incoming.entrySet()) {
+            ResourceLocation id = e.getKey();
+            int rem = e.getValue();
+            int prev = cooldownRemaining.getOrDefault(id, 0);
+            if (rem > prev) cooldownMax.put(id, rem);
+            cooldownRemaining.put(id, rem);
+        }
+        cooldownRemaining.keySet().retainAll(incoming.keySet());
+    }
+
+    public static Map<ResourceLocation, Integer> cooldownRemaining() {
+        return Collections.unmodifiableMap(cooldownRemaining);
+    }
+
+    public static int cooldownMax(ResourceLocation id) {
+        return cooldownMax.getOrDefault(id, 1);
     }
 
 }

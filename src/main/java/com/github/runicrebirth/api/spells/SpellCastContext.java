@@ -1,17 +1,17 @@
 package com.github.runicrebirth.api.spells;
 
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 
 public record SpellCastContext(
     ServerLevel level,
-    ServerPlayer caster,
+    LivingEntity caster,
     ItemStack item,
     Vec3 aimStart,
     Vec3 aimDirection,
     float xRot,
     float yRot,
-    net.minecraft.world.entity.LivingEntity entityTarget
+    LivingEntity entityTarget
 ) {}

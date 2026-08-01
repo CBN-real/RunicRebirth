@@ -5,7 +5,6 @@ import com.github.runicrebirth.api.registry.ModifierRegistry;
 import com.github.runicrebirth.api.registry.SpellTypeRegistry;
 import com.github.runicrebirth.api.spells.SpellComponent;
 import com.github.runicrebirth.api.spells.SpellStack;
-import com.github.runicrebirth.capabilities.magic.MagicData;
 import com.github.runicrebirth.client.ClientMagicData;
 import java.util.ArrayList;
 import java.util.List;
@@ -83,10 +82,9 @@ public record StackChangedS2CPacket(
 
     public static void sendTo(ServerPlayer player) {
         net.minecraft.world.item.ItemStack heldItem = player.getItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND);
-        MagicData data = MagicData.of(player);
 
         if (!(heldItem.getItem() instanceof com.github.runicrebirth.items.SpellWriter)) {
-            PacketDistributor.sendToPlayer(player, new StackChangedS2CPacket(0, List.of(), data.charges(), List.of()));
+            PacketDistributor.sendToPlayer(player, new StackChangedS2CPacket(0, List.of(), 0, List.of()));
             return;
         }
 
@@ -102,7 +100,9 @@ public record StackChangedS2CPacket(
             snapshot.add(list);
             elementIds.add(entry.elementId());
         }
-        PacketDistributor.sendToPlayer(player, new StackChangedS2CPacket(wandData.activeIndex(), snapshot, data.charges(), elementIds));
+        int activeCharges = wandData.stacks().isEmpty() ? 0
+            : wandData.stacks().get(wandData.activeIndex()).chargeCount();
+        PacketDistributor.sendToPlayer(player, new StackChangedS2CPacket(wandData.activeIndex(), snapshot, activeCharges, elementIds));
     }
 
     public static void handle(StackChangedS2CPacket packet, IPayloadContext ctx) {
