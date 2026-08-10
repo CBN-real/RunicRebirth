@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "hanging=false,waterlogged=false": { "model": "runicrebirth:block/runelight_lantern" },
+    "hanging=false,waterlogged=true": { "model": "runicrebirth:block/runelight_lantern" },
+    "hanging=true,waterlogged=false": { "model": "runicrebirth:block/runelight_lantern" },
+    "hanging=true,waterlogged=true": { "model": "runicrebirth:block/runelight_lantern" }
+  }
+}

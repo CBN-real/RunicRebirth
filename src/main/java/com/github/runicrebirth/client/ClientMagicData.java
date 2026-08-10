@@ -41,6 +41,8 @@ public final class ClientMagicData {
     private static int phantomMiningTicks = 0;
     private static int magicHandTicks = 0;
     private static boolean magicHandIsPassive = false;
+    private static final Map<ResourceLocation, Integer> ringDurationRemaining = new HashMap<>();
+    private static final Map<ResourceLocation, Integer> ringDurationMax = new HashMap<>();
     private static Runnable onStackChanged;
     private ClientMagicData() {}
 
@@ -232,6 +234,38 @@ public final class ClientMagicData {
 
     public static int cooldownMax(ResourceLocation id) {
         return cooldownMax.getOrDefault(id, 1);
+    }
+
+    public static void applyRingDurations(Map<ResourceLocation, Integer> incoming) {
+        for (Map.Entry<ResourceLocation, Integer> e : incoming.entrySet()) {
+            ResourceLocation id = e.getKey();
+            int rem = e.getValue();
+            int prev = ringDurationRemaining.getOrDefault(id, 0);
+            // Track max for bar rendering (skip sentinel -1 = indefinite)
+            if (rem > 0 && rem > prev) ringDurationMax.put(id, rem);
+            ringDurationRemaining.put(id, rem);
+        }
+        // Remove entries absent from incoming (ring deactivated)
+        ringDurationRemaining.keySet().retainAll(incoming.keySet());
+    }
+
+    public static void applyRingDuration(ResourceLocation id, int remaining, int max) {
+        if (remaining == 0) {
+            ringDurationRemaining.remove(id);
+        } else {
+            int prev = ringDurationRemaining.getOrDefault(id, 0);
+            if (max > 0 && max > ringDurationMax.getOrDefault(id, 0)) ringDurationMax.put(id, max);
+            else if (remaining > 0 && remaining > prev) ringDurationMax.put(id, remaining);
+            ringDurationRemaining.put(id, remaining);
+        }
+    }
+
+    public static int ringDurationRemaining(ResourceLocation id) {
+        return ringDurationRemaining.getOrDefault(id, 0);
+    }
+
+    public static int ringDurationMax(ResourceLocation id) {
+        return ringDurationMax.getOrDefault(id, 1);
     }
 
 }

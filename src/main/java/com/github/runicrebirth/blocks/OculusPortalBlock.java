@@ -58,6 +58,8 @@ public class OculusPortalBlock extends BaseEntityBlock {
         return CODEC;
     }
 
+
+
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(FACING);

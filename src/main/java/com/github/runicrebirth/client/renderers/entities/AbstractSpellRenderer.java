@@ -1,5 +1,6 @@
 package com.github.runicrebirth.client.renderers.entities;
 
+import com.github.runicrebirth.api.spells.ScaledSpellEntity;
 import com.github.runicrebirth.client.BookDisplayState;
 import com.github.runicrebirth.client.renderers.ModRenderTypes;
 import com.github.runicrebirth.client.renderers.NormalOverrideVertexConsumer;
@@ -43,6 +44,10 @@ public abstract class AbstractSpellRenderer<T extends Entity & GeoEntity> extend
             if (ox != 0f || oy != 0f || oz != 0f) {
                 poseStack.translate(ox, oy, oz);
             }
+        }
+        if (entity instanceof ScaledSpellEntity scaled) {
+            float s = scaled.getProjectileSize();
+            if (s != 1f) poseStack.scale(s, s, s);
         }
         super.preRender(poseStack, entity, model, bufferSource, buffer, isReRender,
             partialTick, packedLight, packedOverlay, colour);

@@ -2,6 +2,7 @@ package com.github.runicrebirth.network;
 
 import com.github.runicrebirth.RunicRebirth;
 import com.github.runicrebirth.client.ClientMagicData;
+import com.github.runicrebirth.entities.MagicHandEntity;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
@@ -29,6 +30,12 @@ public record MagicHandSyncS2CPacket(int ticks, boolean passive) implements Cust
     }
 
     public static void handle(MagicHandSyncS2CPacket packet, IPayloadContext ctx) {
-        ctx.enqueueWork(() -> ClientMagicData.setMagicHandSync(packet.ticks(), packet.passive()));
+        ctx.enqueueWork(() -> {
+            ClientMagicData.setMagicHandSync(packet.ticks(), packet.passive());
+            // -1 = indefinite active (passive mode), 0 = deactivated, >0 = hostile countdown
+            int durationValue = packet.ticks() == 0 ? 0 : (packet.passive() ? -1 : packet.ticks());
+            ClientMagicData.applyRingDuration(MagicHandEntity.DURATION_KEY,
+                durationValue, MagicHandEntity.HOSTILE_HOLD_TICKS);
+        });
     }
 }

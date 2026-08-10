@@ -93,7 +93,7 @@ public class SkeletalMageAcolyteEntity extends Monster implements GeoEntity, Sma
             new CastSpellBehaviour<SkeletalMageAcolyteEntity>(60) {
                 @Override
                 protected void performCast(ServerLevel level, SkeletalMageAcolyteEntity entity, LivingEntity target, SpellCastContext ctx) {
-                    SpellParams params = new SpellParams(6f, 1.0f, 1.5f, 0, 0, 0,
+                    SpellParams params = new SpellParams(6f, 1.0f,0.125f, 1.5f, 0, 0, 0,
                         ModElements.ARCANE.get(), MagicDamageType.SHARP);
                     ModSpellTypes.MAGIC_ARROW.get().onCast(ctx, params);
                 }
@@ -104,7 +104,7 @@ public class SkeletalMageAcolyteEntity extends Monster implements GeoEntity, Sma
                 }
                 @Override
                 protected void performCast(ServerLevel level, SkeletalMageAcolyteEntity entity, LivingEntity target, SpellCastContext ctx) {
-                    SpellParams params = new SpellParams(5f, 1.0f, 0.75f, 0, 0, 0,
+                    SpellParams params = new SpellParams(5f, 1.0f,0.25f, 0.75f, 0, 0, 0,
                         ModElements.ARCANE.get(), MagicDamageType.BLUNT);
                     ModSpellTypes.MAGIC_PROJECTILE.get().onCast(ctx, params);
                 }

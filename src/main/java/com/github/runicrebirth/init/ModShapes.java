@@ -49,6 +49,10 @@ public final class ModShapes {
             ModModifiers.FOUR_CASTS::get);
         ShapeRegistry.register(ShapeTemplates.ID_CHARGES, ShapeTemplates.charges(), -1.0,
             ModModifiers.CHARGES::get);
+        ShapeRegistry.register(ShapeTemplates.ID_CHARGES_THREE, ShapeTemplates.threeCharges(), -1.0,
+            ModModifiers.CHARGES_THREE::get);
+        ShapeRegistry.register(ShapeTemplates.ID_CHARGES_FOUR, ShapeTemplates.fourCharges(), -1.0,
+            ModModifiers.CHARGES_FOUR::get);
         ShapeRegistry.register(ShapeTemplates.ID_PLUS_TWO, ShapeTemplates.plus_two(), -1.0,
             ModModifiers.SIZE_PLUS_TWO::get);
         ShapeRegistry.register(ShapeTemplates.ID_PLUS_FOUR, ShapeTemplates.plus_four(), -1.0,

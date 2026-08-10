@@ -3,6 +3,7 @@ package com.github.runicrebirth.entities.spells;
 import com.github.runicrebirth.api.registry.ElementRegistry;
 import com.github.runicrebirth.api.spells.Element;
 import com.github.runicrebirth.api.spells.MagicDamageType;
+import com.github.runicrebirth.api.spells.ScaledSpellEntity;
 import com.github.runicrebirth.api.spells.SpellParams;
 import com.github.runicrebirth.client.BookDisplayState;
 import com.github.runicrebirth.init.ModElements;
@@ -24,7 +25,7 @@ import software.bernie.geckolib.animation.PlayState;
 import software.bernie.geckolib.animation.RawAnimation;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
-public abstract class AbstractInstantSpellEntity extends Entity implements GeoEntity {
+public abstract class AbstractInstantSpellEntity extends Entity implements GeoEntity, ScaledSpellEntity {
 
     protected RawAnimation initiate_and_hold = RawAnimation.begin().thenPlay("initiate_spell").thenLoop("hold_spell");
     protected static final RawAnimation HOLD_SPELL = RawAnimation.begin().thenLoop("hold_spell");

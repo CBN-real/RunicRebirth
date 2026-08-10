@@ -44,7 +44,8 @@ public class DrawingCanvasScreen extends Screen {
     private static final int RADIAL_HIGHLIGHT = 0xFFDBA914;
     private static final float RADIAL_ANIM_SPEED = 0.01f;
     private static final double INK_WORLD_RADIUS = 0.3;
-    private static final double INK_PLANE_DISTANCE = 0.7;
+    private static final float INK_BASE_DISTANCE = 0.7f;
+    private static final float INK_DEFAULT_FOV = 70.0f;
 
     private static final float[] ELEMENT_X_FRAC = {0.27f, 0.21f, 0.19f, 0.225f, 0.30f};
     private static final float[] ELEMENT_Y_FRACS = {0.19f, 0.32f, 0.53f, 0.705f, 0.83f};
@@ -879,11 +880,14 @@ public class DrawingCanvasScreen extends Screen {
         double wy = ry;
         double wz = -localX * sinY + rz * cosY;
 
+        float inkFov = (float) mc.options.fov().get();
+        double inkRatio = Math.tan(Math.toRadians(INK_DEFAULT_FOV * 0.5)) / Math.tan(Math.toRadians(inkFov * 0.5));
+        float inkDist = INK_BASE_DISTANCE * (float) Math.pow(inkRatio, 0.914);
         Vec3 eye = mc.player.getEyePosition(1.0f);
         Vec3 look = mc.player.getLookAngle();
-        double px = eye.x + look.x * INK_PLANE_DISTANCE + wx;
-        double py = eye.y + look.y * INK_PLANE_DISTANCE + wy;
-        double pz = eye.z + look.z * INK_PLANE_DISTANCE + wz;
+        double px = eye.x + look.x * inkDist + wx;
+        double py = eye.y + look.y * inkDist + wy;
+        double pz = eye.z + look.z * inkDist + wz;
 
         mc.level.addParticle(getInkParticle(), px, py, pz, 0, 0, 0);
     }

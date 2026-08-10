@@ -92,6 +92,9 @@ public class RunicRebirth {
             event.accept(ModItems.ARCANE_TETHER_RING.get());
             event.accept(ModItems.RING_OF_LEAPING_GALES.get());
             event.accept(ModItems.RING_OF_PHANTOM_MINING.get());
+            event.accept(ModItems.BLINK_RING.get());
+            event.accept(ModItems.THRUSTER_RING.get());
+            event.accept(ModItems.HOVER_RING.get());
             event.accept(ModItems.ACOLYTE_WIZARD_HAT.get());
             event.accept(ModItems.ACOLYTE_ROBES.get());
             event.accept(ModItems.ACOLYTE_PANTS.get());
@@ -122,6 +125,9 @@ public class RunicRebirth {
             event.accept(ModItems.ARCANE_SPIRIT.get());
             event.accept(ModItems.ARCANE_GEMSTONE.get());
             event.accept(ModItems.RUNIC_KEY_RING.get());
+            event.accept(ModItems.ARCANE_DRONE.get());
+            event.accept(ModItems.HAMMER_DRONE.get());
+            event.accept(ModItems.BASIC_RUNIC_LONGSWORD.get());
         }
         if (event.getTabKey() == CreativeModeTabs.BUILDING_BLOCKS) {
             event.accept(ModItems.RUNIC_STONE.get());
@@ -136,6 +142,16 @@ public class RunicRebirth {
             event.accept(ModItems.RUNIC_ANVIL.get());
             event.accept(ModItems.RUNIC_STONE_BRICKS.get());
             event.accept(ModItems.ARCANE_RUNIC_STONE_BRICKS.get());
+            event.accept(ModItems.CUT_RUNIC_STONE.get());
+            event.accept(ModItems.REINFORCED_CUT_RUNIC_STONE.get());
+            event.accept(ModItems.RUNESTEEL_PORTCULLIS.get());
+            event.accept(ModItems.DUNGEON_DOOR.get());
+            event.accept(ModItems.DUNGEON_TEMPORARY_PLATFORM.get());
+            event.accept(ModItems.DUNGEON_PRESSURE_PLATE.get());
+            event.accept(ModItems.DUNGEON_SPIKE.get());
+            event.accept(ModItems.DUNGEON_BOULDER_SPAWNER.get());
+            event.accept(ModItems.DUNGEON_SWINGING_AXE.get());
+            event.accept(ModItems.DUNGEON_FLAMETHROWER.get());
         }
     }
 }

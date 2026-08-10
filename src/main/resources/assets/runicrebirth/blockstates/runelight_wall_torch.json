@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=north": { "model": "runicrebirth:block/runelight_wall_torch" },
+    "facing=south": { "model": "runicrebirth:block/runelight_wall_torch", "y": 180 },
+    "facing=east":  { "model": "runicrebirth:block/runelight_wall_torch", "y": 90 },
+    "facing=west":  { "model": "runicrebirth:block/runelight_wall_torch", "y": 270 }
+  }
+}

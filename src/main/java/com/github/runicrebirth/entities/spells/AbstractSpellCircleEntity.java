@@ -9,6 +9,7 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -40,7 +41,7 @@ public abstract class AbstractSpellCircleEntity extends Entity implements GeoEnt
     protected SpellParams params;
     protected LivingEntity target;
     private int age;
-    private int lifespan;
+    protected int lifespan;
     private int finishingTicks;
     private boolean projectileSpawned;
 
@@ -52,11 +53,12 @@ public abstract class AbstractSpellCircleEntity extends Entity implements GeoEnt
 
     protected void init(LivingEntity owner, SpellParams params, int lifespan, LivingEntity target) {
         this.owner = owner;
-        this.params = params;
         this.lifespan = lifespan;
         this.target = target;
         this.entityData.set(DATA_ELEMENT, params.element.id().toString());
         this.entityData.set(DATA_MODIFIER_IDS, String.join(",", params.modifierIds));
+        this.params = params.copy();
+        this.params.size *= getCircleScale();
     }
 
     @Override
@@ -105,6 +107,7 @@ public abstract class AbstractSpellCircleEntity extends Entity implements GeoEnt
             level().playSound(null, this.getX(), this.getY(), this.getZ(),
                 ModSounds.SPELLS_SPAWN_CIRCLE.get(), SoundSource.PLAYERS, 1.0f, 1.0f);
             onSpawn();
+            spawnCrackling((ServerLevel) level());
         }
         if (age >= lifespan || owner == null || !owner.isAlive()) {
             beginFinishing();
@@ -120,6 +123,20 @@ public abstract class AbstractSpellCircleEntity extends Entity implements GeoEnt
     private void beginFinishing() {
         finishingTicks = FINISH_TICKS;
         entityData.set(DATA_FINISHING, true);
+    }
+
+    private void spawnCrackling(ServerLevel serverLevel) {
+        float scale = getCircleScale();
+        int color = params.element.displayColor();
+        EnergyCracklingEntity crackling = new EnergyCracklingEntity(serverLevel, scale * 0.15f, color, lifespan - 10, 0.5f, 1.0f, 0.15f * scale);
+        var center = getBoundingBox().getCenter();
+        crackling.setPos(center.x, center.y, center.z);
+        crackling.attachTo(this);
+        serverLevel.addFreshEntity(crackling);
+    }
+
+    protected Vec3 getCircleSpawnPos(float baseYOffset) {
+        return new Vec3(getX(), getY() + baseYOffset * getCircleScale(), getZ());
     }
 
     protected void onSpawn() {}

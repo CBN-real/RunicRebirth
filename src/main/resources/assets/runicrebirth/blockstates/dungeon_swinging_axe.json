@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=north": { "model": "runicrebirth:block/dungeon_swinging_axe" },
+    "facing=south": { "model": "runicrebirth:block/dungeon_swinging_axe", "y": 180 },
+    "facing=east":  { "model": "runicrebirth:block/dungeon_swinging_axe", "y": 90 },
+    "facing=west":  { "model": "runicrebirth:block/dungeon_swinging_axe", "y": 270 }
+  }
+}

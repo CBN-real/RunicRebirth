@@ -168,5 +168,55 @@
     "sounds": [
       "runicrebirth:spells/meteor_end"
     ]
+  },
+  "dungeon.door": {
+    "sounds": [
+      "runicrebirth:dungeon/door"
+    ]
+  },
+  "dungeon.door_closing": {
+    "sounds": [
+      "runicrebirth:dungeon/dungeon_door_closing"
+    ]
+  },
+  "dungeon.pressure_plate": {
+    "sounds": [
+      "runicrebirth:dungeon/pressure_plate"
+    ]
+  },
+  "dungeon.spike": {
+    "sounds": [
+      "runicrebirth:dungeon/spike"
+    ]
+  },
+  "dungeon.temporary_platform": {
+    "sounds": [
+      "runicrebirth:dungeon/temporary_platform"
+    ]
+  },
+  "spells.hover": {
+    "sounds": [
+      { "name": "runicrebirth:spells/hover", "stream": true }
+    ]
+  },
+  "spells.thruster": {
+    "sounds": [
+      "runicrebirth:spells/thruster"
+    ]
+  },
+  "spells.blink": {
+    "sounds": [
+      "runicrebirth:spells/blink"
+    ]
+  },
+  "spells.leaping": {
+    "sounds": [
+      "runicrebirth:spells/leaping"
+    ]
+  },
+  "spells.tether": {
+    "sounds": [
+      "runicrebirth:spells/tether"
+    ]
   }
 }

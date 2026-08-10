@@ -81,9 +81,25 @@ public class DungeonInstance {
 
     public float getSpawnerCountMultiplier() {
         float mult = 1.0f;
-        for (DungeonModifier mod : modifiers) {
-            mult *= mod.getSpawnerCountMultiplier();
-        }
+        for (DungeonModifier mod : modifiers) mult *= mod.getSpawnerCountMultiplier();
+        return mult;
+    }
+
+    public float getSharpTrapMultiplier() {
+        float mult = 1.0f;
+        for (DungeonModifier mod : modifiers) mult *= mod.getSharpTrapMultiplier();
+        return mult;
+    }
+
+    public float getBluntTrapMultiplier() {
+        float mult = 1.0f;
+        for (DungeonModifier mod : modifiers) mult *= mod.getBluntTrapMultiplier();
+        return mult;
+    }
+
+    public float getFireTrapMultiplier() {
+        float mult = 1.0f;
+        for (DungeonModifier mod : modifiers) mult *= mod.getFireTrapMultiplier();
         return mult;
     }
 

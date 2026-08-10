@@ -1,0 +1,12 @@
+{
+  "variants": {
+    "facing=north,open=false": { "model": "runicrebirth:block/dungeon_door" },
+    "facing=south,open=false": { "model": "runicrebirth:block/dungeon_door" },
+    "facing=east,open=false":  { "model": "runicrebirth:block/dungeon_door" },
+    "facing=west,open=false":  { "model": "runicrebirth:block/dungeon_door" },
+    "facing=north,open=true":  { "model": "runicrebirth:block/dungeon_door" },
+    "facing=south,open=true":  { "model": "runicrebirth:block/dungeon_door" },
+    "facing=east,open=true":   { "model": "runicrebirth:block/dungeon_door" },
+    "facing=west,open=true":   { "model": "runicrebirth:block/dungeon_door" }
+  }
+}

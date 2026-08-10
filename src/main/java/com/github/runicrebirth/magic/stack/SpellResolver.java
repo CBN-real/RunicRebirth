@@ -40,7 +40,7 @@ public final class SpellResolver {
 
         Element resolvedElement = stack.resolveElement() != null ? stack.resolveElement() : type.defaultElement();
         SpellParams params = new SpellParams(
-            type.baseDamage(), type.baseSize(), type.baseSpeed(),
+            type.baseDamage(), type.baseSize(), type.spellHeight(), type.baseSpeed(),
             type.baseDuration(), type.castingDelayTicks(),0, resolvedElement, type.damageCategory());
 
         stack.compose(params);
@@ -76,7 +76,7 @@ public final class SpellResolver {
         if (type == null) return null;
         Element resolvedElement = stack.resolveElement() != null ? stack.resolveElement() : type.defaultElement();
         SpellParams params = new SpellParams(
-            type.baseDamage(), type.baseSize(), type.baseSpeed(),
+            type.baseDamage(), type.baseSize(), type.spellHeight(), type.baseSpeed(),
             type.baseDuration(), type.castingDelayTicks(), 0, resolvedElement, type.damageCategory());
         stack.compose(params);
         applyCurioEmpowerments(ctx, params);

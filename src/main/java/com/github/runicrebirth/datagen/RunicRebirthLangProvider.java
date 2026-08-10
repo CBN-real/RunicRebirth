@@ -19,6 +19,7 @@ public class RunicRebirthLangProvider extends LanguageProvider {
         cache.data().forEach(this::add);
 
         add("itemGroup.runicrebirth", "Interactive Magic Tab");
+        add("item.runicrebirth.basic_runic_longsword", "Basic Runic Longsword");
         add("item.runicrebirth.acolyte_wand", "Acolyte Wand");
         add("item.runicrebirth.adept_staff", "Adept Staff");
         add("item.runicrebirth.inscribed_wand", "Inscribed Wand");
@@ -55,6 +56,9 @@ public class RunicRebirthLangProvider extends LanguageProvider {
 
         add("item.runicrebirth.ring_of_leaping_gales", "Ring of Leaping Gales");
         add("item.runicrebirth.ring_of_phantom_mining", "Ring of Phantom Mining");
+        add("item.runicrebirth.blink_ring", "Blink Ring");
+        add("item.runicrebirth.thruster_ring", "Thruster Ring");
+        add("item.runicrebirth.hover_ring", "Hover Ring");
 
         add("entity.runicrebirth.magic_projectile", "Magic Projectile");
         add("entity.runicrebirth.magic_arrow", "Magic Arrow");
@@ -67,6 +71,11 @@ public class RunicRebirthLangProvider extends LanguageProvider {
         add("entity.runicrebirth.basic_circle", "Spell Circle");
         add("entity.runicrebirth.magic_blast", "Magic Blast");
         add("entity.runicrebirth.infusion_circle", "Infusion Circle");
+        add("entity.runicrebirth.arcane_drone", "Arcane Drone");
+        add("entity.runicrebirth.hammer_drone", "Hammer Drone");
+        add("item.runicrebirth.arcane_drone", "Arcane Drone");
+        add("item.runicrebirth.hammer_drone", "Hammer Drone");
+        add("curios.identifier.runic_drone", "Runic Drone");
         add("entity.runicrebirth.runesteel_golem", "Runesteel Golem");
         add("entity.runicrebirth.zombified_runeblade_acolyte", "Zombified Runeblade Acolyte");
         add("entity.runicrebirth.skeletal_mage_acolyte", "Skeletal Mage Acolyte");
@@ -121,6 +130,14 @@ public class RunicRebirthLangProvider extends LanguageProvider {
         add("block.runicrebirth.runesteel_pylon", "Runesteel Pylon");
         add("block.runicrebirth.return_portal", "Return Portal");
         add("block.runicrebirth.trial_spawner", "Trial Spawner");
+        add("block.runicrebirth.dungeon_temporary_platform", "Dungeon Temporary Platform");
+        add("block.runicrebirth.dungeon_pressure_plate", "Dungeon Pressure Plate");
+        add("block.runicrebirth.dungeon_spike", "Dungeon Spike");
+        add("block.runicrebirth.crumbling_platform", "Crumbling Platform");
+        add("block.runicrebirth.dungeon_boulder_spawner", "Dungeon Boulder Spawner");
+        add("block.runicrebirth.dungeon_swinging_axe", "Dungeon Swinging Axe");
+        add("block.runicrebirth.dungeon_flamethrower", "Dungeon Flamethrower");
+        add("entity.runicrebirth.dungeon_boulder", "Dungeon Boulder");
         add("block.runicrebirth.infusion_altar", "Infusion Altar");
         add("block.runicrebirth.runic_anvil", "Runic Anvil");
 

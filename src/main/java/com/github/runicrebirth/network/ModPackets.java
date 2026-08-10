@@ -33,6 +33,7 @@ public final class ModPackets {
         registrar.playToClient(RingCastAnimS2CPacket.TYPE, RingCastAnimS2CPacket.STREAM_CODEC, RingCastAnimS2CPacket::handle);
         registrar.playToClient(CooldownSyncS2CPacket.TYPE, CooldownSyncS2CPacket.STREAM_CODEC, CooldownSyncS2CPacket::handle);
         registrar.playToClient(MagicHandSyncS2CPacket.TYPE, MagicHandSyncS2CPacket.STREAM_CODEC, MagicHandSyncS2CPacket::handle);
+        registrar.playToClient(RingDurationSyncS2CPacket.TYPE, RingDurationSyncS2CPacket.STREAM_CODEC, RingDurationSyncS2CPacket::handle);
 
         // Dungeon system
         registrar.playToServer(EnterDungeonC2SPacket.TYPE, EnterDungeonC2SPacket.STREAM_CODEC, EnterDungeonC2SPacket::handle);

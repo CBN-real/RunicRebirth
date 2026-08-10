@@ -48,6 +48,7 @@ public class RunicBlockItemRenderer extends GeoItemRenderer<RunicBlockItem> {
         }
     }
 
+
     private boolean isHandContext() {
         return this.renderPerspective == ItemDisplayContext.FIRST_PERSON_RIGHT_HAND
             || this.renderPerspective == ItemDisplayContext.FIRST_PERSON_LEFT_HAND

@@ -97,7 +97,7 @@ public class ZombifiedArtificerAcolyteEntity extends Monster implements GeoEntit
             new CastSpellBehaviour<ZombifiedArtificerAcolyteEntity>(40) {
                 @Override
                 protected void performCast(ServerLevel level, ZombifiedArtificerAcolyteEntity entity, LivingEntity target, SpellCastContext ctx) {
-                    SpellParams params = new SpellParams(5f, 1.0f, 0.75f, 0, 0, 0,
+                    SpellParams params = new SpellParams(5f, 1.0f,0.25f, 0.75f, 0, 0, 0,
                         ModElements.ARCANE.get(), MagicDamageType.BLUNT);
                     params.damage = params.damage * (1.0f + params.size) / 2.0f;
                     ModSpellTypes.MAGIC_PROJECTILE.get().onCast(ctx, params);

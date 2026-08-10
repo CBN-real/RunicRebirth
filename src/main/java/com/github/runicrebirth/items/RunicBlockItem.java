@@ -87,7 +87,7 @@ public class RunicBlockItem extends BlockItem implements GeoItem {
                 if (this.renderer == null) {
                     String tex = texturePath != null ? texturePath : "textures/block/" + blockName + ".png";
                     this.renderer = new com.github.runicrebirth.client.renderers.blocks.RunicBlockItemRenderer(
-                        new com.github.runicrebirth.client.renderers.blocks.RunicBlockItemModel(
+                        new com.github.runicrebirth.client.renderers.blocks.RunicBlockItemModel<>(
                             "geo/block/" + blockName + ".geo.json",
                             tex,
                             "animations/block/" + blockName + ".animation.json"));

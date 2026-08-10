@@ -2,6 +2,7 @@ package com.github.runicrebirth.network;
 
 import com.github.runicrebirth.RunicRebirth;
 import com.github.runicrebirth.client.ClientMagicData;
+import com.github.runicrebirth.items.curios.RingOfPhantomMiningItem;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
@@ -29,6 +30,10 @@ public record PhantomMiningSyncS2CPacket(int ticks) implements CustomPacketPaylo
     }
 
     public static void handle(PhantomMiningSyncS2CPacket packet, IPayloadContext ctx) {
-        ctx.enqueueWork(() -> ClientMagicData.setPhantomMiningTicks(packet.ticks()));
+        ctx.enqueueWork(() -> {
+            ClientMagicData.setPhantomMiningTicks(packet.ticks());
+            ClientMagicData.applyRingDuration(RingOfPhantomMiningItem.DURATION_KEY,
+                packet.ticks(), RingOfPhantomMiningItem.EFFECT_TICKS);
+        });
     }
 }

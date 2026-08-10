@@ -16,6 +16,7 @@ public class SpellParams {
     public final List<PostHitEffect> postHitEffects = new ArrayList<>();
     public final List<String> modifierIds = new ArrayList<>();
 
+    public float spellHeight = 1.0f;
     public int extraCasts;
     public boolean useCharges;
     public int chargesMultiplier = 1;
@@ -23,10 +24,11 @@ public class SpellParams {
     public int cooldownOverrideTicks = -1;
 
 
-    public SpellParams(float damage, float size, float speed, int duration, int castingDelayTicks, int piercing,
+    public SpellParams(float damage, float size, float spellHeight, float speed, int duration, int castingDelayTicks, int piercing,
                        Element element, MagicDamageType damageCategory) {
         this.damage = damage;
         this.size = size;
+        this.spellHeight = spellHeight;
         this.speed = speed;
         this.duration = duration;
         this.castingDelayTicks = castingDelayTicks;
@@ -36,7 +38,7 @@ public class SpellParams {
     }
 
     public static SpellParams base(Element defaultElement, MagicDamageType damageCategory) {
-        return new SpellParams(1f, 1f, 1f, 20, 15, 0, defaultElement, damageCategory);
+        return new SpellParams(1f, 1f, 1f, 1f, 20, 15, 0, defaultElement, damageCategory);
     }
 
     public void addPostHitEffect(PostHitEffect effect) {
@@ -44,9 +46,10 @@ public class SpellParams {
     }
 
     public SpellParams copy() {
-        SpellParams c = new SpellParams(damage, size, speed, duration, piercing, castingDelayTicks, element, damageCategory);
+        SpellParams c = new SpellParams(damage, size, spellHeight, speed, duration, piercing, castingDelayTicks, element, damageCategory);
         c.postHitEffects.addAll(this.postHitEffects);
         c.modifierIds.addAll(this.modifierIds);
+        c.spellHeight = this.spellHeight;
         c.extraCasts = this.extraCasts;
         c.useCharges = this.useCharges;
         c.chargesMultiplier = this.chargesMultiplier;

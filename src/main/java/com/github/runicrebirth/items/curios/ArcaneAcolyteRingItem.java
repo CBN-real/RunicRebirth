@@ -45,7 +45,7 @@ public class ArcaneAcolyteRingItem extends MagicItem implements IActivatableRing
         );
 
         SpellParams params = new SpellParams(
-            spell.baseDamage(), spell.baseSize(), spell.baseSpeed(),
+            spell.baseDamage(), spell.baseSize(),spell.spellHeight(), spell.baseSpeed(),
             spell.baseDuration(), spell.castingDelayTicks() / 2, 0,
             ModElements.ARCANE.get(), spell.damageCategory()
         );

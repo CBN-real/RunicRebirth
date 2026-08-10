@@ -62,7 +62,7 @@ public class MagicBeamEntity extends AbstractInstantSpellEntity {
     protected void onChargingTick() {
         if (phaseAge == 1) {
             level().playSound(null, this.getX(), this.getY(), this.getZ(),
-                ModSounds.SPELLS_LASER_SHOT.get(), SoundSource.PLAYERS, 0.4f, 0.9f);
+                ModSounds.SPELLS_LASER_SHOT.get(), SoundSource.PLAYERS, 0.4f, 1.3f);
         }
     }
 

@@ -8,6 +8,9 @@
     "runicrebirth:oculus_portal",
     "runicrebirth:oculus_controller",
     "runicrebirth:runesteel_pylon",
-    "runicrebirth:infusion_altar"
+    "runicrebirth:infusion_altar",
+    "runicrebirth:dungeon_temporary_platform",
+    "runicrebirth:dungeon_pressure_plate",
+    "runicrebirth:dungeon_spike"
   ]
 }

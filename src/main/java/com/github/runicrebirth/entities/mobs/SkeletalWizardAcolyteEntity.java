@@ -41,8 +41,8 @@ import java.util.List;
 
 public class SkeletalWizardAcolyteEntity extends Monster implements GeoEntity, SmartBrainOwner<SkeletalWizardAcolyteEntity> {
 
-    private static final RawAnimation IDLE = RawAnimation.begin().thenLoop("animation.skeletal_wizard_acolyte.idle");
-    private static final RawAnimation CAST = RawAnimation.begin().thenPlay("animation.skeletal_wizard_acolyte.cast");
+    private static final RawAnimation IDLE = RawAnimation.begin().thenLoop("idle");
+    private static final RawAnimation CAST = RawAnimation.begin().thenPlay("cast");
 
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
@@ -102,7 +102,7 @@ public class SkeletalWizardAcolyteEntity extends Monster implements GeoEntity, S
                 protected void performCast(ServerLevel level, SkeletalWizardAcolyteEntity entity, LivingEntity target, SpellCastContext ctx) {
                     Vec3 spawnPos = entity.position().add(entity.getLookAngle().scale(1.0));
                     MagicBlastEntity blast = new MagicBlastEntity(ModEntities.MAGIC_BLAST.get(), level);
-                    SpellParams params = new SpellParams(2.5f, 2.0f, 1.0f, 0, 0, 0,
+                    SpellParams params = new SpellParams(2.5f, 2.0f,0.25f, 1.0f, 0, 0, 0,
                         ModElements.ARCANE.get(), MagicDamageType.BLUNT);
                     blast.init(entity, spawnPos, entity.getLookAngle(), params);
                     level.addFreshEntity(blast);
@@ -117,7 +117,7 @@ public class SkeletalWizardAcolyteEntity extends Monster implements GeoEntity, S
                 }
                 @Override
                 protected void performCast(ServerLevel level, SkeletalWizardAcolyteEntity entity, LivingEntity target, SpellCastContext ctx) {
-                    SpellParams params = new SpellParams(6f, 1.5f, 1.5f, 0, 0, 0,
+                    SpellParams params = new SpellParams(6f, 1.5f,0.125f, 1.5f, 0, 0, 0,
                         ModElements.ARCANE.get(), MagicDamageType.SHARP);
                     ModSpellTypes.MAGIC_ARROW.get().onCast(ctx, params);
                 }

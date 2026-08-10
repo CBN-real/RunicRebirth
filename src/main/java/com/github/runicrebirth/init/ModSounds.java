@@ -148,6 +148,50 @@ public final class ModSounds {
         SOUNDS.register("spells.meteor_end", () -> SoundEvent.createVariableRangeEvent(
             ResourceLocation.fromNamespaceAndPath(RunicRebirth.MODID, "spells.meteor_end")));
 
+    public static final DeferredHolder<SoundEvent, SoundEvent> DUNGEON_DOOR =
+        SOUNDS.register("dungeon.door", () -> SoundEvent.createVariableRangeEvent(
+            ResourceLocation.fromNamespaceAndPath(RunicRebirth.MODID, "dungeon.door")));
+
+    public static final DeferredHolder<SoundEvent, SoundEvent> DUNGEON_DOOR_CLOSING =
+        SOUNDS.register("dungeon.door_closing", () -> SoundEvent.createVariableRangeEvent(
+            ResourceLocation.fromNamespaceAndPath(RunicRebirth.MODID, "dungeon.door_closing")));
+
+    public static final DeferredHolder<SoundEvent, SoundEvent> DUNGEON_PRESSURE_PLATE =
+        SOUNDS.register("dungeon.pressure_plate", () -> SoundEvent.createVariableRangeEvent(
+            ResourceLocation.fromNamespaceAndPath(RunicRebirth.MODID, "dungeon.pressure_plate")));
+
+    public static final DeferredHolder<SoundEvent, SoundEvent> DUNGEON_SPIKE =
+        SOUNDS.register("dungeon.spike", () -> SoundEvent.createVariableRangeEvent(
+            ResourceLocation.fromNamespaceAndPath(RunicRebirth.MODID, "dungeon.spike")));
+
+    public static final DeferredHolder<SoundEvent, SoundEvent> DUNGEON_TEMPORARY_PLATFORM =
+        SOUNDS.register("dungeon.temporary_platform", () -> SoundEvent.createVariableRangeEvent(
+            ResourceLocation.fromNamespaceAndPath(RunicRebirth.MODID, "dungeon.temporary_platform")));
+
+  public static final DeferredHolder<SoundEvent, SoundEvent> DUNGEON_CRUMBLING_PLATFORM =
+      SOUNDS.register("dungeon.crumbling_platform", () -> SoundEvent.createVariableRangeEvent(
+          ResourceLocation.fromNamespaceAndPath(RunicRebirth.MODID, "dungeon.crumbling_platform")));
+
+    public static final DeferredHolder<SoundEvent, SoundEvent> SPELLS_HOVER =
+        SOUNDS.register("spells.hover", () -> SoundEvent.createVariableRangeEvent(
+            ResourceLocation.fromNamespaceAndPath(RunicRebirth.MODID, "spells.hover")));
+
+    public static final DeferredHolder<SoundEvent, SoundEvent> SPELLS_THRUSTER =
+        SOUNDS.register("spells.thruster", () -> SoundEvent.createVariableRangeEvent(
+            ResourceLocation.fromNamespaceAndPath(RunicRebirth.MODID, "spells.thruster")));
+
+    public static final DeferredHolder<SoundEvent, SoundEvent> SPELLS_BLINK =
+        SOUNDS.register("spells.blink", () -> SoundEvent.createVariableRangeEvent(
+            ResourceLocation.fromNamespaceAndPath(RunicRebirth.MODID, "spells.blink")));
+
+    public static final DeferredHolder<SoundEvent, SoundEvent> SPELLS_LEAPING =
+        SOUNDS.register("spells.leaping", () -> SoundEvent.createVariableRangeEvent(
+            ResourceLocation.fromNamespaceAndPath(RunicRebirth.MODID, "spells.leaping")));
+
+    public static final DeferredHolder<SoundEvent, SoundEvent> SPELLS_TETHER =
+        SOUNDS.register("spells.tether", () -> SoundEvent.createVariableRangeEvent(
+            ResourceLocation.fromNamespaceAndPath(RunicRebirth.MODID, "spells.tether")));
+
     public static void init() {}
 
     private ModSounds() {}

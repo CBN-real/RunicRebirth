@@ -1,11 +1,11 @@
 package com.github.runicrebirth.client.renderers.blocks;
 
 import com.github.runicrebirth.RunicRebirth;
-import com.github.runicrebirth.items.RunicBlockItem;
 import net.minecraft.resources.ResourceLocation;
+import software.bernie.geckolib.animatable.GeoAnimatable;
 import software.bernie.geckolib.model.GeoModel;
 
-public class RunicBlockItemModel extends GeoModel<RunicBlockItem> {
+public class RunicBlockItemModel<T extends GeoAnimatable> extends GeoModel<T> {
 
     private final ResourceLocation model;
     private final ResourceLocation texture;
@@ -18,11 +18,11 @@ public class RunicBlockItemModel extends GeoModel<RunicBlockItem> {
     }
 
     @Override
-    public ResourceLocation getModelResource(RunicBlockItem animatable) { return model; }
+    public ResourceLocation getModelResource(T animatable) { return model; }
 
     @Override
-    public ResourceLocation getTextureResource(RunicBlockItem animatable) { return texture; }
+    public ResourceLocation getTextureResource(T animatable) { return texture; }
 
     @Override
-    public ResourceLocation getAnimationResource(RunicBlockItem animatable) { return animation; }
+    public ResourceLocation getAnimationResource(T animatable) { return animation; }
 }

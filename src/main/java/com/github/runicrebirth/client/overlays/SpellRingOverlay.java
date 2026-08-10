@@ -3,9 +3,14 @@ package com.github.runicrebirth.client.overlays;
 import com.github.runicrebirth.client.ClientMagicData;
 import com.github.runicrebirth.client.input.ModKeyMappings;
 import com.github.runicrebirth.entities.MagicHandEntity;
+import com.github.runicrebirth.entities.spells.ArcaneTetherEntity;
+import com.github.runicrebirth.items.curios.ArcaneTetherRingItem;
+import com.github.runicrebirth.items.curios.BlinkRingItem;
+import com.github.runicrebirth.items.curios.HoverRingItem;
 import com.github.runicrebirth.items.curios.MagicHandRingItem;
 import com.github.runicrebirth.items.curios.RingOfLeapingGalesItem;
 import com.github.runicrebirth.items.curios.RingOfPhantomMiningItem;
+import com.github.runicrebirth.items.curios.ThrusterRingItem;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
@@ -114,26 +119,22 @@ public class SpellRingOverlay implements LayeredDraw.Layer {
     }
 
     private static void drawDurationBar(GuiGraphics graphics, ItemStack stack, int x, int y) {
-        if (stack.getItem() instanceof RingOfPhantomMiningItem) {
-            int pmTicks = ClientMagicData.phantomMiningTicks();
-            if (pmTicks <= 0) return;
-            float fraction = Math.min(1.0f, pmTicks / (float) RingOfPhantomMiningItem.EFFECT_TICKS);
+        ResourceLocation durId = getDurationId(stack);
+        if (durId == null) return;
+
+        int remaining = ClientMagicData.ringDurationRemaining(durId);
+        if (remaining == 0) return;
+
+        if (remaining < 0) {
+            // Indefinite active state (hover ring on, magic hand passive) — solid teal tint
+            graphics.fill(x, y, x + SLOT_SIZE, y + SLOT_SIZE, 0x4400CCAA);
+        } else {
+            int max = ClientMagicData.ringDurationMax(durId);
+            float fraction = Math.min(1.0f, remaining / (float) Math.max(1, max));
             int filledHeight = (int)(SLOT_SIZE * fraction);
             int elapsedHeight = SLOT_SIZE - filledHeight;
             if (elapsedHeight > 0) graphics.fill(x, y, x + SLOT_SIZE, y + elapsedHeight, 0xAA000000);
             if (filledHeight > 0) graphics.fill(x, y + elapsedHeight, x + SLOT_SIZE, y + SLOT_SIZE, 0x4400CCAA);
-        } else if (stack.getItem() instanceof MagicHandRingItem) {
-            int handTicks = ClientMagicData.magicHandTicks();
-            if (handTicks == 0) return;
-            if (ClientMagicData.magicHandIsPassive()) {
-                graphics.fill(x, y, x + SLOT_SIZE, y + SLOT_SIZE, 0x4400CCAA);
-            } else {
-                float fraction = Math.min(1.0f, handTicks / (float) MagicHandEntity.HOSTILE_HOLD_TICKS);
-                int filledHeight = (int)(SLOT_SIZE * fraction);
-                int elapsedHeight = SLOT_SIZE - filledHeight;
-                if (elapsedHeight > 0) graphics.fill(x, y, x + SLOT_SIZE, y + elapsedHeight, 0xAA000000);
-                if (filledHeight > 0) graphics.fill(x, y + elapsedHeight, x + SLOT_SIZE, y + SLOT_SIZE, 0x4400CCAA);
-            }
         }
     }
 
@@ -151,9 +152,21 @@ public class SpellRingOverlay implements LayeredDraw.Layer {
         }
     }
 
+    private static ResourceLocation getDurationId(ItemStack stack) {
+        if (stack.getItem() instanceof HoverRingItem) return HoverRingItem.DURATION_KEY;
+        if (stack.getItem() instanceof ThrusterRingItem) return ThrusterRingItem.DURATION_KEY;
+        if (stack.getItem() instanceof RingOfPhantomMiningItem) return RingOfPhantomMiningItem.DURATION_KEY;
+        if (stack.getItem() instanceof MagicHandRingItem) return MagicHandEntity.DURATION_KEY;
+        return null;
+    }
+
     private static ResourceLocation getCooldownId(ItemStack stack) {
         if (stack.getItem() instanceof RingOfPhantomMiningItem) return RingOfPhantomMiningItem.COOLDOWN_ID;
         if (stack.getItem() instanceof RingOfLeapingGalesItem) return RingOfLeapingGalesItem.COOLDOWN_ID;
+        if (stack.getItem() instanceof MagicHandRingItem) return MagicHandEntity.COOLDOWN_KEY;
+        if (stack.getItem() instanceof ArcaneTetherRingItem) return ArcaneTetherEntity.COOLDOWN_KEY;
+        if (stack.getItem() instanceof BlinkRingItem) return BlinkRingItem.COOLDOWN_ID;
+        if (stack.getItem() instanceof ThrusterRingItem) return ThrusterRingItem.COOLDOWN_ID;
         return null;
     }
 

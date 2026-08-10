@@ -19,7 +19,7 @@ public class EnergyCracklingSoundInstance extends AbstractTickableSoundInstance 
         this.entity = entity;
         this.looping = true;
         this.delay = 0;
-        this.volume = 0.6f;
+        this.volume = 0.3f;
         this.pitch = 1.0f;
         this.x = entity.getX();
         this.y = entity.getY();

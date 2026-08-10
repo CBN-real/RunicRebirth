@@ -1,9 +1,12 @@
 package com.github.runicrebirth.items.curios;
 
+import com.github.runicrebirth.capabilities.magic.MagicData;
 import com.github.runicrebirth.entities.spells.ArcaneTetherEntity;
+import com.github.runicrebirth.init.ModSounds;
 import com.github.runicrebirth.items.MagicItem;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
@@ -25,6 +28,7 @@ public class ArcaneTetherRingItem extends MagicItem implements IActivatableRing 
     @Override
     public void activate(ServerPlayer player, ItemStack stack) {
         if (!(player.level() instanceof ServerLevel level)) return;
+        if (MagicData.of(player).isOnCooldown(ArcaneTetherEntity.COOLDOWN_KEY)) return;
 
         // Toggle off existing tether
         AABB searchBox = player.getBoundingBox().inflate(TETHER_RANGE + 4);
@@ -89,5 +93,8 @@ public class ArcaneTetherRingItem extends MagicItem implements IActivatableRing 
             attachedEntityId);
         tether.setPos(anchorPos.x, anchorPos.y, anchorPos.z);
         level.addFreshEntity(tether);
+
+        level.playSound(null, player.getX(), player.getY(), player.getZ(),
+            ModSounds.SPELLS_TETHER.get(), SoundSource.PLAYERS, 1.0f, 1.0f);
     }
 }

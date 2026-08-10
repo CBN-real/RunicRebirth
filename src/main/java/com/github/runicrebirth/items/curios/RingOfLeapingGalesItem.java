@@ -3,11 +3,13 @@ package com.github.runicrebirth.items.curios;
 import com.github.runicrebirth.RunicRebirth;
 import com.github.runicrebirth.capabilities.magic.MagicData;
 import com.github.runicrebirth.init.ModParticles;
+import com.github.runicrebirth.init.ModSounds;
 import com.github.runicrebirth.items.MagicItem;
 import com.github.runicrebirth.particle.ScaledParticleOption;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.item.ItemStack;
@@ -57,7 +59,8 @@ public class RingOfLeapingGalesItem extends MagicItem implements IActivatableRin
         player.fallDistance = 0;
 
         player.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, SLOW_FALL_TICKS, 0, false, true, true));
-
+        player.serverLevel().playSound(null, player.getX(), player.getY(), player.getZ(),
+            ModSounds.SPELLS_LEAPING.get(), SoundSource.PLAYERS, 1.0f, 1.0f);
         data.startCooldown(COOLDOWN_ID, COOLDOWN_TICKS);
     }
 }

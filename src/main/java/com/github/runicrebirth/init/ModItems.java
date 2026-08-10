@@ -3,7 +3,9 @@ package com.github.runicrebirth.init;
 import com.github.runicrebirth.RunicRebirth;
 import com.github.runicrebirth.items.AdeptStaffItem;
 import com.github.runicrebirth.items.AcolyteWandItem;
+import com.github.runicrebirth.items.BasicRunicLongsword;
 import com.github.runicrebirth.items.InscribedWandItem;
+import com.github.runicrebirth.items.RunelightTorchItem;
 import com.github.runicrebirth.items.RunicBlockItem;
 import com.github.runicrebirth.items.RunicCircuitItem;
 import com.github.runicrebirth.items.RunicCodexItem;
@@ -11,11 +13,16 @@ import com.github.runicrebirth.items.armor.AcolyteSetItem;
 import com.github.runicrebirth.items.armor.AdeptSetItem;
 import com.github.runicrebirth.items.RunicKeyRingItem;
 import com.github.runicrebirth.items.curios.ArcaneAcolyteRingItem;
+import com.github.runicrebirth.items.curios.ArcaneDroneItem;
 import com.github.runicrebirth.items.curios.ArcaneTetherRingItem;
+import com.github.runicrebirth.items.curios.HammerDroneItem;
+import com.github.runicrebirth.items.curios.BlinkRingItem;
 import com.github.runicrebirth.items.curios.MagicHandRingItem;
 import com.github.runicrebirth.items.curios.RingOfExpansionItem;
+import com.github.runicrebirth.items.curios.HoverRingItem;
 import com.github.runicrebirth.items.curios.RingOfLeapingGalesItem;
 import com.github.runicrebirth.items.curios.RingOfPhantomMiningItem;
+import com.github.runicrebirth.items.curios.ThrusterRingItem;
 import com.github.runicrebirth.spells.modifiers.AdditiveSizeModifier;
 import com.github.runicrebirth.util.ItemPropertiesHelper;
 import net.minecraft.world.item.ArmorItem;
@@ -64,6 +71,21 @@ public final class ModItems {
 
     public static final DeferredItem<RingOfPhantomMiningItem> RING_OF_PHANTOM_MINING = ITEMS.registerItem(
         "ring_of_phantom_mining", RingOfPhantomMiningItem::new, ItemPropertiesHelper.equipment());
+
+    public static final DeferredItem<BlinkRingItem> BLINK_RING = ITEMS.registerItem(
+        "blink_ring", BlinkRingItem::new, ItemPropertiesHelper.equipment());
+
+    public static final DeferredItem<ThrusterRingItem> THRUSTER_RING = ITEMS.registerItem(
+        "thruster_ring", ThrusterRingItem::new, ItemPropertiesHelper.equipment());
+
+    public static final DeferredItem<HoverRingItem> HOVER_RING = ITEMS.registerItem(
+        "hover_ring", HoverRingItem::new, ItemPropertiesHelper.equipment());
+
+    public static final DeferredItem<ArcaneDroneItem> ARCANE_DRONE = ITEMS.registerItem(
+        "arcane_drone", ArcaneDroneItem::new, ItemPropertiesHelper.equipment());
+
+    public static final DeferredItem<HammerDroneItem> HAMMER_DRONE = ITEMS.registerItem(
+        "hammer_drone", HammerDroneItem::new, ItemPropertiesHelper.equipment());
 
     public static final DeferredItem<RunicKeyRingItem> RUNIC_KEY_RING = ITEMS.registerItem(
         "runic_key_ring", RunicKeyRingItem::new, new Item.Properties().stacksTo(1));
@@ -206,6 +228,9 @@ public final class ModItems {
         "arch_runic_circuit", () -> new RunicCircuitItem(
             new Item.Properties().component(ModDataComponents.CIRCUIT_TIER.get(), 3), 3));
 
+    public static final DeferredItem<BasicRunicLongsword> BASIC_RUNIC_LONGSWORD = ITEMS.registerItem(
+        "basic_runic_longsword", BasicRunicLongsword::new, new Item.Properties().stacksTo(1));
+
     // Dungeon items
     public static final DeferredItem<Item> ARCANE_SPIRIT = ITEMS.registerSimpleItem("arcane_spirit", new Item.Properties().stacksTo(64));
     public static final DeferredItem<Item> ARCANE_GEMSTONE = ITEMS.registerSimpleItem("arcane_gemstone", new Item.Properties().stacksTo(64));
@@ -217,6 +242,8 @@ public final class ModItems {
     public static final DeferredItem<BlockItem> RUNIC_STONE_PILLAR = ITEMS.registerSimpleBlockItem(ModBlocks.RUNIC_STONE_PILLAR);
     public static final DeferredItem<BlockItem> RUNIC_STONE_BRICKS = ITEMS.registerSimpleBlockItem(ModBlocks.RUNIC_STONE_BRICKS);
     public static final DeferredItem<BlockItem> ARCANE_RUNIC_STONE_BRICKS = ITEMS.registerSimpleBlockItem(ModBlocks.ARCANE_RUNIC_STONE_BRICKS);
+    public static final DeferredItem<BlockItem> CUT_RUNIC_STONE = ITEMS.registerSimpleBlockItem(ModBlocks.CUT_RUNIC_STONE);
+    public static final DeferredItem<BlockItem> REINFORCED_CUT_RUNIC_STONE = ITEMS.registerSimpleBlockItem(ModBlocks.REINFORCED_CUT_RUNIC_STONE);
     public static final DeferredItem<RunicBlockItem> OCULUS_PORTAL = ITEMS.register("oculus_portal",
             () -> new RunicBlockItem(ModBlocks.OCULUS_PORTAL.get(), new Item.Properties(), "inactive", "oculus_portal").withHandRotationY(90));
     public static final DeferredItem<RunicBlockItem> OCULUS_CONTROLLER = ITEMS.register("oculus_controller",
@@ -235,6 +262,33 @@ public final class ModItems {
                     .withGuiTranslation(0f, -0.3f, 0f));
     public static final DeferredItem<BlockItem> RETURN_PORTAL = ITEMS.registerSimpleBlockItem(ModBlocks.RETURN_PORTAL);
     public static final DeferredItem<BlockItem> TRIAL_SPAWNER = ITEMS.registerSimpleBlockItem(ModBlocks.TRIAL_SPAWNER);
+    public static final DeferredItem<RunicBlockItem> RUNESTEEL_PORTCULLIS = ITEMS.register("runesteel_portcullis",
+            () -> new RunicBlockItem(ModBlocks.RUNESTEEL_PORTCULLIS.get(), new Item.Properties(), "open_top", "runesteel_portcullis")
+                .withTexture("textures/entity/runic_templates/arcane_runic_template.png")
+                .withGuiTranslation(0f, -0.3f, 0f)
+                .withHandRotationY(30));
+
+    public static final DeferredItem<RunicBlockItem> DUNGEON_DOOR = ITEMS.register("dungeon_door",
+            () -> new RunicBlockItem(ModBlocks.DUNGEON_DOOR.get(), new Item.Properties(), "idle", "dungeon_door")
+                .withGuiScale(0.25f));
+
+    public static final DeferredItem<RunelightTorchItem> RUNELIGHT_TORCH = ITEMS.register("runelight_torch",
+            () -> new RunelightTorchItem(ModBlocks.RUNELIGHT_TORCH.get(), ModBlocks.RUNELIGHT_WALL_TORCH.get(), new Item.Properties()));
+
+    public static final DeferredItem<RunicBlockItem> RUNELIGHT_LANTERN = ITEMS.register("runelight_lantern",
+            () -> new RunicBlockItem(ModBlocks.RUNELIGHT_LANTERN.get(), new Item.Properties(), "idle", "runelight_lantern")
+                    .withTexture("textures/entity/runic_templates/arcane_runic_template.png"));
+
+    // Dungeon trap block items
+    public static final DeferredItem<BlockItem> DUNGEON_TEMPORARY_PLATFORM = ITEMS.registerSimpleBlockItem(ModBlocks.DUNGEON_TEMPORARY_PLATFORM);
+    public static final DeferredItem<BlockItem> DUNGEON_PRESSURE_PLATE = ITEMS.registerSimpleBlockItem(ModBlocks.DUNGEON_PRESSURE_PLATE);
+    public static final DeferredItem<BlockItem> DUNGEON_SPIKE = ITEMS.registerSimpleBlockItem(ModBlocks.DUNGEON_SPIKE);
+    public static final DeferredItem<BlockItem> CRUMBLING_PLATFORM = ITEMS.registerSimpleBlockItem(ModBlocks.CRUMBLING_PLATFORM);
+    public static final DeferredItem<RunicBlockItem> DUNGEON_BOULDER_SPAWNER = ITEMS.register("dungeon_boulder_spawner",
+            () -> new RunicBlockItem(ModBlocks.DUNGEON_BOULDER_SPAWNER.get(), new Item.Properties(), "idle", "dungeon_boulder_spawner"));
+    public static final DeferredItem<RunicBlockItem> DUNGEON_SWINGING_AXE = ITEMS.register("dungeon_swinging_axe",
+            () -> new RunicBlockItem(ModBlocks.DUNGEON_SWINGING_AXE.get(), new Item.Properties(), "swinging_axe", "dungeon_swinging_axe"));
+    public static final DeferredItem<BlockItem> DUNGEON_FLAMETHROWER = ITEMS.registerSimpleBlockItem(ModBlocks.DUNGEON_FLAMETHROWER);
 
     private ModItems() {}
 }

@@ -1,7 +1,11 @@
 package com.github.runicrebirth.init;
 
 import com.github.runicrebirth.RunicRebirth;
+import com.github.runicrebirth.entities.ArcaneDroneEntity;
+import com.github.runicrebirth.entities.CrumblingPlatformFallingEntity;
+import com.github.runicrebirth.entities.DungeonBoulderEntity;
 import com.github.runicrebirth.entities.DrawingCanvasEntity;
+import com.github.runicrebirth.entities.HammerDroneEntity;
 import com.github.runicrebirth.entities.MagicHandEntity;
 import com.github.runicrebirth.entities.PhantomMinerEntity;
 import com.github.runicrebirth.entities.mobs.RunesteelGolemEntity;
@@ -281,6 +285,22 @@ public class ModEntities {
             .noSave()
             .build("phantom_miner"));
 
+    public static final DeferredHolder<EntityType<?>, EntityType<CrumblingPlatformFallingEntity>> CRUMBLING_PLATFORM_FALLING = ENTITIES.register(
+        "crumbling_platform_falling",
+        () -> EntityType.Builder.<CrumblingPlatformFallingEntity>of(CrumblingPlatformFallingEntity::new, MobCategory.MISC)
+            .sized(0.98F, 0.98F)
+            .clientTrackingRange(4)
+            .updateInterval(1)
+            .build("crumbling_platform_falling"));
+
+    public static final DeferredHolder<EntityType<?>, EntityType<DungeonBoulderEntity>> DUNGEON_BOULDER = ENTITIES.register(
+        "dungeon_boulder",
+        () -> EntityType.Builder.<DungeonBoulderEntity>of(DungeonBoulderEntity::new, MobCategory.MISC)
+            .sized(2.0F, 2.0F)
+            .clientTrackingRange(10)
+            .updateInterval(1)
+            .build("dungeon_boulder"));
+
     public static final DeferredHolder<EntityType<?>, EntityType<TargetCircleEntity>> TARGET_CIRCLE = ENTITIES.register(
         "target_circle",
         () -> EntityType.Builder.<TargetCircleEntity>of(TargetCircleEntity::new, MobCategory.MISC)
@@ -288,6 +308,24 @@ public class ModEntities {
             .clientTrackingRange(0)
             .noSave()
             .build("target_circle"));
+
+    public static final DeferredHolder<EntityType<?>, EntityType<ArcaneDroneEntity>> ARCANE_DRONE = ENTITIES.register(
+        "arcane_drone",
+        () -> EntityType.Builder.<ArcaneDroneEntity>of(ArcaneDroneEntity::new, MobCategory.MISC)
+            .sized(0.5F, 0.5F)
+            .clientTrackingRange(8)
+            .updateInterval(3)
+            .noSave()
+            .build("arcane_drone"));
+
+    public static final DeferredHolder<EntityType<?>, EntityType<HammerDroneEntity>> HAMMER_DRONE = ENTITIES.register(
+        "hammer_drone",
+        () -> EntityType.Builder.<HammerDroneEntity>of(HammerDroneEntity::new, MobCategory.MISC)
+            .sized(0.6F, 0.6F)
+            .clientTrackingRange(8)
+            .updateInterval(3)
+            .noSave()
+            .build("hammer_drone"));
 
     public static final DeferredHolder<EntityType<?>, EntityType<RunesteelGolemEntity>> RUNESTEEL_GOLEM = ENTITIES.register(
         "runesteel_golem",

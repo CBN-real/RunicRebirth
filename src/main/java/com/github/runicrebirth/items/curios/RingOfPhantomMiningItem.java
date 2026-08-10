@@ -13,6 +13,8 @@ public class RingOfPhantomMiningItem extends MagicItem implements IActivatableRi
     public static final int EFFECT_TICKS = 1200;
     public static final ResourceLocation COOLDOWN_ID =
         ResourceLocation.fromNamespaceAndPath(RunicRebirth.MODID, "phantom_mining_ring");
+    public static final ResourceLocation DURATION_KEY =
+        ResourceLocation.fromNamespaceAndPath(RunicRebirth.MODID, "phantom_mining_ring_duration");
     public static final int COOLDOWN_TICKS = 600;
 
     public RingOfPhantomMiningItem(Properties properties) {

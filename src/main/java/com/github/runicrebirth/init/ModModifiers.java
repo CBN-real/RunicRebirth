@@ -43,10 +43,10 @@ public final class ModModifiers {
         ModifierRegistry.MODIFIERS.register("charges", () -> new ChargesModifier(ChargesModifier.ID, "charges", 2));
 
     public static final DeferredHolder<SpellModifier, ChargesModifier> CHARGES_THREE =
-        ModifierRegistry.MODIFIERS.register("charges_three", () -> new ChargesModifier(ChargesModifier.ID_THREE, "charges_three", 3));
+        ModifierRegistry.MODIFIERS.register("charges_three", () -> new ChargesModifier(ChargesModifier.ID_THREE, "three_charges", 3));
 
     public static final DeferredHolder<SpellModifier, ChargesModifier> CHARGES_FOUR =
-        ModifierRegistry.MODIFIERS.register("charges_four", () -> new ChargesModifier(ChargesModifier.ID_FOUR, "charges_four", 4));
+        ModifierRegistry.MODIFIERS.register("charges_four", () -> new ChargesModifier(ChargesModifier.ID_FOUR, "four_charges", 4));
 
     public static final DeferredHolder<SpellModifier, DamageTypeBoostModifier> SHARP_BOOST =
         ModifierRegistry.MODIFIERS.register("sharp_boost",

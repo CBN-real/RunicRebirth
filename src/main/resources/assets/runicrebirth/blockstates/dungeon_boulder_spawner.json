@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=north": { "model": "runicrebirth:block/dungeon_boulder_spawner" },
+    "facing=south": { "model": "runicrebirth:block/dungeon_boulder_spawner", "y": 180 },
+    "facing=east":  { "model": "runicrebirth:block/dungeon_boulder_spawner", "y": 90 },
+    "facing=west":  { "model": "runicrebirth:block/dungeon_boulder_spawner", "y": 270 }
+  }
+}

@@ -49,6 +49,8 @@ public final class ModParticles {
     public static final Supplier<ParticleType<ScaledParticleOption>> EARTH_INK  = registerScaled("earth_ink");
     public static final Supplier<ParticleType<ScaledParticleOption>> WIND_INK   = registerScaled("wind_ink");
 
+    public static final Supplier<ParticleType<ScaledParticleOption>> HOVER_EFFECT = registerScaled("hover_effect");
+
     @SuppressWarnings("unchecked")
     public static final Supplier<ParticleType<TremorBlockParticleOption>> TREMOR_BLOCK =
         PARTICLES.register("tremor_block", () -> new ParticleType<TremorBlockParticleOption>(false) {

@@ -30,8 +30,8 @@ public final class ShapeTemplates {
     public static final ResourceLocation ID_TWO_CASTS  = id("two_casts");
     public static final ResourceLocation ID_FOUR_CASTS = id("four_casts");
     public static final ResourceLocation ID_CHARGES       = id("charges");
-    public static final ResourceLocation ID_CHARGES_THREE = id("charges_three");
-    public static final ResourceLocation ID_CHARGES_FOUR  = id("charges_four");
+    public static final ResourceLocation ID_CHARGES_THREE = id("three_charges");
+    public static final ResourceLocation ID_CHARGES_FOUR  = id("four_charges");
     public static final ResourceLocation ID_PLUS_TWO   = id("plus_two");
     public static final ResourceLocation ID_PLUS_FOUR  = id("plus_four");
     public static final ResourceLocation ID_SHARP_BOOST = id("sharp_boost");
@@ -296,6 +296,31 @@ public final class ShapeTemplates {
             40.0,-40.0,  60.0,0.0,  80.0,0.0,  40.0,20.0,
             40.0,40.0
         );
+    }
+
+    public static List<StrokePoint> threeCharges() {
+      return pts(
+          -80.0,-60.0, -60.0,-40.0, -40.0,-20.0, -20.0,-40.0,
+          0.0,-60.0, 20.0,-40.0, 40.0,-20.0, 60.0,-40.0,
+          80.0,-60.0, 60.0,0.0, 60.0,20.0, 60.0,40.0,
+          40.0,40.0, 20.0,40.0, 0.0,40.0, 0.0,20.0,
+          0.0,0.0, -20.0,0.0, -60.0,0.0, -60.0,20.0,
+          -60.0,40.0, -40.0,40.0, -20.0,40.0, 0.0,60.0,
+          0.0,80.0, 20.0,0.0
+      );
+    }
+
+    public static List<StrokePoint> fourCharges() {
+      return pts(
+          0.0,-80.0, 0.0,-60.0, 0.0,-40.0, -20.0,-40.0,
+          -40.0,-40.0, -40.0,-20.0, -40.0,0.0, -60.0,0.0,
+          -80.0,0.0, -40.0,20.0, -40.0,40.0, -20.0,40.0,
+          0.0,40.0, 0.0,20.0, 0.0,0.0, 0.0,-20.0,
+          20.0,-40.0, 40.0,-40.0, 40.0,-20.0, 40.0,0.0,
+          20.0,0.0, 40.0,20.0, 40.0,40.0, 20.0,40.0,
+          0.0,60.0, 0.0,80.0, -20.0,0.0, 60.0,0.0,
+          80.0,0.0
+      );
     }
 
     // ADVANCED SPELL MODIFIERS

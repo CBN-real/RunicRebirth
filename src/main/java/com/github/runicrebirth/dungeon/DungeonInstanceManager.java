@@ -68,6 +68,16 @@ public class DungeonInstanceManager {
         }
     }
 
+    public DungeonInstance getInstanceForPosition(BlockPos pos) {
+        for (DungeonInstance inst : instances.values()) {
+            if (!inst.isActive()) continue;
+            if (Math.abs(pos.getX() - inst.getOrigin().getX()) < INSTANCE_SPACING / 2) {
+                return inst;
+            }
+        }
+        return null;
+    }
+
     public DungeonInstance getInstanceForPlayer(UUID playerId) {
         UUID instanceId = playerToInstance.get(playerId);
         return instanceId != null ? instances.get(instanceId) : null;

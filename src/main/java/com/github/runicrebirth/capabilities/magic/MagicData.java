@@ -31,6 +31,10 @@ public class MagicData {
     private int phantomMiningTicks;
     private boolean phantomMiningJustExpired;
     private int magicHandEntityId = -1;
+    private int arcaneDroneEntityId = -1;
+    private int hammerDroneEntityId = -1;
+    private int thrusterActiveTicks;
+    private boolean glidingActive;
 
 
     public MagicData() {
@@ -93,6 +97,24 @@ public class MagicData {
     public void setMagicHandEntityId(int id) { magicHandEntityId = id; }
     public void clearMagicHandEntityId() { magicHandEntityId = -1; }
 
+    // Arcane drone — transient, not persisted
+    public int arcaneDroneEntityId() { return arcaneDroneEntityId; }
+    public void setArcaneDroneEntityId(int id) { arcaneDroneEntityId = id; }
+    public void clearArcaneDroneEntityId() { arcaneDroneEntityId = -1; }
+
+    // Hammer drone — transient, not persisted
+    public int hammerDroneEntityId() { return hammerDroneEntityId; }
+    public void setHammerDroneEntityId(int id) { hammerDroneEntityId = id; }
+    public void clearHammerDroneEntityId() { hammerDroneEntityId = -1; }
+
+    // Thruster ring
+    public int thrusterActiveTicks() { return thrusterActiveTicks; }
+    public void setThrusterActiveTicks(int ticks) { thrusterActiveTicks = Math.max(0, ticks); }
+
+    // Gliding ring
+    public boolean isGlidingActive() { return glidingActive; }
+    public void setGlidingActive(boolean active) { glidingActive = active; }
+
     // Pending circuit inscription (transient, not persisted)
     private SpellStack pendingCircuitSpell;
 
@@ -124,5 +146,6 @@ public class MagicData {
             phantomMiningTicks--;
             if (phantomMiningTicks == 0) phantomMiningJustExpired = true;
         }
+        if (thrusterActiveTicks > 0) thrusterActiveTicks--;
     }
 }

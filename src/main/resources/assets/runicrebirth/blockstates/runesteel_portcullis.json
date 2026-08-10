@@ -1,0 +1,5 @@
+{
+  "multipart": [
+    { "apply": { "model": "runicrebirth:block/runesteel_portcullis" } }
+  ]
+}

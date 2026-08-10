@@ -112,7 +112,7 @@ public class RunesteelGolemEntity extends Monster implements GeoEntity, SmartBra
                     }
                     @Override
                     protected void performCast(ServerLevel level, RunesteelGolemEntity entity, LivingEntity target, SpellCastContext ctx) {
-                        SpellParams params = new SpellParams(3f, 1.0f, 1.0f, 0, 0, 0,
+                        SpellParams params = new SpellParams(3f, 1.0f,0.5f, 1.0f, 0, 0, 0,
                             ModElements.ARCANE.get(), MagicDamageType.SPIRIT);
                         ModSpellTypes.MAGIC_BEAM.get().onCast(ctx, params);
                     }

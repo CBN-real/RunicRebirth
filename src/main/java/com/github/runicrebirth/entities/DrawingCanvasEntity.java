@@ -38,7 +38,8 @@ public class DrawingCanvasEntity extends Entity implements GeoEntity {
     private static final EntityDataAccessor<Integer> DATA_PHASE =
         SynchedEntityData.defineId(DrawingCanvasEntity.class, EntityDataSerializers.INT);
 
-    private static final float DISTANCE_FROM_EYE = 1.0f;
+    private static final float DISTANCE_FROM_EYE = 0.7f;
+    private static final float DEFAULT_FOV = 70.0f;
 
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
@@ -141,7 +142,10 @@ public class DrawingCanvasEntity extends Entity implements GeoEntity {
             if (ownerId != -1) {
                 Entity owner = this.level().getEntity(ownerId);
                 if (owner instanceof net.minecraft.world.entity.player.Player player) {
-                    snapToOwner(player);
+                    float fov = (float) net.minecraft.client.Minecraft.getInstance().options.fov().get();
+                    double ratio = Math.tan(Math.toRadians(DEFAULT_FOV * 0.5)) / Math.tan(Math.toRadians(fov * 0.5));
+                    float dist = DISTANCE_FROM_EYE * (float) Math.pow(ratio, 0.96);
+                    snapToOwner(player, dist);
                 }
             }
         }
@@ -152,6 +156,10 @@ public class DrawingCanvasEntity extends Entity implements GeoEntity {
     }
 
     private void snapToOwner(Entity owner) {
+        snapToOwner(owner, DISTANCE_FROM_EYE);
+    }
+
+    private void snapToOwner(Entity owner, float distance) {
         Vec3 eye;
         Vec3 look;
         if (owner instanceof net.minecraft.world.entity.player.Player player) {
@@ -161,9 +169,9 @@ public class DrawingCanvasEntity extends Entity implements GeoEntity {
             eye = owner.getEyePosition();
             look = owner.getForward();
         }
-        double x = eye.x + look.x * DISTANCE_FROM_EYE;
-        double y = eye.y + look.y * DISTANCE_FROM_EYE;
-        double z = eye.z + look.z * DISTANCE_FROM_EYE;
+        double x = eye.x + look.x * distance;
+        double y = eye.y + look.y * distance;
+        double z = eye.z + look.z * distance;
         this.xo = this.getX();
         this.yo = this.getY();
         this.zo = this.getZ();

@@ -45,6 +45,8 @@ public class MagicHandEntity extends Entity implements GeoEntity {
 
     public static final ResourceLocation COOLDOWN_KEY =
         ResourceLocation.fromNamespaceAndPath(RunicRebirth.MODID, "magic_hand_ring");
+    public static final ResourceLocation DURATION_KEY =
+        ResourceLocation.fromNamespaceAndPath(RunicRebirth.MODID, "magic_hand_duration");
     private static final int COOLDOWN_TICKS = 100;
 
     public static final int HOSTILE_HOLD_TICKS = 40;

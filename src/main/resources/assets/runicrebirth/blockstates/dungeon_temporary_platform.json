@@ -1,0 +1,6 @@
+{
+  "variants": {
+    "active=true": { "model": "runicrebirth:block/dungeon_temporary_platform" },
+    "active=false": { "model": "runicrebirth:block/dungeon_temporary_platform" }
+  }
+}

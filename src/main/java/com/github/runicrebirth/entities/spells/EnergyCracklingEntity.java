@@ -132,11 +132,11 @@ public class EnergyCracklingEntity extends Entity {
                 discard();
                 return;
             }
-            var center = attached.getBoundingBox().getCenter();
-            this.setPos(
-                center.x + this.entityData.get(DATA_OFFSET_X),
-                center.y + this.entityData.get(DATA_OFFSET_Y),
-                center.z + this.entityData.get(DATA_OFFSET_Z));
+//            var center = attached.getBoundingBox().getCenter();
+//            this.setPos(
+//                center.x + this.entityData.get(DATA_OFFSET_X),
+//                center.y + this.entityData.get(DATA_OFFSET_Y),
+//                center.z + this.entityData.get(DATA_OFFSET_Z));
         }
     }
 

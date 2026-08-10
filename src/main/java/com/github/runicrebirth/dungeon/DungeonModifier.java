@@ -66,6 +66,24 @@ public enum DungeonModifier {
     SWARM("Swarm", "Spawners produce 50% more enemies.", ChatFormatting.GOLD, -2) {
         @Override
         public void applyToMob(LivingEntity entity) {}
+    },
+    DOUBLE_SHARP_DAMAGE("Double Sharp Damage", "Axe and spike traps deal 2x damage.", ChatFormatting.RED, -2) {
+        @Override
+        public void applyToMob(LivingEntity entity) {}
+        @Override
+        public float getSharpTrapMultiplier() { return 2.0f; }
+    },
+    DOUBLE_BLUNT_DAMAGE("Double Blunt Damage", "Boulder traps deal 2x damage.", ChatFormatting.DARK_RED, -2) {
+        @Override
+        public void applyToMob(LivingEntity entity) {}
+        @Override
+        public float getBluntTrapMultiplier() { return 2.0f; }
+    },
+    DOUBLE_FIRE_DAMAGE("Double Fire Damage", "Flamethrower traps deal 2x damage.", ChatFormatting.GOLD, -2) {
+        @Override
+        public void applyToMob(LivingEntity entity) {}
+        @Override
+        public float getFireTrapMultiplier() { return 2.0f; }
     };
 
     private final String displayName;
@@ -81,6 +99,10 @@ public enum DungeonModifier {
     }
 
     public abstract void applyToMob(LivingEntity entity);
+
+    public float getSharpTrapMultiplier() { return 1.0f; }
+    public float getBluntTrapMultiplier() { return 1.0f; }
+    public float getFireTrapMultiplier()  { return 1.0f; }
 
     public MutableComponent toComponent() {
         return Component.literal("  ▸ " + displayName).withStyle(color)

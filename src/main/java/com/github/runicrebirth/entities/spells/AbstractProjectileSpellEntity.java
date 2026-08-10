@@ -1,8 +1,10 @@
 package com.github.runicrebirth.entities.spells;
 
+import com.github.runicrebirth.RunicRebirth;
 import com.github.runicrebirth.api.registry.ElementRegistry;
 import com.github.runicrebirth.api.spells.Element;
 import com.github.runicrebirth.api.spells.MagicDamageType;
+import com.github.runicrebirth.api.spells.ScaledSpellEntity;
 import com.github.runicrebirth.api.spells.SpellParams;
 import com.github.runicrebirth.client.BookDisplayState;
 import com.github.runicrebirth.init.ModElements;
@@ -35,7 +37,7 @@ import software.bernie.geckolib.animation.PlayState;
 import software.bernie.geckolib.animation.RawAnimation;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
-public abstract class AbstractProjectileSpellEntity extends ThrowableProjectile implements GeoEntity {
+public abstract class AbstractProjectileSpellEntity extends ThrowableProjectile implements GeoEntity, ScaledSpellEntity {
 
     protected static final RawAnimation INITIATE_AND_HOLD = RawAnimation.begin().thenPlay("initiate_spell").thenLoop("hold_spell");
     protected static final RawAnimation HOLD_SPELL = RawAnimation.begin().thenLoop("hold_spell");
@@ -47,6 +49,8 @@ public abstract class AbstractProjectileSpellEntity extends ThrowableProjectile 
     private static final EntityDataAccessor<String> DATA_ELEMENT =
         SynchedEntityData.defineId(AbstractProjectileSpellEntity.class, EntityDataSerializers.STRING);
     private static final EntityDataAccessor<Float> DATA_SIZE =
+        SynchedEntityData.defineId(AbstractProjectileSpellEntity.class, EntityDataSerializers.FLOAT);
+    private static final EntityDataAccessor<Float> DATA_SPELL_HEIGHT =
         SynchedEntityData.defineId(AbstractProjectileSpellEntity.class, EntityDataSerializers.FLOAT);
     private static final EntityDataAccessor<Integer> DATA_PHASE =
         SynchedEntityData.defineId(AbstractProjectileSpellEntity.class, EntityDataSerializers.INT);
@@ -63,6 +67,7 @@ public abstract class AbstractProjectileSpellEntity extends ThrowableProjectile 
     protected int age;
     protected float damage = 1f;
     protected float size = 1f;
+    protected float spellHeight = 1f;
     protected Element element;
     protected MagicDamageType damageCategory = MagicDamageType.BLUNT;
     protected int chargeTicks = 41;
@@ -96,10 +101,12 @@ public abstract class AbstractProjectileSpellEntity extends ThrowableProjectile 
     protected void initFromParams(SpellParams params) {
         this.damage = params.damage;
         this.size = params.size;
+        this.spellHeight = params.spellHeight;
         this.element = params.element;
         this.damageCategory = params.damageCategory;
         this.entityData.set(DATA_ELEMENT, params.element.id().toString());
         this.entityData.set(DATA_SIZE, params.size);
+        this.entityData.set(DATA_SPELL_HEIGHT, params.spellHeight);
         this.refreshDimensions();
     }
 
@@ -122,6 +129,7 @@ public abstract class AbstractProjectileSpellEntity extends ThrowableProjectile 
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         builder.define(DATA_ELEMENT, ModElements.ARCANE.getId().toString());
         builder.define(DATA_SIZE, 1f);
+        builder.define(DATA_SPELL_HEIGHT, 1f);
         builder.define(DATA_PHASE, SpellPhase.CHARGING.ordinal());
         builder.define(DATA_TARGET_ID, -1);
     }
@@ -262,7 +270,9 @@ public abstract class AbstractProjectileSpellEntity extends ThrowableProjectile 
     protected void onActiveTick() {}
     protected void onEndingTick() {}
     protected void spawnActiveParticles() {
-        ParticleHelper.trailParticleEvent(this.level(), element().particle(), this.position(), this.getDeltaMovement(), this.size);
+        float h = this.entityData.get(DATA_SPELL_HEIGHT);
+        Vec3 center = this.position().add(0, h * this.size / 2.0, 0);
+        ParticleHelper.trailParticleEvent(this.level(), element().particle(), center, this.getDeltaMovement(), this.size);
     }
 
     protected void burstParticles() {

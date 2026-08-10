@@ -3,6 +3,7 @@ package com.github.runicrebirth.client;
 import com.github.runicrebirth.entities.spells.AdvancedCircleEntity;
 import com.github.runicrebirth.entities.spells.IntermediateCircleEntity;
 import com.github.runicrebirth.entities.spells.AbstractCircleEntity;
+import com.github.runicrebirth.entities.spells.AbstractSpellCircleEntity;
 import software.bernie.geckolib.loading.math.MolangQueries;
 
 public final class SpellCircleQueries {
@@ -23,10 +24,18 @@ public final class SpellCircleQueries {
         registerTypeQuery("query.is_ballista", "magic_ballista");
 
         MolangQueries.<Object>setActorVariable("query.is_plus", actor -> {
-            if (!(actor.animatable() instanceof AbstractCircleEntity circle)) return 0;
-            if (circle.hasModifier("size_plus_four")) return 3.0;
-            if (circle.hasModifier("size_plus_two")) return 2.0;
-            if (circle.hasModifier("size_plus")) return 1.5;
+            if (actor.animatable() instanceof AbstractCircleEntity circle) {
+                if (circle.hasModifier("size_plus_four")) return 3.0;
+                if (circle.hasModifier("size_plus_two")) return 2.0;
+                if (circle.hasModifier("size_plus")) return 1.5;
+                return 1.0;
+            }
+            if (actor.animatable() instanceof AbstractSpellCircleEntity circle) {
+                if (circle.hasModifier("size_plus_four")) return 3.0;
+                if (circle.hasModifier("size_plus_two")) return 2.0;
+                if (circle.hasModifier("size_plus")) return 1.5;
+                return 1.0;
+            }
             return 1.0;
         });
 
