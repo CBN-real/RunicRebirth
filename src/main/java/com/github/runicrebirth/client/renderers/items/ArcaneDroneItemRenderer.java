@@ -32,7 +32,7 @@ public class ArcaneDroneItemRenderer extends GeoItemRenderer<ArcaneDroneItem> {
             poseStack.mulPose(Axis.XP.rotationDegrees(30f));
             poseStack.mulPose(Axis.YP.rotationDegrees(225f));
             poseStack.scale(1.5f, 1.5f, 1.5f);
-            poseStack.translate(0f, 4.0f, 0f);
+            poseStack.translate(0f, -0.25f, 0f);
         }
     }
 

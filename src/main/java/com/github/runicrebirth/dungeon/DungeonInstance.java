@@ -75,6 +75,10 @@ public class DungeonInstance {
         remainingTicks -= DEATH_PENALTY_TICKS;
     }
 
+    public void addTime(int ticks) {
+        remainingTicks += ticks;
+    }
+
     public boolean hasModifier(DungeonModifier modifier) {
         return modifiers.contains(modifier);
     }

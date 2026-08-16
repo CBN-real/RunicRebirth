@@ -40,3 +40,4 @@ repo/
 !**/src/**/repo/
 /src/main/CLAUDE.md
 /src/main/CLAUDE.original.md
+/.claude/

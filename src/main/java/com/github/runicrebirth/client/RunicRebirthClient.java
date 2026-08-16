@@ -23,11 +23,13 @@ import com.github.runicrebirth.client.particles.IceTinyParticle;
 import com.github.runicrebirth.client.particles.WindElementParticle;
 import com.github.runicrebirth.client.particles.WindInkParticle;
 import com.github.runicrebirth.client.particles.WindTinyParticle;
+import com.github.runicrebirth.client.renderers.blocks.AncientArcaneTurretRenderer;
 import com.github.runicrebirth.client.renderers.blocks.DungeonBoulderSpawnerRenderer;
 import com.github.runicrebirth.client.renderers.blocks.DungeonDoorRenderer;
 import com.github.runicrebirth.client.renderers.blocks.DungeonSwingingAxeRenderer;
 import com.github.runicrebirth.client.renderers.entities.DungeonBoulderRenderer;
 import com.github.runicrebirth.client.renderers.blocks.CrumblingPlatformRenderer;
+import com.github.runicrebirth.client.renderers.blocks.DungeonMobSpawnerRenderer;
 import com.github.runicrebirth.client.renderers.blocks.DungeonPressurePlateRenderer;
 import com.github.runicrebirth.client.renderers.entities.CrumblingPlatformFallingRenderer;
 import com.github.runicrebirth.client.renderers.blocks.RunelightLanternRenderer;
@@ -39,6 +41,7 @@ import com.github.runicrebirth.client.renderers.blocks.OculusControllerRenderer;
 import com.github.runicrebirth.client.renderers.blocks.OculusPillarRenderer;
 import com.github.runicrebirth.client.renderers.blocks.OculusPortalRenderer;
 import com.github.runicrebirth.client.renderers.blocks.RunesteelPylonRenderer;
+import com.github.runicrebirth.client.renderers.entities.AncientArcaneDroneRenderer;
 import com.github.runicrebirth.client.renderers.entities.DrawingCanvasRenderer;
 import com.github.runicrebirth.client.renderers.entities.RunesteelGolemRenderer;
 import com.github.runicrebirth.client.renderers.entities.ZombifiedRunebladeAcolyteRenderer;
@@ -115,7 +118,9 @@ import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.FastColor;
 import net.minecraft.world.item.component.DyedItemColor;
+import net.minecraft.world.phys.Vec3;
 import com.github.runicrebirth.init.ModItems;
 import com.github.runicrebirth.items.armor.AcolyteSetItem;
 
@@ -152,6 +157,14 @@ public class RunicRebirthClient {
             );
             net.minecraft.client.renderer.ItemBlockRenderTypes.setRenderLayer(
                 ModBlocks.DUNGEON_SPIKE.get(),
+                net.minecraft.client.renderer.RenderType.translucent()
+            );
+            net.minecraft.client.renderer.ItemBlockRenderTypes.setRenderLayer(
+                ModBlocks.FALSE_SKY.get(),
+                net.minecraft.client.renderer.RenderType.translucent()
+            );
+            net.minecraft.client.renderer.ItemBlockRenderTypes.setRenderLayer(
+                ModBlocks.CRACKED_FALSE_SKY.get(),
                 net.minecraft.client.renderer.RenderType.translucent()
             );
         });
@@ -208,6 +221,7 @@ public class RunicRebirthClient {
         event.registerEntityRenderer(ModEntities.PHANTOM_MINER.get(), PhantomMinerRenderer::new);
         event.registerEntityRenderer(ModEntities.MAGIC_HAND.get(), MagicHandRenderer::new);
         event.registerEntityRenderer(ModEntities.ARCANE_DRONE.get(), ArcaneDroneRenderer::new);
+        event.registerEntityRenderer(ModEntities.ANCIENT_ARCANE_DRONE.get(), AncientArcaneDroneRenderer::new);
         event.registerEntityRenderer(ModEntities.HAMMER_DRONE.get(), HammerDroneRenderer::new);
         event.registerEntityRenderer(ModEntities.TARGET_CIRCLE.get(), TargetCircleRenderer::new);
         event.registerEntityRenderer(ModEntities.RUNESTEEL_GOLEM.get(), RunesteelGolemRenderer::new);
@@ -225,6 +239,7 @@ public class RunicRebirthClient {
         event.registerBlockEntityRenderer(ModBlockEntities.RUNIC_ANVIL.get(), RunicAnvilRenderer::new);
         event.registerEntityRenderer(ModEntities.DUNGEON_BOULDER.get(), DungeonBoulderRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.DUNGEON_BOULDER_SPAWNER.get(), DungeonBoulderSpawnerRenderer::new);
+        event.registerBlockEntityRenderer(ModBlockEntities.ANCIENT_ARCANE_TURRET.get(), AncientArcaneTurretRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.DUNGEON_SWINGING_AXE.get(), DungeonSwingingAxeRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.RUNESTEEL_PORTCULLIS.get(), RunesteelPortcullisRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.DUNGEON_DOOR.get(), DungeonDoorRenderer::new);
@@ -232,6 +247,7 @@ public class RunicRebirthClient {
         event.registerBlockEntityRenderer(ModBlockEntities.RUNELIGHT_LANTERN.get(), RunelightLanternRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.DUNGEON_PRESSURE_PLATE.get(), DungeonPressurePlateRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.CRUMBLING_PLATFORM.get(), CrumblingPlatformRenderer::new);
+        event.registerBlockEntityRenderer(ModBlockEntities.DUNGEON_MOB_SPAWNER.get(), DungeonMobSpawnerRenderer::new);
     }
 
     public void registerKeyMappings(RegisterKeyMappingsEvent event) {

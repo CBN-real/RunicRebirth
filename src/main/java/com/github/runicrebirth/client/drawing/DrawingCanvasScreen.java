@@ -134,7 +134,7 @@ public class DrawingCanvasScreen extends Screen {
         ), List.of(
             new ShapeRef("plus_two", "plus_two", true),
             new ShapeRef("cooldown", "cooldown", true),
-            new ShapeRef("charges_three", "charges_three", true, null, "3x Charges")
+            new ShapeRef("charges_three", "three_charges", true, null, "3x Charges")
         )),
         new RefSection("gui.runicrebirth.adv_spells", List.of(
             new ShapeRef("binding", "binding", false, "runicrebirth:magic_binding"),
@@ -143,7 +143,7 @@ public class DrawingCanvasScreen extends Screen {
         ), List.of(
             new ShapeRef("plus_four", "plus_four", true),
             new ShapeRef("four_casts", "four_casts", true),
-            new ShapeRef("charges_four", "charges_four", true, null, "4x Charges")
+            new ShapeRef("charges_four", "four_charges", true, null, "4x Charges")
         ))
     );
 

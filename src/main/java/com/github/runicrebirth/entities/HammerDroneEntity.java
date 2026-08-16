@@ -38,10 +38,10 @@ public class HammerDroneEntity extends Entity implements GeoEntity {
     public static final int PHASE_ATTACKING = 2;
     public static final int PHASE_RETURNING = 3;
 
-    private static final int ATTACK_COOLDOWN = 60;
+    private static final int ATTACK_COOLDOWN = 80;
     private static final int ATTACK_ANIM_TICKS = 12;
     private static final int DAMAGE_TICK = 6;
-    private static final float ATTACK_DAMAGE = 12.0f;
+    private static final float ATTACK_DAMAGE = 6.0f;
     private static final double ATTACK_RANGE_PLAYER = 6.0;
     private static final double FLY_SPEED = 0.4;
     private static final double CLOSE_THRESHOLD_SQ = 1.0;
@@ -53,6 +53,8 @@ public class HammerDroneEntity extends Entity implements GeoEntity {
         SynchedEntityData.defineId(HammerDroneEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> DATA_OWNER_ID =
         SynchedEntityData.defineId(HammerDroneEntity.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Float> DATA_FACING_YAW =
+        SynchedEntityData.defineId(HammerDroneEntity.class, EntityDataSerializers.FLOAT);
 
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
@@ -72,6 +74,7 @@ public class HammerDroneEntity extends Entity implements GeoEntity {
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         builder.define(DATA_PHASE, PHASE_HOVERING);
         builder.define(DATA_OWNER_ID, -1);
+        builder.define(DATA_FACING_YAW, 0f);
     }
 
     public void setOwner(UUID uuid) {
@@ -100,12 +103,14 @@ public class HammerDroneEntity extends Entity implements GeoEntity {
             if (ownerId != -1 && getPhase() == PHASE_HOVERING) {
                 Entity owner = level().getEntity(ownerId);
                 if (owner instanceof LivingEntity living) {
-                    Vec3 hover = hoverPos(living);
-                    this.setPos(hover.x, hover.y, hover.z);
-                    this.xo = owner.xo + (hover.x - owner.getX());
-                    this.yo = owner.yo + (hover.y - owner.getY());
-                    this.zo = owner.zo + (hover.z - owner.getZ());
-                    this.setYRot(living.getYRot());
+                    Vec3 prev = hoverPosFromOld(living);
+                    Vec3 cur = hoverPos(living);
+                    this.xo = prev.x;
+                    this.yo = prev.y;
+                    this.zo = prev.z;
+//                    this.setPos(cur.x, cur.y, cur.z);
+//                    this.setYRot(entityData.get(DATA_FACING_YAW));
+                    this.lerpPositionAndRotationStep(2, cur.x, cur.y, cur.z, entityData.get(DATA_FACING_YAW), owner.getXRot());
                 }
             }
             return;
@@ -121,7 +126,6 @@ public class HammerDroneEntity extends Entity implements GeoEntity {
 
         entityData.set(DATA_OWNER_ID, owner.getId());
         phaseAge++;
-        this.setYRot(owner.getYRot());
 
         switch (getPhase()) {
             case PHASE_HOVERING -> tickHovering(serverLevel, owner);
@@ -136,15 +140,27 @@ public class HammerDroneEntity extends Entity implements GeoEntity {
         }
     }
 
+    private static float yawToward(Vec3 from, Vec3 to) {
+        return (float) Math.toDegrees(Math.atan2(-(to.x - from.x), to.z - from.z));
+    }
+
     private void tickHovering(ServerLevel level, ServerPlayer owner) {
         Vec3 hover = hoverPos(owner);
         setPos(hover.x, hover.y, hover.z);
 
         if (attackCooldown > 0) {
             attackCooldown--;
+            Entity lastTarget = level.getEntity(targetEntityId);
+            float yaw = (lastTarget instanceof LivingEntity lt && lt.isAlive())
+                ? yawToward(this.position(), lt.getBoundingBox().getCenter())
+                : owner.getYRot();
+            this.setYRot(yaw);
+            entityData.set(DATA_FACING_YAW, yaw);
             return;
         }
 
+        this.setYRot(owner.getYRot());
+        entityData.set(DATA_FACING_YAW, owner.getYRot());
         LivingEntity target = findNearbyHostile(level, owner);
         if (target != null) {
             targetEntityId = target.getId();
@@ -165,23 +181,33 @@ public class HammerDroneEntity extends Entity implements GeoEntity {
         Vec3 dir = dest.subtract(cur);
         double dist = dir.length();
 
+        this.setYRot(yawToward(cur, dest));
+
         if (dist < Math.sqrt(CLOSE_THRESHOLD_SQ)) {
             setPhase(PHASE_ATTACKING);
             return;
         }
-
+        this.xo = cur.x;
+        this.yo = cur.y;
+        this.zo = cur.z;
         Vec3 move = dir.normalize().scale(Math.min(FLY_SPEED, dist));
-        setPos(cur.x + move.x, cur.y + move.y, cur.z + move.z);
+        this.lerpPositionAndRotationStep(2, cur.x + move.x, cur.y + move.y, cur.z + move.z, entityData.get(DATA_FACING_YAW), owner.getXRot());
+//        setPos(cur.x + move.x, cur.y + move.y, cur.z + move.z);
     }
 
     private void tickAttacking(ServerLevel level, ServerPlayer owner) {
+        Entity peekTarget = level.getEntity(targetEntityId);
+        if (peekTarget instanceof LivingEntity) {
+            this.setYRot(yawToward(this.position(), ((LivingEntity) peekTarget).getBoundingBox().getCenter()));
+        }
+
         if (!damageDealt && phaseAge >= DAMAGE_TICK) {
             Entity targetEntity = level.getEntity(targetEntityId);
             if (targetEntity instanceof LivingEntity target && target.isAlive()) {
                 SpellDamageSource src = SpellDamageSource.source(owner, MagicDamageType.BLUNT, ModElements.EARTH.get())
                     .withSpellType(DRONE_ID);
                 DamageSources.applyDamage(target, ATTACK_DAMAGE, src);
-                target.knockback(4.0, this.getX() - target.getX(), this.getZ() - target.getZ());
+                target.knockback(2.0, this.getX() - target.getX(), this.getZ() - target.getZ());
             }
             damageDealt = true;
         }
@@ -197,6 +223,8 @@ public class HammerDroneEntity extends Entity implements GeoEntity {
         Vec3 cur = this.position();
         Vec3 dir = hover.subtract(cur);
         double dist = dir.length();
+
+        this.setYRot(owner.getYRot());
 
         if (dist < 0.3) {
             setPhase(PHASE_HOVERING);
@@ -234,6 +262,14 @@ public class HammerDroneEntity extends Entity implements GeoEntity {
         double leftX = -Math.cos(yawRad);
         double leftZ = -Math.sin(yawRad);
         return player.position()
+            .add(leftX * 0.7, player.getBbHeight() + 0.5, leftZ * 0.7);
+    }
+
+    private Vec3 hoverPosFromOld(LivingEntity player) {
+        float yawRad = (float) Math.toRadians(player.getYRot());
+        double leftX = -Math.cos(yawRad);
+        double leftZ = -Math.sin(yawRad);
+        return new Vec3(player.xo, player.yo, player.zo)
             .add(leftX * 0.7, player.getBbHeight() + 0.5, leftZ * 0.7);
     }
 

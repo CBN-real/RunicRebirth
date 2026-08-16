@@ -14,33 +14,44 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.tslat.smartbrainlib.api.SmartBrainOwner;
 import net.tslat.smartbrainlib.api.core.BrainActivityGroup;
 import net.tslat.smartbrainlib.api.core.SmartBrainProvider;
 import net.tslat.smartbrainlib.api.core.behaviour.FirstApplicableBehaviour;
+import net.tslat.smartbrainlib.api.core.behaviour.OneRandomBehaviour;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.look.LookAtTarget;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.misc.Idle;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.move.MoveToWalkTarget;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.move.StrafeTarget;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.path.SetRandomWalkTarget;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.target.InvalidateAttackTarget;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.target.SetPlayerLookTarget;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.target.SetRandomLookTarget;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.target.TargetOrRetaliate;
 import net.tslat.smartbrainlib.api.core.sensor.ExtendedSensor;
 import net.tslat.smartbrainlib.api.core.sensor.vanilla.HurtBySensor;
 import net.tslat.smartbrainlib.api.core.sensor.vanilla.NearbyLivingEntitySensor;
+import net.tslat.smartbrainlib.example.SBLSkeleton;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.animation.AnimatableManager;
 import software.bernie.geckolib.animation.AnimationController;
+import software.bernie.geckolib.animation.PlayState;
 import software.bernie.geckolib.animation.RawAnimation;
+import software.bernie.geckolib.constant.DefaultAnimations;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 import java.util.List;
 
 public class SkeletalMageAcolyteEntity extends Monster implements GeoEntity, SmartBrainOwner<SkeletalMageAcolyteEntity> {
 
-    private static final RawAnimation IDLE = RawAnimation.begin().thenLoop("animation.skeletal_mage_acolyte.idle");
-    private static final RawAnimation CAST = RawAnimation.begin().thenPlay("animation.skeletal_mage_acolyte.cast");
+
+    private static final RawAnimation CAST = RawAnimation.begin().thenPlay("attack.cast");
+
 
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
@@ -70,29 +81,40 @@ public class SkeletalMageAcolyteEntity extends Monster implements GeoEntity, Sma
         return ObjectArrayList.of(new NearbyLivingEntitySensor<>(), new HurtBySensor<>());
     }
 
+
+
     @Override
     public BrainActivityGroup<? extends SkeletalMageAcolyteEntity> getCoreTasks() {
-        return BrainActivityGroup.coreTasks(new LookAtTarget<>());
+        return BrainActivityGroup.coreTasks(
+            new LookAtTarget<>(),
+            new StrafeTarget<>(),	// Strafe around target
+            new MoveToWalkTarget<>()); // Move to the current walk target)
     }
 
     @Override
     public BrainActivityGroup<? extends SkeletalMageAcolyteEntity> getIdleTasks() {
-        return BrainActivityGroup.idleTasks(
-            new FirstApplicableBehaviour<SkeletalMageAcolyteEntity>(
-                new TargetOrRetaliate<>(), new SetPlayerLookTarget<>()
-            ),
-            new SetRandomWalkTarget<>()
-        );
+      return BrainActivityGroup.idleTasks(
+          new FirstApplicableBehaviour<SBLSkeleton>(
+              new TargetOrRetaliate<>()
+                  .useMemory(MemoryModuleType.NEAREST_VISIBLE_ATTACKABLE_PLAYER)
+                  .attackablePredicate(target -> target.isAlive() && (this == target.getLastHurtMob() || ((target instanceof Player player) && !player.getAbilities().invulnerable))),
+              new SetPlayerLookTarget<>(),
+              new SetRandomLookTarget<>()),
+          new OneRandomBehaviour<>(
+              new SetRandomWalkTarget<>()
+                  .speedModifier(1),
+              new Idle<>() // Don't do anything for a bit
+                  .runFor(entity -> entity.getRandom().nextInt(30, 60))));
     }
 
     @Override
     public BrainActivityGroup<? extends SkeletalMageAcolyteEntity> getFightTasks() {
         return BrainActivityGroup.fightTasks(
             new InvalidateAttackTarget<>(),
-            new CircleAroundTargetBehaviour<>(7.0),
             new CastSpellBehaviour<SkeletalMageAcolyteEntity>(60) {
                 @Override
                 protected void performCast(ServerLevel level, SkeletalMageAcolyteEntity entity, LivingEntity target, SpellCastContext ctx) {
+                    entity.triggerAnim("cast_controller", "cast");
                     SpellParams params = new SpellParams(6f, 1.0f,0.125f, 1.5f, 0, 0, 0,
                         ModElements.ARCANE.get(), MagicDamageType.SHARP);
                     ModSpellTypes.MAGIC_ARROW.get().onCast(ctx, params);
@@ -104,6 +126,7 @@ public class SkeletalMageAcolyteEntity extends Monster implements GeoEntity, Sma
                 }
                 @Override
                 protected void performCast(ServerLevel level, SkeletalMageAcolyteEntity entity, LivingEntity target, SpellCastContext ctx) {
+                    entity.triggerAnim("cast_controller", "cast");
                     SpellParams params = new SpellParams(5f, 1.0f,0.25f, 0.75f, 0, 0, 0,
                         ModElements.ARCANE.get(), MagicDamageType.BLUNT);
                     ModSpellTypes.MAGIC_PROJECTILE.get().onCast(ctx, params);
@@ -114,10 +137,13 @@ public class SkeletalMageAcolyteEntity extends Monster implements GeoEntity, Sma
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<>(this, "mage_ctrl", 5, state ->
-            this.isAggressive() ? state.setAndContinue(CAST) : state.setAndContinue(IDLE)));
+        controllers.add(DefaultAnimations.genericWalkIdleController(this));
+        controllers.add(new AnimationController<>(this, "cast_controller", 2, state -> PlayState.STOP)
+            .triggerableAnim("cast", CAST));
     }
 
     @Override
     public AnimatableInstanceCache getAnimatableInstanceCache() { return cache; }
+
+
 }

@@ -1,6 +1,0 @@
-{
-  "parent": "minecraft:item/generated",
-  "textures": {
-    "layer0": "runicrebirth:item/adept_artificer_robes_item"
-  }
-}

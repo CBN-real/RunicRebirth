@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "face=floor,facing=north":    { "model": "runicrebirth:block/ancient_arcane_turret" },
+    "face=floor,facing=south":    { "model": "runicrebirth:block/ancient_arcane_turret", "y": 180 },
+    "face=floor,facing=east":     { "model": "runicrebirth:block/ancient_arcane_turret", "y": 90 },
+    "face=floor,facing=west":     { "model": "runicrebirth:block/ancient_arcane_turret", "y": 270 },
+    "face=ceiling,facing=north":  { "model": "runicrebirth:block/ancient_arcane_turret" },
+    "face=ceiling,facing=south":  { "model": "runicrebirth:block/ancient_arcane_turret", "y": 180 },
+    "face=ceiling,facing=east":   { "model": "runicrebirth:block/ancient_arcane_turret", "y": 90 },
+    "face=ceiling,facing=west":   { "model": "runicrebirth:block/ancient_arcane_turret", "y": 270 },
+    "face=wall,facing=north":     { "model": "runicrebirth:block/ancient_arcane_turret", "y": 180 },
+    "face=wall,facing=south":     { "model": "runicrebirth:block/ancient_arcane_turret" },
+    "face=wall,facing=east":      { "model": "runicrebirth:block/ancient_arcane_turret", "y": 270 },
+    "face=wall,facing=west":      { "model": "runicrebirth:block/ancient_arcane_turret", "y": 90 }
+  }
+}

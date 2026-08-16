@@ -1,0 +1,64 @@
+{
+	"format_version": "1.12.0",
+	"minecraft:geometry": [
+		{
+			"description": {
+				"identifier": "geometry.dungeon_mob_spawner",
+				"texture_width": 64,
+				"texture_height": 64,
+				"visible_bounds_width": 4,
+				"visible_bounds_height": 3,
+				"visible_bounds_offset": [0, 0.5, 0]
+			},
+			"bones": [
+				{
+					"name": "root",
+					"pivot": [0, 0, 0]
+				},
+				{
+					"name": "spawner_body",
+					"parent": "root",
+					"pivot": [0, 4, 0],
+					"cubes": [
+						{
+							"origin": [-4, 0, -4],
+							"size": [8, 8, 8],
+							"uv": {
+								"north": {"uv": [0, 0], "uv_size": [8, 8]},
+								"east": {"uv": [8, 0], "uv_size": [8, 8]},
+								"south": {"uv": [16, 0], "uv_size": [8, 8]},
+								"west": {"uv": [24, 0], "uv_size": [8, 8]},
+								"up": {"uv": [8, 8], "uv_size": [8, 8]},
+								"down": {"uv": [0, 8], "uv_size": [8, 8]}
+							}
+						}
+					]
+				},
+				{
+					"name": "inner_cage",
+					"parent": "spawner_body",
+					"pivot": [0, 4, 0]
+				},
+				{
+					"name": "spawn_circle",
+					"parent": "root",
+					"pivot": [0, 0.1, 0],
+					"cubes": [
+						{
+							"origin": [-8, 0, -8],
+							"size": [16, 0.5, 16],
+							"uv": {
+								"north": {"uv": [0, 56], "uv_size": [1, 1]},
+								"east": {"uv": [0, 56], "uv_size": [1, 1]},
+								"south": {"uv": [0, 56], "uv_size": [1, 1]},
+								"west": {"uv": [0, 56], "uv_size": [1, 1]},
+								"up": {"uv": [0, 32], "uv_size": [32, 32]},
+								"down": {"uv": [0, 32], "uv_size": [32, 32]}
+							}
+						}
+					]
+				}
+			]
+		}
+	]
+}

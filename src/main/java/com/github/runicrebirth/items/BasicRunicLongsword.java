@@ -2,15 +2,17 @@ package com.github.runicrebirth.items;
 
 import com.github.runicrebirth.RunicRebirth;
 import com.github.runicrebirth.api.item.IMagicWeapon;
-import com.github.runicrebirth.api.spells.CastResult;
 import com.github.runicrebirth.api.spells.SpellCastContext;
 import com.github.runicrebirth.api.spells.SpellStack;
 import com.github.runicrebirth.capabilities.magic.MagicData;
+import com.github.runicrebirth.entities.spells.MagicSlashEntity;
+import com.github.runicrebirth.init.ModSounds;
 import com.github.runicrebirth.init.ModSpellTypes;
 import com.github.runicrebirth.magic.stack.SpellResolver;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -78,10 +80,15 @@ public class BasicRunicLongsword extends SwordItem implements GeoItem, IMagicWea
         var params = SpellResolver.buildParams(ctx, tmp);
         if (params == null) return InteractionResultHolder.pass(stack);
 
-        CastResult result = ModSpellTypes.MAGIC_SLASH.get().onCast(ctx, params);
-        if (result == CastResult.SUCCESS) {
-            data.startCooldown(COOLDOWN_ID, COOLDOWN_TICKS);
-        }
+        level.playSound(null, sp.getX(), sp.getY(), sp.getZ(),
+            ModSounds.SPELLS_LONGSWORD.get(), SoundSource.PLAYERS, 0.5f, 1.0f);
+        MagicSlashEntity slash = new MagicSlashEntity(level, sp, params, dir);
+        slash.setChargeTicks(10);
+        Vec3 spawnPos = eye.add(dir.scale(1.0));
+        slash.setPos(spawnPos.x, spawnPos.y, spawnPos.z);
+        level.addFreshEntity(slash);
+
+        data.startCooldown(COOLDOWN_ID, COOLDOWN_TICKS);
         return InteractionResultHolder.sidedSuccess(stack, false);
     }
 

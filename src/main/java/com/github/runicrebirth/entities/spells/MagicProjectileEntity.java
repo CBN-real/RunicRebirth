@@ -1,8 +1,10 @@
 package com.github.runicrebirth.entities.spells;
 
+import com.github.runicrebirth.api.spells.MagicDamageType;
 import com.github.runicrebirth.api.spells.SpellParams;
 import com.github.runicrebirth.damage.DamageSources;
 import com.github.runicrebirth.damage.SpellDamageSource;
+import com.github.runicrebirth.init.ModElements;
 import com.github.runicrebirth.init.ModEntities;
 import com.github.runicrebirth.init.ModSounds;
 import net.minecraft.sounds.SoundSource;
@@ -29,6 +31,18 @@ public class MagicProjectileEntity extends AbstractProjectileSpellEntity {
         initFromParams(params);
         this.endTicks = 20;
         this.chargeTicks = 7;
+    }
+
+    public MagicProjectileEntity(Level level, Vec3 spawnPos, Vec3 direction, float speed, float damage) {
+        super(ModEntities.MAGIC_PROJECTILE.get(), level);
+        this.endTicks = 20;
+        this.chargeTicks = 0;
+        this.damage = damage;
+        this.element = ModElements.ARCANE.get();
+        this.damageCategory = MagicDamageType.BLUNT;
+        this.storedDirection = direction;
+        this.storedSpeed = speed;
+        this.setPos(spawnPos.x, spawnPos.y, spawnPos.z);
     }
 
     @Override

@@ -31,7 +31,7 @@ public class MagicSlashCircleEntity extends AbstractSpellCircleEntity {
     @Override
     protected void spawnProjectile() {
         level().playSound(null, this.getX(), this.getY(), this.getZ(),
-            ModSounds.SPELLS_SLASH_SPELL.get(), SoundSource.PLAYERS, 1.0f, 1.0f);
+            ModSounds.SPELLS_SLASH_SPELL.get(), SoundSource.PLAYERS, 0.6f, 1.0f);
         MagicSlashEntity slash = new MagicSlashEntity(level(), owner, params, direction);
         Vec3 spawnPos = getCircleSpawnPos(0.5f);
         slash.setPos(spawnPos.x, spawnPos.y, spawnPos.z);

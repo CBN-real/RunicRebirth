@@ -131,7 +131,7 @@ public class DungeonDoorBlock extends BaseEntityBlock {
         return false;
     }
 
-    static void setOpen(ServerLevel level, BlockPos pos, BlockState state, boolean open) {
+    public static void setOpen(ServerLevel level, BlockPos pos, BlockState state, boolean open) {
         BlockState newState = state.setValue(OPEN, open);
         level.setBlock(pos, newState, Block.UPDATE_ALL);
 

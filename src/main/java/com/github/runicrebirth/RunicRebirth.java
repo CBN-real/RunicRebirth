@@ -11,6 +11,7 @@ import com.github.runicrebirth.init.ModAttachments;
 import com.github.runicrebirth.init.ModBlockEntities;
 import com.github.runicrebirth.init.ModBlocks;
 import com.github.runicrebirth.init.ModDataComponents;
+import com.github.runicrebirth.init.ModCreativeTabs;
 import com.github.runicrebirth.init.ModElements;
 import com.github.runicrebirth.init.ModEntities;
 import com.github.runicrebirth.init.ModItems;
@@ -25,12 +26,10 @@ import com.github.runicrebirth.init.ModSpellTypes;
 import com.github.runicrebirth.compat.modonomicon.ModonomiconCompat;
 import com.github.runicrebirth.network.ModPackets;
 import com.mojang.logging.LogUtils;
-import net.minecraft.world.item.CreativeModeTabs;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import org.slf4j.Logger;
 
 @Mod(RunicRebirth.MODID)
@@ -41,10 +40,10 @@ public class RunicRebirth {
 
     public RunicRebirth(IEventBus modEventBus, ModContainer modContainer) {
         modEventBus.addListener(this::commonSetup);
-        modEventBus.addListener(this::buildContents);
         modEventBus.addListener(ModPackets::register);
 
         // Vanilla-style registries
+        ModCreativeTabs.CREATIVE_TABS.register(modEventBus);
         ModArmorMaterials.ARMOR_MATERIALS.register(modEventBus);
         ModItems.ITEMS.register(modEventBus);
         ModBlocks.BLOCKS.register(modEventBus);
@@ -82,76 +81,4 @@ public class RunicRebirth {
         event.enqueueWork(ModonomiconCompat::registerPageLoaders);
     }
 
-    private void buildContents(BuildCreativeModeTabContentsEvent event) {
-        if (event.getTabKey() == CreativeModeTabs.TOOLS_AND_UTILITIES) {
-            event.accept(ModItems.ACOLYTE_WAND.get());
-            event.accept(ModItems.INSCRIBED_WAND.get());
-            event.accept(ModItems.ADEPT_STAFF.get());
-            event.accept(ModItems.RING_OF_EXPANSION.get());
-            event.accept(ModItems.ARCANE_ACOLYTE_RING.get());
-            event.accept(ModItems.ARCANE_TETHER_RING.get());
-            event.accept(ModItems.RING_OF_LEAPING_GALES.get());
-            event.accept(ModItems.RING_OF_PHANTOM_MINING.get());
-            event.accept(ModItems.BLINK_RING.get());
-            event.accept(ModItems.THRUSTER_RING.get());
-            event.accept(ModItems.HOVER_RING.get());
-            event.accept(ModItems.ACOLYTE_WIZARD_HAT.get());
-            event.accept(ModItems.ACOLYTE_ROBES.get());
-            event.accept(ModItems.ACOLYTE_PANTS.get());
-            event.accept(ModItems.ACOLYTE_BOOTS.get());
-            event.accept(ModItems.ACOLYTE_ARTIFICER_HEADGEAR.get());
-            event.accept(ModItems.ACOLYTE_MAGE_HOOD.get());
-            event.accept(ModItems.ACOLYTE_RUNEBLADE_HELMET.get());
-            event.accept(ModItems.ADEPT_RUNEBLADE_HELMET.get());
-            event.accept(ModItems.ADEPT_RUNEBLADE_CHESTPLATE.get());
-            event.accept(ModItems.ADEPT_RUNEBLADE_LEGGINGS.get());
-            event.accept(ModItems.ADEPT_RUNEBLADE_BOOTS.get());
-            event.accept(ModItems.ADEPT_WIZARD_HAT.get());
-            event.accept(ModItems.ADEPT_WIZARD_ROBES.get());
-            event.accept(ModItems.ADEPT_WIZARD_PANTS.get());
-            event.accept(ModItems.ADEPT_WIZARD_BOOTS.get());
-            event.accept(ModItems.ADEPT_MAGE_HOOD.get());
-            event.accept(ModItems.ADEPT_MAGE_ROBES.get());
-            event.accept(ModItems.ADEPT_MAGE_PANTS.get());
-            event.accept(ModItems.ADEPT_MAGE_BOOTS.get());
-            event.accept(ModItems.ADEPT_ARTIFICER_HEADGEAR.get());
-            event.accept(ModItems.ADEPT_ARTIFICER_CHESTGEAR.get());
-            event.accept(ModItems.ADEPT_ARTIFICER_PANTS.get());
-            event.accept(ModItems.ADEPT_ARTIFICER_BOOTS.get());
-            event.accept(ModItems.RUNIC_CODEX.get());
-            event.accept(ModItems.ACOLYTE_RUNIC_CIRCUIT.get());
-            event.accept(ModItems.ADEPT_RUNIC_CIRCUIT.get());
-            event.accept(ModItems.ARCH_RUNIC_CIRCUIT.get());
-            event.accept(ModItems.ARCANE_SPIRIT.get());
-            event.accept(ModItems.ARCANE_GEMSTONE.get());
-            event.accept(ModItems.RUNIC_KEY_RING.get());
-            event.accept(ModItems.ARCANE_DRONE.get());
-            event.accept(ModItems.HAMMER_DRONE.get());
-            event.accept(ModItems.BASIC_RUNIC_LONGSWORD.get());
-        }
-        if (event.getTabKey() == CreativeModeTabs.BUILDING_BLOCKS) {
-            event.accept(ModItems.RUNIC_STONE.get());
-            event.accept(ModItems.RUNIC_STONE_SLAB.get());
-            event.accept(ModItems.RUNIC_STONE_STAIRS.get());
-            event.accept(ModItems.RUNIC_STONE_PILLAR.get());
-            event.accept(ModItems.OCULUS_PORTAL.get());
-            event.accept(ModItems.OCULUS_CONTROLLER.get());
-            event.accept(ModItems.OCULUS_PILLAR.get());
-            event.accept(ModItems.RUNESTEEL_PYLON.get());
-            event.accept(ModItems.INFUSION_ALTAR.get());
-            event.accept(ModItems.RUNIC_ANVIL.get());
-            event.accept(ModItems.RUNIC_STONE_BRICKS.get());
-            event.accept(ModItems.ARCANE_RUNIC_STONE_BRICKS.get());
-            event.accept(ModItems.CUT_RUNIC_STONE.get());
-            event.accept(ModItems.REINFORCED_CUT_RUNIC_STONE.get());
-            event.accept(ModItems.RUNESTEEL_PORTCULLIS.get());
-            event.accept(ModItems.DUNGEON_DOOR.get());
-            event.accept(ModItems.DUNGEON_TEMPORARY_PLATFORM.get());
-            event.accept(ModItems.DUNGEON_PRESSURE_PLATE.get());
-            event.accept(ModItems.DUNGEON_SPIKE.get());
-            event.accept(ModItems.DUNGEON_BOULDER_SPAWNER.get());
-            event.accept(ModItems.DUNGEON_SWINGING_AXE.get());
-            event.accept(ModItems.DUNGEON_FLAMETHROWER.get());
-        }
-    }
 }

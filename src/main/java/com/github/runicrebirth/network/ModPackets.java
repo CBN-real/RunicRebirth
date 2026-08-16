@@ -40,5 +40,9 @@ public final class ModPackets {
         registrar.playToServer(SelectDungeonC2SPacket.TYPE, SelectDungeonC2SPacket.STREAM_CODEC, SelectDungeonC2SPacket::handle);
         registrar.playToClient(DungeonDataSyncS2CPacket.TYPE, DungeonDataSyncS2CPacket.STREAM_CODEC, DungeonDataSyncS2CPacket::handle);
         registrar.playToClient(OpenDungeonScreenS2CPacket.TYPE, OpenDungeonScreenS2CPacket.STREAM_CODEC, OpenDungeonScreenS2CPacket::handle);
+
+        // Dungeon Room Tracker
+        registrar.playToClient(OpenDungeonRoomTrackerS2CPacket.TYPE, OpenDungeonRoomTrackerS2CPacket.STREAM_CODEC, OpenDungeonRoomTrackerS2CPacket::handle);
+        registrar.playToServer(DungeonRoomTrackerSyncC2SPacket.TYPE, DungeonRoomTrackerSyncC2SPacket.STREAM_CODEC, DungeonRoomTrackerSyncC2SPacket::handle);
     }
 }

@@ -74,8 +74,8 @@ public class MagicBlastEntity extends AbstractInstantSpellEntity {
         right = right.normalize();
         Vec3 up = right.cross(forward).normalize();
 
-        double halfWidth = size;
-        double halfHeight = size;
+        double halfWidth = 2 * size;
+        double halfHeight = 2 * size;
         double length = 3.0 * size;
 
         double upRad = Math.toRadians(35.0);

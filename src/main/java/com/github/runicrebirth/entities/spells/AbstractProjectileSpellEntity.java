@@ -66,6 +66,8 @@ public abstract class AbstractProjectileSpellEntity extends ThrowableProjectile 
 
     protected int age;
     protected float damage = 1f;
+
+    public float getDamage() { return damage; }
     protected float size = 1f;
     protected float spellHeight = 1f;
     protected Element element;
@@ -75,8 +77,8 @@ public abstract class AbstractProjectileSpellEntity extends ThrowableProjectile 
     protected int phaseAge;
     protected LivingEntity trackingTarget;
     protected float homingStrength = 0.12f;
-    private Vec3 storedDirection;
-    private float storedSpeed;
+    protected Vec3 storedDirection;
+    protected float storedSpeed;
 
     protected AbstractProjectileSpellEntity(EntityType<? extends AbstractProjectileSpellEntity> type, Level level) {
         super(type, level);
@@ -233,6 +235,8 @@ public abstract class AbstractProjectileSpellEntity extends ThrowableProjectile 
         }
     }
 
+    public void setChargeTicks(int ticks) { this.chargeTicks = ticks; }
+
     public void setTrackingTarget(LivingEntity target) {
         this.trackingTarget = target;
         this.entityData.set(DATA_TARGET_ID, target != null ? target.getId() : -1);
@@ -330,6 +334,8 @@ public abstract class AbstractProjectileSpellEntity extends ThrowableProjectile 
             }
             if (state.getAnimatable().getPhase() == SpellPhase.ENDING) {
                 state.setAnimation(END_SPELL);
+            } else if (state.getAnimatable().getPhase() == SpellPhase.ACTIVE) {
+                state.setAndContinue(HOLD_SPELL);
             } else {
                 state.setAnimation(INITIATE_AND_HOLD);
             }

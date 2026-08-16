@@ -114,6 +114,11 @@
       "runicrebirth:spells/shield_end"
     ]
   },
+  "spells.longsword": {
+    "sounds": [
+      "runicrebirth:spells/longsword"
+    ]
+  },
   "spells.slash_spell": {
     "sounds": [
       "runicrebirth:spells/slash_spell"
@@ -192,6 +197,11 @@
   "dungeon.temporary_platform": {
     "sounds": [
       "runicrebirth:dungeon/temporary_platform"
+    ]
+  },
+  "dungeon.turret_power_on": {
+    "sounds": [
+      "runicrebirth:dungeon/turret_power_on"
     ]
   },
   "spells.hover": {

@@ -83,7 +83,9 @@ public class MagicBeamRenderer extends AbstractSpellRenderer<MagicBeamEntity> {
         float distance = entity.getBeamDistance();
         if (distance <= 0) return;
 
-        for (float d = (float) Math.floor(distance - 1.0f); d >= 0; d -= 1.0f) {
+        float size = entity.getProjectileSize();
+        float scaledDistance = (size > 0) ? distance / size : distance;
+        for (float d = (float) Math.floor(scaledDistance - 1.0f); d >= 0; d -= 1.0f) {
             poseStack.pushPose();
             poseStack.translate(0, 0, -d);
             super.actuallyRender(poseStack, entity, model, renderType, bufferSource, buffer,

@@ -24,8 +24,9 @@ public class RunicBlockItem extends BlockItem implements GeoItem {
     private float guiTranslationY = 0;
     private float guiTranslationZ = 0;
     private float guiScale = 1;
+    private String geoPath;
 
-    public RunicBlockItem(Block block, Properties properties, String animationName, String blockName) {
+  public RunicBlockItem(Block block, Properties properties, String animationName, String blockName) {
         super(block, properties);
         this.defaultAnimation = RawAnimation.begin().thenLoop(animationName);
         this.blockName = blockName;
@@ -33,6 +34,11 @@ public class RunicBlockItem extends BlockItem implements GeoItem {
 
     public RunicBlockItem withTexture(String texturePath) {
         this.texturePath = texturePath;
+        return this;
+    }
+
+    public RunicBlockItem withGeoPath(String geoPath) {
+        this.geoPath = geoPath;
         return this;
     }
 
@@ -86,9 +92,10 @@ public class RunicBlockItem extends BlockItem implements GeoItem {
             public net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer getGeoItemRenderer() {
                 if (this.renderer == null) {
                     String tex = texturePath != null ? texturePath : "textures/block/" + blockName + ".png";
+                    String geo = geoPath != null ? geoPath : "geo/block/" + blockName + ".geo.json";
                     this.renderer = new com.github.runicrebirth.client.renderers.blocks.RunicBlockItemRenderer(
                         new com.github.runicrebirth.client.renderers.blocks.RunicBlockItemModel<>(
-                            "geo/block/" + blockName + ".geo.json",
+                            geo,
                             tex,
                             "animations/block/" + blockName + ".animation.json"));
                 }

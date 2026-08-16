@@ -73,7 +73,7 @@ public class RunicBlockItemRenderer extends GeoItemRenderer<RunicBlockItem> {
         VertexConsumer finalBuffer;
         if (this.renderPerspective == ItemDisplayContext.GUI) {
             noShadeType = ModRenderTypes.entityTranslucentNoCullNoShade(texture);
-            finalBuffer = bufferSource.getBuffer(ModRenderTypes.entityUnlit(texture));
+            finalBuffer = bufferSource.getBuffer(ModRenderTypes.entityTranslucentNoCullNoShade(texture));
         } else {
             finalBuffer = new NormalOverrideVertexConsumer(bufferSource.getBuffer(noShadeType));
         }

@@ -1,5 +1,6 @@
 package com.github.runicrebirth.client.renderers.armor;
 
+import com.github.runicrebirth.client.renderers.ModRenderTypes;
 import com.github.runicrebirth.items.armor.MagicArmorItem;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
@@ -17,7 +18,7 @@ public class MagicArmorRenderer<T extends MagicArmorItem> extends GeoArmorRender
 
     @Override
     public RenderType getRenderType(T animatable, ResourceLocation texture, net.minecraft.client.renderer.MultiBufferSource bufferSource, float partialTick) {
-        return RenderType.eyes(texture);
+        return ModRenderTypes.entityTranslucentNoCullNoShade(texture);
     }
 
 

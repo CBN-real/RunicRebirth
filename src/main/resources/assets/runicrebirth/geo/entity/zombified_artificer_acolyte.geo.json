@@ -1,14 +1,326 @@
 {
-  "format_version": "1.12.0",
-  "minecraft:geometry": [{
-    "description": {
-      "identifier": "geometry.zombified_artificer_acolyte",
-      "texture_width": 64,
-      "texture_height": 64,
-      "visible_bounds_width": 2,
-      "visible_bounds_height": 3,
-      "visible_bounds_offset": [0, 1, 0]
-    },
-    "bones": [{"name": "root", "pivot": [0, 0, 0]}]
-  }]
+	"format_version": "1.12.0",
+	"minecraft:geometry": [
+		{
+			"description": {
+				"identifier": "geometry.unknown",
+				"texture_width": 128,
+				"texture_height": 128,
+				"visible_bounds_width": 3,
+				"visible_bounds_height": 3.5,
+				"visible_bounds_offset": [0, 1.25, 0]
+			},
+			"bones": [
+				{
+					"name": "zombified_artificer_acolyte",
+					"pivot": [0, 0, 0]
+				},
+				{
+					"name": "bipedHead",
+					"parent": "zombified_artificer_acolyte",
+					"pivot": [0, 24, 0]
+				},
+				{
+					"name": "head",
+					"parent": "bipedHead",
+					"pivot": [0, 24, 0],
+					"cubes": [
+						{"origin": [-4, 24, -4], "size": [8, 8, 8], "uv": [64, 48]}
+					]
+				},
+				{
+					"name": "headwear",
+					"parent": "bipedHead",
+					"pivot": [0, 24, 0],
+					"cubes": [
+						{
+							"origin": [-4, 24, -4],
+							"size": [8, 8, 8],
+							"inflate": 0.5,
+							"uv": {
+								"north": {"uv": [104, 56.5], "uv_size": [8, 7.5]},
+								"east": {"uv": [96, 56.5], "uv_size": [8, 7.5]},
+								"south": {"uv": [120, 56.5], "uv_size": [8, 7.5]},
+								"west": {"uv": [112, 56.5], "uv_size": [8, 7.5]},
+								"up": {"uv": [104, 49], "uv_size": [8, 7.5]},
+								"down": {"uv": [112, 56.5], "uv_size": [8, -7.5]}
+							}
+						}
+					]
+				},
+				{
+					"name": "armorHead",
+					"parent": "bipedHead",
+					"pivot": [0, 24, 0],
+					"cubes": [
+						{"origin": [-4, 25.9, -4], "size": [8, 8, 8], "inflate": 0.75, "uv": [94, 80]},
+						{"origin": [-3.31761, 31.98235, -5.125], "size": [3, 3, 1], "pivot": [0.09409, 31.59335, -4.625], "rotation": [-15, -15, -45], "uv": [84, 108]},
+						{"origin": [0.48079, 27.70435, -5.325], "size": [2, 2, 1], "pivot": [-1.43091, 31.59335, -4.825], "rotation": [-15, -15, -45], "uv": [96, 114]},
+						{"origin": [-4.49421, 27.47935, -5.325], "size": [1, 1, 1], "pivot": [-7.40591, 31.36835, -4.825], "rotation": [-15, -15, -45], "uv": [96, 118]},
+						{"origin": [-0.09421, 27.70435, -5.125], "size": [4, 4, 1], "pivot": [-0.00591, 31.59335, -4.625], "rotation": [-15, -15, -45], "uv": [94, 107]}
+					]
+				},
+				{
+					"name": "dye_head",
+					"parent": "armorHead",
+					"pivot": [0, 0, 0],
+					"cubes": [
+						{"origin": [-4.5, 23.4, -4.5], "size": [9, 3, 9], "inflate": 0.01, "uv": [32, 116]}
+					]
+				},
+				{
+					"name": "bipedBody",
+					"parent": "zombified_artificer_acolyte",
+					"pivot": [0, 24, 0]
+				},
+				{
+					"name": "armorBody",
+					"parent": "bipedBody",
+					"pivot": [0, 24, 0],
+					"cubes": [
+						{"origin": [-5, 11.5, -3], "size": [10, 1, 6], "uv": [12, 80]},
+						{"origin": [-1.25, 11.2, -3.1], "size": [2.5, 1.6, 2.1], "uv": [18, 69]},
+						{"origin": [-1.225, 20.2, -3], "size": [3.7, 1.25, 2], "uv": [17, 73]},
+						{"origin": [-1.225, 18, -3], "size": [3.7, 1.25, 2], "uv": [17, 73]}
+					]
+				},
+				{
+					"name": "dye",
+					"parent": "armorBody",
+					"pivot": [0, 24, 0],
+					"cubes": [
+						{"origin": [-4, 12, -2], "size": [8, 12, 4], "inflate": 0.75, "uv": [16, 35]}
+					]
+				},
+				{
+					"name": "back_robe",
+					"parent": "dye",
+					"pivot": [0, 12, 1.75],
+					"cubes": [
+						{"origin": [-4.475, 2.125, 1], "size": [8.95, 8.75, 2], "pivot": [0, 8.875, 2], "rotation": [6.75, 0, 0], "uv": [0, 53]}
+					]
+				},
+				{
+					"name": "front_robe",
+					"parent": "dye",
+					"pivot": [0, 12, -2],
+					"cubes": [
+						{"origin": [1.36431, 1.80659, -2], "size": [3.25, 9, 4], "inflate": 0.76, "pivot": [4.53931, 7.03159, 0], "rotation": [0, 0, -7.75], "uv": [20, 51]},
+						{"origin": [-4.61431, 1.80659, -2], "size": [3.25, 9, 4], "inflate": 0.76, "pivot": [-4.53931, 7.03159, 0], "rotation": [0, 0, 7.75], "uv": [20, 51], "mirror": true}
+					]
+				},
+				{
+					"name": "body",
+					"parent": "bipedBody",
+					"pivot": [0, 24, 0],
+					"cubes": [
+						{"origin": [-4, 12, -2], "size": [8, 12, 4], "uv": [80, 64]}
+					]
+				},
+				{
+					"name": "bipedRightArm",
+					"parent": "zombified_artificer_acolyte",
+					"pivot": [-5, 22, 0]
+				},
+				{
+					"name": "armorRightArm",
+					"parent": "bipedRightArm",
+					"pivot": [-5, 22, 0]
+				},
+				{
+					"name": "dye2",
+					"parent": "armorRightArm",
+					"pivot": [-5, 22, 0],
+					"cubes": [
+						{"origin": [-8, 12, -2], "size": [4, 2, 4], "inflate": 0.76, "uv": [0, 70]},
+						{"origin": [-8, 12, -2], "size": [4, 12, 4], "inflate": 0.51, "uv": [42, 36]}
+					]
+				},
+				{
+					"name": "right_arm",
+					"parent": "bipedRightArm",
+					"pivot": [-5, 22, 0],
+					"cubes": [
+						{
+							"origin": [-8, 12, -2],
+							"size": [4, 12, 4],
+							"uv": {
+								"north": {"uv": [108, 68], "uv_size": [4, 12]},
+								"east": {"uv": [104, 68], "uv_size": [4, 12]},
+								"south": {"uv": [116, 68], "uv_size": [4, 12]},
+								"west": {"uv": [112, 68], "uv_size": [4, 12]},
+								"up": {"uv": [108, 64], "uv_size": [4, 4]},
+								"down": {"uv": [112, 68], "uv_size": [4, -4]}
+							}
+						}
+					]
+				},
+				{
+					"name": "ring",
+					"parent": "bipedRightArm",
+					"pivot": [-6.50521, 12.6, -2.03021],
+					"cubes": [
+						{
+							"origin": [-7.01563, 12.1, -2.4],
+							"size": [0.25, 1, 1],
+							"uv": {
+								"north": {"uv": [65, 40], "uv_size": [8, 5]},
+								"east": {"uv": [65, 40], "uv_size": [8, 5]},
+								"south": {"uv": [65.75, 40], "uv_size": [0.25, 1]},
+								"west": {"uv": [65, 40], "uv_size": [1, 1]},
+								"up": {"uv": [66, 41], "uv_size": [-0.25, -1]},
+								"down": {"uv": [66, 41], "uv_size": [-0.25, -1]}
+							}
+						},
+						{
+							"origin": [-6.26563, 12.1, -2.4],
+							"size": [0.28125, 1, 1],
+							"uv": {
+								"north": {"uv": [83, 40], "uv_size": [8.03125, 5]},
+								"east": {"uv": [83, 40], "uv_size": [1, 1]},
+								"south": {"uv": [83.09375, 40], "uv_size": [0.03125, 0.2]},
+								"west": {"uv": [83, 40], "uv_size": [8.025, 5]},
+								"up": {"uv": [83.125, 40.2], "uv_size": [-0.03125, -0.2]},
+								"down": {"uv": [83.125, 40.2], "uv_size": [-0.03125, -0.2]}
+							}
+						},
+						{
+							"origin": [-6.625, 12.1, -2.79063],
+							"size": [0.25, 1, 1],
+							"pivot": [-6.5, 12.6, -2.29063],
+							"rotation": [0, -90, 0],
+							"uv": {
+								"north": {"uv": [65, 40], "uv_size": [0.25, 1]},
+								"east": {"uv": [74, 40], "uv_size": [8, 5]},
+								"south": {"uv": [65.75, 40], "uv_size": [0.25, 1]},
+								"west": {"uv": [65, 40], "uv_size": [1, 1]},
+								"up": {"uv": [66, 41], "uv_size": [-0.25, -1]},
+								"down": {"uv": [66, 41], "uv_size": [-0.25, -1]}
+							}
+						}
+					]
+				},
+				{
+					"name": "bipedLeftArm",
+					"parent": "zombified_artificer_acolyte",
+					"pivot": [5, 22, 0]
+				},
+				{
+					"name": "armorLeftArm",
+					"parent": "bipedLeftArm",
+					"pivot": [5, 22, 0]
+				},
+				{
+					"name": "dye3",
+					"parent": "armorLeftArm",
+					"pivot": [5, 22, 0],
+					"cubes": [
+						{"origin": [4, 12, -2], "size": [4, 2, 4], "inflate": 0.76, "uv": [0, 70]},
+						{
+							"origin": [4, 12, -2],
+							"size": [4, 12, 4],
+							"inflate": 0.51,
+							"uv": {
+								"north": {"uv": [50, 40], "uv_size": [-4, 9]},
+								"east": {"uv": [54, 40], "uv_size": [-4, 9]},
+								"south": {"uv": [58, 40], "uv_size": [-4, 9]},
+								"west": {"uv": [46, 40], "uv_size": [-4, 9]},
+								"up": {"uv": [50, 36], "uv_size": [-4, 4]},
+								"down": {"uv": [54, 40], "uv_size": [-4, -4]}
+							}
+						}
+					]
+				},
+				{
+					"name": "left_arm",
+					"parent": "bipedLeftArm",
+					"pivot": [5, 22, 0],
+					"cubes": [
+						{
+							"origin": [4, 12, -2],
+							"size": [4, 12, 4],
+							"uv": {
+								"north": {"uv": [112, 68], "uv_size": [-4, 12]},
+								"east": {"uv": [116, 68], "uv_size": [-4, 12]},
+								"south": {"uv": [120, 68], "uv_size": [-4, 12]},
+								"west": {"uv": [108, 68], "uv_size": [-4, 12]},
+								"up": {"uv": [112, 64], "uv_size": [-4, 4]},
+								"down": {"uv": [116, 68], "uv_size": [-4, -4]}
+							}
+						}
+					]
+				},
+				{
+					"name": "bipedLeftLeg",
+					"parent": "zombified_artificer_acolyte",
+					"pivot": [2, 12, 0]
+				},
+				{
+					"name": "armorLeftLeg",
+					"parent": "bipedLeftLeg",
+					"pivot": [2, 12, 0]
+				},
+				{
+					"name": "dye4",
+					"parent": "armorLeftLeg",
+					"pivot": [2, 12, 0],
+					"cubes": [
+						{"origin": [-0.1, 0, -2], "size": [4, 15, 4], "inflate": 0.5, "uv": [42, 52], "mirror": true}
+					]
+				},
+				{
+					"name": "left_leg",
+					"parent": "bipedLeftLeg",
+					"pivot": [1.9, 12, 0],
+					"cubes": [
+						{"origin": [0, 0, -2], "size": [4, 12, 4], "uv": [64, 64], "mirror": true}
+					]
+				},
+				{
+					"name": "armorLeftBoot",
+					"parent": "bipedLeftLeg",
+					"pivot": [2, 12, 0],
+					"cubes": [
+						{"origin": [-0.875, -0.75, -3.7], "size": [5.526, 2, 1.7], "uv": [1, 96]},
+						{"origin": [-0.1, 0, -2], "size": [4, 3, 4], "inflate": 0.75, "uv": [0, 99], "mirror": true}
+					]
+				},
+				{
+					"name": "bipedRightLeg",
+					"parent": "zombified_artificer_acolyte",
+					"pivot": [-2, 12, 0]
+				},
+				{
+					"name": "armorRightLeg",
+					"parent": "bipedRightLeg",
+					"pivot": [-2, 12, 0]
+				},
+				{
+					"name": "dye5",
+					"parent": "armorRightLeg",
+					"pivot": [-2, 12, 0],
+					"cubes": [
+						{"origin": [-3.9, 0, -2], "size": [4, 15, 4], "inflate": 0.5, "uv": [42, 52]}
+					]
+				},
+				{
+					"name": "right_leg",
+					"parent": "bipedRightLeg",
+					"pivot": [-1.9, 12, 0],
+					"cubes": [
+						{"origin": [-4, 0, -2], "size": [4, 12, 4], "uv": [64, 64]}
+					]
+				},
+				{
+					"name": "armorRightBoot",
+					"parent": "bipedRightLeg",
+					"pivot": [-2, 12, 0],
+					"cubes": [
+						{"origin": [-4.651, -0.75, -3.7], "size": [5.526, 2, 1.7], "uv": [1, 96], "mirror": true},
+						{"origin": [-3.9, 0, -2], "size": [4, 3, 4], "inflate": 0.75, "uv": [0, 99]}
+					]
+				}
+			]
+		}
+	]
 }

@@ -108,6 +108,10 @@ public final class ModSounds {
         SOUNDS.register("spells.slash_spell", () -> SoundEvent.createVariableRangeEvent(
             ResourceLocation.fromNamespaceAndPath(RunicRebirth.MODID, "spells.slash_spell")));
 
+    public static final DeferredHolder<SoundEvent, SoundEvent> SPELLS_LONGSWORD =
+        SOUNDS.register("spells.longsword", () -> SoundEvent.createVariableRangeEvent(
+            ResourceLocation.fromNamespaceAndPath(RunicRebirth.MODID, "spells.longsword")));
+
     public static final DeferredHolder<SoundEvent, SoundEvent> SPELLS_SPAWN_CIRCLE =
         SOUNDS.register("spells.spawn_circle", () -> SoundEvent.createVariableRangeEvent(
             ResourceLocation.fromNamespaceAndPath(RunicRebirth.MODID, "spells.spawn_circle")));
@@ -171,6 +175,10 @@ public final class ModSounds {
   public static final DeferredHolder<SoundEvent, SoundEvent> DUNGEON_CRUMBLING_PLATFORM =
       SOUNDS.register("dungeon.crumbling_platform", () -> SoundEvent.createVariableRangeEvent(
           ResourceLocation.fromNamespaceAndPath(RunicRebirth.MODID, "dungeon.crumbling_platform")));
+
+    public static final DeferredHolder<SoundEvent, SoundEvent> DUNGEON_TURRET_POWER_ON =
+        SOUNDS.register("dungeon.turret_power_on", () -> SoundEvent.createVariableRangeEvent(
+            ResourceLocation.fromNamespaceAndPath(RunicRebirth.MODID, "dungeon.turret_power_on")));
 
     public static final DeferredHolder<SoundEvent, SoundEvent> SPELLS_HOVER =
         SOUNDS.register("spells.hover", () -> SoundEvent.createVariableRangeEvent(

@@ -4,6 +4,7 @@ import com.github.runicrebirth.RunicRebirth;
 import com.github.runicrebirth.blocks.entity.CrumblingPlatformBlockEntity;
 import com.github.runicrebirth.blocks.entity.DungeonBoulderSpawnerBlockEntity;
 import com.github.runicrebirth.blocks.entity.DungeonDoorBlockEntity;
+import com.github.runicrebirth.blocks.entity.AncientArcaneTurretBlockEntity;
 import com.github.runicrebirth.blocks.entity.DungeonFlamethrowerBlockEntity;
 import com.github.runicrebirth.blocks.entity.DungeonSwingingAxeBlockEntity;
 import com.github.runicrebirth.blocks.entity.DungeonPressurePlateBlockEntity;
@@ -16,7 +17,8 @@ import com.github.runicrebirth.blocks.entity.RunesteelPylonBlockEntity;
 import com.github.runicrebirth.blocks.entity.OculusControllerBlockEntity;
 import com.github.runicrebirth.blocks.entity.OculusPortalBlockEntity;
 import com.github.runicrebirth.blocks.entity.RunicAnvilBlockEntity;
-import com.github.runicrebirth.blocks.entity.TrialSpawnerBlockEntity;
+import com.github.runicrebirth.blocks.entity.DungeonMobSpawnerBlockEntity;
+import com.github.runicrebirth.blocks.entity.DungeonRoomTrackerBlockEntity;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.neoforge.registries.DeferredHolder;
@@ -43,9 +45,13 @@ public final class ModBlockEntities {
             BLOCK_ENTITIES.register("runesteel_pylon",
                     () -> BlockEntityType.Builder.of(RunesteelPylonBlockEntity::new, ModBlocks.RUNESTEEL_PYLON.get()).build(null));
 
-    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<TrialSpawnerBlockEntity>> TRIAL_SPAWNER =
-            BLOCK_ENTITIES.register("trial_spawner",
-                    () -> BlockEntityType.Builder.of(TrialSpawnerBlockEntity::new, ModBlocks.TRIAL_SPAWNER.get()).build(null));
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<DungeonMobSpawnerBlockEntity>> DUNGEON_MOB_SPAWNER =
+            BLOCK_ENTITIES.register("dungeon_mob_spawner",
+                    () -> BlockEntityType.Builder.of(DungeonMobSpawnerBlockEntity::new, ModBlocks.DUNGEON_MOB_SPAWNER.get()).build(null));
+
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<DungeonRoomTrackerBlockEntity>> DUNGEON_ROOM_TRACKER =
+            BLOCK_ENTITIES.register("dungeon_room_tracker",
+                    () -> BlockEntityType.Builder.of(DungeonRoomTrackerBlockEntity::new, ModBlocks.DUNGEON_ROOM_TRACKER.get()).build(null));
 
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<InfusionAltarBlockEntity>> INFUSION_ALTAR =
             BLOCK_ENTITIES.register("infusion_altar",
@@ -99,6 +105,11 @@ public final class ModBlockEntities {
             BLOCK_ENTITIES.register("dungeon_flamethrower",
                     () -> BlockEntityType.Builder.of(DungeonFlamethrowerBlockEntity::new,
                             ModBlocks.DUNGEON_FLAMETHROWER.get()).build(null));
+
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<AncientArcaneTurretBlockEntity>> ANCIENT_ARCANE_TURRET =
+            BLOCK_ENTITIES.register("ancient_arcane_turret",
+                    () -> BlockEntityType.Builder.of(AncientArcaneTurretBlockEntity::new,
+                            ModBlocks.ANCIENT_ARCANE_TURRET.get()).build(null));
 
     private ModBlockEntities() {}
 }

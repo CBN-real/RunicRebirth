@@ -31,8 +31,8 @@ public class HammerDroneItemRenderer extends GeoItemRenderer<HammerDroneItem> {
         if (!isReRender && this.renderPerspective == ItemDisplayContext.GUI) {
             poseStack.mulPose(Axis.XP.rotationDegrees(30f));
             poseStack.mulPose(Axis.YP.rotationDegrees(225f));
-            poseStack.scale(1.5f, 1.5f, 1.5f);
-            poseStack.translate(0f, 4.0f, 0f);
+            poseStack.scale(1.45f, 1.45f, 1.45f);
+            poseStack.translate(0.05f, -0.25f, 0f);
         }
     }
 

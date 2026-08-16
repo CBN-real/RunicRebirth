@@ -18,6 +18,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
@@ -45,11 +46,14 @@ public class ArcaneDroneEntity extends Entity implements GeoEntity {
         SynchedEntityData.defineId(ArcaneDroneEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Integer> DATA_OWNER_ID =
         SynchedEntityData.defineId(ArcaneDroneEntity.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Float> DATA_FACING_YAW =
+        SynchedEntityData.defineId(ArcaneDroneEntity.class, EntityDataSerializers.FLOAT);
 
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
     private UUID ownerUUID;
     private int beamCooldown = BEAM_COOLDOWN_TICKS;
+    private int lastTargetId = -1;
 
     public ArcaneDroneEntity(EntityType<?> type, Level level) {
         super(type, level);
@@ -61,6 +65,7 @@ public class ArcaneDroneEntity extends Entity implements GeoEntity {
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         builder.define(DATA_CASTING, false);
         builder.define(DATA_OWNER_ID, -1);
+        builder.define(DATA_FACING_YAW, 0f);
     }
 
     public void setOwner(UUID uuid) {
@@ -71,6 +76,8 @@ public class ArcaneDroneEntity extends Entity implements GeoEntity {
         return ownerUUID;
     }
 
+
+
     @Override
     public void tick() {
         super.tick();
@@ -79,13 +86,15 @@ public class ArcaneDroneEntity extends Entity implements GeoEntity {
             int ownerId = entityData.get(DATA_OWNER_ID);
             if (ownerId != -1) {
                 Entity owner = level().getEntity(ownerId);
-                if (owner instanceof LivingEntity living) {
-                    Vec3 hover = hoverPos(living);
-                    this.setPos(hover.x, hover.y, hover.z);
-                    this.xo = owner.xo + (hover.x - owner.getX());
-                    this.yo = owner.yo + (hover.y - owner.getY());
-                    this.zo = owner.zo + (hover.z - owner.getZ());
-                    this.setYRot(living.getYRot());
+                if (owner instanceof Player living) {
+                    Vec3 prev = hoverPosFromOld(living);
+                    Vec3 cur = hoverPos(living);
+                    this.xo = prev.x;
+                    this.yo = prev.y;
+                    this.zo = prev.z;
+//                    this.setPos(cur.x, cur.y, cur.z);
+//                    this.setYRot(entityData.get(DATA_FACING_YAW));
+                    this.lerpPositionAndRotationStep(2, cur.x, cur.y, cur.z, entityData.get(DATA_FACING_YAW), owner.getXRot());
                 }
             }
             return;
@@ -103,7 +112,6 @@ public class ArcaneDroneEntity extends Entity implements GeoEntity {
 
         Vec3 hover = hoverPos(owner);
         this.setPos(hover.x, hover.y, hover.z);
-        this.setYRot(owner.getYRot());
 
         if (this.tickCount % 4 == 0) {
             serverLevel.sendParticles(new ScaledParticleOption(ModParticles.ARCANE_TINY.get(), 0.5f),
@@ -115,18 +123,36 @@ public class ArcaneDroneEntity extends Entity implements GeoEntity {
             if (entityData.get(DATA_CASTING) && beamCooldown < BEAM_COOLDOWN_TICKS - 15) {
                 entityData.set(DATA_CASTING, false);
             }
+            Entity lastTarget = serverLevel.getEntity(lastTargetId);
+            float yaw;
+            if (lastTarget instanceof LivingEntity lt && lt.isAlive()
+                    && this.distanceToSqr(lt) <= ATTACK_RANGE * ATTACK_RANGE) {
+                yaw = yawToward(this.position(), lt.getBoundingBox().getCenter());
+            } else {
+                yaw = owner.getYRot();
+                lastTargetId = -1;
+            }
+            entityData.set(DATA_FACING_YAW, yaw);
             return;
         }
 
         LivingEntity beamTarget = findTarget(serverLevel, owner);
         if (beamTarget == null) {
             beamCooldown = 20;
+            entityData.set(DATA_FACING_YAW, owner.getYRot());
             return;
         }
 
+        lastTargetId = beamTarget.getId();
+        float targetYaw = yawToward(this.position(), beamTarget.getBoundingBox().getCenter());
+        entityData.set(DATA_FACING_YAW, targetYaw);
         fireBeam(serverLevel, owner, beamTarget);
         entityData.set(DATA_CASTING, true);
         beamCooldown = BEAM_COOLDOWN_TICKS;
+    }
+
+    private static float yawToward(Vec3 from, Vec3 to) {
+        return (float) Math.toDegrees(Math.atan2(-(to.x - from.x), to.z - from.z));
     }
 
     private void fireBeam(ServerLevel level, ServerPlayer owner, LivingEntity target) {
@@ -134,7 +160,7 @@ public class ArcaneDroneEntity extends Entity implements GeoEntity {
         Vec3 dir = target.getBoundingBox().getCenter().subtract(start).normalize();
 
         SpellCastContext ctx = new SpellCastContext(level, owner, ItemStack.EMPTY, start, dir, 0f, 0f, target);
-        SpellParams params = new SpellParams(4f, 0.1f,0.05f, 1.0f, 0, 0, 0, ModElements.ARCANE.get(), MagicDamageType.SPIRIT);
+        SpellParams params = new SpellParams(4f, 0.4f,0.25f, 1.0f, 0, 0, 0, ModElements.ARCANE.get(), MagicDamageType.SPIRIT);
         ModSpellTypes.MAGIC_BEAM.get().onCast(ctx, params);
     }
 
@@ -165,6 +191,14 @@ public class ArcaneDroneEntity extends Entity implements GeoEntity {
         double rightX = Math.cos(yawRad);
         double rightZ = Math.sin(yawRad);
         return player.position()
+            .add(rightX * 0.7, player.getBbHeight() + 0.5, rightZ * 0.7);
+    }
+
+    private Vec3 hoverPosFromOld(LivingEntity player) {
+        float yawRad = (float) Math.toRadians(player.getYRot());
+        double rightX = Math.cos(yawRad);
+        double rightZ = Math.sin(yawRad);
+        return new Vec3(player.xo, player.yo, player.zo)
             .add(rightX * 0.7, player.getBbHeight() + 0.5, rightZ * 0.7);
     }
 

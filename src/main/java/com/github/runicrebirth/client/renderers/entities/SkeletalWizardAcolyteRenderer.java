@@ -15,9 +15,9 @@ public class SkeletalWizardAcolyteRenderer extends GeoEntityRenderer<SkeletalWiz
         super(context, new SkeletalWizardAcolyteGeoModel());
     }
 
-  @Override
-  public @Nullable RenderType getRenderType(SkeletalWizardAcolyteEntity animatable,
-      ResourceLocation texture, @Nullable MultiBufferSource bufferSource, float partialTick) {
-    return RenderType.entityTranslucent(texture);
-  }
+    @Override
+    public @Nullable RenderType getRenderType(SkeletalWizardAcolyteEntity animatable,
+        ResourceLocation texture, @Nullable MultiBufferSource bufferSource, float partialTick) {
+      return RenderType.entityTranslucent(texture);
+    }
 }

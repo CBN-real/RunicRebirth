@@ -27,7 +27,7 @@ public class ArcaneDroneRenderer extends GeoEntityRenderer<ArcaneDroneEntity> {
     @Override
     public RenderType getRenderType(ArcaneDroneEntity entity, ResourceLocation texture,
         @Nullable MultiBufferSource bufferSource, float partialTick) {
-        return ModRenderTypes.entityTranslucentNoCullNoShade(texture);
+        return RenderType.entityTranslucent(texture);
     }
 
     @Override

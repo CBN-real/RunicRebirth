@@ -18,12 +18,13 @@ public class RunicRebirthLangProvider extends LanguageProvider {
     protected void addTranslations() {
         cache.data().forEach(this::add);
 
-        add("itemGroup.runicrebirth", "Interactive Magic Tab");
-        add("item.runicrebirth.basic_runic_longsword", "Basic Runic Longsword");
+        add("itemGroup.runicrebirth.blocks", "Runic Rebirth Blocks");
+        add("itemGroup.runicrebirth.items", "Runic Rebirth Items");
+        add("itemGroup.runicrebirth.armor", "Runic Rebirth Armor");
+        add("item.runicrebirth.basic_runic_longsword", "Runic Longsword");
         add("item.runicrebirth.acolyte_wand", "Acolyte Wand");
         add("item.runicrebirth.adept_staff", "Adept Staff");
-        add("item.runicrebirth.inscribed_wand", "Inscribed Wand");
-        add("item.runicrebirth.ring_of_expansion", "Ring of Expansion");
+add("item.runicrebirth.ring_of_expansion", "Ring of Expansion");
         add("item.runicrebirth.arcane_acolyte_ring", "Arcane Acolyte Ring");
         add("item.runicrebirth.arcane_tether_ring", "Arcane Tether Ring");
         add("item.runicrebirth.magic_hand_ring", "Ring of the Magic Hand");
@@ -76,6 +77,7 @@ public class RunicRebirthLangProvider extends LanguageProvider {
         add("item.runicrebirth.arcane_drone", "Arcane Drone");
         add("item.runicrebirth.hammer_drone", "Hammer Drone");
         add("curios.identifier.runic_drone", "Runic Drone");
+        add("entity.runicrebirth.ancient_arcane_drone", "Ancient Arcane Drone");
         add("entity.runicrebirth.runesteel_golem", "Runesteel Golem");
         add("entity.runicrebirth.zombified_runeblade_acolyte", "Zombified Runeblade Acolyte");
         add("entity.runicrebirth.skeletal_mage_acolyte", "Skeletal Mage Acolyte");
@@ -121,15 +123,25 @@ public class RunicRebirthLangProvider extends LanguageProvider {
         add("screen.runicrebirth.canvas_hint", "Left-click to draw §f|§7 Right-click to submit §f|§7 Esc to cancel");
 
         add("block.runicrebirth.runic_stone", "Runic Stone");
+        add("block.runicrebirth.runic_stone_bricks", "Runic Stone Bricks");
+        add("block.runicrebirth.cracked_runic_stone_bricks", "Cracked Runic Stone Bricks");
+        add("block.runicrebirth.cut_runic_stone", "Cut Runic Stone");
+        add("block.runicrebirth.reinforced_cut_runic_stone", "Reinforced Runic Stone");
         add("block.runicrebirth.runic_stone_slab", "Runic Stone Slab");
         add("block.runicrebirth.runic_stone_stairs", "Runic Stone Stairs");
         add("block.runicrebirth.runic_stone_pillar", "Runic Stone Pillar");
+        add("block.runicrebirth.false_sky", "False Sky");
+        add("block.runicrebirth.cracked_false_sky", "Cracked False Sky");
+        add("block.runicrebirth.runelight_lantern", "Runelight Lantern");
+        add("block.runicrebirth.runelight_torch", "Runelight Torch");
         add("block.runicrebirth.oculus_portal", "Dimensional Oculus Portal");
         add("block.runicrebirth.oculus_controller", "Dimensional Oculus Controller");
         add("block.runicrebirth.oculus_pillar", "Activated Pillar");
         add("block.runicrebirth.runesteel_pylon", "Runesteel Pylon");
         add("block.runicrebirth.return_portal", "Return Portal");
-        add("block.runicrebirth.trial_spawner", "Trial Spawner");
+        add("block.runicrebirth.dungeon_mob_spawner", "Dungeon Mob Spawner");
+        add("block.runicrebirth.dungeon_room_tracker", "Dungeon Room Tracker");
+        add("block.runicrebirth.dungeon_door", "Dungeon Door");
         add("block.runicrebirth.dungeon_temporary_platform", "Dungeon Temporary Platform");
         add("block.runicrebirth.dungeon_pressure_plate", "Dungeon Pressure Plate");
         add("block.runicrebirth.dungeon_spike", "Dungeon Spike");
@@ -137,6 +149,7 @@ public class RunicRebirthLangProvider extends LanguageProvider {
         add("block.runicrebirth.dungeon_boulder_spawner", "Dungeon Boulder Spawner");
         add("block.runicrebirth.dungeon_swinging_axe", "Dungeon Swinging Axe");
         add("block.runicrebirth.dungeon_flamethrower", "Dungeon Flamethrower");
+        add("block.runicrebirth.ancient_arcane_turret", "Ancient Arcane Turret");
         add("entity.runicrebirth.dungeon_boulder", "Dungeon Boulder");
         add("block.runicrebirth.infusion_altar", "Infusion Altar");
         add("block.runicrebirth.runic_anvil", "Runic Anvil");

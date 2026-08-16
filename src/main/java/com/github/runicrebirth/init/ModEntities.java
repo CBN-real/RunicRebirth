@@ -8,6 +8,7 @@ import com.github.runicrebirth.entities.DrawingCanvasEntity;
 import com.github.runicrebirth.entities.HammerDroneEntity;
 import com.github.runicrebirth.entities.MagicHandEntity;
 import com.github.runicrebirth.entities.PhantomMinerEntity;
+import com.github.runicrebirth.entities.mobs.AncientArcaneDroneEntity;
 import com.github.runicrebirth.entities.mobs.RunesteelGolemEntity;
 import com.github.runicrebirth.entities.mobs.SkeletalMageAcolyteEntity;
 import com.github.runicrebirth.entities.mobs.SkeletalWizardAcolyteEntity;
@@ -327,6 +328,11 @@ public class ModEntities {
             .noSave()
             .build("hammer_drone"));
 
+    public static final DeferredHolder<EntityType<?>, EntityType<AncientArcaneDroneEntity>> ANCIENT_ARCANE_DRONE = ENTITIES.register(
+        "ancient_arcane_drone",
+        () -> EntityType.Builder.<AncientArcaneDroneEntity>of(AncientArcaneDroneEntity::new, MobCategory.MONSTER)
+            .sized(0.5F, 0.5F).clientTrackingRange(10).updateInterval(3).build("ancient_arcane_drone"));
+
     public static final DeferredHolder<EntityType<?>, EntityType<RunesteelGolemEntity>> RUNESTEEL_GOLEM = ENTITIES.register(
         "runesteel_golem",
         () -> EntityType.Builder.<RunesteelGolemEntity>of(RunesteelGolemEntity::new, MobCategory.MONSTER)
@@ -354,6 +360,7 @@ public class ModEntities {
 
     @SubscribeEvent
     public static void registerAttributes(EntityAttributeCreationEvent event) {
+        event.put(ANCIENT_ARCANE_DRONE.get(), AncientArcaneDroneEntity.createAttributes().build());
         event.put(RUNESTEEL_GOLEM.get(), RunesteelGolemEntity.createAttributes().build());
         event.put(ZOMBIFIED_RUNEBLADE_ACOLYTE.get(), ZombifiedRunebladeAcolyteEntity.createAttributes().build());
         event.put(SKELETAL_MAGE_ACOLYTE.get(), SkeletalMageAcolyteEntity.createAttributes().build());
@@ -363,6 +370,8 @@ public class ModEntities {
 
     @SubscribeEvent
     public static void registerSpawnPlacements(RegisterSpawnPlacementsEvent event) {
+        event.register(ANCIENT_ARCANE_DRONE.get(), SpawnPlacementTypes.NO_RESTRICTIONS,
+            Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Monster::checkMonsterSpawnRules, Operation.OR);
         event.register(RUNESTEEL_GOLEM.get(), SpawnPlacementTypes.ON_GROUND,
             Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Monster::checkMonsterSpawnRules, Operation.OR);
         event.register(ZOMBIFIED_RUNEBLADE_ACOLYTE.get(), SpawnPlacementTypes.ON_GROUND,

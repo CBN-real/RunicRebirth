@@ -6,6 +6,7 @@ import com.github.runicrebirth.blocks.DungeonDoorProxyBlock;
 import com.github.runicrebirth.blocks.CrumblingPlatformBlock;
 import com.github.runicrebirth.blocks.DungeonPressurePlateBlock;
 import com.github.runicrebirth.blocks.DungeonBoulderSpawnerBlock;
+import com.github.runicrebirth.blocks.AncientArcaneTurretBlock;
 import com.github.runicrebirth.blocks.DungeonFlamethrowerBlock;
 import com.github.runicrebirth.blocks.DungeonSpikeBlock;
 import com.github.runicrebirth.blocks.DungeonSwingingAxeBlock;
@@ -22,12 +23,16 @@ import com.github.runicrebirth.blocks.RunesteelPortcullisBlock;
 import com.github.runicrebirth.blocks.RunesteelPylonBlock;
 import com.github.runicrebirth.blocks.OculusControllerBlock;
 import com.github.runicrebirth.blocks.RunicAnvilBlock;
-import com.github.runicrebirth.blocks.TrialSpawnerBlock;
+import com.github.runicrebirth.blocks.DungeonMobSpawnerBlock;
+import com.github.runicrebirth.blocks.DungeonRoomTrackerBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SlabBlock;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.StairBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
+import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
@@ -52,6 +57,33 @@ public class ModBlocks {
 
     public static final DeferredBlock<Block> ARCANE_RUNIC_STONE_BRICKS = BLOCKS.register("arcane_runic_stone_bricks",
         () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE_BRICKS).lightLevel(s -> 4)));
+
+    public static final DeferredBlock<Block> CRACKED_RUNIC_STONE_BRICKS = BLOCKS.register("cracked_runic_stone_bricks",
+        () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE_BRICKS)));
+
+    public static final DeferredBlock<Block> FALSE_SKY = BLOCKS.register("false_sky",
+        () -> new Block(
+            Properties.of()
+                .instrument(NoteBlockInstrument.HAT)
+                .strength(0.3F)
+                .sound(SoundType.GLASS)
+                .isValidSpawn((state, level, pos, entityType) -> false)
+                .isRedstoneConductor((state, level, pos) -> false)
+                .isSuffocating((state, level, pos) -> false)
+                .isViewBlocking((state, level, pos) -> true)
+                .lightLevel(s -> 7)));
+
+    public static final DeferredBlock<Block> CRACKED_FALSE_SKY = BLOCKS.register("cracked_false_sky",
+        () -> new Block(
+            Properties.of()
+                .instrument(NoteBlockInstrument.HAT)
+                .strength(0.3F)
+                .sound(SoundType.GLASS)
+                .isValidSpawn((state, level, pos, entityType) -> false)
+                .isRedstoneConductor((state, level, pos) -> false)
+                .isSuffocating((state, level, pos) -> false)
+                .isViewBlocking((state, level, pos) -> true)
+                .lightLevel(s -> 7)));
 
     public static final DeferredBlock<Block> CUT_RUNIC_STONE = BLOCKS.register("cut_runic_stone",
         () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE_BRICKS)));
@@ -87,8 +119,11 @@ public class ModBlocks {
     public static final DeferredBlock<ReturnPortalBlock> RETURN_PORTAL = BLOCKS.register("return_portal",
             () -> new ReturnPortalBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE).noOcclusion().lightLevel(s -> 12)));
 
-    public static final DeferredBlock<TrialSpawnerBlock> TRIAL_SPAWNER = BLOCKS.register("trial_spawner",
-            () -> new TrialSpawnerBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE).noOcclusion().lightLevel(s -> 5)));
+    public static final DeferredBlock<DungeonMobSpawnerBlock> DUNGEON_MOB_SPAWNER = BLOCKS.register("dungeon_mob_spawner",
+            () -> new DungeonMobSpawnerBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE).noOcclusion().lightLevel(s -> 5)));
+
+    public static final DeferredBlock<DungeonRoomTrackerBlock> DUNGEON_ROOM_TRACKER = BLOCKS.register("dungeon_room_tracker",
+            () -> new DungeonRoomTrackerBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE).lightLevel(s -> 3)));
 
     public static final DeferredBlock<DungeonDoorBlock> DUNGEON_DOOR = BLOCKS.register("dungeon_door",
             () -> new DungeonDoorBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_DOOR).noOcclusion().strength(5.0f)));
@@ -127,4 +162,7 @@ public class ModBlocks {
 
     public static final DeferredBlock<DungeonFlamethrowerBlock> DUNGEON_FLAMETHROWER = BLOCKS.register("dungeon_flamethrower",
             () -> new DungeonFlamethrowerBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE).noOcclusion().strength(2.0f)));
+
+    public static final DeferredBlock<AncientArcaneTurretBlock> ANCIENT_ARCANE_TURRET = BLOCKS.register("ancient_arcane_turret",
+            () -> new AncientArcaneTurretBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE).noOcclusion().strength(3.0f).lightLevel(s -> 4)));
 }

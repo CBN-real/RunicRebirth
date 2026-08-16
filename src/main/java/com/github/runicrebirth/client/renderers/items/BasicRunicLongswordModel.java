@@ -8,9 +8,9 @@ import software.bernie.geckolib.model.GeoModel;
 public class BasicRunicLongswordModel extends GeoModel<BasicRunicLongsword> {
 
     private static final ResourceLocation MODEL =
-        ResourceLocation.fromNamespaceAndPath(RunicRebirth.MODID, "geo/item/basic_runic_longsword.geo.json");
+        ResourceLocation.fromNamespaceAndPath(RunicRebirth.MODID, "geo/item/runic_longsword.geo.json");
     private static final ResourceLocation TEXTURE =
-        ResourceLocation.fromNamespaceAndPath(RunicRebirth.MODID, "textures/item/basic_runic_longsword.png");
+        ResourceLocation.fromNamespaceAndPath(RunicRebirth.MODID, "textures/models/weapon/runic_longsword.png");
     private static final ResourceLocation ANIMATIONS =
         ResourceLocation.fromNamespaceAndPath(RunicRebirth.MODID, "animations/item/basic_runic_longsword.animation.json");
 

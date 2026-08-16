@@ -41,17 +41,17 @@ public abstract class CastSpellBehaviour<T extends Monster> extends ExtendedBeha
         if (!(entity.level() instanceof ServerLevel serverLevel)) return;
         entity.getBrain().getMemory(MemoryModuleType.ATTACK_TARGET).ifPresent(target -> {
             entity.getLookControl().setLookAt(target, 30.0f, 30.0f);
-            SpellCastContext ctx = buildContext(serverLevel, entity);
+            SpellCastContext ctx = buildContext(serverLevel, entity, target);
             performCast(serverLevel, entity, target, ctx);
             cooldownTimer = cooldownTicks;
         });
     }
 
-    protected SpellCastContext buildContext(ServerLevel level, T entity) {
+    protected SpellCastContext buildContext(ServerLevel level, T entity, LivingEntity target) {
         Vec3 aimStart = entity.getEyePosition();
         Vec3 aimDir = entity.getLookAngle();
         return new SpellCastContext(level, entity, ItemStack.EMPTY, aimStart, aimDir,
-            entity.getXRot(), entity.getYRot(), null);
+            entity.getXRot(), entity.getYRot(), target);
     }
 
     protected abstract void performCast(ServerLevel level, T entity, LivingEntity target, SpellCastContext ctx);

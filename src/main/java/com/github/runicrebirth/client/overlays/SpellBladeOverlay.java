@@ -44,10 +44,10 @@ public class SpellBladeOverlay implements LayeredDraw.Layer {
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
 
-        // Slot 0: main hand
-        drawSlot(graphics, mc, startX, slotY, mainHand, mainIsMagic);
-        // Slot 1: off hand
-        drawSlot(graphics, mc, startX + SLOT_SIZE + SLOT_GAP, slotY, offHand, offIsMagic);
+        // Slot 0: off hand
+        drawSlot(graphics, mc, startX, slotY, offHand, offIsMagic);
+        // Slot 1: main hand
+        drawSlot(graphics, mc, startX + SLOT_SIZE + SLOT_GAP, slotY, mainHand, mainIsMagic);
 
         RenderSystem.disableBlend();
     }
