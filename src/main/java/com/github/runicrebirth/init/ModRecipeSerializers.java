@@ -1,8 +1,10 @@
 package com.github.runicrebirth.init;
 
 import com.github.runicrebirth.RunicRebirth;
+import com.github.runicrebirth.crafting.DyeArmorRecipe;
 import com.github.runicrebirth.crafting.InfusionRecipeSerializer;
 import com.github.runicrebirth.crafting.RunicAnvilRecipeSerializer;
+import net.minecraft.world.item.crafting.SimpleCraftingRecipeSerializer;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.neoforged.neoforge.registries.DeferredHolder;
@@ -18,6 +20,9 @@ public final class ModRecipeSerializers {
 
     public static final DeferredHolder<RecipeSerializer<?>, RunicAnvilRecipeSerializer> RUNIC_ANVIL =
             RECIPE_SERIALIZERS.register("runic_anvil", RunicAnvilRecipeSerializer::new);
+
+    public static final DeferredHolder<RecipeSerializer<?>, SimpleCraftingRecipeSerializer<DyeArmorRecipe>> DYE_ARMOR =
+            RECIPE_SERIALIZERS.register("dye_armor", () -> new SimpleCraftingRecipeSerializer<>(DyeArmorRecipe::new));
 
     private ModRecipeSerializers() {}
 }

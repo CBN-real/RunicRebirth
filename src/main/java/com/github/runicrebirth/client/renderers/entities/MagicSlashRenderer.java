@@ -41,8 +41,6 @@ public class MagicSlashRenderer extends AbstractSpellRenderer<MagicSlashEntity> 
             float yRot = (float) (Mth.atan2(motion.x, motion.z) * Mth.RAD_TO_DEG);
             poseStack.mulPose(Axis.YP.rotationDegrees(yRot));
         }
-        float scale = entity.getProjectileSize();
-        poseStack.scale(scale, scale, scale);
         super.preRender(poseStack, entity, model, bufferSource, buffer, isReRender,
             partialTick, packedLight, packedOverlay, colour);
     }

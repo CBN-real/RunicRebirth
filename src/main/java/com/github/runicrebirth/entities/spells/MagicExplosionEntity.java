@@ -20,7 +20,7 @@ import java.util.UUID;
 
 public class MagicExplosionEntity extends AbstractInstantSpellEntity {
 
-    private float aoeRadius = 1.5f;
+    private float aoeRadius = 2.5f;
     private UUID casterUUID;
 
     public MagicExplosionEntity(EntityType<? extends MagicExplosionEntity> type, Level level) {
@@ -33,7 +33,7 @@ public class MagicExplosionEntity extends AbstractInstantSpellEntity {
         this(ModEntities.MAGIC_EXPLOSION.get(), level);
         this.casterUUID = caster.getUUID();
         initFromParams(params);
-        this.aoeRadius = 1.5f * params.size;
+        this.aoeRadius = 2.5f * params.size;
     }
 
     @Override

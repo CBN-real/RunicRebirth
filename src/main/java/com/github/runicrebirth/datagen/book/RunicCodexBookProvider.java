@@ -22,6 +22,10 @@ public class RunicCodexBookProvider extends SingleBookSubProvider {
     protected void generateCategories() {
         this.add(new FoundationCategory(this).generate());
         this.add(new SpellsCategory(this).generate());
+        this.add(new MobsCategory(this).generate());
+        this.add(new WeaponsCategory(this).generate());
+        this.add(new DungeonTrapsCategory(this).generate());
+        this.add(new SpellRingsCategory(this).generate());
     }
 
     @Override

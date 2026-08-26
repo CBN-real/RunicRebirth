@@ -31,10 +31,12 @@ public final class ClientMagicData {
     private static List<ResourceLocation> stackElements = Collections.emptyList();
     private static int activeIndex = 0;
     private static int castAnimTicksRemaining = 0;
+    private static int offHandCastAnimTicks = 0;
     private static int ringCastAnimTicksRemaining = 0;
     private static int charges = 0;
     private static Set<ResourceLocation> unlockedSpells = new HashSet<>();
     private static final Map<Integer, Integer> remoteCastAnimTicks = new HashMap<>();
+    private static final Map<Integer, Integer> remoteOffHandCastAnimTicks = new HashMap<>();
     private static final Map<Integer, Integer> remoteRingCastAnimTicks = new HashMap<>();
     private static final Map<ResourceLocation, Integer> cooldownRemaining = new HashMap<>();
     private static final Map<ResourceLocation, Integer> cooldownMax = new HashMap<>();
@@ -50,9 +52,6 @@ public final class ClientMagicData {
     public static void clearOnStackChanged() { onStackChanged = null; }
 
     public static void apply(StackChangedS2CPacket packet) {
-        // Detect "cast" transition: previous active stack had a SpellType; new active stack doesn't.
-        boolean wasValid = isStackValid(activeStackFor(stacks, activeIndex));
-
         List<List<SpellComponent>> newStacks = new ArrayList<>(packet.stacks().size());
         for (List<StackChangedS2CPacket.Entry> entryList : packet.stacks()) {
             List<SpellComponent> resolved = new ArrayList<>(entryList.size());
@@ -68,12 +67,6 @@ public final class ClientMagicData {
         }
 
         int newActive = packet.activeIndex();
-        boolean isNowValid = isStackValid(activeStackFor(newStacks, newActive));
-
-        // Valid → invalid (and the active index didn't change) means the stack was just cast+cleared.
-        if (wasValid && !isNowValid && newActive == activeIndex) {
-            castAnimTicksRemaining = CAST_ANIM_TICKS;
-        }
 
         stacks = newStacks;
         stackElements = packet.stackElements() != null ? packet.stackElements() : Collections.emptyList();
@@ -105,6 +98,7 @@ public final class ClientMagicData {
 
     public static void tickCastAnim() {
         if (castAnimTicksRemaining > 0) castAnimTicksRemaining--;
+        if (offHandCastAnimTicks > 0) offHandCastAnimTicks--;
         if (ringCastAnimTicksRemaining > 0) ringCastAnimTicksRemaining--;
         if (!magicHandIsPassive && magicHandTicks > 0) magicHandTicks--;
         Iterator<Map.Entry<Integer, Integer>> it = remoteCastAnimTicks.entrySet().iterator();
@@ -112,6 +106,13 @@ public final class ClientMagicData {
             Map.Entry<Integer, Integer> e = it.next();
             int remaining = e.getValue() - 1;
             if (remaining <= 0) it.remove();
+            else e.setValue(remaining);
+        }
+        Iterator<Map.Entry<Integer, Integer>> oit = remoteOffHandCastAnimTicks.entrySet().iterator();
+        while (oit.hasNext()) {
+            Map.Entry<Integer, Integer> e = oit.next();
+            int remaining = e.getValue() - 1;
+            if (remaining <= 0) oit.remove();
             else e.setValue(remaining);
         }
         Iterator<Map.Entry<Integer, Integer>> rit = remoteRingCastAnimTicks.entrySet().iterator();
@@ -124,16 +125,35 @@ public final class ClientMagicData {
     }
 
     public static boolean isCastAnimActive() {
-        return castAnimTicksRemaining > 0;
+        return castAnimTicksRemaining > 0 || offHandCastAnimTicks > 0;
     }
 
-    public static void setRemoteCastAnim(int entityId, int ticks) {
-        if (ticks <= 0) remoteCastAnimTicks.remove(entityId);
-        else remoteCastAnimTicks.put(entityId, ticks);
+    public static boolean isCastAnimActive(net.minecraft.world.InteractionHand hand) {
+        return hand == net.minecraft.world.InteractionHand.MAIN_HAND
+            ? castAnimTicksRemaining > 0 : offHandCastAnimTicks > 0;
+    }
+
+    public static void setCastAnimTicks(int ticks, net.minecraft.world.InteractionHand hand) {
+        if (hand == net.minecraft.world.InteractionHand.MAIN_HAND) castAnimTicksRemaining = ticks;
+        else offHandCastAnimTicks = ticks;
+    }
+
+    public static void setRemoteCastAnim(int entityId, int ticks, net.minecraft.world.InteractionHand hand) {
+        Map<Integer, Integer> map = hand == net.minecraft.world.InteractionHand.MAIN_HAND
+            ? remoteCastAnimTicks : remoteOffHandCastAnimTicks;
+        if (ticks <= 0) map.remove(entityId);
+        else map.put(entityId, ticks);
     }
 
     public static boolean isCastAnimActiveFor(int entityId) {
-        return remoteCastAnimTicks.getOrDefault(entityId, 0) > 0;
+        return remoteCastAnimTicks.getOrDefault(entityId, 0) > 0
+            || remoteOffHandCastAnimTicks.getOrDefault(entityId, 0) > 0;
+    }
+
+    public static boolean isCastAnimActiveFor(int entityId, net.minecraft.world.InteractionHand hand) {
+        Map<Integer, Integer> map = hand == net.minecraft.world.InteractionHand.MAIN_HAND
+            ? remoteCastAnimTicks : remoteOffHandCastAnimTicks;
+        return map.getOrDefault(entityId, 0) > 0;
     }
 
     public static boolean isRingCastAnimActive() {

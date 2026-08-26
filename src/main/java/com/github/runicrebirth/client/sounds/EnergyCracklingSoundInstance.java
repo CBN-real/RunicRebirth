@@ -15,7 +15,7 @@ public class EnergyCracklingSoundInstance extends AbstractTickableSoundInstance 
     private final EnergyCracklingEntity entity;
 
     public EnergyCracklingSoundInstance(EnergyCracklingEntity entity) {
-        super(ModSounds.SPELLS_ENERGY_CRACKLING.get(), SoundSource.AMBIENT, RandomSource.create());
+        super(ModSounds.SPELLS_ENERGY_CRACKLING.get(), SoundSource.NEUTRAL, RandomSource.create());
         this.entity = entity;
         this.looping = true;
         this.delay = 0;

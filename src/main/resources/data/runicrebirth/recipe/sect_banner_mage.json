@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    { "item": "minecraft:black_dye" },
+    { "item": "minecraft:white_dye" },
+    { "item": "runicrebirth:sect_banner" }
+  ],
+  "result": {
+    "id": "runicrebirth:sect_banner_mage",
+    "count": 1
+  }
+}

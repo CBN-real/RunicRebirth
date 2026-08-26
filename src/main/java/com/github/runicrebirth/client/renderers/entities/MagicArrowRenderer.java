@@ -29,15 +29,4 @@ public class MagicArrowRenderer extends AbstractSpellRenderer<MagicArrowEntity> 
         poseStack.mulPose(Axis.XP.rotationDegrees(180-xRot));
     }
 
-    @Override
-    public void preRender(PoseStack poseStack, MagicArrowEntity entity, BakedGeoModel model,
-        @Nullable MultiBufferSource bufferSource, @Nullable VertexConsumer buffer,
-        boolean isReRender, float partialTick, int packedLight, int packedOverlay,
-        int colour) {
-        float scale = entity.getProjectileSize();
-        poseStack.scale(scale, scale, scale);
-        super.preRender(poseStack, entity, model, bufferSource, buffer, isReRender,
-            partialTick, packedLight, packedOverlay, colour);
-    }
-
 }

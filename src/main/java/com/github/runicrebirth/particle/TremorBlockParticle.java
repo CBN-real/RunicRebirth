@@ -29,12 +29,14 @@ public class TremorBlockParticle extends Particle {
 
     private final BlockState blockState;
     private final double groundY;
+    final float scale;
 
     public TremorBlockParticle(ClientLevel level, double x, double y, double z,
-                               BlockState state, Vec3 motion) {
+                               BlockState state, Vec3 motion, float scale) {
         super(level, x, y, z);
         this.blockState = state;
         this.groundY = y;
+        this.scale = scale;
         this.xd = motion.x;
         this.yd = motion.y;
         this.zd = motion.z;
@@ -109,8 +111,9 @@ public class TremorBlockParticle extends Particle {
                 double z = Mth.lerp(partialTick, p.zo, p.z);
 
                 poseStack.pushPose();
-                poseStack.translate(x - camPos.x - 0.35, y - camPos.y, z - camPos.z - 0.35);
-                poseStack.scale(1.0f, 1.0f, 1.0f);
+                double offset = p.scale * 0.35;
+                poseStack.translate(x - camPos.x - offset, y - camPos.y, z - camPos.z - offset);
+                poseStack.scale(p.scale, p.scale, p.scale);
                 dispatcher.renderSingleBlock(p.blockState, poseStack, bufferSource,
                     LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY);
                 poseStack.popPose();
@@ -125,7 +128,7 @@ public class TremorBlockParticle extends Particle {
         public Particle createParticle(TremorBlockParticleOption option, ClientLevel level,
                                        double x, double y, double z,
                                        double xSpeed, double ySpeed, double zSpeed) {
-            return new TremorBlockParticle(level, x, y, z, option.getState(), option.getMotion());
+            return new TremorBlockParticle(level, x, y, z, option.getState(), option.getMotion(), option.getScale());
         }
     }
 }

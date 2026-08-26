@@ -19,7 +19,7 @@ import net.minecraft.world.phys.Vec3;
 
 public class MagicSlashEntity extends AbstractProjectileSpellEntity {
 
-    private static final double MAX_TRAVEL_DISTANCE = 16.0;
+    private float range = 20f;
 
     private final IntSet hitEntities = new IntOpenHashSet();
     private Vec3 spawnPos;
@@ -36,6 +36,7 @@ public class MagicSlashEntity extends AbstractProjectileSpellEntity {
         this.damageCategory = MagicDamageType.SHARP;
         this.chargeTicks = 40;
         this.endTicks = 5;
+        this.range = params.range;
         initFromParams(params);
     }
 
@@ -43,7 +44,7 @@ public class MagicSlashEntity extends AbstractProjectileSpellEntity {
     protected void onActiveTick() {
         if (spawnPos == null) spawnPos = this.position();
         double traveled = this.position().distanceTo(spawnPos);
-        if (traveled >= MAX_TRAVEL_DISTANCE * size) {
+        if (traveled >= range * size) {
             burstParticles();
             beginEnding();
         }

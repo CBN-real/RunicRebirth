@@ -5,9 +5,6 @@
 			"animation_length": 2,
 			"bones": {
 				"basic_circle": {
-					"position": {
-						"vector": [0, "6.1 * (query.is_plus - 1.0)", "-5 * (query.is_plus - 1.0)"]
-					},
 					"scale": {
 						"0.0": {
 							"post": {
@@ -16,7 +13,7 @@
 							"lerp_mode": "catmullrom"
 						},
 						"0.25": {
-							"vector": ["query.is_plus", "query.is_plus", "query.is_plus"],
+							"vector": [1, 1, 1],
 							"easing": "easeInSine"
 						}
 					}
@@ -285,13 +282,10 @@
 			"animation_length": 0.5,
 			"bones": {
 				"basic_circle": {
-					"position": {
-						"vector": [0, "6.1 * (query.is_plus - 1.0)", "-5 * (query.is_plus - 1.0)"]
-					},
 					"scale": {
 						"0.0": {
 							"post": {
-								"vector": ["query.is_plus", "query.is_plus", "query.is_plus"]
+								"vector": [1, 1, 1]
 							},
 							"lerp_mode": "catmullrom"
 						},
@@ -404,14 +398,6 @@
 			"loop": true,
 			"animation_length": 3,
 			"bones": {
-				"basic_circle": {
-					"position": {
-						"vector": [0, "6.1 * (query.is_plus - 1.0)", "-5 * (query.is_plus - 1.0)"]
-					},
-					"scale": {
-						"vector": ["query.is_plus", "query.is_plus", "query.is_plus"]
-					}
-				},
 				"outer_circle": {
 					"rotation": {
 						"vector": ["-math.sin(query.anim_time * 360) * 1.5", "-math.sin(query.anim_time * 180) * -1.5", "query.anim_time * -22.5"]

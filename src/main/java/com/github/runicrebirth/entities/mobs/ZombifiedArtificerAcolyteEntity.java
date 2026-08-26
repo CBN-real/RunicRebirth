@@ -64,7 +64,8 @@ public class ZombifiedArtificerAcolyteEntity extends Monster implements GeoEntit
             .add(Attributes.MAX_HEALTH, 24.0)
             .add(Attributes.MOVEMENT_SPEED, 0.24)
             .add(Attributes.ATTACK_DAMAGE, 2.5)
-            .add(Attributes.FOLLOW_RANGE, 16.0).add(Attributes.ATTACK_SPEED, 2.0);
+            .add(Attributes.FOLLOW_RANGE, 16.0)
+            .add(Attributes.ATTACK_SPEED, 2.0);
 
     }
 

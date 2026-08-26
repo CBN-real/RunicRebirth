@@ -3,22 +3,22 @@
 	"credit": "Made with Blockbench",
 	"ambientocclusion": false,
 	"textures": {
-		"0": "runicrebirth:block/runic_stone",
+		"1": "runicrebirth:block/runic_stone",
 		"particle": "runicrebirth:block/runic_stone"
 	},
 	"elements": [
 		{
 			"name": "octagon",
-			"from": [5.50329, 0.02813, 1.7168],
-			"to": [10.70846, 16.05938, 14.2832],
-			"rotation": {"angle": 45, "axis": "y", "origin": [8.10587, 0.27813, 8]},
+			"from": [0.30329, 0.02813, 1.7168],
+			"to": [12.86969, 16.05938, 6.922],
+			"rotation": {"angle": -45, "axis": "y", "origin": [2.90587, 0.27813, 8]},
 			"faces": {
-				"north": {"uv": [1, 0, 8, 16], "texture": "#0"},
-				"east": {"uv": [0, 0, 16, 16], "texture": "#0"},
-				"south": {"uv": [1, 0, 8, 16], "texture": "#0"},
-				"west": {"uv": [0, 0, 16, 16], "texture": "#0"},
-				"up": {"uv": [1, 0, 15, 16], "texture": "#0"},
-				"down": {"uv": [1, 0, 15, 16], "texture": "#0"}
+				"north": {"uv": [10, 1, 15, 15], "texture": "#1"},
+				"east": {"uv": [9, 1, 14, 15], "texture": "#1"},
+				"south": {"uv": [10, 1, 15, 15], "texture": "#1"},
+				"west": {"uv": [9, 1, 14, 15], "texture": "#1"},
+				"up": {"uv": [1, 0, 7, 16], "rotation": 90, "texture": "#1"},
+				"down": {"uv": [1, 0, 15, 16], "texture": "#1"}
 			}
 		},
 		{
@@ -27,12 +27,12 @@
 			"to": [10.70846, 16.02813, 14.2832],
 			"rotation": {"angle": 0, "axis": "y", "origin": [8.10587, 0.27813, 8]},
 			"faces": {
-				"north": {"uv": [8, 0, 15, 16], "texture": "#0"},
-				"east": {"uv": [0, 0, 16, 16], "texture": "#0"},
-				"south": {"uv": [8, 0, 15, 16], "texture": "#0"},
-				"west": {"uv": [0, 0, 16, 16], "texture": "#0"},
-				"up": {"uv": [0, 0, 16, 16], "texture": "#0"},
-				"down": {"uv": [0, 0, 16, 16], "texture": "#0"}
+				"north": {"uv": [6, 1, 11, 15], "texture": "#1"},
+				"east": {"uv": [0, 0, 16, 16], "texture": "#1"},
+				"south": {"uv": [6, 1, 11, 15], "texture": "#1"},
+				"west": {"uv": [0, 0, 16, 16], "texture": "#1"},
+				"up": {"uv": [8, 0, 16, 16], "texture": "#1"},
+				"down": {"uv": [0, 0, 16, 16], "texture": "#1"}
 			}
 		},
 		{
@@ -41,12 +41,12 @@
 			"to": [14.38907, 16.04376, 10.60258],
 			"rotation": {"angle": 45, "axis": "y", "origin": [8.10587, 0.27813, 8]},
 			"faces": {
-				"north": {"uv": [0, 0, 16, 16], "texture": "#0"},
-				"east": {"uv": [1, 0, 8, 16], "texture": "#0"},
-				"south": {"uv": [0, 0, 16, 16], "texture": "#0"},
-				"west": {"uv": [1, 0, 8, 16], "texture": "#0"},
-				"up": {"uv": [0, 1, 16, 15], "texture": "#0"},
-				"down": {"uv": [0, 1, 16, 15], "texture": "#0"}
+				"north": {"uv": [0, 0, 16, 16], "texture": "#1"},
+				"east": {"uv": [1, 1, 6, 15], "texture": "#1"},
+				"south": {"uv": [0, 0, 16, 16], "texture": "#1"},
+				"west": {"uv": [1, 1, 6, 15], "texture": "#1"},
+				"up": {"uv": [0, 8, 16, 15], "texture": "#1"},
+				"down": {"uv": [0, 1, 16, 15], "texture": "#1"}
 			}
 		},
 		{
@@ -55,39 +55,15 @@
 			"to": [14.38907, 16.02813, 10.60258],
 			"rotation": {"angle": 0, "axis": "y", "origin": [8.10587, 0.27813, 8]},
 			"faces": {
-				"north": {"uv": [0, 0, 16, 16], "texture": "#0"},
-				"east": {"uv": [8, 0, 15, 16], "texture": "#0"},
-				"south": {"uv": [0, 0, 16, 16], "texture": "#0"},
-				"west": {"uv": [8, 0, 15, 16], "texture": "#0"},
-				"up": {"uv": [0, 0, 16, 16], "texture": "#0"},
-				"down": {"uv": [0, 0, 16, 16], "texture": "#0"}
+				"north": {"uv": [0, 0, 16, 16], "texture": "#1"},
+				"east": {"uv": [5, 1, 10, 15], "texture": "#1"},
+				"south": {"uv": [0, 0, 16, 16], "texture": "#1"},
+				"west": {"uv": [5, 1, 10, 15], "texture": "#1"},
+				"up": {"uv": [0, 2, 16, 8], "texture": "#1"},
+				"down": {"uv": [0, 0, 16, 16], "texture": "#1"}
 			}
 		}
 	],
-	"display": {
-		"thirdperson_righthand": {
-			"rotation": [75, 45, 0],
-			"translation": [0, 2.5, 0],
-			"scale": [0.375, 0.375, 0.375]
-		},
-		"thirdperson_lefthand": {
-			"rotation": [75, 45, 0],
-			"translation": [0, 2.5, 0],
-			"scale": [0.375, 0.375, 0.375]
-		},
-		"firstperson_righthand": {
-			"rotation": [0, 45, 0],
-			"scale": [0.4, 0.4, 0.4]
-		},
-		"firstperson_lefthand": {
-			"rotation": [0, -135, 0],
-			"scale": [0.4, 0.4, 0.4]
-		},
-		"gui": {
-			"rotation": [30, -135, 0],
-			"scale": [0.625, 0.625, 0.625]
-		}
-	},
 	"groups": [
 		{
 			"name": "runic_stone_pillar",

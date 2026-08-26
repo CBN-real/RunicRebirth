@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=north": { "model": "runicrebirth:block/adept_statue_proxy" },
+    "facing=south": { "model": "runicrebirth:block/adept_statue_proxy" },
+    "facing=east":  { "model": "runicrebirth:block/adept_statue_proxy" },
+    "facing=west":  { "model": "runicrebirth:block/adept_statue_proxy" }
+  }
+}

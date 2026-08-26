@@ -3,8 +3,7 @@ package com.github.runicrebirth.network;
 import com.github.runicrebirth.RunicRebirth;
 import com.github.runicrebirth.blocks.entity.OculusControllerBlockEntity;
 import com.github.runicrebirth.blocks.entity.OculusPortalBlockEntity;
-import com.github.runicrebirth.capabilities.dungeon.DungeonData;
-import com.github.runicrebirth.dungeon.DungeonType;
+import com.github.runicrebirth.dungeon.DungeonTierRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
@@ -43,14 +42,7 @@ public record SelectDungeonC2SPacket(
         ctx.enqueueWork(() -> {
             if (!(ctx.player() instanceof ServerPlayer player)) return;
 
-            DungeonType type = DungeonType.byId(packet.dungeonId);
-            if (type == null) return;
-
-            if (packet.difficulty < 1 || packet.difficulty > type.getMaxDifficulty()) return;
-
-            DungeonData data = DungeonData.of(player);
-            int maxSelectable = data.getMaxSelectableDifficulty(type.getId(), type.getMaxDifficulty());
-            if (packet.difficulty > maxSelectable) return;
+            if (packet.difficulty < 1 || packet.difficulty > 3) return;
 
             var be = player.level().getBlockEntity(packet.controllerPos);
             if (!(be instanceof OculusControllerBlockEntity controller) || !controller.isActive()) return;
@@ -62,8 +54,10 @@ public record SelectDungeonC2SPacket(
             if (!(portalBe instanceof OculusPortalBlockEntity portal)) return;
 
             portal.setSelectedDungeon(packet.dungeonId, packet.difficulty);
+
+            String tierName = packet.dungeonId.getPath();
             player.displayClientMessage(
-                    Component.literal("§6Portal attuned to " + type.getDisplayName()
+                    Component.literal("§6Portal attuned to " + tierName
                             + " §7(Difficulty " + packet.difficulty + ")§6. Walk through to enter."), false);
         });
     }

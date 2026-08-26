@@ -62,7 +62,7 @@ public abstract non-sealed class SpellType implements SpellComponent {
     }
 
     public int defaultCircleLifespan() {
-        return 40;
+        return 20;
     }
 
     public int cooldownTicks() {
@@ -90,4 +90,16 @@ public abstract non-sealed class SpellType implements SpellComponent {
     public int baseDuration() {
         return 40;
     }
+
+    public float baseRange() {
+        return 32.0f;
+    }
+
+    /** Projectile spells return true — they can always be cast regardless of target distance. */
+    public boolean bypassesRangeCheck() {
+        return false;
+    }
+
+    /** AOE radius in blocks at base size=1. 0 means no AOE indicator shown. */
+    public float baseAoeRadius() { return 0f; }
 }

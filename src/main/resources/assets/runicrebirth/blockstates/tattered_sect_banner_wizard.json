@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "face=floor,facing=north":    { "model": "runicrebirth:block/tattered_sect_banner_wizard" },
+    "face=floor,facing=south":    { "model": "runicrebirth:block/tattered_sect_banner_wizard", "y": 180 },
+    "face=floor,facing=east":     { "model": "runicrebirth:block/tattered_sect_banner_wizard", "y": 90 },
+    "face=floor,facing=west":     { "model": "runicrebirth:block/tattered_sect_banner_wizard", "y": 270 },
+    "face=ceiling,facing=north":  { "model": "runicrebirth:block/tattered_sect_banner_wizard" },
+    "face=ceiling,facing=south":  { "model": "runicrebirth:block/tattered_sect_banner_wizard", "y": 180 },
+    "face=ceiling,facing=east":   { "model": "runicrebirth:block/tattered_sect_banner_wizard", "y": 90 },
+    "face=ceiling,facing=west":   { "model": "runicrebirth:block/tattered_sect_banner_wizard", "y": 270 },
+    "face=wall,facing=north":     { "model": "runicrebirth:block/tattered_sect_banner_wizard", "y": 180 },
+    "face=wall,facing=south":     { "model": "runicrebirth:block/tattered_sect_banner_wizard" },
+    "face=wall,facing=east":      { "model": "runicrebirth:block/tattered_sect_banner_wizard", "y": 270 },
+    "face=wall,facing=west":      { "model": "runicrebirth:block/tattered_sect_banner_wizard", "y": 90 }
+  }
+}

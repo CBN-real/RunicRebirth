@@ -1,6 +1,7 @@
 package com.github.runicrebirth.items;
 
 import com.github.runicrebirth.RunicRebirth;
+import com.github.runicrebirth.api.item.IMagicStaff;
 import com.github.runicrebirth.client.ClientMagicData;
 import com.github.runicrebirth.client.drawing.DrawingCanvasScreen;
 import java.util.function.Consumer;
@@ -22,7 +23,7 @@ import software.bernie.geckolib.constant.DataTickets;
 import software.bernie.geckolib.renderer.GeoItemRenderer;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
-public class AdeptStaffItem extends SpellWriter implements GeoItem {
+public class AdeptStaffItem extends SpellWriter implements GeoItem, IMagicStaff {
 
     private static final RawAnimation IDLE = RawAnimation.begin().thenLoop("idle_animation");
     private static final RawAnimation CASTING_FP = RawAnimation.begin().thenLoop("casting_animation");
@@ -50,9 +51,13 @@ public class AdeptStaffItem extends SpellWriter implements GeoItem {
           Entity raw = state.getData(software.bernie.geckolib.constant.DataTickets.ENTITY);
           LivingEntity holder = raw instanceof LivingEntity le ? le : Minecraft.getInstance().player;
           boolean isLocal = holder != null && holder == Minecraft.getInstance().player;
-          boolean drawing = isLocal && Minecraft.getInstance().screen instanceof DrawingCanvasScreen;
-          boolean localCasting = isLocal && ClientMagicData.isCastAnimActive();
-          boolean remoteCasting = !isLocal && holder != null && ClientMagicData.isCastAnimActiveFor(holder.getId());
+          net.minecraft.world.InteractionHand hand = (perspective == net.minecraft.world.item.ItemDisplayContext.FIRST_PERSON_LEFT_HAND
+              || perspective == net.minecraft.world.item.ItemDisplayContext.THIRD_PERSON_LEFT_HAND)
+              ? net.minecraft.world.InteractionHand.OFF_HAND : net.minecraft.world.InteractionHand.MAIN_HAND;
+          boolean drawing = isLocal && hand == net.minecraft.world.InteractionHand.MAIN_HAND
+              && Minecraft.getInstance().screen instanceof DrawingCanvasScreen;
+          boolean localCasting = isLocal && ClientMagicData.isCastAnimActive(hand);
+          boolean remoteCasting = !isLocal && holder != null && ClientMagicData.isCastAnimActiveFor(holder.getId(), hand);
           boolean casting = drawing || localCasting || remoteCasting;
           boolean firstPerson = isLocal && Minecraft.getInstance().options.getCameraType().isFirstPerson();
           state.setAnimation(casting ? (firstPerson ? CASTING_FP : CASTING_TP) : IDLE);

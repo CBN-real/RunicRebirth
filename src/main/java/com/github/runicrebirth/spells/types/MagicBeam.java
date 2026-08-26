@@ -38,9 +38,9 @@ public class MagicBeam extends SpellType {
 
     @Override
     public CastResult onCast(SpellCastContext ctx, SpellParams params) {
-        double range = 16.0 * (1.0 + Math.max(1.0f, params.size)) / 2;
+        double range = baseRange() * (1.0 + Math.max(1.0f, params.size)) / 2;
         Vec3 dir = ctx.aimDirection().normalize();
-        Vec3 start = ctx.aimStart().add(dir.scale(0.5));
+        Vec3 start = ctx.aimStart().add(dir.scale(0.5 + params.size / 4));
         Vec3 end = start.add(dir.scale(range));
         HitResult hit = RaycastBuilder.begin(ctx.level(), ctx.caster())
             .start(start).end(end)

@@ -1,0 +1,8 @@
+{
+  "criteria": {
+    "progress": {
+      "trigger": "runicrebirth:weapon_active_used",
+      "conditions": { "min_count": 25 }
+    }
+  }
+}

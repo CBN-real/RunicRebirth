@@ -1,5 +1,6 @@
 package com.github.runicrebirth.items.curios;
 
+import com.github.runicrebirth.api.item.IRunicDrone;
 import com.github.runicrebirth.capabilities.magic.MagicData;
 import com.github.runicrebirth.entities.HammerDroneEntity;
 import com.github.runicrebirth.init.ModEntities;
@@ -23,7 +24,7 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 
 import java.util.function.Consumer;
 
-public class HammerDroneItem extends MagicItem implements ICurioItem, GeoItem {
+public class HammerDroneItem extends MagicItem implements ICurioItem, GeoItem, IRunicDrone {
 
     private static final RawAnimation IDLE = RawAnimation.begin().thenLoop("idle");
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);

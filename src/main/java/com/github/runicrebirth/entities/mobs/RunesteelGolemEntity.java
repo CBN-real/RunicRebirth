@@ -8,25 +8,40 @@ import com.github.runicrebirth.init.ModElements;
 import com.github.runicrebirth.init.ModSpellTypes;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.SpawnGroupData;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.Nullable;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
+import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.tslat.smartbrainlib.api.SmartBrainOwner;
 import net.tslat.smartbrainlib.api.core.BrainActivityGroup;
 import net.tslat.smartbrainlib.api.core.SmartBrainProvider;
 import net.tslat.smartbrainlib.api.core.behaviour.FirstApplicableBehaviour;
+import net.tslat.smartbrainlib.api.core.behaviour.OneRandomBehaviour;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.attack.AnimatableMeleeAttack;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.look.LookAtTarget;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.misc.Idle;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.move.MoveToWalkTarget;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.move.StrafeTarget;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.path.SetRandomWalkTarget;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.path.SetWalkTargetToAttackTarget;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.target.InvalidateAttackTarget;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.target.SetPlayerLookTarget;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.target.SetRandomLookTarget;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.target.TargetOrRetaliate;
 import net.tslat.smartbrainlib.api.core.sensor.ExtendedSensor;
 import net.tslat.smartbrainlib.api.core.sensor.vanilla.HurtBySensor;
@@ -35,35 +50,74 @@ import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.animation.AnimatableManager;
 import software.bernie.geckolib.animation.AnimationController;
+import software.bernie.geckolib.animation.PlayState;
 import software.bernie.geckolib.animation.RawAnimation;
+import software.bernie.geckolib.constant.DefaultAnimations;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 import java.util.List;
 
 public class RunesteelGolemEntity extends Monster implements GeoEntity, SmartBrainOwner<RunesteelGolemEntity> {
 
-    private static final RawAnimation IDLE = RawAnimation.begin().thenLoop("animation.runesteel_golem.idle");
-    private static final RawAnimation ATTACK = RawAnimation.begin().thenPlay("animation.runesteel_golem.attack");
-    private static final RawAnimation BEAM_CAST = RawAnimation.begin().thenPlay("animation.runesteel_golem.beam_cast");
+    private static final RawAnimation ATTACK = RawAnimation.begin().thenPlay("attack.swing");
+    private static final RawAnimation BEAM_CAST = RawAnimation.begin().thenPlay("attack.cast");
+    private static final RawAnimation DIE = RawAnimation.begin().thenPlayAndHold("misc.die");
+    private static final RawAnimation POWER_UP = RawAnimation.begin().thenPlay("misc.power_up");
 
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
     public RunesteelGolemEntity(EntityType<? extends RunesteelGolemEntity> type, Level level) {
         super(type, level);
+        this.swingTime = 30;
+        this.updateSwingTime();
+    }
+
+    @Override
+    protected PathNavigation createNavigation(Level level) {
+        return new GroundPathNavigation(this, level) {
+            private int recalcCooldown = 0;
+            private BlockPos lastTarget = null;
+
+            @Override
+            public boolean moveTo(double x, double y, double z, double speed) {
+                BlockPos target = BlockPos.containing(x, y, z);
+                if (target.equals(lastTarget) && recalcCooldown-- > 0) return true;
+                lastTarget = target;
+                recalcCooldown = 20;
+                return super.moveTo(x, y, z, speed);
+            }
+        };
+    }
+
+    @Override
+    public @Nullable SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType spawnType, @Nullable SpawnGroupData spawnGroupData) {
+        SpawnGroupData data = super.finalizeSpawn(level, difficulty, spawnType, spawnGroupData);
+        triggerAnim("spawn_controller", "power_up");
+        return data;
     }
 
     public static AttributeSupplier.Builder createAttributes() {
         return Monster.createMonsterAttributes()
             .add(Attributes.MAX_HEALTH, 80.0)
             .add(Attributes.MOVEMENT_SPEED, 0.18)
-            .add(Attributes.ATTACK_DAMAGE, 8.0)
+            .add(Attributes.ATTACK_DAMAGE, 12.0)
             .add(Attributes.FOLLOW_RANGE, 24.0)
-            .add(Attributes.KNOCKBACK_RESISTANCE, 0.8);
+            .add(Attributes.KNOCKBACK_RESISTANCE, 0.8)
+            .add(Attributes.ATTACK_SPEED, 0.6f);
+
     }
 
     @Override
     protected Brain.Provider<?> brainProvider() {
         return new SmartBrainProvider<>(this);
+    }
+
+    @Override
+    protected void tickDeath() {
+        this.deathTime++;
+        if (this.deathTime >= 25) {
+            this.discard();
+        }
     }
 
     @Override
@@ -83,6 +137,7 @@ public class RunesteelGolemEntity extends Monster implements GeoEntity, SmartBra
     public BrainActivityGroup<? extends RunesteelGolemEntity> getCoreTasks() {
         return BrainActivityGroup.coreTasks(
             new LookAtTarget<>(),
+            //new StrafeTarget<>(),
             new MoveToWalkTarget<>()
         );
     }
@@ -91,10 +146,16 @@ public class RunesteelGolemEntity extends Monster implements GeoEntity, SmartBra
     public BrainActivityGroup<? extends RunesteelGolemEntity> getIdleTasks() {
         return BrainActivityGroup.idleTasks(
             new FirstApplicableBehaviour<RunesteelGolemEntity>(
-                new TargetOrRetaliate<>(),
-                new SetPlayerLookTarget<>()
-            ),
-            new SetRandomWalkTarget<>()
+                new TargetOrRetaliate<>()
+                    .useMemory(MemoryModuleType.NEAREST_VISIBLE_ATTACKABLE_PLAYER)
+                    .attackablePredicate(target -> target.isAlive() && (this == target.getLastHurtMob() || ((target instanceof Player player) && !player.getAbilities().invulnerable))),
+                new SetPlayerLookTarget<>(),
+                new SetRandomLookTarget<>().lookTime(entity -> entity.getRandom().nextInt(60, 80))),
+            new OneRandomBehaviour<>(
+                new SetRandomWalkTarget<>()
+                    .speedModifier(1),
+                new Idle<>()
+                    .runFor(entity -> entity.getRandom().nextInt(30, 60)).cooldownFor(entity -> entity.getRandom().nextInt(100, 200)))
         );
     }
 
@@ -103,7 +164,7 @@ public class RunesteelGolemEntity extends Monster implements GeoEntity, SmartBra
         return BrainActivityGroup.fightTasks(
             new InvalidateAttackTarget<>(),
             new FirstApplicableBehaviour<RunesteelGolemEntity>(
-                new CastSpellBehaviour<RunesteelGolemEntity>(60) {
+                new CastSpellBehaviour<RunesteelGolemEntity>(100, 18) {
                     @Override
                     protected boolean checkExtraStartConditions(ServerLevel level, RunesteelGolemEntity entity) {
                         if (!super.checkExtraStartConditions(level, entity)) return false;
@@ -111,25 +172,52 @@ public class RunesteelGolemEntity extends Monster implements GeoEntity, SmartBra
                             .map(t -> entity.distanceTo(t) > 5.0f).orElse(false);
                     }
                     @Override
+                    protected SpellCastContext buildContext(ServerLevel level, RunesteelGolemEntity entity, LivingEntity target) {
+                        Vec3 aimStart = entity.position().add(0, 3.0, 0);
+                        Vec3 aimDir = target.getEyePosition().subtract(aimStart).normalize();
+                        return new SpellCastContext(level, entity, ItemStack.EMPTY, aimStart, aimDir,
+                            entity.getXRot(), entity.getYRot(), target);
+                    }
+                    @Override
+                    protected void onWindupStart(ServerLevel level, RunesteelGolemEntity entity, LivingEntity target) {
+                        entity.triggerAnim("cast_controller", "cast");
+                    }
+                    @Override
                     protected void performCast(ServerLevel level, RunesteelGolemEntity entity, LivingEntity target, SpellCastContext ctx) {
-                        SpellParams params = new SpellParams(3f, 1.0f,0.5f, 1.0f, 0, 0, 0,
+                        SpellParams params = new SpellParams(10f, 1.75f,0.5f, 1.0f, 0, 0, 1,
                             ModElements.ARCANE.get(), MagicDamageType.SPIRIT);
                         ModSpellTypes.MAGIC_BEAM.get().onCast(ctx, params);
                     }
                 },
-                new SetWalkTargetToAttackTarget<RunesteelGolemEntity>().speedMod((e, t) -> 0.5f)
+                new SetWalkTargetToAttackTarget<RunesteelGolemEntity>().speedMod((e, t) -> 1.0f)
             ),
-            new AnimatableMeleeAttack<>(10)
+            new AnimatableMeleeAttack<>(24)
         );
     }
 
     @Override
+    public int getCurrentSwingDuration() {
+      return 30;
+    }
+
+  @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<>(this, "golem_ctrl", 5, state -> {
-            if (this.swinging) return state.setAndContinue(ATTACK);
-            if (this.isAggressive()) return state.setAndContinue(BEAM_CAST);
-            return state.setAndContinue(IDLE);
+        controllers.add(new AnimationController<>(this, "base_controller", 5, state -> {
+            if (this.deathTime > 0) return state.setAndContinue(DIE);
+            if (state.isMoving()) return state.setAndContinue(DefaultAnimations.WALK);
+            return state.setAndContinue(DefaultAnimations.IDLE);
         }));
+        controllers.add(new AnimationController<>(this, "attack_controller", 0, state -> {
+            if (this.deathTime > 0) return PlayState.STOP;
+            if (this.swinging)
+                return state.setAndContinue(ATTACK);
+            state.getController().forceAnimationReset();
+            return PlayState.STOP;
+        }));
+        controllers.add(new AnimationController<>(this, "cast_controller", 2, state -> PlayState.STOP)
+            .triggerableAnim("cast", BEAM_CAST));
+        controllers.add(new AnimationController<>(this, "spawn_controller", 0, state -> PlayState.STOP)
+            .triggerableAnim("power_up", POWER_UP));
     }
 
     @Override

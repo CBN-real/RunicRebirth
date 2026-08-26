@@ -2,8 +2,13 @@ package com.github.runicrebirth.entities;
 
 import com.github.runicrebirth.capabilities.magic.MagicData;
 import com.github.runicrebirth.init.ModEntities;
+import com.github.runicrebirth.init.ModParticles;
 import com.github.runicrebirth.init.ModSounds;
+import com.github.runicrebirth.particle.ScaledParticleOption;
+import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
+import java.util.Map;
 import java.util.UUID;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -14,6 +19,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.animation.AnimatableManager;
@@ -26,6 +32,7 @@ public class DrawingCanvasEntity extends Entity implements GeoEntity {
 
     private static final RawAnimation INITIATE_AND_HOLD = RawAnimation.begin().thenPlay("initiate_canvas").thenLoop("hold_canvas");
     private static final RawAnimation END_CANVAS = RawAnimation.begin().thenPlayAndHold("end_canvas");
+    private static final RawAnimation ELEMENT_SPARKS_LOOP = RawAnimation.begin().thenLoop("element_sparks_loop");
 
     private static final EntityDataAccessor<String> DATA_OWNER_UUID =
         SynchedEntityData.defineId(DrawingCanvasEntity.class, EntityDataSerializers.STRING);
@@ -40,6 +47,26 @@ public class DrawingCanvasEntity extends Entity implements GeoEntity {
 
     private static final float DISTANCE_FROM_EYE = 0.7f;
     private static final float DEFAULT_FOV = 70.0f;
+
+    private static final Map<String, double[]> ELEMENT_SPARK_OFFSETS = Map.of(
+        "arcane", new double[]{-5.966,  4.55418,  5.58382},
+        "fire",   new double[]{-7.196,  2.08855,  6.37382},
+        "ice",    new double[]{-7.376, -0.38418,  6.77382},
+        "earth",  new double[]{-6.686, -2.68418,  6.37382},
+        "wind",   new double[]{-5.556, -4.94418,  5.13382}
+    );
+
+    @Nullable
+    private static ParticleOptions elementSparkParticle(String effect) {
+        return switch (effect) {
+            case "arcane" -> new ScaledParticleOption(ModParticles.ARCANE_TINY.get(), 1.0f);
+            case "fire"   -> new ScaledParticleOption(ModParticles.FIRE_TINY.get(),   1.0f);
+            case "ice"    -> new ScaledParticleOption(ModParticles.ICE_TINY.get(),    1.0f);
+            case "earth"  -> new ScaledParticleOption(ModParticles.EARTH_TINY.get(),  1.0f);
+            case "wind"   -> new ScaledParticleOption(ModParticles.WIND_TINY.get(),   1.0f);
+            default -> null;
+        };
+    }
 
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
@@ -61,7 +88,7 @@ public class DrawingCanvasEntity extends Entity implements GeoEntity {
         entity.entityData.set(DATA_OWNER_ID, player.getId());
         entity.snapToOwner(player);
         player.level().playSound(null, player.blockPosition(), ModSounds.SPELLS_CHIME2.get(),
-            SoundSource.PLAYERS, 0.5f, 1.2f);
+            SoundSource.PLAYERS, 0.4f, 1.2f);
         player.level().addFreshEntity(entity);
 
         return entity;
@@ -220,6 +247,37 @@ public class DrawingCanvasEntity extends Entity implements GeoEntity {
             state.setAnimation(RawAnimation.begin().thenLoop(elementName + "_selected"));
             return PlayState.CONTINUE;
         }));
+
+        AnimationController<DrawingCanvasEntity> sparksController = new AnimationController<>(this, "element_sparks", 0, state -> {
+            if (state.getAnimatable().getPhaseOrdinal() != 1) return PlayState.STOP;
+            state.setAnimation(ELEMENT_SPARKS_LOOP);
+            return PlayState.CONTINUE;
+        });
+        sparksController.setParticleKeyframeHandler(event -> {
+            DrawingCanvasEntity entity = event.getAnimatable();
+            if (!entity.level().isClientSide()) return;
+            String effect = event.getKeyframeData().getEffect();
+            ParticleOptions particle = elementSparkParticle(effect);
+            double[] off = ELEMENT_SPARK_OFFSETS.get(effect);
+            if (particle == null || off == null) return;
+            Vec3 pos = entity.position();
+            float yawRad   = (float) Math.toRadians(180.0 - entity.getYRot());
+            float pitchRad = (float) Math.toRadians(-entity.getXRot());
+            float cosY = Mth.cos(yawRad),   sinY = Mth.sin(yawRad);
+            float cosP = Mth.cos(pitchRad), sinP = Mth.sin(pitchRad);
+            double mx = off[0] / 22.0, my = off[1] / 22.0, mz = off[2] / 22.0;
+            double ry = my * cosP - mz * sinP;
+            double rz = my * sinP + mz * cosP;
+            double wx = pos.x + mx * cosY + rz * sinY;
+            double wy = pos.y + ry;
+            double wz = pos.z - mx * sinY + rz * cosY;
+            var rand = entity.getRandom();
+            wx += (rand.nextDouble() - 0.5) * 0.06;
+            wy += (rand.nextDouble() - 0.5) * 0.06;
+            wz += (rand.nextDouble() - 0.5) * 0.06;
+            entity.level().addParticle(particle, wx, wy, wz, 0, 0.02, 0);
+        });
+        controllers.add(sparksController);
 
         controllers.add(new AnimationController<>(this, "tier_selection", 0, state -> {
             if (state.getAnimatable().getPhaseOrdinal() != 1) return PlayState.STOP;

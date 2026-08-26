@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    { "item": "minecraft:red_dye" },
+    { "item": "minecraft:orange_dye" },
+    { "item": "runicrebirth:tattered_sect_banner" }
+  ],
+  "result": {
+    "id": "runicrebirth:tattered_sect_banner_artificer",
+    "count": 1
+  }
+}

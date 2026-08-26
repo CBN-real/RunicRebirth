@@ -25,6 +25,7 @@ public class RunicBlockItem extends BlockItem implements GeoItem {
     private float guiTranslationZ = 0;
     private float guiScale = 1;
     private String geoPath;
+    private String animationPath;
 
   public RunicBlockItem(Block block, Properties properties, String animationName, String blockName) {
         super(block, properties);
@@ -39,6 +40,11 @@ public class RunicBlockItem extends BlockItem implements GeoItem {
 
     public RunicBlockItem withGeoPath(String geoPath) {
         this.geoPath = geoPath;
+        return this;
+    }
+
+    public RunicBlockItem withAnimationPath(String animationPath) {
+        this.animationPath = animationPath;
         return this;
     }
 
@@ -93,11 +99,12 @@ public class RunicBlockItem extends BlockItem implements GeoItem {
                 if (this.renderer == null) {
                     String tex = texturePath != null ? texturePath : "textures/block/" + blockName + ".png";
                     String geo = geoPath != null ? geoPath : "geo/block/" + blockName + ".geo.json";
+                    String anim = animationPath != null ? animationPath : "animations/block/" + blockName + ".animation.json";
                     this.renderer = new com.github.runicrebirth.client.renderers.blocks.RunicBlockItemRenderer(
                         new com.github.runicrebirth.client.renderers.blocks.RunicBlockItemModel<>(
                             geo,
                             tex,
-                            "animations/block/" + blockName + ".animation.json"));
+                            anim));
                 }
                 return this.renderer;
             }

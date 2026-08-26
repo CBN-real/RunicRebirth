@@ -99,7 +99,7 @@ public class ZombifiedRunebladeAcolyteEntity extends Monster implements GeoEntit
         return BrainActivityGroup.fightTasks(
             new InvalidateAttackTarget<>(),
             new SetWalkTargetToAttackTarget<>().closeEnoughDist((owner, target) -> 2),
-            new AnimatableMeleeAttack<>(4)
+            new AnimatableMeleeAttack<>(20)
         );
     }
 

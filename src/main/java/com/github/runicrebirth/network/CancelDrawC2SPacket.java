@@ -37,7 +37,7 @@ public record CancelDrawC2SPacket() implements CustomPacketPayload {
                 }
                 data.clearCanvasEntityId();
             }
-            CastAnimBroadcastS2CPacket.broadcast(player, 0);
+            CastAnimBroadcastS2CPacket.broadcast(player, 0, net.minecraft.world.InteractionHand.MAIN_HAND);
             ItemStack held = player.getItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND);
         });
     }

@@ -1,0 +1,30 @@
+{
+  "background_u_index": 0,
+  "background_v_index": 0,
+  "category": "spell_rings",
+  "description": "book.runicrebirth.runic_codex.spell_rings.ring_of_phantom_mining.description",
+  "hide_while_locked": false,
+  "icon": {
+    "item": "runicrebirth:ring_of_phantom_mining"
+  },
+  "name": "book.runicrebirth.runic_codex.spell_rings.ring_of_phantom_mining.name",
+  "pages": [
+    {
+      "type": "modonomicon:spotlight",
+      "anchor": "",
+      "condition": {
+        "type": "modonomicon:none"
+      },
+      "item": {
+        "count": 1,
+        "item": "runicrebirth:ring_of_phantom_mining"
+      },
+      "text": "",
+      "title": "Ring of Phantom Mining"
+    }
+  ],
+  "show_when_any_parent_unlocked": false,
+  "sort_number": 5,
+  "x": 4,
+  "y": 0
+}

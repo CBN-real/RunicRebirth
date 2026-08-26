@@ -3,10 +3,10 @@ package com.github.runicrebirth.dungeon;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
 
@@ -16,38 +16,41 @@ public class DungeonInstance {
     private static final int DEATH_PENALTY_TICKS = 20 * 60;   // 1 minute
 
     private final UUID instanceId;
-    private final DungeonType dungeonType;
+    private final ResourceLocation tierId;
+    @Nullable
+    private final ResourceLocation variantId;
     private final int difficulty;
     private final BlockPos origin;
     private final BlockPos returnPos;
     private final ResourceLocation returnDimension;
     private final Set<UUID> players = new HashSet<>();
-    private final List<DungeonModifier> modifiers;
+    private List<DungeonModifier> modifiers = new ArrayList<>();
     private boolean completed;
     private boolean active;
     private int ticksAlive;
     private int remainingTicks;
+    private boolean timerPaused = false;
+    @Nullable
+    private BlockPos entryPortalPos = null;
 
-    public DungeonInstance(UUID instanceId, DungeonType dungeonType, int difficulty,
-                           BlockPos origin, BlockPos returnPos, ResourceLocation returnDimension) {
+    public DungeonInstance(UUID instanceId, ResourceLocation tierId, @Nullable ResourceLocation variantId,
+                           int difficulty, BlockPos origin, BlockPos returnPos,
+                           ResourceLocation returnDimension, int durationTicks) {
         this.instanceId = instanceId;
-        this.dungeonType = dungeonType;
+        this.tierId = tierId;
+        this.variantId = variantId;
         this.difficulty = difficulty;
         this.origin = origin;
         this.returnPos = returnPos;
         this.returnDimension = returnDimension;
         this.active = true;
-        this.remainingTicks = TIME_LIMIT_TICKS;
-
-        if (dungeonType == DungeonType.ACOLYTE) {
-            this.modifiers = DungeonModifier.rollModifiers(difficulty, new Random());
-        } else {
-            this.modifiers = List.of();
-        }
+        this.remainingTicks = durationTicks;
     }
 
     public UUID getInstanceId() { return instanceId; }
-    public DungeonType getDungeonType() { return dungeonType; }
+    public ResourceLocation getTierId() { return tierId; }
+    @Nullable
+    public ResourceLocation getVariantId() { return variantId; }
     public int getDifficulty() { return difficulty; }
     public BlockPos getOrigin() { return origin; }
     public BlockPos getReturnPos() { return returnPos; }
@@ -57,6 +60,17 @@ public class DungeonInstance {
     public boolean isActive() { return active; }
     public List<DungeonModifier> getModifiers() { return modifiers; }
     public int getRemainingTicks() { return remainingTicks; }
+    public boolean isTimerPaused() { return timerPaused; }
+    public void setTimerPaused(boolean paused) { this.timerPaused = paused; }
+    @Nullable
+    public BlockPos getEntryPortalPos() { return entryPortalPos; }
+    public void setEntryPortalPos(BlockPos pos) { this.entryPortalPos = pos; }
+    public void setModifiers(List<DungeonModifier> modifiers) { this.modifiers = modifiers; }
+
+    @Nullable
+    public DungeonVariant getVariant() {
+        return variantId != null ? DungeonVariantRegistry.get(variantId) : null;
+    }
 
     public int getRemainingSeconds() {
         return Math.max(0, remainingTicks / 20);
@@ -125,12 +139,16 @@ public class DungeonInstance {
 
     public void tick() {
         ticksAlive++;
-        if (!completed) {
+        if (!completed && !timerPaused && remainingTicks > 0) {
             remainingTicks--;
         }
     }
 
     public boolean isEmpty() {
         return players.isEmpty();
+    }
+
+    public static int getDefaultDurationTicks() {
+        return TIME_LIMIT_TICKS;
     }
 }

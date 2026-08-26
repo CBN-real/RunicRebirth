@@ -5,9 +5,7 @@ import com.github.runicrebirth.api.spells.Element;
 import com.github.runicrebirth.api.spells.SpellParams;
 import com.github.runicrebirth.init.ModElements;
 import com.github.runicrebirth.init.ModEntities;
-import com.github.runicrebirth.init.ModParticles;
 import com.github.runicrebirth.init.ModSounds;
-import com.github.runicrebirth.particle.ScaledParticleOption;
 import com.github.runicrebirth.util.ParticleHelper;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -134,7 +132,7 @@ public class MagicShieldEntity extends AbstractEffectSpellEntity {
             double angle = this.level().random.nextDouble() * Math.PI * 2;
             double dx = Math.cos(angle) * sz * 1.2;
             double dz = Math.sin(angle) * sz * 1.2;
-            this.level().addParticle(new ScaledParticleOption(ModParticles.FIRE_ELEMENT.get(), 1.0f),
+            this.level().addParticle(element().particle(),
                 pos.x + dx, pos.y + 0.5 + this.level().random.nextDouble(), pos.z + dz,
                 0.0, 0.02, 0.0);
         }

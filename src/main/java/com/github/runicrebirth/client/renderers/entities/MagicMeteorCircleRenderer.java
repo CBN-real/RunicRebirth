@@ -1,8 +1,11 @@
 package com.github.runicrebirth.client.renderers.entities;
 
 import com.github.runicrebirth.client.renderers.models.MagicMeteorCircleGeoModel;
+import com.github.runicrebirth.entities.spells.AbstractCircleEntity;
+import com.github.runicrebirth.entities.spells.AbstractSpellCircleEntity;
 import com.github.runicrebirth.entities.spells.MagicMeteorCircleEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -12,6 +15,7 @@ import net.minecraft.util.Mth;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.Nullable;
+import software.bernie.geckolib.cache.object.BakedGeoModel;
 
 @OnlyIn(Dist.CLIENT)
 public class MagicMeteorCircleRenderer extends AbstractSpellRenderer<MagicMeteorCircleEntity> {
@@ -27,5 +31,15 @@ public class MagicMeteorCircleRenderer extends AbstractSpellRenderer<MagicMeteor
         float xRot = Mth.rotLerp(partialTick, entity.xRotO, entity.getXRot());
         poseStack.mulPose(Axis.YP.rotationDegrees(180f - yRot));
         poseStack.mulPose(Axis.XP.rotationDegrees(-38f + xRot));
+    }
+
+    @Override
+    public void preRender(PoseStack poseStack, MagicMeteorCircleEntity entity, BakedGeoModel model,
+        @Nullable MultiBufferSource bufferSource, @Nullable VertexConsumer buffer, boolean isReRender,
+        float partialTick, int packedLight, int packedOverlay, int colour) {
+      float scale = entity.getCircleScale();
+      poseStack.scale(scale, scale, scale);
+      super.preRender(poseStack, entity, model, bufferSource, buffer, isReRender, partialTick,
+          packedLight, packedOverlay, colour);
     }
 }

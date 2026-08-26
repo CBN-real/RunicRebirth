@@ -2,6 +2,7 @@ package com.github.runicrebirth.items;
 
 import com.github.runicrebirth.RunicRebirth;
 import com.github.runicrebirth.api.item.IMagicWeapon;
+import com.github.runicrebirth.network.RunicWeaponAnimS2CPacket;
 import com.github.runicrebirth.api.spells.SpellCastContext;
 import com.github.runicrebirth.api.spells.SpellStack;
 import com.github.runicrebirth.capabilities.magic.MagicData;
@@ -63,22 +64,28 @@ public class BasicRunicLongsword extends SwordItem implements GeoItem, IMagicWea
 
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
-        ItemStack stack = player.getItemInHand(hand);
-        if (level.isClientSide) return InteractionResultHolder.consume(stack);
-        if (!(player instanceof ServerPlayer sp)) return InteractionResultHolder.pass(stack);
+        return InteractionResultHolder.pass(player.getItemInHand(hand));
+    }
 
+    @Override
+    public void activate(ServerPlayer sp) {
         MagicData data = MagicData.of(sp);
-        if (data.isOnCooldown(COOLDOWN_ID)) return InteractionResultHolder.pass(stack);
+        if (data.isOnCooldown(COOLDOWN_ID)) return;
 
+        Level level = sp.level();
         Vec3 eye = sp.getEyePosition();
         Vec3 dir = sp.getLookAngle().normalize();
         SpellCastContext ctx = new SpellCastContext(
-            (ServerLevel) level, sp, stack, eye, dir, sp.getXRot(), sp.getYRot(), null);
+            (ServerLevel) level, sp, sp.getMainHandItem(), eye, dir, sp.getXRot(), sp.getYRot(), null);
 
         SpellStack tmp = new SpellStack();
         tmp.append(ModSpellTypes.MAGIC_SLASH.get());
         var params = SpellResolver.buildParams(ctx, tmp);
-        if (params == null) return InteractionResultHolder.pass(stack);
+        if (params == null) return;
+
+        com.github.runicrebirth.api.spells.Element runeElement =
+            com.github.runicrebirth.rune.RuneEffectApplicator.getActiveElement(sp.getMainHandItem());
+        if (runeElement != null) params.element = runeElement;
 
         level.playSound(null, sp.getX(), sp.getY(), sp.getZ(),
             ModSounds.SPELLS_LONGSWORD.get(), SoundSource.PLAYERS, 0.5f, 1.0f);
@@ -89,7 +96,7 @@ public class BasicRunicLongsword extends SwordItem implements GeoItem, IMagicWea
         level.addFreshEntity(slash);
 
         data.startCooldown(COOLDOWN_ID, COOLDOWN_TICKS);
-        return InteractionResultHolder.sidedSuccess(stack, false);
+        RunicWeaponAnimS2CPacket.send(sp, RunicWeaponAnimS2CPacket.Anim.SWORD_SWING);
     }
 
     @Override

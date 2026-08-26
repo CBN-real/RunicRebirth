@@ -1,0 +1,30 @@
+{
+  "background_u_index": 0,
+  "background_v_index": 0,
+  "category": "dungeon_traps",
+  "description": "book.runicrebirth.runic_codex.dungeon_traps.dungeon_swinging_axe.description",
+  "hide_while_locked": false,
+  "icon": {
+    "item": "runicrebirth:dungeon_swinging_axe"
+  },
+  "name": "book.runicrebirth.runic_codex.dungeon_traps.dungeon_swinging_axe.name",
+  "pages": [
+    {
+      "type": "modonomicon:spotlight",
+      "anchor": "",
+      "condition": {
+        "type": "modonomicon:none"
+      },
+      "item": {
+        "count": 1,
+        "item": "runicrebirth:dungeon_swinging_axe"
+      },
+      "text": "",
+      "title": "Swinging Axe"
+    }
+  ],
+  "show_when_any_parent_unlocked": false,
+  "sort_number": 0,
+  "x": -2,
+  "y": -2
+}

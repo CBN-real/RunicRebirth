@@ -1,0 +1,40 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"animation.runic_warstaff.idle": {
+			"loop": true,
+			"animation_length": 1,
+			"bones": {}
+		},
+		"animation.runic_warstaff.whirlwind": {
+			"loop": false,
+			"animation_length": 1,
+			"bones": {}
+		},
+		"idle": {
+			"loop": true
+		},
+		"spinning": {
+			"loop": true,
+			"animation_length": 0.5,
+			"bones": {
+				"staff": {
+					"relative_to": {
+						"rotation": "entity"
+					},
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.5": {
+							"vector": [0, 0, 360]
+						}
+					},
+					"position": {
+						"vector": [0, 2, -3]
+					}
+				}
+			}
+		}
+	}
+}

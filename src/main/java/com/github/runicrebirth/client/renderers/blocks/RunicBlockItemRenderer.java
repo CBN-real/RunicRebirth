@@ -36,6 +36,13 @@ public class RunicBlockItemRenderer extends GeoItemRenderer<RunicBlockItem> {
             isReRender, partialTick, packedLight, packedOverlay, colour);
         if (!isReRender && animatable.getHandRotationY() != 0 && isHandContext()) {
             poseStack.mulPose(Axis.YP.rotationDegrees(animatable.getHandRotationY()));
+            if (animatable.getGuiTranslationX() != 0 || animatable.getGuiTranslationY() != 0 || animatable.getGuiTranslationZ() != 0) {
+              poseStack.translate(animatable.getGuiTranslationX(), animatable.getGuiTranslationY(), animatable.getGuiTranslationZ());
+            }
+            if (animatable.getGuiScale() != 1) {
+              float s = animatable.getGuiScale();
+              poseStack.scale(s, s, s);
+            }
         }
         if (!isReRender && this.renderPerspective == ItemDisplayContext.GUI) {
             if (animatable.getGuiTranslationX() != 0 || animatable.getGuiTranslationY() != 0 || animatable.getGuiTranslationZ() != 0) {

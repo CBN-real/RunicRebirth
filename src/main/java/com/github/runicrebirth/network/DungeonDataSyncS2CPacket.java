@@ -20,7 +20,8 @@ public record DungeonDataSyncS2CPacket(
         Set<ResourceLocation> unlockedElements,
         int knowledgePoints,
         Set<ResourceLocation> unlockedSpellTypes,
-        Map<ResourceLocation, Integer> maxDifficultyCleared
+        Map<ResourceLocation, Integer> maxDifficultyCleared,
+        Set<ResourceLocation> unlockedEntries
 ) implements CustomPacketPayload {
 
     public static final Type<DungeonDataSyncS2CPacket> TYPE =
@@ -38,6 +39,8 @@ public record DungeonDataSyncS2CPacket(
                     buf.writeResourceLocation(id);
                     buf.writeVarInt(diff);
                 });
+                buf.writeVarInt(pkt.unlockedEntries.size());
+                pkt.unlockedEntries.forEach(buf::writeResourceLocation);
             },
             buf -> {
                 int elemCount = buf.readVarInt();
@@ -50,7 +53,10 @@ public record DungeonDataSyncS2CPacket(
                 int diffCount = buf.readVarInt();
                 Map<ResourceLocation, Integer> diffs = new HashMap<>();
                 for (int i = 0; i < diffCount; i++) diffs.put(buf.readResourceLocation(), buf.readVarInt());
-                return new DungeonDataSyncS2CPacket(elements, kp, spells, diffs);
+                int entryCount = buf.readVarInt();
+                Set<ResourceLocation> entries = new HashSet<>();
+                for (int i = 0; i < entryCount; i++) entries.add(buf.readResourceLocation());
+                return new DungeonDataSyncS2CPacket(elements, kp, spells, diffs, entries);
             }
     );
 
@@ -67,7 +73,8 @@ public record DungeonDataSyncS2CPacket(
                 new HashSet<>(data.getUnlockedElements()),
                 data.getKnowledgePoints(),
                 new HashSet<>(data.getUnlockedSpellTypes()),
-                new HashMap<>(Map.of()) // populated from DungeonData
+                new HashMap<>(Map.of()),
+                new HashSet<>(data.getUnlockedEntries())
         ));
     }
 }

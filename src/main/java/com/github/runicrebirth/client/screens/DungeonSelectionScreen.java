@@ -2,7 +2,6 @@ package com.github.runicrebirth.client.screens;
 
 import com.github.runicrebirth.RunicRebirth;
 import com.github.runicrebirth.client.ClientDungeonData;
-import com.github.runicrebirth.dungeon.DungeonType;
 import com.github.runicrebirth.network.SelectDungeonC2SPacket;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
@@ -22,21 +21,17 @@ public class DungeonSelectionScreen extends Screen {
     private static final int BG_COLOR = 0xCC1A1A2E;
     private static final int NODE_COLOR = 0xFF3A3A5E;
     private static final int NODE_SELECTED = 0xFF6A4ADE;
-    private static final int NODE_LOCKED = 0xFF2A2A3E;
     private static final int LINE_COLOR = 0xFF5A5A8A;
 
-    private final BlockPos controllerPos;
-    private DungeonType selectedDungeon;
-    private int selectedDifficulty = 1;
-
-    // Node positions (screen-relative, set in init)
-    private static final DungeonType[] NODE_ORDER = {
-            DungeonType.ACOLYTE,
-            DungeonType.FIRE_TRIAL,
-            DungeonType.ICE_TRIAL,
-            DungeonType.WIND_TRIAL,
-            DungeonType.EARTH_TRIAL,
+    private static final ResourceLocation[] TIER_IDS = {
+            ResourceLocation.fromNamespaceAndPath(RunicRebirth.MODID, "acolyte"),
+            ResourceLocation.fromNamespaceAndPath(RunicRebirth.MODID, "adept"),
+            ResourceLocation.fromNamespaceAndPath(RunicRebirth.MODID, "arch"),
     };
+
+    private final BlockPos controllerPos;
+    private ResourceLocation selectedTierId;
+    private int selectedDifficulty = 1;
 
     private int[][] nodePositions;
 
@@ -51,21 +46,16 @@ public class DungeonSelectionScreen extends Screen {
         int centerX = this.width / 2;
         int centerY = this.height / 2 - 30;
 
-        // Layout: Acolyte in center, 4 element trials around it
         nodePositions = new int[][]{
-                {centerX, centerY},                           // Acolyte (center)
-                {centerX - NODE_SPACING, centerY - NODE_SPACING},  // Fire (top-left)
-                {centerX + NODE_SPACING, centerY - NODE_SPACING},  // Ice (top-right)
-                {centerX - NODE_SPACING, centerY + NODE_SPACING},  // Wind (bottom-left)
-                {centerX + NODE_SPACING, centerY + NODE_SPACING},  // Earth (bottom-right)
+                {centerX - NODE_SPACING, centerY},
+                {centerX, centerY},
+                {centerX + NODE_SPACING, centerY},
         };
 
-        // Attune button
         this.addRenderableWidget(Button.builder(Component.literal("Attune Portal"), btn -> attuneDungeon())
                 .bounds(centerX - 50, this.height - 50, 100, 20)
                 .build());
 
-        // Difficulty buttons
         for (int d = 1; d <= 3; d++) {
             final int diff = d;
             this.addRenderableWidget(Button.builder(Component.literal("D" + d), btn -> selectedDifficulty = diff)
@@ -76,53 +66,40 @@ public class DungeonSelectionScreen extends Screen {
 
     @Override
     public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-        // Background
         graphics.fill(0, 0, this.width, this.height, BG_COLOR);
-
-        // Title
         graphics.drawCenteredString(this.font, this.title, this.width / 2, 10, 0xFFD4AF37);
 
-        // Connection lines from acolyte to each trial
-        for (int i = 1; i < nodePositions.length; i++) {
-            drawLine(graphics, nodePositions[0][0], nodePositions[0][1],
-                    nodePositions[i][0], nodePositions[i][1], LINE_COLOR);
+        for (int i = 0; i < TIER_IDS.length - 1; i++) {
+            drawLine(graphics, nodePositions[i][0], nodePositions[i][1],
+                    nodePositions[i + 1][0], nodePositions[i + 1][1], LINE_COLOR);
         }
 
-        // Nodes
-        for (int i = 0; i < NODE_ORDER.length; i++) {
-            DungeonType type = NODE_ORDER[i];
+        for (int i = 0; i < TIER_IDS.length; i++) {
+            ResourceLocation tierId = TIER_IDS[i];
             int nx = nodePositions[i][0];
             int ny = nodePositions[i][1];
-            boolean isSelected = type == selectedDungeon;
+            boolean isSelected = tierId.equals(selectedTierId);
             int color = isSelected ? NODE_SELECTED : NODE_COLOR;
 
-            // Node box
             graphics.fill(nx - NODE_SIZE / 2, ny - NODE_SIZE / 2,
                     nx + NODE_SIZE / 2, ny + NODE_SIZE / 2, color);
-            // Border
             int borderColor = isSelected ? 0xFFD4AF37 : 0xFF8A8AAA;
             graphics.renderOutline(nx - NODE_SIZE / 2, ny - NODE_SIZE / 2, NODE_SIZE, NODE_SIZE, borderColor);
 
-            // Label
-            graphics.drawCenteredString(this.font, type.getDisplayName(),
-                    nx, ny - 4, 0xFFFFFFFF);
+            String label = tierId.getPath();
+            graphics.drawCenteredString(this.font, label, nx, ny - 4, 0xFFFFFFFF);
         }
 
-        // Selected dungeon info
-        if (selectedDungeon != null) {
+        if (selectedTierId != null) {
             int infoY = this.height - 110;
-            graphics.drawCenteredString(this.font, selectedDungeon.getDisplayName(), this.width / 2, infoY, 0xFFD4AF37);
-            graphics.drawCenteredString(this.font, selectedDungeon.getDescription(), this.width / 2, infoY + 12, 0xFFAAAAAA);
-
-            int maxDiff = ClientDungeonData.getMaxSelectableDifficulty(
-                    selectedDungeon.getId(), selectedDungeon.getMaxDifficulty());
+            graphics.drawCenteredString(this.font, selectedTierId.getPath(), this.width / 2, infoY, 0xFFD4AF37);
+            int maxDiff = ClientDungeonData.getMaxSelectableDifficulty(selectedTierId, 3);
             graphics.drawCenteredString(this.font,
-                    "Difficulty: " + selectedDifficulty + " / " + selectedDungeon.getMaxDifficulty()
+                    "Difficulty: " + selectedDifficulty + " / 3"
                             + "  (Max unlocked: " + maxDiff + ")",
-                    this.width / 2, infoY + 24, 0xFF8888CC);
+                    this.width / 2, infoY + 12, 0xFF8888CC);
         }
 
-        // Knowledge points display
         graphics.drawString(this.font, "KP: " + ClientDungeonData.getKnowledgePoints(), 10, 10, 0xFFD4AF37);
 
         super.render(graphics, mouseX, mouseY, partialTick);
@@ -131,12 +108,12 @@ public class DungeonSelectionScreen extends Screen {
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         if (button == 0) {
-            for (int i = 0; i < NODE_ORDER.length; i++) {
+            for (int i = 0; i < TIER_IDS.length; i++) {
                 int nx = nodePositions[i][0];
                 int ny = nodePositions[i][1];
                 if (mouseX >= nx - NODE_SIZE / 2 && mouseX <= nx + NODE_SIZE / 2
                         && mouseY >= ny - NODE_SIZE / 2 && mouseY <= ny + NODE_SIZE / 2) {
-                    selectedDungeon = NODE_ORDER[i];
+                    selectedTierId = TIER_IDS[i];
                     selectedDifficulty = 1;
                     return true;
                 }
@@ -146,21 +123,19 @@ public class DungeonSelectionScreen extends Screen {
     }
 
     private void attuneDungeon() {
-        if (selectedDungeon == null) return;
+        if (selectedTierId == null) return;
 
-        int maxDiff = ClientDungeonData.getMaxSelectableDifficulty(
-                selectedDungeon.getId(), selectedDungeon.getMaxDifficulty());
+        int maxDiff = ClientDungeonData.getMaxSelectableDifficulty(selectedTierId, 3);
         if (selectedDifficulty > maxDiff) {
             selectedDifficulty = maxDiff;
         }
 
         PacketDistributor.sendToServer(new SelectDungeonC2SPacket(
-                selectedDungeon.getId(), selectedDifficulty, controllerPos));
+                selectedTierId, selectedDifficulty, controllerPos));
         this.onClose();
     }
 
     private void drawLine(GuiGraphics graphics, int x1, int y1, int x2, int y2, int color) {
-        // Simple line using fill — horizontal then vertical (L-shape)
         int midY = (y1 + y2) / 2;
         graphics.fill(Math.min(x1, x2), midY, Math.max(x1, x2) + 1, midY + 1, color);
         graphics.fill(x1, Math.min(y1, midY), x1 + 1, Math.max(y1, midY), color);

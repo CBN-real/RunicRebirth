@@ -28,18 +28,19 @@ public class MagicHammer extends SpellType {
     @Override public int cooldownTicks() { return 100; }
     @Override public float baseDamage() { return 12f; }
     @Override public float baseSize() { return 1f; }
+    @Override public float baseAoeRadius() { return 2.5f; }
     @Override public int castingDelayTicks() { return 20; }
     @Override public int multiCastDelay() { return 10; }
+    @Override public float baseRange() {return 24f;}
 
-    @Override public String iconName() { return "hammer"; }
+  @Override public String iconName() { return "hammer"; }
     @Override public Element defaultElement() { return ModElements.ARCANE.get(); }
     @Override public MagicDamageType damageCategory() { return MagicDamageType.BLUNT; }
 
     @Override
     public CastResult onCast(SpellCastContext ctx, SpellParams params) {
-        double range = 16.0;
         Vec3 start = ctx.aimStart();
-        Vec3 end = start.add(ctx.aimDirection().normalize().scale(range));
+        Vec3 end = start.add(ctx.aimDirection().normalize().scale(baseRange()));
         HitResult hit = RaycastBuilder.begin(ctx.level(), ctx.caster())
             .start(start).end(end)
             .checkForBlocks(true)

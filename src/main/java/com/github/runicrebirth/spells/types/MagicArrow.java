@@ -34,7 +34,7 @@ public class MagicArrow extends SpellType {
     public CastResult onCast(SpellCastContext ctx, SpellParams params) {
         Vec3 dir = ctx.aimDirection().normalize();
         MagicArrowEntity arrow = new MagicArrowEntity(ctx.level(), ctx.caster(), params, dir);
-        Vec3 spawn = ctx.aimStart().add(dir.scale(0.5));
+        Vec3 spawn = ctx.aimStart().add(dir.scale(0.5 * params.size));
         arrow.setPos(spawn.x, spawn.y, spawn.z);
         arrow.setYRot(ctx.yRot());
         arrow.setXRot(ctx.xRot());

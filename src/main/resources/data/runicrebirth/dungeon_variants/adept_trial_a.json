@@ -1,0 +1,19 @@
+{
+  "tier": "runicrebirth:adept",
+  "room_count": 7,
+  "entry_rooms": [
+    {"template": "runicrebirth:rooms/adept/entry_a", "weight": 1}
+  ],
+  "boss_rooms": [
+    {"template": "runicrebirth:rooms/adept/boss_a", "weight": 1}
+  ],
+  "inner_sanctum_rooms": [
+    {"template": "runicrebirth:rooms/adept/sanctum_a", "weight": 1}
+  ],
+  "combat_rooms": [
+    {"template": "runicrebirth:rooms/adept/combat_a", "weight": 3}
+  ],
+  "hallways": [
+    {"template": "runicrebirth:rooms/adept/hallway_a", "weight": 2}
+  ]
+}

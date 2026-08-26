@@ -1,0 +1,30 @@
+{
+  "background_u_index": 0,
+  "background_v_index": 0,
+  "category": "spell_rings",
+  "description": "book.runicrebirth.runic_codex.spell_rings.ring_of_leaping_gales.description",
+  "hide_while_locked": false,
+  "icon": {
+    "item": "runicrebirth:ring_of_leaping_gales"
+  },
+  "name": "book.runicrebirth.runic_codex.spell_rings.ring_of_leaping_gales.name",
+  "pages": [
+    {
+      "type": "modonomicon:spotlight",
+      "anchor": "",
+      "condition": {
+        "type": "modonomicon:none"
+      },
+      "item": {
+        "count": 1,
+        "item": "runicrebirth:ring_of_leaping_gales"
+      },
+      "text": "",
+      "title": "Ring of Leaping Gales"
+    }
+  ],
+  "show_when_any_parent_unlocked": false,
+  "sort_number": 4,
+  "x": 1,
+  "y": 0
+}

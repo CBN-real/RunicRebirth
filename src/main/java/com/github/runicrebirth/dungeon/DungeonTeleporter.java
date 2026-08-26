@@ -22,7 +22,9 @@ public final class DungeonTeleporter {
             return;
         }
 
-        BlockPos spawnPos = instance.getOrigin().above();
+        BlockPos spawnPos = instance.getEntryPortalPos() != null
+                ? instance.getEntryPortalPos().above()
+                : instance.getOrigin().above();
         player.teleportTo(dungeonLevel, spawnPos.getX() + 0.5, spawnPos.getY(), spawnPos.getZ() + 0.5,
                 player.getYRot(), player.getXRot());
 

@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/wall_inventory",
+  "textures": {
+    "wall": "runicrebirth:block/runic_stone_bricks"
+  }
+}

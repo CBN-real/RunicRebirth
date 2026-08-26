@@ -29,15 +29,14 @@ public class DungeonSwingingAxeBlockEntity extends BlockEntity implements GeoBlo
     private static final RawAnimation SWINGING_AXE = RawAnimation.begin().thenLoop("swinging_axe");
 
     // Full cycle: 40 ticks = 2s  (sin: 0→+65°→0→-65°→0)
-    private static final int HALF_CYCLE = 20;
-    private static final int FULL_CYCLE = 40;
+    public static final int HALF_CYCLE = 20;
+    public static final int FULL_CYCLE = 40;
+    public static final double MAX_ANGLE_DEG = 65.0;
     private static final double SWING_RADIUS = 3.5;
-    private static final double MAX_ANGLE_DEG = 65.0;
     private static final float SHARP_DAMAGE = 30.0f; // 15 hearts
 
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
-    private int swingTick = 0;
     // Track hit entities per half-swing to prevent multi-hit per pass
     private final Set<UUID> hitThisPass = new HashSet<>();
     private boolean lastPassWasForward = true;
@@ -52,17 +51,17 @@ public class DungeonSwingingAxeBlockEntity extends BlockEntity implements GeoBlo
     }
 
     private void tick(Level level, BlockPos pos, BlockState state) {
-        swingTick = (swingTick + 1) % FULL_CYCLE;
+        int effectiveTick = (int)(level.getGameTime() % FULL_CYCLE);
 
         // Detect direction change to reset hit set
-        boolean currentlyForward = swingTick < HALF_CYCLE;
+        boolean currentlyForward = effectiveTick < HALF_CYCLE;
         if (currentlyForward != lastPassWasForward) {
             hitThisPass.clear();
             lastPassWasForward = currentlyForward;
         }
 
         // Matches animation: math.sin(anim_time * 180) * 65
-        double angleDeg = Math.sin(Math.PI * swingTick / HALF_CYCLE) * MAX_ANGLE_DEG;
+        double angleDeg = Math.sin(Math.PI * effectiveTick / HALF_CYCLE) * MAX_ANGLE_DEG;
         double angleRad = Math.toRadians(angleDeg);
 
         // Mount point = center of block (top of block entity's 1×1×1 space)

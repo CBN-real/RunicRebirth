@@ -56,6 +56,10 @@ public abstract class AbstractMultiblockValidator {
           case INFUSION_ALTAR_PROXY ->  state.is(ModBlocks.INFUSION_ALTAR_PROXY.get());
             case RUNIC_ANVIL       -> state.is(ModBlocks.RUNIC_ANVIL.get());
             case AIR               -> state.isAir();
+            case RUNELIGHT_TORCH   -> state.is(ModBlocks.RUNELIGHT_TORCH.get()) || state.is(ModBlocks.RUNELIGHT_WALL_TORCH.get());
+            case MEDITATION_CUSHION -> state.is(ModBlocks.MEDITATION_CUSHION.get());
+            case ANY_BLOCK         -> true;
+            case CUT_RUNIC_STONE   -> state.is(ModBlocks.CUT_RUNIC_STONE.get());
         };
     }
 }

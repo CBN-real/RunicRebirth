@@ -12,6 +12,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
+import net.neoforged.fml.LogicalSide;
 
 @EventBusSubscriber(modid = RunicRebirth.MODID, value = Dist.CLIENT)
 public final class SpellWriterClientEvents {
@@ -20,6 +21,7 @@ public final class SpellWriterClientEvents {
 
     @SubscribeEvent
     public static void onRightClickItem(PlayerInteractEvent.RightClickItem event) {
+        if (event.getSide() != LogicalSide.CLIENT) return;
         ItemStack held = event.getItemStack();
 
         if (held.getItem() instanceof RunicCircuitItem circuit) {

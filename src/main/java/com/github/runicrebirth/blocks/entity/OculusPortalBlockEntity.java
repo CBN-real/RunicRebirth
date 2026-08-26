@@ -1,6 +1,5 @@
 package com.github.runicrebirth.blocks.entity;
 
-import com.github.runicrebirth.dungeon.DungeonType;
 import com.github.runicrebirth.init.ModBlockEntities;
 import com.github.runicrebirth.init.ModSounds;
 import net.minecraft.core.BlockPos;
@@ -40,6 +39,8 @@ public class OculusPortalBlockEntity extends BlockEntity implements GeoBlockEnti
     private int selectedDifficulty;
     @Nullable
     private BlockPos controllerPos;
+    @Nullable
+    private java.util.UUID activeInstanceId = null;
 
     public OculusPortalBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.OCULUS_PORTAL.get(), pos, state);
@@ -83,14 +84,21 @@ public class OculusPortalBlockEntity extends BlockEntity implements GeoBlockEnti
     }
 
     @Nullable
-    public DungeonType getSelectedDungeonType() {
-        return selectedDungeonId != null ? DungeonType.byId(selectedDungeonId) : null;
-    }
-
-    @Nullable
     public ResourceLocation getSelectedDungeonId() {
         return selectedDungeonId;
     }
+
+    @Nullable
+    public ResourceLocation getSelectedTierId() {
+        return selectedDungeonId;
+    }
+
+    @Nullable
+    public java.util.UUID getActiveInstanceId() { return activeInstanceId; }
+
+    public void setActiveInstanceId(java.util.UUID id) { this.activeInstanceId = id; setChanged(); }
+
+    public void clearActiveInstanceId() { this.activeInstanceId = null; setChanged(); }
 
     public int getSelectedDifficulty() {
         return selectedDifficulty;
@@ -132,6 +140,9 @@ public class OculusPortalBlockEntity extends BlockEntity implements GeoBlockEnti
         if (controllerPos != null) {
             tag.putLong("controllerPos", controllerPos.asLong());
         }
+        if (activeInstanceId != null) {
+            tag.putString("activeInstanceId", activeInstanceId.toString());
+        }
     }
 
     @Override
@@ -151,6 +162,13 @@ public class OculusPortalBlockEntity extends BlockEntity implements GeoBlockEnti
         }
         if (tag.contains("controllerPos")) {
             controllerPos = BlockPos.of(tag.getLong("controllerPos"));
+        }
+        if (tag.contains("activeInstanceId")) {
+            try {
+                activeInstanceId = java.util.UUID.fromString(tag.getString("activeInstanceId"));
+            } catch (IllegalArgumentException e) {
+                activeInstanceId = null;
+            }
         }
     }
 

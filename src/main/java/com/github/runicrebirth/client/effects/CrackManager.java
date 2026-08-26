@@ -66,7 +66,9 @@ public final class CrackManager {
                 if (chance < 1.0 && level.random.nextFloat() > chance) continue;
                 for (int y = 3; y >= -3; y--) {
                     BlockPos check = centerPos.offset(x, y, z);
-                    if (!level.getBlockState(check).isAir() && level.getBlockState(check.above()).isAir()) {
+                    net.minecraft.world.level.block.state.BlockState state = level.getBlockState(check);
+                    if (!state.isAir() && level.getBlockState(check.above()).isAir()) {
+                        if (state.getDestroySpeed(level, check) == 0.0f) continue;
                         positions.add(check);
                         break;
                     }

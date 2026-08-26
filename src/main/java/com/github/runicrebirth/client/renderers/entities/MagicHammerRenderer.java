@@ -24,12 +24,6 @@ public class MagicHammerRenderer extends AbstractSpellRenderer<MagicHammerEntity
     }
 
     @Override
-    public RenderType getRenderType(MagicHammerEntity entity, ResourceLocation texture,
-        @Nullable MultiBufferSource bufferSource, float partialTick) {
-        return RenderType.entityTranslucentCull(texture);
-    }
-
-    @Override
     public void preRender(PoseStack poseStack, MagicHammerEntity entity, BakedGeoModel model,
         @Nullable MultiBufferSource bufferSource, @Nullable VertexConsumer buffer,
         boolean isReRender, float partialTick, int packedLight, int packedOverlay,
@@ -39,8 +33,6 @@ public class MagicHammerRenderer extends AbstractSpellRenderer<MagicHammerEntity
             float xRot = (float) (Mth.atan2(motion.y, motion.horizontalDistance()) * Mth.RAD_TO_DEG);
             poseStack.mulPose(Axis.XP.rotationDegrees(xRot));
         }
-        float scale = entity.getProjectileSize();
-        poseStack.scale(scale, scale, scale);
         super.preRender(poseStack, entity, model, bufferSource, buffer, isReRender,
             partialTick, packedLight, packedOverlay, colour);
     }

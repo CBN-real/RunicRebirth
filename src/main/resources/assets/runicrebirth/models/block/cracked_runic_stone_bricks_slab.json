@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/slab",
+  "textures": {
+    "bottom": "runicrebirth:block/cracked_runic_stone_bricks",
+    "top": "runicrebirth:block/cracked_runic_stone_bricks",
+    "side": "runicrebirth:block/cracked_runic_stone_bricks"
+  }
+}

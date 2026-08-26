@@ -40,7 +40,7 @@ public class AncientArcaneTurretBlockEntity extends BlockEntity implements GeoBl
     private static final double DETECTION_RANGE = 12.0;
     private static final float PROJECTILE_DAMAGE = 6.0f;
     private static final float PROJECTILE_SPEED = 0.3f;
-    private static final float MAX_HEALTH = 20.0f; // 10 hearts
+    private static final float MAX_HEALTH = 10.0f; // 5 hearts
     private static final int REVIVE_TICKS = 60 * 20; // 60 seconds
     private static final int CRACKLING_RESPAWN_INTERVAL = 40;
 

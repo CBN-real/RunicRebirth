@@ -2,6 +2,8 @@ package com.github.runicrebirth.init;
 
 import com.github.runicrebirth.RunicRebirth;
 import com.github.runicrebirth.entities.ArcaneDroneEntity;
+import com.github.runicrebirth.entities.SeatEntity;
+import com.github.runicrebirth.entities.ThrownRunicDaggerEntity;
 import com.github.runicrebirth.entities.CrumblingPlatformFallingEntity;
 import com.github.runicrebirth.entities.DungeonBoulderEntity;
 import com.github.runicrebirth.entities.DrawingCanvasEntity;
@@ -14,7 +16,10 @@ import com.github.runicrebirth.entities.mobs.SkeletalMageAcolyteEntity;
 import com.github.runicrebirth.entities.mobs.SkeletalWizardAcolyteEntity;
 import com.github.runicrebirth.entities.mobs.ZombifiedArtificerAcolyteEntity;
 import com.github.runicrebirth.entities.mobs.ZombifiedRunebladeAcolyteEntity;
+import com.github.runicrebirth.entities.spells.EarthQuicksandEntity;
+import com.github.runicrebirth.entities.spells.FrozenEffectEntity;
 import com.github.runicrebirth.entities.spells.ArcaneTetherEntity;
+import com.github.runicrebirth.entities.spells.AoeTrackerEntity;
 import com.github.runicrebirth.entities.spells.EnergyCracklingEntity;
 import com.github.runicrebirth.entities.spells.TargetCircleEntity;
 import com.github.runicrebirth.entities.spells.MagicArrowEntity;
@@ -36,6 +41,8 @@ import com.github.runicrebirth.entities.spells.MagicShieldEntity;
 import com.github.runicrebirth.entities.spells.MagicSlashCircleEntity;
 import com.github.runicrebirth.entities.spells.MagicSlashEntity;
 import com.github.runicrebirth.entities.spells.demo.SpellDemoEntity;
+import com.github.runicrebirth.entities.EarthVeinCircleEntity;
+import com.github.runicrebirth.entities.EarthVeinRunesEntity;
 import java.util.function.Function;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.entity.Entity;
@@ -241,6 +248,18 @@ public class ModEntities {
             .noSave()
             .build("magic_ballista_demo"));
 
+    public static final DeferredHolder<EntityType<?>, EntityType<FrozenEffectEntity>> FROZEN_EFFECT = ENTITIES.register(
+        "frozen_effect",
+        () -> EntityType.Builder.<FrozenEffectEntity>of(FrozenEffectEntity::new, MobCategory.MISC)
+            .sized(0.8F, 1.8F).clientTrackingRange(8).updateInterval(3).noSave()
+            .build("frozen_effect"));
+
+    public static final DeferredHolder<EntityType<?>, EntityType<EarthQuicksandEntity>> EARTH_QUICKSAND = ENTITIES.register(
+        "earth_quicksand",
+        () -> EntityType.Builder.<EarthQuicksandEntity>of(EarthQuicksandEntity::new, MobCategory.MISC)
+            .sized(4.0F, 0.5F).clientTrackingRange(8).updateInterval(3).noSave()
+            .build("earth_quicksand"));
+
     public static final DeferredHolder<EntityType<?>, EntityType<ArcaneTetherEntity>> ARCANE_TETHER = ENTITIES.register(
         "arcane_tether",
         () -> EntityType.Builder.<ArcaneTetherEntity>of(ArcaneTetherEntity::new, MobCategory.MISC)
@@ -310,6 +329,22 @@ public class ModEntities {
             .noSave()
             .build("target_circle"));
 
+    public static final DeferredHolder<EntityType<?>, EntityType<AoeTrackerEntity>> AOE_TRACKER = ENTITIES.register(
+        "aoe_tracker",
+        () -> EntityType.Builder.<AoeTrackerEntity>of(AoeTrackerEntity::new, MobCategory.MISC)
+            .sized(1.0F, 0.1F)
+            .clientTrackingRange(0)
+            .noSave()
+            .build("aoe_tracker"));
+
+    public static final DeferredHolder<EntityType<?>, EntityType<ThrownRunicDaggerEntity>> THROWN_RUNIC_DAGGER =
+        ENTITIES.register("thrown_runic_dagger",
+            () -> EntityType.Builder.<ThrownRunicDaggerEntity>of(ThrownRunicDaggerEntity::new, MobCategory.MISC)
+                .sized(0.2F, 0.3F)
+                .clientTrackingRange(6)
+                .updateInterval(3)
+                .build("thrown_runic_dagger"));
+
     public static final DeferredHolder<EntityType<?>, EntityType<ArcaneDroneEntity>> ARCANE_DRONE = ENTITIES.register(
         "arcane_drone",
         () -> EntityType.Builder.<ArcaneDroneEntity>of(ArcaneDroneEntity::new, MobCategory.MISC)
@@ -318,6 +353,15 @@ public class ModEntities {
             .updateInterval(3)
             .noSave()
             .build("arcane_drone"));
+
+    public static final DeferredHolder<EntityType<?>, EntityType<SeatEntity>> SEAT = ENTITIES.register(
+        "seat",
+        () -> EntityType.Builder.<SeatEntity>of(SeatEntity::new, MobCategory.MISC)
+            .sized(0.0F, 0.0F)
+            .clientTrackingRange(10)
+            .updateInterval(40)
+            .noSave()
+            .build("seat"));
 
     public static final DeferredHolder<EntityType<?>, EntityType<HammerDroneEntity>> HAMMER_DRONE = ENTITIES.register(
         "hammer_drone",
@@ -336,7 +380,7 @@ public class ModEntities {
     public static final DeferredHolder<EntityType<?>, EntityType<RunesteelGolemEntity>> RUNESTEEL_GOLEM = ENTITIES.register(
         "runesteel_golem",
         () -> EntityType.Builder.<RunesteelGolemEntity>of(RunesteelGolemEntity::new, MobCategory.MONSTER)
-            .sized(1.4F, 2.7F).clientTrackingRange(10).updateInterval(3).build("runesteel_golem"));
+            .sized(2F, 3F).clientTrackingRange(10).updateInterval(3).build("runesteel_golem"));
 
     public static final DeferredHolder<EntityType<?>, EntityType<ZombifiedRunebladeAcolyteEntity>> ZOMBIFIED_RUNEBLADE_ACOLYTE = ENTITIES.register(
         "zombified_runeblade_acolyte",
@@ -357,6 +401,24 @@ public class ModEntities {
         "zombified_artificer_acolyte",
         () -> EntityType.Builder.<ZombifiedArtificerAcolyteEntity>of(ZombifiedArtificerAcolyteEntity::new, MobCategory.MONSTER)
             .sized(0.6F, 1.95F).clientTrackingRange(8).updateInterval(3).build("zombified_artificer_acolyte"));
+
+    public static final DeferredHolder<EntityType<?>, EntityType<EarthVeinRunesEntity>> EARTH_VEIN_RUNES = ENTITIES.register(
+        "earth_vein_runes",
+        () -> EntityType.Builder.<EarthVeinRunesEntity>of(EarthVeinRunesEntity::new, MobCategory.MISC)
+            .sized(8.0F, 5.5F)
+            .clientTrackingRange(16)
+            .updateInterval(20)
+            .noSave()
+            .build("earth_vein_runes"));
+
+    public static final DeferredHolder<EntityType<?>, EntityType<EarthVeinCircleEntity>> EARTH_VEIN_CIRCLE = ENTITIES.register(
+        "earth_vein_circle",
+        () -> EntityType.Builder.<EarthVeinCircleEntity>of(EarthVeinCircleEntity::new, MobCategory.MISC)
+            .sized(3.0F, 0.2F)
+            .clientTrackingRange(16)
+            .updateInterval(5)
+            .noSave()
+            .build("earth_vein_circle"));
 
     @SubscribeEvent
     public static void registerAttributes(EntityAttributeCreationEvent event) {

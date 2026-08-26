@@ -6,6 +6,9 @@ import com.github.runicrebirth.entities.mobs.SkeletalMageAcolyteEntity;
 import com.github.runicrebirth.entities.mobs.SkeletalWizardAcolyteEntity;
 import com.github.runicrebirth.entities.mobs.ZombifiedArtificerAcolyteEntity;
 import com.github.runicrebirth.entities.mobs.ZombifiedRunebladeAcolyteEntity;
+import com.github.runicrebirth.init.ModParticles;
+import com.github.runicrebirth.particle.ScaledParticleOption;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -54,7 +57,20 @@ public final class MobDamageModifiers {
             if (type == null) return;
         }
         float mult = getMobMultiplier(event.getEntity(), type);
-        if (mult != 1.0f) event.setAmount(event.getAmount() * mult);
+        if (mult != 1.0f) {
+            event.setAmount(event.getAmount() * mult);
+            LivingEntity target = event.getEntity();
+            if (target.level() instanceof ServerLevel level) {
+                double x = target.getX();
+                double y = target.getY() + target.getBbHeight() * 0.5;
+                double z = target.getZ();
+                if (mult > 1.0f) {
+                    level.sendParticles(new ScaledParticleOption(ModParticles.CRITICAL_HIT.get(), 1.4f), x, y, z, 12, 0.25, 0.25, 0.25, 0.1);
+                } else {
+                    level.sendParticles(new ScaledParticleOption(ModParticles.RESISTED.get(), 1.2f), x, y, z, 7, 0.15, 0.15, 0.15, 0.02);
+                }
+            }
+        }
     }
 
     private static MagicDamageType getWeaponType(DamageSource source) {
@@ -81,7 +97,7 @@ public final class MobDamageModifiers {
                 || entity instanceof ZombifiedArtificerAcolyteEntity
                 || entity instanceof ZombifiedPiglin
                 || entity instanceof Zombie) {
-            if (type == MagicDamageType.SHARP) return 1.5f;
+            if (type == MagicDamageType.SHARP) return 1.25f;
             if (type == MagicDamageType.BLUNT) return 0.75f;
         }
         // Skeletal + phantom (undead flying): blunt weak, sharp resist
@@ -89,22 +105,22 @@ public final class MobDamageModifiers {
                 || entity instanceof SkeletalWizardAcolyteEntity
                 || entity instanceof AbstractSkeleton
                 || entity instanceof Phantom) {
-            if (type == MagicDamageType.BLUNT) return 1.5f;
+            if (type == MagicDamageType.BLUNT) return 1.25f;
             if (type == MagicDamageType.SHARP) return 0.75f;
         }
         // Large/heavy: blunt weak, spirit weak, sharp resist
         else if (entity instanceof IronGolem
                 || entity instanceof Ravager
                 || entity instanceof Warden) {
-            if (type == MagicDamageType.BLUNT) return 1.5f;
-            if (type == MagicDamageType.SPIRIT) return 1.5f;
+            if (type == MagicDamageType.BLUNT) return 1.25f;
+            if (type == MagicDamageType.SPIRIT) return 1.25f;
             if (type == MagicDamageType.SHARP) return 0.75f;
         }
         // Human-like (illagers, villagers, witch): sharp weak, spirit resist
         else if (entity instanceof AbstractIllager
                 || entity instanceof Witch
                 || entity instanceof AbstractVillager) {
-            if (type == MagicDamageType.SHARP) return 1.5f;
+            if (type == MagicDamageType.SHARP) return 1.25f;
             if (type == MagicDamageType.SPIRIT) return 0.5f;
         }
         // Arthropod/creeper/elemental: spirit weak
@@ -115,15 +131,15 @@ public final class MobDamageModifiers {
                 || entity instanceof Blaze
                 || entity instanceof Ghast
                 || entity instanceof Vex) {
-            if (type == MagicDamageType.SPIRIT) return 1.5f;
+            if (type == MagicDamageType.SPIRIT) return 1.25f;
         }
         // Gelatinous: blunt weak
         else if (entity instanceof Slime) {
-            if (type == MagicDamageType.BLUNT) return 1.5f;
+            if (type == MagicDamageType.BLUNT) return 1.25f;
         }
         // Arcane/mystical: spirit weak
         else if (entity instanceof Guardian || entity instanceof EnderMan) {
-            if (type == MagicDamageType.SPIRIT) return 1.5f;
+            if (type == MagicDamageType.SPIRIT) return 1.25f;
         }
         return 1.0f;
     }

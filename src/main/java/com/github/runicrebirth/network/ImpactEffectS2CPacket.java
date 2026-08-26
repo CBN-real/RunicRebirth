@@ -3,6 +3,7 @@ package com.github.runicrebirth.network;
 import com.github.runicrebirth.RunicRebirth;
 import com.github.runicrebirth.client.effects.CameraShakeHandler;
 import com.github.runicrebirth.client.effects.CrackManager;
+import com.github.runicrebirth.client.effects.ShockwaveManager;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
@@ -47,6 +48,8 @@ public record ImpactEffectS2CPacket(
         ctx.enqueueWork(() -> {
             CameraShakeHandler.addShake(packet.position, packet.shakeIntensity, packet.shakeDurationTicks);
             CrackManager.addCracks(packet.position, packet.radius * 1.25f, packet.color);
+            com.github.runicrebirth.client.overlays.FlashOverlay.trigger(packet.radius);
+            ShockwaveManager.addShockwave(packet.position, packet.radius);
         });
     }
 }

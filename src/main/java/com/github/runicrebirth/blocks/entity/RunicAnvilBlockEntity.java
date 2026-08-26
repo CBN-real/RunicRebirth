@@ -7,11 +7,18 @@ import com.github.runicrebirth.crafting.RunicAnvilRecipe;
 import com.github.runicrebirth.crafting.RunicAnvilRecipeInput;
 import com.github.runicrebirth.init.ModBlockEntities;
 import com.github.runicrebirth.init.ModBlocks;
+import com.github.runicrebirth.api.item.IMagicWeapon;
+import com.github.runicrebirth.api.item.IRunicDrone;
 import com.github.runicrebirth.init.ModDataComponents;
 import com.github.runicrebirth.init.ModRecipeTypes;
 import com.github.runicrebirth.init.ModSounds;
+import com.github.runicrebirth.items.EnhancementRuneItem;
 import com.github.runicrebirth.items.RunicCircuitItem;
 import com.github.runicrebirth.items.SpellWriter;
+import com.github.runicrebirth.rune.ElementRuneType;
+import com.github.runicrebirth.rune.EnhancementRuneData;
+import com.github.runicrebirth.rune.RuneType;
+import com.github.runicrebirth.rune.RuneTypeRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
@@ -52,7 +59,7 @@ public class RunicAnvilBlockEntity extends BlockEntity implements GeoBlockEntity
 
     public enum AnimState { IDLE, ACTIVATING, ACTIVATED, CRAFTING, HOLDING_RESULT, DEACTIVATING }
 
-    public enum AnvilAction { REPAIR, INSCRIBE, DEINSCRIBE, NO_SLOTS }
+    public enum AnvilAction { REPAIR, INSCRIBE, DEINSCRIBE, ENGRAVE, NO_SLOTS }
 
     private static final RawAnimation ANIM_IDLE = RawAnimation.begin().thenLoop("idle");
     private static final RawAnimation ANIM_ACTIVATING = RawAnimation.begin().thenPlay("initiate_activated").thenLoop("hold_activated");
@@ -295,12 +302,31 @@ public class RunicAnvilBlockEntity extends BlockEntity implements GeoBlockEntity
             }
         }
 
+        ItemStack implementStack = null;
+        ItemStack runeStack = null;
+        for (ItemStack item : items) {
+            if (item.isEmpty()) continue;
+            if (item.getItem() instanceof EnhancementRuneItem && runeStack == null) runeStack = item;
+            else if (isRuneTarget(item) && implementStack == null) implementStack = item;
+        }
+        if (runeStack != null && implementStack != null) {
+            EnhancementRuneItem runeItem = (EnhancementRuneItem) runeStack.getItem();
+            RuneType runeType = runeItem.getRuneType();
+            if (runeType != null && runeType.applicableTo(implementStack)) return AnvilAction.ENGRAVE;
+        }
+
         Optional<RecipeHolder<RunicAnvilRecipe>> match = findMatchingRecipe();
         if (match.isPresent()) {
             return AnvilAction.REPAIR;
         }
 
         return null;
+    }
+
+    private static boolean isRuneTarget(ItemStack stack) {
+        return stack.getItem() instanceof SpellWriter
+            || stack.getItem() instanceof IMagicWeapon
+            || stack.getItem() instanceof IRunicDrone;
     }
 
     public Optional<RecipeHolder<RunicAnvilRecipe>> findMatchingRecipe() {
@@ -331,6 +357,12 @@ public class RunicAnvilBlockEntity extends BlockEntity implements GeoBlockEntity
                 Optional<RecipeHolder<RunicAnvilRecipe>> match = findMatchingRecipe();
                 yield match.map(h -> h.value().getResultItem(level.registryAccess()).copy()).orElse(ItemStack.EMPTY);
             }
+            case ENGRAVE -> {
+                for (ItemStack item : items) {
+                    if (!item.isEmpty() && isRuneTarget(item)) yield item.copy();
+                }
+                yield ItemStack.EMPTY;
+            }
             default -> ItemStack.EMPTY;
         };
     }
@@ -349,6 +381,7 @@ public class RunicAnvilBlockEntity extends BlockEntity implements GeoBlockEntity
             case INSCRIBE -> completeInscription();
             case DEINSCRIBE -> completeDeinscription();
             case REPAIR -> completeRepair();
+            case ENGRAVE -> completeEngraving();
             default -> {
                 craftingTicks = 0;
                 craftingTotalTicks = 0;
@@ -497,6 +530,64 @@ public class RunicAnvilBlockEntity extends BlockEntity implements GeoBlockEntity
         resultItem = result;
         craftingTicks = 0;
         craftingTotalTicks = 0;
+        syncToClient();
+    }
+
+    private void completeEngraving() {
+        ItemStack implementStack = null;
+        ItemStack runeStack = null;
+        int implementSlot = -1;
+        int runeSlot = -1;
+        for (int i = 0; i < MAX_ITEMS; i++) {
+            ItemStack item = items.get(i);
+            if (item.isEmpty()) continue;
+            if (item.getItem() instanceof EnhancementRuneItem && runeStack == null) {
+                runeStack = item;
+                runeSlot = i;
+            } else if (isRuneTarget(item) && implementStack == null) {
+                implementStack = item;
+                implementSlot = i;
+            }
+        }
+        if (implementStack == null || runeStack == null) {
+            craftingTicks = 0; craftingTotalTicks = 0; return;
+        }
+        EnhancementRuneItem runeItem = (EnhancementRuneItem) runeStack.getItem();
+        RuneType runeType = runeItem.getRuneType();
+        if (runeType == null || !runeType.applicableTo(implementStack)) {
+            craftingTicks = 0; craftingTotalTicks = 0; return;
+        }
+
+        net.minecraft.nbt.CompoundTag statsTag = runeStack.get(ModDataComponents.RUNE_STATS.get());
+        if (statsTag == null) {
+            craftingTicks = 0; craftingTotalTicks = 0; return;
+        }
+
+        java.util.Map<String, Float> stats = new java.util.LinkedHashMap<>();
+        for (String key : statsTag.getAllKeys()) stats.put(key, statsTag.getFloat(key));
+
+        EnhancementRuneData runeData = new EnhancementRuneData(runeType.id(), runeItem.getTier(), stats);
+
+        java.util.List<EnhancementRuneData> existing = implementStack.getOrDefault(
+            ModDataComponents.ENHANCEMENT_RUNES.get(), java.util.List.of());
+        java.util.List<EnhancementRuneData> updated = new java.util.ArrayList<>(existing);
+        if (runeType instanceof ElementRuneType) {
+            updated.removeIf(r -> RuneTypeRegistry.get(r.runeTypeId()) instanceof ElementRuneType);
+        } else {
+            updated.removeIf(r -> r.runeTypeId().equals(runeData.runeTypeId()));
+        }
+        updated.add(runeData);
+
+        ItemStack result = implementStack.copy();
+        result.set(ModDataComponents.ENHANCEMENT_RUNES.get(), java.util.List.copyOf(updated));
+
+        items.set(implementSlot, ItemStack.EMPTY);
+        items.set(runeSlot, ItemStack.EMPTY);
+        itemCount = 0;
+        for (ItemStack s : items) if (!s.isEmpty()) itemCount++;
+
+        resultItem = result;
+        craftingTicks = 0; craftingTotalTicks = 0;
         syncToClient();
     }
 

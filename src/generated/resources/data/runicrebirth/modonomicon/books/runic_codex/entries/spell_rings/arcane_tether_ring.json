@@ -1,0 +1,30 @@
+{
+  "background_u_index": 0,
+  "background_v_index": 0,
+  "category": "spell_rings",
+  "description": "book.runicrebirth.runic_codex.spell_rings.arcane_tether_ring.description",
+  "hide_while_locked": false,
+  "icon": {
+    "item": "runicrebirth:arcane_tether_ring"
+  },
+  "name": "book.runicrebirth.runic_codex.spell_rings.arcane_tether_ring.name",
+  "pages": [
+    {
+      "type": "modonomicon:spotlight",
+      "anchor": "",
+      "condition": {
+        "type": "modonomicon:none"
+      },
+      "item": {
+        "count": 1,
+        "item": "runicrebirth:arcane_tether_ring"
+      },
+      "text": "",
+      "title": "Arcane Tether Ring"
+    }
+  ],
+  "show_when_any_parent_unlocked": false,
+  "sort_number": 2,
+  "x": 4,
+  "y": -1
+}

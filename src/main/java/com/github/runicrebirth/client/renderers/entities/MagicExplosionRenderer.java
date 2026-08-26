@@ -27,14 +27,4 @@ public class MagicExplosionRenderer extends AbstractSpellRenderer<MagicExplosion
         return ModRenderTypes.entityTranslucentNoDepth(texture);
     }
 
-    @Override
-    public void preRender(PoseStack poseStack, MagicExplosionEntity entity, BakedGeoModel model,
-        @Nullable MultiBufferSource bufferSource, @Nullable VertexConsumer buffer,
-        boolean isReRender, float partialTick, int packedLight, int packedOverlay,
-        int colour) {
-        float scale = entity.getProjectileSize();
-        poseStack.scale(scale, scale, scale);
-        super.preRender(poseStack, entity, model, bufferSource, buffer, isReRender,
-            partialTick, packedLight, packedOverlay, colour);
-    }
 }

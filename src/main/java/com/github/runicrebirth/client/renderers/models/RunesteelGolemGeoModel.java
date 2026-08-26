@@ -3,7 +3,12 @@ package com.github.runicrebirth.client.renderers.models;
 import com.github.runicrebirth.RunicRebirth;
 import com.github.runicrebirth.entities.mobs.RunesteelGolemEntity;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
+import software.bernie.geckolib.animation.AnimationState;
+import software.bernie.geckolib.cache.object.GeoBone;
+import software.bernie.geckolib.constant.DataTickets;
 import software.bernie.geckolib.model.GeoModel;
+import software.bernie.geckolib.model.data.EntityModelData;
 
 public class RunesteelGolemGeoModel extends GeoModel<RunesteelGolemEntity> {
 
@@ -22,4 +27,14 @@ public class RunesteelGolemGeoModel extends GeoModel<RunesteelGolemEntity> {
 
     @Override
     public ResourceLocation getAnimationResource(RunesteelGolemEntity entity) { return ANIMATIONS; }
+
+    @Override
+    public void setCustomAnimations(RunesteelGolemEntity animatable, long instanceId, AnimationState<RunesteelGolemEntity> animationState) {
+        GeoBone head = getAnimationProcessor().getBone("Head");
+        if (head != null) {
+            EntityModelData modelData = animationState.getData(DataTickets.ENTITY_MODEL_DATA);
+            head.setRotX(modelData.headPitch() * Mth.DEG_TO_RAD);
+            head.setRotY(modelData.netHeadYaw() * Mth.DEG_TO_RAD);
+        }
+    }
 }

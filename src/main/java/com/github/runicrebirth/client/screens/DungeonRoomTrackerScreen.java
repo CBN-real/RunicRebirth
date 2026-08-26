@@ -1,6 +1,9 @@
 package com.github.runicrebirth.client.screens;
 
+import com.github.runicrebirth.client.DungeonRoomBoundsRenderer;
+import com.github.runicrebirth.network.DungeonRoomTrackerResetC2SPacket;
 import com.github.runicrebirth.network.DungeonRoomTrackerSyncC2SPacket;
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
@@ -9,6 +12,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.neoforged.neoforge.network.PacketDistributor;
@@ -27,8 +31,8 @@ public class DungeonRoomTrackerScreen extends Screen {
     // All positions stored relative to trackerPos
     private BlockPos corner1 = BlockPos.ZERO;
     private BlockPos corner2 = BlockPos.ZERO;
-    private final List<BlockPos> spawners = new ArrayList<>();
-    private final List<BlockPos> doors = new ArrayList<>();
+    private final List<BlockPos> spawners    = new ArrayList<>();
+    private final List<BlockPos> doors       = new ArrayList<>();
     private final List<BlockPos> activations = new ArrayList<>();
     private int timeBonusSeconds = 60;
 
@@ -47,6 +51,13 @@ public class DungeonRoomTrackerScreen extends Screen {
         super(Component.literal("Dungeon Room Tracker"));
         this.trackerPos = pos;
         loadConfig(config);
+    }
+
+    @Override
+    protected void renderBlurredBackground(float partialTick) {
+        RenderSystem.disableDepthTest();
+        assert this.minecraft != null;
+        this.minecraft.getMainRenderTarget().bindWrite(false);
     }
 
     private BlockPos toRelative(BlockPos abs) {
@@ -108,9 +119,9 @@ public class DungeonRoomTrackerScreen extends Screen {
         }
 
         addRenderableWidget(Button.builder(Component.literal("Save & Close"), b -> saveAndClose())
-                .pos(centerX - 82, height - 26).size(80, 20).build());
+            .pos(centerX - 82, height - 26).size(80, 20).build());
         addRenderableWidget(Button.builder(Component.literal("Cancel"), b -> onClose())
-                .pos(centerX + 2, height - 26).size(80, 20).build());
+            .pos(centerX + 2, height - 26).size(80, 20).build());
     }
 
     private void buildZoneTab(int cx, int top) {
@@ -139,8 +150,21 @@ public class DungeonRoomTrackerScreen extends Screen {
         corner2ZBox.setValue(String.valueOf(corner2.getZ()));
 
         addRenderableWidget(Button.builder(Component.literal("Apply Corners"), b -> applyCorners())
-                .pos(cx - 45, top + 114).size(90, 18).build());
-        // Green corner summary rendered below the Apply button in render()
+            .pos(cx - 45, top + 114).size(90, 18).build());
+
+        // Show / hide zone bounding box (structure-block style)
+        String zoneLabel = DungeonRoomBoundsRenderer.showing ? "Hide Zone" : "Show Zone";
+        addRenderableWidget(Button.builder(Component.literal(zoneLabel), b -> {
+            applyCorners();
+            if (DungeonRoomBoundsRenderer.showing) {
+                DungeonRoomBoundsRenderer.hideBounds();
+            } else {
+                BlockPos abs1 = toAbsolute(corner1);
+                BlockPos abs2 = toAbsolute(corner2);
+                DungeonRoomBoundsRenderer.showBounds(AABB.encapsulatingFullBlocks(abs1, abs2));
+            }
+            refreshTabWidgets();
+        }).pos(cx - 45, top + 138).size(90, 18).build());
     }
 
     private void applyCorners() {
@@ -157,13 +181,12 @@ public class DungeonRoomTrackerScreen extends Screen {
     }
 
     private void buildListTab(int cx, int top, List<BlockPos> list, String categoryName) {
-        // Input boxes start at top+20 so the yellow category title drawn at y=42 is visible above them
         xBox = addRenderableWidget(new EditBox(font, cx - 90, top + 20, 54, 16, Component.literal("X")));
         yBox = addRenderableWidget(new EditBox(font, cx - 32, top + 20, 54, 16, Component.literal("Y")));
         zBox = addRenderableWidget(new EditBox(font, cx + 26, top + 20, 54, 16, Component.literal("Z")));
 
         addRenderableWidget(Button.builder(Component.literal("Add XYZ"), b -> addFromBoxes(list))
-                .pos(cx - 90, top + 40).size(85, 16).build());
+            .pos(cx - 90, top + 40).size(85, 16).build());
         addRenderableWidget(Button.builder(Component.literal("Add Target"), b -> {
             BlockPos target = getLookedAtBlockRelative();
             if (target != null) { list.add(target); refreshTabWidgets(); }
@@ -175,26 +198,27 @@ public class DungeonRoomTrackerScreen extends Screen {
             BlockPos p = list.get(i);
             final int idx = i;
             int rowY = listTop + (i - listScrollOffset) * 18;
-            addRenderableWidget(Button.builder(Component.literal("X " + p.getX() + " Y " + p.getY() + " Z " + p.getZ()), b -> {})
-                    .pos(cx - 90, rowY).size(150, 16).build());
+            addRenderableWidget(Button.builder(
+                Component.literal("X " + p.getX() + " Y " + p.getY() + " Z " + p.getZ()), b -> {})
+                .pos(cx - 90, rowY).size(150, 16).build());
             addRenderableWidget(Button.builder(Component.literal("✕"), b -> {
                 list.remove(idx); refreshTabWidgets();
             }).pos(cx + 62, rowY).size(16, 16).build());
         }
 
         int scrollY = listTop + VISIBLE_ROWS * 18 + 2;
-        if (listScrollOffset > 0) {
-            addRenderableWidget(Button.builder(Component.literal("▲"), b -> { listScrollOffset--; refreshTabWidgets(); })
-                    .pos(cx - 20, scrollY).size(16, 16).build());
-        }
-        if (visEnd < list.size()) {
-            addRenderableWidget(Button.builder(Component.literal("▼"), b -> { listScrollOffset++; refreshTabWidgets(); })
-                    .pos(cx + 4, scrollY).size(16, 16).build());
-        }
-        if (!list.isEmpty()) {
-            addRenderableWidget(Button.builder(Component.literal("Clear All"), b -> { list.clear(); refreshTabWidgets(); })
-                    .pos(cx - 40, scrollY + 22).size(80, 16).build());
-        }
+        if (listScrollOffset > 0)
+            addRenderableWidget(Button.builder(Component.literal("▲"),
+                b -> { listScrollOffset--; refreshTabWidgets(); })
+                .pos(cx - 20, scrollY).size(16, 16).build());
+        if (visEnd < list.size())
+            addRenderableWidget(Button.builder(Component.literal("▼"),
+                b -> { listScrollOffset++; refreshTabWidgets(); })
+                .pos(cx + 4, scrollY).size(16, 16).build());
+        if (!list.isEmpty())
+            addRenderableWidget(Button.builder(Component.literal("Clear All"),
+                b -> { list.clear(); refreshTabWidgets(); })
+                .pos(cx - 40, scrollY + 22).size(80, 16).build());
     }
 
     private void addFromBoxes(List<BlockPos> list) {
@@ -214,6 +238,12 @@ public class DungeonRoomTrackerScreen extends Screen {
             try { timeBonusSeconds = Math.max(0, Integer.parseInt(timeBonusBox.getValue().trim())); }
             catch (NumberFormatException ignored) {}
         }).pos(cx - 15, top + 52).size(30, 16).build());
+
+        // Reset room to INACTIVE — useful for re-testing without replacing the block
+        addRenderableWidget(Button.builder(Component.literal("Reset Room"), b -> {
+            PacketDistributor.sendToServer(new DungeonRoomTrackerResetC2SPacket(trackerPos));
+            onClose();
+        }).pos(cx - 45, top + 80).size(90, 18).build());
     }
 
     @Override
@@ -228,9 +258,8 @@ public class DungeonRoomTrackerScreen extends Screen {
         switch (currentTab) {
             case 0 -> {
                 gfx.drawCenteredString(font, "Zone Configuration", cx, 42, 0xFFFFAA);
-                // Below the Apply Corners button (ends at y=172), left of the coordinate boxes
-                gfx.drawString(font, "C1: " + posToString(corner1), cx - 90, 178, 0xAAFFAA);
-                gfx.drawString(font, "C2: " + posToString(corner2), cx - 90, 190, 0xAAFFAA);
+                gfx.drawString(font, "C1: " + posToString(corner1), cx - 45, 198, 0xAAFFAA);
+                gfx.drawString(font, "C2: " + posToString(corner2), cx - 45, 210, 0xAAFFAA);
             }
             case 1 -> gfx.drawCenteredString(font, "Dungeon Mob Spawners (" + spawners.size() + ")", cx, 42, 0xFFFFAA);
             case 2 -> gfx.drawCenteredString(font, "Dungeon Doors (" + doors.size() + ")", cx, 42, 0xFFFFAA);
@@ -238,6 +267,7 @@ public class DungeonRoomTrackerScreen extends Screen {
             case 4 -> {
                 gfx.drawCenteredString(font, "Settings", cx, 42, 0xFFFFAA);
                 gfx.drawString(font, "Time bonus (seconds):", cx - 90, 62, 0xFFFFFF);
+                gfx.drawString(font, "Resets room to INACTIVE and opens all doors.", cx - 90, 110, 0xFF6666);
             }
         }
 

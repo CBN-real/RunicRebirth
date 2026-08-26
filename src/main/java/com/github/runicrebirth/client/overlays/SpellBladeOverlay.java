@@ -2,6 +2,8 @@ package com.github.runicrebirth.client.overlays;
 
 import com.github.runicrebirth.api.item.IMagicWeapon;
 import com.github.runicrebirth.client.ClientMagicData;
+import com.github.runicrebirth.client.input.ModKeyMappings;
+import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
@@ -38,7 +40,7 @@ public class SpellBladeOverlay implements LayeredDraw.Layer {
         int screenHeight = graphics.guiHeight();
 
         int ringTotalWidth = RING_COUNT * SLOT_SIZE + (RING_COUNT - 1) * SLOT_GAP;
-        int startX = screenWidth / 2 - 91 - 4 - ringTotalWidth;
+        int startX = screenWidth / 2 - 120 - 4 - ringTotalWidth;
         int slotY = screenHeight - 22 + 2 - SLOT_SIZE - SLOT_GAP;
 
         RenderSystem.enableBlend();
@@ -48,6 +50,9 @@ public class SpellBladeOverlay implements LayeredDraw.Layer {
         drawSlot(graphics, mc, startX, slotY, offHand, offIsMagic);
         // Slot 1: main hand
         drawSlot(graphics, mc, startX + SLOT_SIZE + SLOT_GAP, slotY, mainHand, mainIsMagic);
+        if (mainIsMagic) {
+            drawWeaponKeyLabel(graphics, mc, startX + SLOT_SIZE + SLOT_GAP, slotY);
+        }
 
         RenderSystem.disableBlend();
     }
@@ -73,6 +78,39 @@ public class SpellBladeOverlay implements LayeredDraw.Layer {
         graphics.fill(x, y + SLOT_SIZE - 1, x + SLOT_SIZE, y + SLOT_SIZE, borderShadow);
         graphics.fill(x, y, x + 1, y + SLOT_SIZE, borderColor);
         graphics.fill(x + SLOT_SIZE - 1, y, x + SLOT_SIZE, y + SLOT_SIZE, borderShadow);
+    }
+
+    private static String resolveWeaponKeyLabel(Minecraft mc) {
+        InputConstants.Key key = ModKeyMappings.ACTIVATE_WEAPON_ABILITY.getKey();
+        if (key.getType() == InputConstants.Type.MOUSE) {
+            return switch (key.getValue()) {
+                case 0 -> "MBL";
+                case 1 -> "MBR";
+                case 2 -> "MMB";
+                default -> "MB" + (key.getValue() + 1);
+            };
+        }
+        String name = key.getDisplayName().getString();
+        if (name.isEmpty()) return null;
+        if (mc.font.width(name) > SLOT_SIZE - 2) name = String.valueOf(name.charAt(0));
+        return name;
+    }
+
+    private static void drawWeaponKeyLabel(GuiGraphics graphics, Minecraft mc, int x, int y) {
+        String keyName = resolveWeaponKeyLabel(mc);
+        if (keyName == null) return;
+        float scale = 0.5f;
+        int scaledFontH = 4;
+        int textX = x + 1;
+        int textY = y + SLOT_SIZE - scaledFontH - 1;
+        var pose = graphics.pose();
+        pose.pushPose();
+        pose.translate(textX, textY, 300f);
+        pose.scale(scale, scale, 1f);
+        graphics.fill(-(int)(1 / scale), -(int)(1 / scale),
+            (int)(mc.font.width(keyName) + 1), scaledFontH * 2 + (int)(1 / scale), 0x99000000);
+        graphics.drawString(mc.font, keyName, 0, 0, 0xFFFFFF, false);
+        pose.popPose();
     }
 
     private static void drawCooldownBar(GuiGraphics graphics, ItemStack stack, int x, int y) {

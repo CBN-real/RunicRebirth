@@ -5,7 +5,6 @@ import com.github.runicrebirth.capabilities.dungeon.DungeonData;
 import com.github.runicrebirth.dungeon.DungeonInstance;
 import com.github.runicrebirth.dungeon.DungeonInstanceManager;
 import com.github.runicrebirth.dungeon.DungeonTeleporter;
-import com.github.runicrebirth.dungeon.DungeonType;
 import com.github.runicrebirth.dungeon.gen.DungeonGenerator;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
@@ -44,20 +43,14 @@ public record EnterDungeonC2SPacket(
         ctx.enqueueWork(() -> {
             if (!(ctx.player() instanceof ServerPlayer player)) return;
 
-            DungeonType type = DungeonType.byId(packet.dungeonId);
-            if (type == null) return;
-
-            if (packet.difficulty < 1 || packet.difficulty > type.getMaxDifficulty()) return;
-
-            DungeonData data = DungeonData.of(player);
-            int maxSelectable = data.getMaxSelectableDifficulty(type.getId(), type.getMaxDifficulty());
-            if (packet.difficulty > maxSelectable) return;
+            if (packet.difficulty < 1 || packet.difficulty > 3) return;
 
             if (DungeonInstanceManager.get().isPlayerInDungeon(player.getUUID())) return;
 
             ResourceLocation returnDim = player.level().dimension().location();
             DungeonInstance instance = DungeonInstanceManager.get().createInstance(
-                    type, packet.difficulty, packet.controllerPos, returnDim);
+                    packet.dungeonId, packet.difficulty, packet.controllerPos, returnDim);
+            if (instance == null) return;
 
             DungeonGenerator.generate(player.getServer(), instance);
 

@@ -14,6 +14,6 @@ public class CooldownModifier implements SpellModifier {
 
     @Override
     public void apply(SpellParams params) {
-        params.castingDelayTicks = Math.max(1, params.castingDelayTicks / 2);
+        params.castingDelayTicks = (int) Math.max(1, params.castingDelayTicks * 0.75f);
     }
 }

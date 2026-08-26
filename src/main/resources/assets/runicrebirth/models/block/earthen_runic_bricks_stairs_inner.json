@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/inner_stairs",
+  "textures": {
+    "bottom": "runicrebirth:block/earthen_runic_bricks",
+    "top": "runicrebirth:block/earthen_runic_bricks",
+    "side": "runicrebirth:block/earthen_runic_bricks"
+  }
+}

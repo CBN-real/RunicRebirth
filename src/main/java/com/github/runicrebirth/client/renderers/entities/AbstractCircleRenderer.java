@@ -1,9 +1,14 @@
 package com.github.runicrebirth.client.renderers.entities;
 
+import com.github.runicrebirth.api.registry.SpellTypeRegistry;
+import com.github.runicrebirth.api.spells.ScaledSpellEntity;
+import com.github.runicrebirth.api.spells.SpellType;
 import com.github.runicrebirth.client.BookDisplayState;
 import com.github.runicrebirth.client.renderers.ModRenderTypes;
 import com.github.runicrebirth.client.renderers.NormalOverrideVertexConsumer;
 import com.github.runicrebirth.entities.spells.AbstractCircleEntity;
+import com.github.runicrebirth.RunicRebirth;
+import net.minecraft.resources.ResourceLocation;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
@@ -42,6 +47,15 @@ public abstract class AbstractCircleRenderer<T extends AbstractCircleEntity> ext
             if (ox != 0f || oy != 0f || oz != 0f) {
                 poseStack.translate(ox, oy, oz);
             }
+        }
+        if (entity instanceof AbstractCircleEntity circle) {
+            float s = circle.getCircleScale();
+            SpellType spellType = SpellTypeRegistry.get(
+                ResourceLocation.fromNamespaceAndPath(RunicRebirth.MODID, circle.getSpellTypeId()));
+            if (spellType != null) {
+                s = Math.max(1.0f, spellType.spellHeight() * s);
+            }
+            if (s != 1f) poseStack.scale(s, s, s);
         }
         super.preRender(poseStack, entity, model, bufferSource, buffer, isReRender,
             partialTick, packedLight, packedOverlay, colour);

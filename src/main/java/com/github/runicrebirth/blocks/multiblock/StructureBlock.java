@@ -10,5 +10,9 @@ public enum StructureBlock {
     INFUSION_ALTAR,
     INFUSION_ALTAR_PROXY,
     RUNIC_ANVIL,
-    AIR
+    AIR,
+    RUNELIGHT_TORCH,
+    MEDITATION_CUSHION,
+    ANY_BLOCK,
+    CUT_RUNIC_STONE
 }

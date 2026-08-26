@@ -7,7 +7,6 @@ import com.github.runicrebirth.dungeon.DungeonEventHandler;
 import com.github.runicrebirth.dungeon.DungeonInstance;
 import com.github.runicrebirth.dungeon.DungeonInstanceManager;
 import com.github.runicrebirth.dungeon.DungeonTeleporter;
-import com.github.runicrebirth.dungeon.DungeonType;
 import com.github.runicrebirth.dungeon.gen.DungeonGenerator;
 import com.github.runicrebirth.items.SpellWriter;
 import com.github.runicrebirth.network.DungeonDataSyncS2CPacket;
@@ -119,11 +118,26 @@ public class OculusPortalBlock extends BaseEntityBlock {
         if (!portal.hasSelectedDungeon()) return;
         if (portal.getAnimState() != OculusPortalBlockEntity.AnimState.ACTIVATING) return;
 
-        DungeonType type = portal.getSelectedDungeonType();
-        if (type == null) return;
+        ResourceLocation tierId = portal.getSelectedTierId();
+        if (tierId == null) return;
         int difficulty = portal.getSelectedDifficulty();
 
         if (DungeonInstanceManager.get().isPlayerInDungeon(player.getUUID())) return;
+
+        // Re-entry check
+        java.util.UUID existingInstanceId = portal.getActiveInstanceId();
+        if (existingInstanceId != null) {
+            DungeonInstance existing = DungeonInstanceManager.get().getInstance(existingInstanceId);
+            if (existing != null && existing.isActive() && !existing.isCompleted()) {
+                TELEPORT_COOLDOWNS.put(player.getUUID(), gameTime);
+                DungeonInstanceManager.get().enterInstance(player, existing);
+                DungeonTeleporter.teleportToDungeon(player, existing);
+                DungeonEventHandler.onEnterDungeon(player, existing);
+                DungeonDataSyncS2CPacket.sendTo(player);
+                return;
+            }
+            portal.clearActiveInstanceId();
+        }
 
         TELEPORT_COOLDOWNS.put(player.getUUID(), gameTime);
 
@@ -132,7 +146,10 @@ public class OculusPortalBlock extends BaseEntityBlock {
         BlockPos returnPos = controllerPos != null ? controllerPos : pos;
 
         DungeonInstance instance = DungeonInstanceManager.get().createInstance(
-                type, difficulty, returnPos, returnDim);
+                tierId, difficulty, returnPos, returnDim);
+        if (instance == null) return;
+
+        portal.setActiveInstanceId(instance.getInstanceId());
 
         DungeonGenerator.generate(player.getServer(), instance);
         DungeonInstanceManager.get().enterInstance(player, instance);

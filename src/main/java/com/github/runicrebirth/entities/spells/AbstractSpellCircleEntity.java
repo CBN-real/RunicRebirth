@@ -58,7 +58,6 @@ public abstract class AbstractSpellCircleEntity extends Entity implements GeoEnt
         this.entityData.set(DATA_ELEMENT, params.element.id().toString());
         this.entityData.set(DATA_MODIFIER_IDS, String.join(",", params.modifierIds));
         this.params = params.copy();
-        this.params.size *= getCircleScale();
     }
 
     @Override
@@ -85,7 +84,7 @@ public abstract class AbstractSpellCircleEntity extends Entity implements GeoEnt
         return false;
     }
 
-    protected float getCircleScale() {
+    public float getCircleScale() {
         if (hasModifier("size_plus_four")) return 3.0f;
         if (hasModifier("size_plus_two")) return 2.0f;
         if (hasModifier("size_plus")) return 1.5f;
@@ -105,9 +104,9 @@ public abstract class AbstractSpellCircleEntity extends Entity implements GeoEnt
         age++;
         if (age == 1) {
             level().playSound(null, this.getX(), this.getY(), this.getZ(),
-                ModSounds.SPELLS_SPAWN_CIRCLE.get(), SoundSource.PLAYERS, 1.0f, 1.0f);
+                ModSounds.SPELLS_SPAWN_CIRCLE.get(), SoundSource.PLAYERS, 0.5f, 1.0f);
             onSpawn();
-            spawnCrackling((ServerLevel) level());
+            //spawnCrackling((ServerLevel) level());
         }
         if (age >= lifespan || owner == null || !owner.isAlive()) {
             beginFinishing();

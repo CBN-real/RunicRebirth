@@ -21,7 +21,10 @@ public class SpellParams {
     public boolean useCharges;
     public int chargesMultiplier = 1;
     public float rangeMultiplier = 1.0f;
+    public float range = 32.0f;
     public int cooldownOverrideTicks = -1;
+    public int chargesBonus = 0;
+    public float cooldownReductionFactor = 1.0f;
 
 
     public SpellParams(float damage, float size, float spellHeight, float speed, int duration, int castingDelayTicks, int piercing,
@@ -54,8 +57,11 @@ public class SpellParams {
         c.useCharges = this.useCharges;
         c.chargesMultiplier = this.chargesMultiplier;
         c.rangeMultiplier = this.rangeMultiplier;
+        c.range = this.range;
         c.cooldownOverrideTicks = this.cooldownOverrideTicks;
         c.castingDelayTicks = this.castingDelayTicks;
+        c.chargesBonus = this.chargesBonus;
+        c.cooldownReductionFactor = this.cooldownReductionFactor;
         return c;
     }
 }

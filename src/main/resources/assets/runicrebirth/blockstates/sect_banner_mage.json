@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "face=floor,facing=north":    { "model": "runicrebirth:block/sect_banner_mage" },
+    "face=floor,facing=south":    { "model": "runicrebirth:block/sect_banner_mage", "y": 180 },
+    "face=floor,facing=east":     { "model": "runicrebirth:block/sect_banner_mage", "y": 90 },
+    "face=floor,facing=west":     { "model": "runicrebirth:block/sect_banner_mage", "y": 270 },
+    "face=ceiling,facing=north":  { "model": "runicrebirth:block/sect_banner_mage" },
+    "face=ceiling,facing=south":  { "model": "runicrebirth:block/sect_banner_mage", "y": 180 },
+    "face=ceiling,facing=east":   { "model": "runicrebirth:block/sect_banner_mage", "y": 90 },
+    "face=ceiling,facing=west":   { "model": "runicrebirth:block/sect_banner_mage", "y": 270 },
+    "face=wall,facing=north":     { "model": "runicrebirth:block/sect_banner_mage", "y": 180 },
+    "face=wall,facing=south":     { "model": "runicrebirth:block/sect_banner_mage" },
+    "face=wall,facing=east":      { "model": "runicrebirth:block/sect_banner_mage", "y": 270 },
+    "face=wall,facing=west":      { "model": "runicrebirth:block/sect_banner_mage", "y": 90 }
+  }
+}

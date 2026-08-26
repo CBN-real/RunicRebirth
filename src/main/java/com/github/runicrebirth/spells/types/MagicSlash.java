@@ -25,6 +25,7 @@ public class MagicSlash extends SpellType {
     @Override public float baseSize() { return 1.0f; }
     @Override public float spellHeight() { return 0.125f * baseSize(); }
     @Override public float baseSpeed() { return 1.25f; }
+    @Override public float baseRange() { return 20f; }
 
 
     @Override public String iconName() { return "slash"; }

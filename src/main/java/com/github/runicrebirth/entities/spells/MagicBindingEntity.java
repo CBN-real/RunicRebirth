@@ -5,10 +5,8 @@ import com.github.runicrebirth.api.spells.SpellParams;
 import com.github.runicrebirth.damage.DamageSources;
 import com.github.runicrebirth.damage.SpellDamageSource;
 import com.github.runicrebirth.init.ModEntities;
-import com.github.runicrebirth.init.ModParticles;
 import com.github.runicrebirth.init.ModSounds;
 import net.minecraft.sounds.SoundSource;
-import com.github.runicrebirth.particle.ScaledParticleOption;
 import com.github.runicrebirth.util.ParticleHelper;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
@@ -102,7 +100,7 @@ public class MagicBindingEntity extends AbstractEffectSpellEntity {
         double angle = this.level().random.nextDouble() * Math.PI * 2;
         double dx = Math.cos(angle) * sz * 0.5;
         double dz = Math.sin(angle) * sz * 0.5;
-        this.level().addParticle(new ScaledParticleOption(ModParticles.FIRE_ELEMENT.get(), 1.0f),
+        this.level().addParticle(element().particle(),
             pos.x + dx, pos.y + 0.5 + this.level().random.nextDouble() * 1.5, pos.z + dz,
             0.0, 0.01, 0.0);
     }

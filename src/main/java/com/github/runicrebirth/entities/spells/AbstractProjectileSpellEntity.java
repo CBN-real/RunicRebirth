@@ -37,7 +37,7 @@ import software.bernie.geckolib.animation.PlayState;
 import software.bernie.geckolib.animation.RawAnimation;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
-public abstract class AbstractProjectileSpellEntity extends ThrowableProjectile implements GeoEntity, ScaledSpellEntity {
+public abstract class  AbstractProjectileSpellEntity extends ThrowableProjectile implements GeoEntity, ScaledSpellEntity {
 
     protected static final RawAnimation INITIATE_AND_HOLD = RawAnimation.begin().thenPlay("initiate_spell").thenLoop("hold_spell");
     protected static final RawAnimation HOLD_SPELL = RawAnimation.begin().thenLoop("hold_spell");
@@ -117,8 +117,8 @@ public abstract class AbstractProjectileSpellEntity extends ThrowableProjectile 
         return EntityDimensions.scalable(getHitWidth(), getHitHeight());
     }
 
-    protected float getHitWidth() { return size; }
-    protected float getHitHeight() { return size; }
+    protected float getHitWidth() { return this.getBbWidth() * size; }
+    protected float getHitHeight() { return this.getBbHeight() * size; }
 
     @Override
     protected double getDefaultGravity() {

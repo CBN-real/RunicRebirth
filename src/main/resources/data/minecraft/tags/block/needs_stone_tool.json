@@ -11,6 +11,26 @@
     "runicrebirth:infusion_altar",
     "runicrebirth:dungeon_temporary_platform",
     "runicrebirth:dungeon_pressure_plate",
-    "runicrebirth:dungeon_spike"
+    "runicrebirth:dungeon_spike",
+    "runicrebirth:frozen_runic_bricks",
+    "runicrebirth:frozen_runic_bricks_slab",
+    "runicrebirth:frozen_runic_bricks_stairs",
+    "runicrebirth:frozen_runic_bricks_wall",
+    "runicrebirth:flaming_runic_bricks",
+    "runicrebirth:flaming_runic_bricks_slab",
+    "runicrebirth:flaming_runic_bricks_stairs",
+    "runicrebirth:flaming_runic_bricks_wall",
+    "runicrebirth:earthen_runic_bricks",
+    "runicrebirth:earthen_runic_bricks_slab",
+    "runicrebirth:earthen_runic_bricks_stairs",
+    "runicrebirth:earthen_runic_bricks_wall",
+    "runicrebirth:windswept_runic_bricks",
+    "runicrebirth:windswept_runic_bricks_slab",
+    "runicrebirth:windswept_runic_bricks_stairs",
+    "runicrebirth:windswept_runic_bricks_wall",
+    "runicrebirth:mossy_runic_bricks",
+    "runicrebirth:mossy_runic_bricks_slab",
+    "runicrebirth:mossy_runic_bricks_stairs",
+    "runicrebirth:mossy_runic_bricks_wall"
   ]
 }

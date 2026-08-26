@@ -1,6 +1,9 @@
 package com.github.runicrebirth.init;
 
 import com.github.runicrebirth.RunicRebirth;
+import com.github.runicrebirth.blocks.RunesteelCacheBlock;
+import com.github.runicrebirth.blocks.AdeptStatueBlock;
+import com.github.runicrebirth.blocks.AdeptStatueProxyBlock;
 import com.github.runicrebirth.blocks.DungeonDoorBlock;
 import com.github.runicrebirth.blocks.DungeonDoorProxyBlock;
 import com.github.runicrebirth.blocks.CrumblingPlatformBlock;
@@ -25,11 +28,17 @@ import com.github.runicrebirth.blocks.OculusControllerBlock;
 import com.github.runicrebirth.blocks.RunicAnvilBlock;
 import com.github.runicrebirth.blocks.DungeonMobSpawnerBlock;
 import com.github.runicrebirth.blocks.DungeonRoomTrackerBlock;
+import com.github.runicrebirth.blocks.MeditationCushionBlock;
+import com.github.runicrebirth.blocks.RunicLeverBlock;
+import com.github.runicrebirth.blocks.SectBannerBlock;
+import com.github.runicrebirth.blocks.TatteredSectBannerBlock;
+import com.github.runicrebirth.blocks.SectBannerVariantBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SlabBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.StairBlock;
+import net.minecraft.world.level.block.WallBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
@@ -49,17 +58,94 @@ public class ModBlocks {
     public static final DeferredBlock<StairBlock> RUNIC_STONE_STAIRS = BLOCKS.register("runic_stone_stairs",
             () -> new StairBlock(RUNIC_STONE.get().defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(Blocks.STONE)));
 
+    public static final DeferredBlock<WallBlock> RUNIC_STONE_WALL = BLOCKS.register("runic_stone_wall",
+            () -> new WallBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE_BRICK_WALL)));
+
     public static final DeferredBlock<Block> RUNIC_STONE_PILLAR = BLOCKS.register("runic_stone_pillar",
             () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE).noOcclusion()));
 
     public static final DeferredBlock<Block> RUNIC_STONE_BRICKS = BLOCKS.register("runic_stone_bricks",
         () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE_BRICKS)));
 
+    public static final DeferredBlock<SlabBlock> RUNIC_STONE_BRICKS_SLAB = BLOCKS.register("runic_stone_bricks_slab",
+        () -> new SlabBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE_BRICKS)));
+
+    public static final DeferredBlock<StairBlock> RUNIC_STONE_BRICKS_STAIRS = BLOCKS.register("runic_stone_bricks_stairs",
+        () -> new StairBlock(RUNIC_STONE_BRICKS.get().defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(Blocks.STONE_BRICKS)));
+
+    public static final DeferredBlock<WallBlock> RUNIC_STONE_BRICKS_WALL = BLOCKS.register("runic_stone_bricks_wall",
+        () -> new WallBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE_BRICK_WALL)));
+
     public static final DeferredBlock<Block> ARCANE_RUNIC_STONE_BRICKS = BLOCKS.register("arcane_runic_stone_bricks",
         () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE_BRICKS).lightLevel(s -> 4)));
 
     public static final DeferredBlock<Block> CRACKED_RUNIC_STONE_BRICKS = BLOCKS.register("cracked_runic_stone_bricks",
         () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE_BRICKS)));
+
+    public static final DeferredBlock<SlabBlock> CRACKED_RUNIC_STONE_BRICKS_SLAB = BLOCKS.register("cracked_runic_stone_bricks_slab",
+        () -> new SlabBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE_BRICKS)));
+
+    public static final DeferredBlock<StairBlock> CRACKED_RUNIC_STONE_BRICKS_STAIRS = BLOCKS.register("cracked_runic_stone_bricks_stairs",
+        () -> new StairBlock(CRACKED_RUNIC_STONE_BRICKS.get().defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(Blocks.STONE_BRICKS)));
+
+    public static final DeferredBlock<WallBlock> CRACKED_RUNIC_STONE_BRICKS_WALL = BLOCKS.register("cracked_runic_stone_bricks_wall",
+        () -> new WallBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE_BRICK_WALL)));
+
+    public static final DeferredBlock<Block> FROZEN_RUNIC_BRICKS = BLOCKS.register("frozen_runic_bricks",
+        () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE_BRICKS)));
+    public static final DeferredBlock<SlabBlock> FROZEN_RUNIC_BRICKS_SLAB = BLOCKS.register("frozen_runic_bricks_slab",
+        () -> new SlabBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE_BRICKS)));
+    public static final DeferredBlock<StairBlock> FROZEN_RUNIC_BRICKS_STAIRS = BLOCKS.register("frozen_runic_bricks_stairs",
+        () -> new StairBlock(FROZEN_RUNIC_BRICKS.get().defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(Blocks.STONE_BRICKS)));
+    public static final DeferredBlock<WallBlock> FROZEN_RUNIC_BRICKS_WALL = BLOCKS.register("frozen_runic_bricks_wall",
+        () -> new WallBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE_BRICK_WALL)));
+
+    public static final DeferredBlock<Block> FLAMING_RUNIC_BRICKS = BLOCKS.register("flaming_runic_bricks",
+        () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE_BRICKS)));
+    public static final DeferredBlock<SlabBlock> FLAMING_RUNIC_BRICKS_SLAB = BLOCKS.register("flaming_runic_bricks_slab",
+        () -> new SlabBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE_BRICKS)));
+    public static final DeferredBlock<StairBlock> FLAMING_RUNIC_BRICKS_STAIRS = BLOCKS.register("flaming_runic_bricks_stairs",
+        () -> new StairBlock(FLAMING_RUNIC_BRICKS.get().defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(Blocks.STONE_BRICKS)));
+    public static final DeferredBlock<WallBlock> FLAMING_RUNIC_BRICKS_WALL = BLOCKS.register("flaming_runic_bricks_wall",
+        () -> new WallBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE_BRICK_WALL)));
+
+    public static final DeferredBlock<Block> EARTHEN_RUNIC_BRICKS = BLOCKS.register("earthen_runic_bricks",
+        () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE_BRICKS)));
+    public static final DeferredBlock<SlabBlock> EARTHEN_RUNIC_BRICKS_SLAB = BLOCKS.register("earthen_runic_bricks_slab",
+        () -> new SlabBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE_BRICKS)));
+    public static final DeferredBlock<StairBlock> EARTHEN_RUNIC_BRICKS_STAIRS = BLOCKS.register("earthen_runic_bricks_stairs",
+        () -> new StairBlock(EARTHEN_RUNIC_BRICKS.get().defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(Blocks.STONE_BRICKS)));
+    public static final DeferredBlock<WallBlock> EARTHEN_RUNIC_BRICKS_WALL = BLOCKS.register("earthen_runic_bricks_wall",
+        () -> new WallBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE_BRICK_WALL)));
+
+    public static final DeferredBlock<Block> WINDSWEPT_RUNIC_BRICKS = BLOCKS.register("windswept_runic_bricks",
+        () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE_BRICKS)));
+    public static final DeferredBlock<SlabBlock> WINDSWEPT_RUNIC_BRICKS_SLAB = BLOCKS.register("windswept_runic_bricks_slab",
+        () -> new SlabBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE_BRICKS)));
+    public static final DeferredBlock<StairBlock> WINDSWEPT_RUNIC_BRICKS_STAIRS = BLOCKS.register("windswept_runic_bricks_stairs",
+        () -> new StairBlock(WINDSWEPT_RUNIC_BRICKS.get().defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(Blocks.STONE_BRICKS)));
+    public static final DeferredBlock<WallBlock> WINDSWEPT_RUNIC_BRICKS_WALL = BLOCKS.register("windswept_runic_bricks_wall",
+        () -> new WallBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE_BRICK_WALL)));
+
+    public static final DeferredBlock<Block> MOSSY_RUNIC_BRICKS = BLOCKS.register("mossy_runic_bricks",
+        () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE_BRICKS)));
+    public static final DeferredBlock<SlabBlock> MOSSY_RUNIC_BRICKS_SLAB = BLOCKS.register("mossy_runic_bricks_slab",
+        () -> new SlabBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE_BRICKS)));
+    public static final DeferredBlock<StairBlock> MOSSY_RUNIC_BRICKS_STAIRS = BLOCKS.register("mossy_runic_bricks_stairs",
+        () -> new StairBlock(MOSSY_RUNIC_BRICKS.get().defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(Blocks.STONE_BRICKS)));
+    public static final DeferredBlock<WallBlock> MOSSY_RUNIC_BRICKS_WALL = BLOCKS.register("mossy_runic_bricks_wall",
+        () -> new WallBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE_BRICK_WALL)));
+
+    public static final DeferredBlock<Block> RUNESTEEL_BLOCK = BLOCKS.register("runesteel_block",
+        () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK)));
+    public static final DeferredBlock<Block> FLAMING_RUNESTEEL_BLOCK = BLOCKS.register("flaming_runesteel_block",
+        () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK)));
+    public static final DeferredBlock<Block> WINDSWEPT_RUNESTEEL_BLOCK = BLOCKS.register("windswept_runesteel_block",
+        () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK)));
+    public static final DeferredBlock<Block> FROZEN_RUNESTEEL_BLOCK = BLOCKS.register("frozen_runesteel_block",
+        () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK)));
+    public static final DeferredBlock<Block> EARTHEN_RUNESTEEL_BLOCK = BLOCKS.register("earthen_runesteel_block",
+        () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK)));
 
     public static final DeferredBlock<Block> FALSE_SKY = BLOCKS.register("false_sky",
         () -> new Block(
@@ -111,6 +197,9 @@ public class ModBlocks {
 
     public static final DeferredBlock<RunicAnvilBlock> RUNIC_ANVIL = BLOCKS.register("runic_anvil",
             () -> new RunicAnvilBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE).noOcclusion().lightLevel(s -> 5)));
+
+    public static final DeferredBlock<RunesteelCacheBlock> RUNESTEEL_CACHE = BLOCKS.register("runesteel_cache",
+            () -> new RunesteelCacheBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE).noOcclusion().lightLevel(s -> 3)));
 
     public static final DeferredBlock<RunesteelPortcullisBlock> RUNESTEEL_PORTCULLIS = BLOCKS.register("runesteel_portcullis",
             () -> new RunesteelPortcullisBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BARS).noOcclusion()));
@@ -165,4 +254,67 @@ public class ModBlocks {
 
     public static final DeferredBlock<AncientArcaneTurretBlock> ANCIENT_ARCANE_TURRET = BLOCKS.register("ancient_arcane_turret",
             () -> new AncientArcaneTurretBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE).noOcclusion().strength(3.0f).lightLevel(s -> 4)));
+
+    public static final DeferredBlock<MeditationCushionBlock> MEDITATION_CUSHION = BLOCKS.register("meditation_cushion",
+            () -> new MeditationCushionBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.WHITE_WOOL).strength(0.5f).noOcclusion()));
+
+    public static final DeferredBlock<RunicLeverBlock> RUNIC_LEVER = BLOCKS.register("runic_lever",
+            () -> new RunicLeverBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE).noOcclusion().strength(1.5f)));
+
+    // --- Sect Banner blocks ---
+    public static final DeferredBlock<SectBannerBlock> SECT_BANNER = BLOCKS.register("sect_banner",
+            () -> new SectBannerBlock(BlockBehaviour.Properties.of().strength(1.0f).noOcclusion()
+                    .sound(SoundType.WOOL)));
+
+    public static final DeferredBlock<TatteredSectBannerBlock> TATTERED_SECT_BANNER = BLOCKS.register("tattered_sect_banner",
+            () -> new TatteredSectBannerBlock(BlockBehaviour.Properties.of().strength(1.0f).noOcclusion()
+                    .sound(SoundType.WOOL)));
+
+    public static final DeferredBlock<SectBannerVariantBlock> SECT_BANNER_MAGE = BLOCKS.register("sect_banner_mage",
+            () -> new SectBannerVariantBlock(BlockBehaviour.Properties.of().strength(1.0f).noOcclusion().sound(SoundType.WOOL),
+                    "sect_banner_mage", SectBannerVariantBlock.BannerType.SECT));
+
+    public static final DeferredBlock<SectBannerVariantBlock> SECT_BANNER_ARTIFICER = BLOCKS.register("sect_banner_artificer",
+            () -> new SectBannerVariantBlock(BlockBehaviour.Properties.of().strength(1.0f).noOcclusion().sound(SoundType.WOOL),
+                    "sect_banner_artificer", SectBannerVariantBlock.BannerType.SECT));
+
+    public static final DeferredBlock<SectBannerVariantBlock> SECT_BANNER_WIZARD = BLOCKS.register("sect_banner_wizard",
+            () -> new SectBannerVariantBlock(BlockBehaviour.Properties.of().strength(1.0f).noOcclusion().sound(SoundType.WOOL),
+                    "sect_banner_wizard", SectBannerVariantBlock.BannerType.SECT));
+
+    public static final DeferredBlock<SectBannerVariantBlock> SECT_BANNER_RUNEBLADE = BLOCKS.register("sect_banner_runeblade",
+            () -> new SectBannerVariantBlock(BlockBehaviour.Properties.of().strength(1.0f).noOcclusion().sound(SoundType.WOOL),
+                    "sect_banner_runeblade", SectBannerVariantBlock.BannerType.SECT));
+
+    public static final DeferredBlock<SectBannerVariantBlock> TATTERED_SECT_BANNER_MAGE = BLOCKS.register("tattered_sect_banner_mage",
+            () -> new SectBannerVariantBlock(BlockBehaviour.Properties.of().strength(1.0f).noOcclusion().sound(SoundType.WOOL),
+                    "tattered_sect_banner_mage", SectBannerVariantBlock.BannerType.TATTERED));
+
+    public static final DeferredBlock<SectBannerVariantBlock> TATTERED_SECT_BANNER_ARTIFICER = BLOCKS.register("tattered_sect_banner_artificer",
+            () -> new SectBannerVariantBlock(BlockBehaviour.Properties.of().strength(1.0f).noOcclusion().sound(SoundType.WOOL),
+                    "tattered_sect_banner_artificer", SectBannerVariantBlock.BannerType.TATTERED));
+
+    public static final DeferredBlock<SectBannerVariantBlock> TATTERED_SECT_BANNER_WIZARD = BLOCKS.register("tattered_sect_banner_wizard",
+            () -> new SectBannerVariantBlock(BlockBehaviour.Properties.of().strength(1.0f).noOcclusion().sound(SoundType.WOOL),
+                    "tattered_sect_banner_wizard", SectBannerVariantBlock.BannerType.TATTERED));
+
+    public static final DeferredBlock<SectBannerVariantBlock> TATTERED_SECT_BANNER_RUNEBLADE = BLOCKS.register("tattered_sect_banner_runeblade",
+            () -> new SectBannerVariantBlock(BlockBehaviour.Properties.of().strength(1.0f).noOcclusion().sound(SoundType.WOOL),
+                    "tattered_sect_banner_runeblade", SectBannerVariantBlock.BannerType.TATTERED));
+
+    // --- Adept Set Statues ---
+    public static final DeferredBlock<AdeptStatueBlock> ADEPT_MAGE_STATUE = BLOCKS.register("adept_mage_statue",
+            () -> new AdeptStatueBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE).noOcclusion().strength(1.5f)));
+
+    public static final DeferredBlock<AdeptStatueBlock> ADEPT_WIZARD_STATUE = BLOCKS.register("adept_wizard_statue",
+            () -> new AdeptStatueBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE).noOcclusion().strength(1.5f)));
+
+    public static final DeferredBlock<AdeptStatueBlock> ADEPT_RUNEBLADE_STATUE = BLOCKS.register("adept_runeblade_statue",
+            () -> new AdeptStatueBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE).noOcclusion().strength(1.5f)));
+
+    public static final DeferredBlock<AdeptStatueBlock> ADEPT_ARTIFICER_STATUE = BLOCKS.register("adept_artificer_statue",
+            () -> new AdeptStatueBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE).noOcclusion().strength(1.5f)));
+
+    public static final DeferredBlock<AdeptStatueProxyBlock> ADEPT_STATUE_PROXY = BLOCKS.register("adept_statue_proxy",
+            () -> new AdeptStatueProxyBlock(BlockBehaviour.Properties.of().noOcclusion().noLootTable().strength(1.5f, 3600000.0f)));
 }

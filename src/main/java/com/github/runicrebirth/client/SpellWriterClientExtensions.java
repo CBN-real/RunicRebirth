@@ -18,10 +18,11 @@ public class SpellWriterClientExtensions implements IClientItemExtensions {
     public HumanoidModel.ArmPose getArmPose(LivingEntity entity, InteractionHand hand, ItemStack stack) {
         boolean casting;
         if (entity == Minecraft.getInstance().player) {
-            boolean drawing = Minecraft.getInstance().screen instanceof DrawingCanvasScreen;
-            casting = drawing || ClientMagicData.isCastAnimActive();
+            boolean drawing = hand == InteractionHand.MAIN_HAND
+                && Minecraft.getInstance().screen instanceof DrawingCanvasScreen;
+            casting = drawing || ClientMagicData.isCastAnimActive(hand);
         } else {
-            casting = ClientMagicData.isCastAnimActiveFor(entity.getId());
+            casting = ClientMagicData.isCastAnimActiveFor(entity.getId(), hand);
         }
         currentEntityCasting = casting;
         if (casting) return SpellWriterArmPose.CASTING.getValue();

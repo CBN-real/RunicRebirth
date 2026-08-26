@@ -13,6 +13,7 @@ import com.github.runicrebirth.items.curios.RingOfPhantomMiningItem;
 import com.github.runicrebirth.items.curios.ThrusterRingItem;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.DeltaTracker;
+import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.LayeredDraw;
@@ -54,7 +55,7 @@ public class SpellRingOverlay implements LayeredDraw.Layer {
         int screenHeight = graphics.guiHeight();
 
         int totalWidth = MAX_RINGS * SLOT_SIZE + (MAX_RINGS - 1) * SLOT_GAP;
-        int startX = screenWidth / 2 - 91 - 4 - totalWidth;
+        int startX = screenWidth / 2 - 120 - 4 - totalWidth;
         int slotY = screenHeight - 22 + 2;
 
         RenderSystem.enableBlend();
@@ -90,14 +91,26 @@ public class SpellRingOverlay implements LayeredDraw.Layer {
         graphics.fill(x + SLOT_SIZE - 1, y, x + SLOT_SIZE, y + SLOT_SIZE, borderShadow);
     }
 
-    private static void drawKeyLabel(GuiGraphics graphics, Minecraft mc, int x, int y, int slotIndex) {
-        if (slotIndex >= ModKeyMappings.ACTIVATE_SPELL_RINGS.length) return;
-        String keyName = ModKeyMappings.ACTIVATE_SPELL_RINGS[slotIndex].getKey().getDisplayName().getString();
-        if (keyName.isEmpty()) return;
-
-        if (mc.font.width(keyName) > SLOT_SIZE - 2) {
-            keyName = String.valueOf(keyName.charAt(0));
+    private static String resolveKeyLabel(Minecraft mc, int slotIndex) {
+        if (slotIndex >= ModKeyMappings.ACTIVATE_SPELL_RINGS.length) return null;
+        InputConstants.Key key = ModKeyMappings.ACTIVATE_SPELL_RINGS[slotIndex].getKey();
+        if (key.getType() == InputConstants.Type.MOUSE) {
+            return switch (key.getValue()) {
+                case 0 -> "MBL";
+                case 1 -> "MBR";
+                case 2 -> "MMB";
+                default -> "MB" + (key.getValue() + 1);
+            };
         }
+        String name = key.getDisplayName().getString();
+        if (name.isEmpty()) return null;
+        if (mc.font.width(name) > SLOT_SIZE - 2) name = String.valueOf(name.charAt(0));
+        return name;
+    }
+
+    private static void drawKeyLabel(GuiGraphics graphics, Minecraft mc, int x, int y, int slotIndex) {
+        String keyName = resolveKeyLabel(mc, slotIndex);
+        if (keyName == null) return;
 
         // Half-size text in bottom-left of slot
         float scale = 0.5f;
@@ -161,7 +174,6 @@ public class SpellRingOverlay implements LayeredDraw.Layer {
     }
 
     private static ResourceLocation getCooldownId(ItemStack stack) {
-        if (stack.getItem() instanceof RingOfPhantomMiningItem) return RingOfPhantomMiningItem.COOLDOWN_ID;
         if (stack.getItem() instanceof RingOfLeapingGalesItem) return RingOfLeapingGalesItem.COOLDOWN_ID;
         if (stack.getItem() instanceof MagicHandRingItem) return MagicHandEntity.COOLDOWN_KEY;
         if (stack.getItem() instanceof ArcaneTetherRingItem) return ArcaneTetherEntity.COOLDOWN_KEY;

@@ -107,6 +107,37 @@ public class MagicData {
     public void setHammerDroneEntityId(int id) { hammerDroneEntityId = id; }
     public void clearHammerDroneEntityId() { hammerDroneEntityId = -1; }
 
+    // Thrown runic dagger — transient, not persisted
+    private int thrownDaggerEntityId = -1;
+
+    public int thrownDaggerEntityId() { return thrownDaggerEntityId; }
+    public void setThrownDaggerEntityId(int id) { thrownDaggerEntityId = id; }
+    public void clearThrownDaggerEntityId() { thrownDaggerEntityId = -1; }
+
+    // Whirlwind — transient, not persisted
+    private int whirlwindTicksRemaining;
+    private int whirlwindWavesFired;
+    private float whirlwindDamage;
+
+    public void startWhirlwind(float damage) {
+        this.whirlwindTicksRemaining = 60;
+        this.whirlwindWavesFired = 0;
+        this.whirlwindDamage = damage;
+    }
+
+    public float whirlwindDamage() { return whirlwindDamage; }
+    public boolean isWhirlwindActive() { return whirlwindTicksRemaining > 0; }
+
+    public boolean tickWhirlwind() {
+        if (whirlwindTicksRemaining <= 0) return false;
+        whirlwindTicksRemaining--;
+        if (whirlwindTicksRemaining % 20 == 0 && whirlwindWavesFired < 3) {
+            whirlwindWavesFired++;
+            return true;
+        }
+        return false;
+    }
+
     // Thruster ring
     public int thrusterActiveTicks() { return thrusterActiveTicks; }
     public void setThrusterActiveTicks(int ticks) { thrusterActiveTicks = Math.max(0, ticks); }

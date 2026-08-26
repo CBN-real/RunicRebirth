@@ -34,7 +34,7 @@ public class MagicProjectile extends SpellType {
     public CastResult onCast(SpellCastContext ctx, SpellParams params) {
         Vec3 dir = ctx.aimDirection().normalize();
         MagicProjectileEntity bolt = new MagicProjectileEntity(ctx.level(), ctx.caster(), params, dir);
-        Vec3 spawn = ctx.aimStart().add(dir.scale(0.5));
+        Vec3 spawn = ctx.aimStart().add(dir.scale(0.5 + params.size / 5));
         bolt.setPos(spawn.x, spawn.y, spawn.z);
         bolt.setTrackingTarget(ctx.entityTarget());
         //bolt.shoot(dir.x, dir.y, dir.z, params.speed, 0.0F);

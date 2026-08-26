@@ -4,6 +4,7 @@ import com.github.runicrebirth.RunicRebirth;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
+@Deprecated
 public enum DungeonType {
 
     FIRE_TRIAL("fire_trial", "Fire Trial", GenerationMode.PRESET, 1, null,

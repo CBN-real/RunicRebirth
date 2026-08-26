@@ -24,7 +24,7 @@ public class MagicMeteorEntity extends AbstractProjectileSpellEntity {
 
     private float directDamage = 10f;
     private float splashDamage = 5f;
-    private float splashRadius = 3f;
+    private float splashRadius = 4f;
 
     public MagicMeteorEntity(EntityType<? extends MagicMeteorEntity> type, Level level) {
         super(type, level);
@@ -38,7 +38,7 @@ public class MagicMeteorEntity extends AbstractProjectileSpellEntity {
         initFromParams(params);
         this.directDamage = directDamage;
         this.splashDamage = splashDamage;
-        this.splashRadius = 3f * params.size;
+        this.splashRadius = 4f * params.size;
         this.chargeTicks = 70;
         this.endTicks = 20;
     }

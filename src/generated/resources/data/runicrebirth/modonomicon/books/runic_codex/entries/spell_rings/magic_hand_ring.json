@@ -1,0 +1,30 @@
+{
+  "background_u_index": 0,
+  "background_v_index": 0,
+  "category": "spell_rings",
+  "description": "book.runicrebirth.runic_codex.spell_rings.magic_hand_ring.description",
+  "hide_while_locked": false,
+  "icon": {
+    "item": "runicrebirth:magic_hand_ring"
+  },
+  "name": "book.runicrebirth.runic_codex.spell_rings.magic_hand_ring.name",
+  "pages": [
+    {
+      "type": "modonomicon:spotlight",
+      "anchor": "",
+      "condition": {
+        "type": "modonomicon:none"
+      },
+      "item": {
+        "count": 1,
+        "item": "runicrebirth:magic_hand_ring"
+      },
+      "text": "",
+      "title": "Magic Hand Ring"
+    }
+  ],
+  "show_when_any_parent_unlocked": false,
+  "sort_number": 3,
+  "x": -2,
+  "y": 0
+}

@@ -49,7 +49,7 @@ public record DrawStartC2SPacket() implements CustomPacketPayload {
                 data.setCanvasEntityId(canvas.getId());
             }
             SpellUnlockSyncS2CPacket.sendTo(player);
-            CastAnimBroadcastS2CPacket.broadcast(player, 1200);
+            CastAnimBroadcastS2CPacket.broadcast(player, 1200, InteractionHand.MAIN_HAND);
         });
     }
 }

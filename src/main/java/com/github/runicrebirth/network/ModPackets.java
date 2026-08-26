@@ -14,6 +14,7 @@ public final class ModPackets {
         PayloadRegistrar registrar = event.registrar(RunicRebirth.MODID).versioned(VERSION);
 
         // C2S
+        registrar.playToServer(WeaponAbilityC2SPacket.TYPE, WeaponAbilityC2SPacket.STREAM_CODEC, WeaponAbilityC2SPacket::handle);
         registrar.playToServer(ActivateRingC2SPacket.TYPE, ActivateRingC2SPacket.STREAM_CODEC, ActivateRingC2SPacket::handle);
         registrar.playToServer(DrawStartC2SPacket.TYPE, DrawStartC2SPacket.STREAM_CODEC, DrawStartC2SPacket::handle);
         registrar.playToServer(DrawSubmitC2SPacket.TYPE, DrawSubmitC2SPacket.STREAM_CODEC, DrawSubmitC2SPacket::handle);
@@ -31,7 +32,9 @@ public final class ModPackets {
         registrar.playToClient(SpellUnlockSyncS2CPacket.TYPE, SpellUnlockSyncS2CPacket.STREAM_CODEC, SpellUnlockSyncS2CPacket::handle);
         registrar.playToClient(CastAnimBroadcastS2CPacket.TYPE, CastAnimBroadcastS2CPacket.STREAM_CODEC, CastAnimBroadcastS2CPacket::handle);
         registrar.playToClient(RingCastAnimS2CPacket.TYPE, RingCastAnimS2CPacket.STREAM_CODEC, RingCastAnimS2CPacket::handle);
+        registrar.playToClient(RunicWeaponAnimS2CPacket.TYPE, RunicWeaponAnimS2CPacket.STREAM_CODEC, RunicWeaponAnimS2CPacket::handle);
         registrar.playToClient(CooldownSyncS2CPacket.TYPE, CooldownSyncS2CPacket.STREAM_CODEC, CooldownSyncS2CPacket::handle);
+        registrar.playToClient(DaggerAnimS2CPacket.TYPE, DaggerAnimS2CPacket.STREAM_CODEC, DaggerAnimS2CPacket::handle);
         registrar.playToClient(MagicHandSyncS2CPacket.TYPE, MagicHandSyncS2CPacket.STREAM_CODEC, MagicHandSyncS2CPacket::handle);
         registrar.playToClient(RingDurationSyncS2CPacket.TYPE, RingDurationSyncS2CPacket.STREAM_CODEC, RingDurationSyncS2CPacket::handle);
 
@@ -44,5 +47,14 @@ public final class ModPackets {
         // Dungeon Room Tracker
         registrar.playToClient(OpenDungeonRoomTrackerS2CPacket.TYPE, OpenDungeonRoomTrackerS2CPacket.STREAM_CODEC, OpenDungeonRoomTrackerS2CPacket::handle);
         registrar.playToServer(DungeonRoomTrackerSyncC2SPacket.TYPE, DungeonRoomTrackerSyncC2SPacket.STREAM_CODEC, DungeonRoomTrackerSyncC2SPacket::handle);
+        registrar.playToServer(DungeonRoomTrackerResetC2SPacket.TYPE, DungeonRoomTrackerResetC2SPacket.STREAM_CODEC, DungeonRoomTrackerResetC2SPacket::handle);
+
+        // Dungeon Mob Spawner
+        registrar.playToClient(OpenDungeonMobSpawnerS2CPacket.TYPE, OpenDungeonMobSpawnerS2CPacket.STREAM_CODEC, OpenDungeonMobSpawnerS2CPacket::handle);
+        registrar.playToServer(DungeonMobSpawnerSyncC2SPacket.TYPE, DungeonMobSpawnerSyncC2SPacket.STREAM_CODEC, DungeonMobSpawnerSyncC2SPacket::handle);
+
+        // EarthVein unlock system
+        registrar.playToClient(OpenUnlockScreenS2CPacket.TYPE, OpenUnlockScreenS2CPacket.STREAM_CODEC, OpenUnlockScreenS2CPacket::handle);
+        registrar.playToServer(AttemptUnlockC2SPacket.TYPE, AttemptUnlockC2SPacket.STREAM_CODEC, AttemptUnlockC2SPacket::handle);
     }
 }

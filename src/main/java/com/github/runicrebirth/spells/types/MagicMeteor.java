@@ -26,9 +26,10 @@ public class MagicMeteor extends SpellType {
 
     @Override public int cooldownTicks() { return 160; }
     @Override public float baseDamage() { return 10f; }
-    @Override public float baseSize() { return 1.0f; }
+    @Override public float baseSize() { return 1.5f; }
     @Override public float spellHeight() { return 0.8f * this.baseSize(); }
     @Override public float baseSpeed() { return 2.0f; }
+    @Override public float baseAoeRadius() { return 4.0f; }
 
   @Override public String iconName() { return "meteor"; }
     @Override public Element defaultElement() { return ModElements.ARCANE.get(); }
@@ -36,9 +37,8 @@ public class MagicMeteor extends SpellType {
 
     @Override
     public CastResult onCast(SpellCastContext ctx, SpellParams params) {
-        double range = 16.0;
         Vec3 start = ctx.aimStart();
-        Vec3 end = start.add(ctx.aimDirection().normalize().scale(range));
+        Vec3 end = start.add(ctx.aimDirection().normalize().scale(baseRange()));
         HitResult hit = RaycastBuilder.begin(ctx.level(), ctx.caster())
             .start(start).end(end)
             .checkForBlocks(true)

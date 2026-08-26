@@ -186,6 +186,7 @@ public class DrawingCanvasScreen extends Screen {
     @Override
     protected void renderBlurredBackground(float partialTick) {
         RenderSystem.disableDepthTest();
+        assert this.minecraft != null;
         this.minecraft.getMainRenderTarget().bindWrite(false);
     }
 
@@ -258,7 +259,8 @@ public class DrawingCanvasScreen extends Screen {
         renderRadialMenu(g);
         renderInscribedSlots(g);
 
-        g.drawCenteredString(font, Component.translatable("screen.runicrebirth.canvas_hint"),
+        g.drawCenteredString(font != null ? font : Minecraft.getInstance().font,
+            Component.translatable("screen.runicrebirth.canvas_hint"),
             width / 2, 4, 0xAAFFFFFF);
 
         renderHoverTooltip(g, mouseX, mouseY);
@@ -648,11 +650,14 @@ public class DrawingCanvasScreen extends Screen {
     }
 
     @Override
+    public void removed() {
+        stopAmbientSound();
+        super.removed();
+    }
+
+    @Override
     public void onClose() {
-        if (ambientSound != null) {
-            Minecraft.getInstance().getSoundManager().stop(ambientSound);
-            ambientSound = null;
-        }
+        stopAmbientSound();
         InkParticle.removeAll();
         ClientMagicData.clearOnStackChanged();
         if (!terminalSent) {
@@ -660,6 +665,13 @@ public class DrawingCanvasScreen extends Screen {
             PacketDistributor.sendToServer(new CancelDrawC2SPacket());
         }
         super.onClose();
+    }
+
+    private void stopAmbientSound() {
+        if (ambientSound != null) {
+            Minecraft.getInstance().getSoundManager().stop(ambientSound);
+            ambientSound = null;
+        }
     }
 
     private static final String[] ELEMENT_DISPLAY_NAMES = {"Arcane", "Fire", "Ice", "Earth", "Wind"};
@@ -861,8 +873,13 @@ public class DrawingCanvasScreen extends Screen {
         double nx = (strokeX / drawRadius) - 1.0;
         double ny = -((strokeY / drawRadius) - 1.0);
 
-        double localX = nx * INK_WORLD_RADIUS;
-        double localY = ny * INK_WORLD_RADIUS;
+        float inkFov = (float) mc.options.fov().get();
+        double inkRatio = Math.tan(Math.toRadians(INK_DEFAULT_FOV * 0.5)) / Math.tan(Math.toRadians(inkFov * 0.5));
+        float inkDist = INK_BASE_DISTANCE * (float) Math.pow(inkRatio, 0.914);
+
+        double lateralScale = inkDist * Math.tan(Math.toRadians(inkFov * 0.5)) * 2.0 * DRAWING_RADIUS_FRAC;
+        double localX = nx * lateralScale;
+        double localY = ny * lateralScale;
 
         float yaw = mc.player.getYRot();
         float pitch = mc.player.getXRot();
@@ -879,10 +896,6 @@ public class DrawingCanvasScreen extends Screen {
         double wx = localX * cosY + rz * sinY;
         double wy = ry;
         double wz = -localX * sinY + rz * cosY;
-
-        float inkFov = (float) mc.options.fov().get();
-        double inkRatio = Math.tan(Math.toRadians(INK_DEFAULT_FOV * 0.5)) / Math.tan(Math.toRadians(inkFov * 0.5));
-        float inkDist = INK_BASE_DISTANCE * (float) Math.pow(inkRatio, 0.914);
         Vec3 eye = mc.player.getEyePosition(1.0f);
         Vec3 look = mc.player.getLookAngle();
         double px = eye.x + look.x * inkDist + wx;

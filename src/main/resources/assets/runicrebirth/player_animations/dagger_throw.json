@@ -1,0 +1,63 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"dagger_throw": {
+			"animation_length": 0.959,
+			"bones": {
+				"torso_bend": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.3997": {
+							"vector": [-5, 0, 0]
+						},
+						"0.7194": {
+							"vector": [0, 0, 0]
+						}
+					}
+				},
+				"right_arm": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.3997": {
+							"vector": [-80, -5, 0]
+						},
+						"0.7194": {
+							"vector": [0, -5, 0],
+							"easing": "easeOutBack",
+							"easingArgs": [1]
+						}
+					}
+				},
+				"right_arm_bend": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.3997": {
+							"vector": [-105, 0, 0]
+						},
+						"0.7194": {
+							"vector": [0, 0, 0],
+							"easing": "linear"
+						}
+					},
+					"position": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.3997": {
+							"vector": [0, 0, -1.75]
+						},
+						"0.7194": {
+							"vector": [0, 0, 0]
+						}
+					}
+				}
+			}
+		}
+	}
+}

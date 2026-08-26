@@ -10,4 +10,9 @@ public class RunesteelGolemRenderer extends GeoEntityRenderer<RunesteelGolemEnti
     public RunesteelGolemRenderer(EntityRendererProvider.Context context) {
         super(context, new RunesteelGolemGeoModel());
     }
+
+    @Override
+    protected float getDeathMaxRotation(RunesteelGolemEntity animatable) {
+        return 0;
+    }
 }

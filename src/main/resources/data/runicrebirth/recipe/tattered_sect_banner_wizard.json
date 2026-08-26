@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    { "item": "minecraft:yellow_dye" },
+    { "item": "minecraft:white_dye" },
+    { "item": "runicrebirth:tattered_sect_banner" }
+  ],
+  "result": {
+    "id": "runicrebirth:tattered_sect_banner_wizard",
+    "count": 1
+  }
+}

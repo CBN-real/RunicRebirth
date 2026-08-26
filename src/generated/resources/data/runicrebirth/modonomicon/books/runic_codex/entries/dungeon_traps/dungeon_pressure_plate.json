@@ -1,0 +1,30 @@
+{
+  "background_u_index": 0,
+  "background_v_index": 0,
+  "category": "dungeon_traps",
+  "description": "book.runicrebirth.runic_codex.dungeon_traps.dungeon_pressure_plate.description",
+  "hide_while_locked": false,
+  "icon": {
+    "item": "runicrebirth:dungeon_pressure_plate"
+  },
+  "name": "book.runicrebirth.runic_codex.dungeon_traps.dungeon_pressure_plate.name",
+  "pages": [
+    {
+      "type": "modonomicon:spotlight",
+      "anchor": "",
+      "condition": {
+        "type": "modonomicon:none"
+      },
+      "item": {
+        "count": 1,
+        "item": "runicrebirth:dungeon_pressure_plate"
+      },
+      "text": "",
+      "title": "Pressure Plate Trap"
+    }
+  ],
+  "show_when_any_parent_unlocked": false,
+  "sort_number": 6,
+  "x": -2,
+  "y": 1
+}

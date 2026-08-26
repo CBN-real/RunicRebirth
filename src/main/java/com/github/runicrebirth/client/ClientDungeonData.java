@@ -17,6 +17,7 @@ public final class ClientDungeonData {
     private static int knowledgePoints = 0;
     private static Set<ResourceLocation> unlockedSpellTypes = new HashSet<>();
     private static Map<ResourceLocation, Integer> maxDifficultyCleared = new HashMap<>();
+    private static Set<ResourceLocation> unlockedEntries = new HashSet<>();
 
     private ClientDungeonData() {}
 
@@ -25,12 +26,15 @@ public final class ClientDungeonData {
         knowledgePoints = packet.knowledgePoints();
         unlockedSpellTypes = new HashSet<>(packet.unlockedSpellTypes());
         maxDifficultyCleared = new HashMap<>(packet.maxDifficultyCleared());
+        unlockedEntries = new HashSet<>(packet.unlockedEntries());
     }
 
     public static Set<ResourceLocation> getUnlockedElements() { return unlockedElements; }
     public static int getKnowledgePoints() { return knowledgePoints; }
     public static Set<ResourceLocation> getUnlockedSpellTypes() { return unlockedSpellTypes; }
     public static boolean isElementUnlocked(ResourceLocation id) { return unlockedElements.contains(id); }
+    public static boolean isUnlocked(ResourceLocation id) { return unlockedEntries.contains(id); }
+    public static Set<ResourceLocation> getUnlockedEntries() { return java.util.Collections.unmodifiableSet(unlockedEntries); }
 
     public static int getMaxDifficultyCleared(ResourceLocation dungeonId) {
         return maxDifficultyCleared.getOrDefault(dungeonId, 0);

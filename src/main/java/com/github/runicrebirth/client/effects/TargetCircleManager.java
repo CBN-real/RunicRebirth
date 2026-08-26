@@ -1,9 +1,12 @@
 package com.github.runicrebirth.client.effects;
 
 import com.github.runicrebirth.RunicRebirth;
+import com.github.runicrebirth.api.registry.SpellTypeRegistry;
+import com.github.runicrebirth.api.spells.SpellType;
 import com.github.runicrebirth.client.ClientMagicData;
 import com.github.runicrebirth.client.renderers.ModRenderTypes;
 import com.github.runicrebirth.entities.spells.AbstractCircleEntity;
+import com.github.runicrebirth.entities.spells.AoeTrackerEntity;
 import com.github.runicrebirth.entities.spells.EnergyCracklingEntity;
 import com.github.runicrebirth.entities.spells.TargetCircleEntity;
 import com.github.runicrebirth.init.ModEntities;
@@ -47,6 +50,9 @@ public final class TargetCircleManager {
     private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(
         RunicRebirth.MODID, "textures/entity/runic_templates/arcane_runic_template.png");
 
+    /** Native radius of aoe_tracker.geo.json disc in blocks (13.5 Bedrock units / 16). */
+    private static final float AOE_MODEL_RADIUS = 13.5f / 16.0f;
+
     private static final String TEAM_NAME = "runicrebirth_target";
     private static final int CRACKLING_COLOR = 0x8855FF;
     private static final double LERP_STIFFNESS = 14.0;
@@ -67,9 +73,14 @@ public final class TargetCircleManager {
     @Nullable private static Vec3 s_lookDisplayPos = null;
     private static long s_lookLastNanos = 0;
     @Nullable private static Entity s_lookOutlineTarget = null;
+    @Nullable private static AoeTrackerEntity s_lookAoeTracker = null;
 
     // One slot per AbstractCircleEntity that has an active entity target, keyed by circle entity ID
     private static final Map<Integer, SpellSlot> s_spellSlots = new HashMap<>();
+
+    private static boolean s_hidden = false;
+
+    public static void toggleHidden() { s_hidden = !s_hidden; }
 
     private TargetCircleManager() {}
 
@@ -79,6 +90,7 @@ public final class TargetCircleManager {
         Vec3 displayPos;
         long lastNanos;
         Entity outlineTarget;
+        AoeTrackerEntity aoeTracker;
     }
 
     public static void onRenderLevelStage(RenderLevelStageEvent event) {
@@ -92,15 +104,22 @@ public final class TargetCircleManager {
             // --- Look-target slot ---
             ItemStack mainHand = player.getMainHandItem();
             ItemStack offHand = player.getOffhandItem();
-            boolean holdsWriter = (mainHand.getItem() instanceof SpellWriter
-                    && (SpellWriter.resolveActiveStack(mainHand).validSpell() || ClientMagicData.hasCharges()))
-                || (offHand.getItem() instanceof SpellWriter
-                    && (SpellWriter.resolveActiveStack(offHand).validSpell() || ClientMagicData.hasCharges()));
+            boolean mainHandValid = mainHand.getItem() instanceof SpellWriter
+                && (SpellWriter.resolveActiveStack(mainHand).validSpell() || ClientMagicData.hasCharges());
+            boolean offHandValid = offHand.getItem() instanceof SpellWriter
+                && (SpellWriter.resolveActiveStack(offHand).validSpell() || ClientMagicData.hasCharges());
+            boolean holdsWriter = mainHandValid || offHandValid;
 
             if (holdsWriter) {
+                ItemStack rangeSource = mainHandValid ? mainHand : offHand;
+                float aoeRadius = SpellWriter.resolveActiveAoeRadius(rangeSource);
+                com.github.runicrebirth.api.spells.SpellType activeType = SpellWriter.resolveActiveType(rangeSource);
+                double spellRange = (activeType != null && activeType.bypassesRangeCheck())
+                    ? 64.0
+                    : SpellWriter.resolveActiveRange(rangeSource);
                 Vec3 eye = player.getEyePosition(pt);
                 Vec3 dir = player.getViewVector(pt);
-                Vec3 end = eye.add(dir.scale(64.0));
+                Vec3 end = eye.add(dir.scale(spellRange));
                 HitResult hit = RaycastBuilder.begin(mc.level, player)
                     .start(eye).end(end).checkForBlocks(true).inflate(1.0f).cast();
 
@@ -135,6 +154,16 @@ public final class TargetCircleManager {
                     if (s_lookCrackling == null)
                         s_lookCrackling = new EnergyCracklingEntity(mc.level, 0.45f, CRACKLING_COLOR, 1, 0.22f, 0.8f, 0.6f);
                     s_lookCrackling.tickCount = (int) mc.level.getGameTime();
+
+                    if (aoeRadius > 0) {
+                        if (s_lookAoeTracker == null)
+                            s_lookAoeTracker = new AoeTrackerEntity(ModEntities.AOE_TRACKER.get(), mc.level);
+                        s_lookAoeTracker.setPos(s_lookDisplayPos.x, s_lookDisplayPos.y, s_lookDisplayPos.z);
+                        s_lookAoeTracker.setAoeScale(aoeRadius / AOE_MODEL_RADIUS);
+                        s_lookAoeTracker.tickCount = (int) mc.level.getGameTime();
+                    } else {
+                        s_lookAoeTracker = null;
+                    }
 
                     if (lookEntity != s_lookOutlineTarget) {
                         if (s_lookOutlineTarget != null) removeOutlineIfUnused(mc.level, s_lookOutlineTarget, null);
@@ -183,6 +212,23 @@ public final class TargetCircleManager {
                     slot.crackling = new EnergyCracklingEntity(mc.level, 0.45f, CRACKLING_COLOR, 1, 0.22f, 0.8f, 0.6f);
                 slot.crackling.tickCount = (int) mc.level.getGameTime();
 
+                String spellTypeId = circle.getSpellTypeId();
+                float slotAoeRadius = 0f;
+                if (!spellTypeId.isEmpty()) {
+                    SpellType st = SpellTypeRegistry.get(
+                        net.minecraft.resources.ResourceLocation.fromNamespaceAndPath(RunicRebirth.MODID, spellTypeId));
+                    if (st != null) slotAoeRadius = st.baseAoeRadius() * circle.getCircleScale();
+                }
+                if (slotAoeRadius > 0) {
+                    if (slot.aoeTracker == null)
+                        slot.aoeTracker = new AoeTrackerEntity(ModEntities.AOE_TRACKER.get(), mc.level);
+                    slot.aoeTracker.setPos(slot.displayPos.x, slot.displayPos.y, slot.displayPos.z);
+                    slot.aoeTracker.setAoeScale(slotAoeRadius / AOE_MODEL_RADIUS);
+                    slot.aoeTracker.tickCount = (int) mc.level.getGameTime();
+                } else {
+                    slot.aoeTracker = null;
+                }
+
                 if (target != slot.outlineTarget) {
                     if (slot.outlineTarget != null) removeOutlineIfUnused(mc.level, slot.outlineTarget, cid);
                     slot.outlineTarget = target;
@@ -222,15 +268,36 @@ public final class TargetCircleManager {
             MultiBufferSource.BufferSource buf = mc.renderBuffers().bufferSource();
             float pt = event.getPartialTick().getGameTimeDeltaPartialTick(false);
 
-            if (s_lookCircle != null && s_lookDisplayPos != null) {
-                renderSlot(s_lookCircle, s_lookCrackling, s_lookDisplayPos, event, camPos, buf, pt);
-            }
-            for (SpellSlot slot : s_spellSlots.values()) {
-                if (slot.circle != null && slot.displayPos != null) {
-                    renderSlot(slot.circle, slot.crackling, slot.displayPos, event, camPos, buf, pt);
+            if (!s_hidden) {
+                if (s_lookCircle != null && s_lookDisplayPos != null) {
+                    renderSlot(s_lookCircle, s_lookCrackling, s_lookDisplayPos, event, camPos, buf, pt);
+                    renderAoeTracker(s_lookAoeTracker, s_lookDisplayPos, event, camPos, buf, pt);
+                }
+                for (SpellSlot slot : s_spellSlots.values()) {
+                    if (slot.circle != null && slot.displayPos != null) {
+                        renderSlot(slot.circle, slot.crackling, slot.displayPos, event, camPos, buf, pt);
+                        renderAoeTracker(slot.aoeTracker, slot.displayPos, event, camPos, buf, pt);
+                    }
                 }
             }
         }
+    }
+
+    private static void renderAoeTracker(@Nullable AoeTrackerEntity aoeTracker, Vec3 pos,
+                                         RenderLevelStageEvent event, Vec3 camPos,
+                                         MultiBufferSource.BufferSource buf, float pt) {
+        if (aoeTracker == null) return;
+        Minecraft mc = Minecraft.getInstance();
+        event.getPoseStack().pushPose();
+        event.getPoseStack().translate(pos.x - camPos.x, pos.y - camPos.y, pos.z - camPos.z);
+        float sc = aoeTracker.getAoeScale();
+        event.getPoseStack().scale(sc, sc, sc);
+        @SuppressWarnings("unchecked")
+        EntityRenderer<AoeTrackerEntity> renderer =
+            (EntityRenderer<AoeTrackerEntity>) mc.getEntityRenderDispatcher().getRenderer(aoeTracker);
+        renderer.render(aoeTracker, 0f, pt, event.getPoseStack(), buf, LightTexture.FULL_BRIGHT);
+        event.getPoseStack().popPose();
+        buf.endBatch(ModRenderTypes.entityTranslucentNoCullNoShade(TEXTURE));
     }
 
     private static void renderSlot(TargetCircleEntity circle, @Nullable EnergyCracklingEntity crackling,
@@ -270,6 +337,7 @@ public final class TargetCircleManager {
         s_lookCrackling = null;
         s_lookDisplayPos = null;
         s_lookLastNanos = 0;
+        s_lookAoeTracker = null;
     }
 
     /** Remove entity from team only if no other active slot (excluding skipSpellId) still references it. */

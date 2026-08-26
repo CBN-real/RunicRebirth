@@ -3,10 +3,12 @@ package com.github.runicrebirth.entities.spells;
 import com.github.runicrebirth.RunicRebirth;
 import com.github.runicrebirth.api.spells.SpellParams;
 import com.github.runicrebirth.blocks.entity.InfusionAltarBlockEntity;
+import com.github.runicrebirth.blocks.entity.MeditationCushionBlockEntity;
 import com.github.runicrebirth.blocks.entity.OculusControllerBlockEntity;
 import com.github.runicrebirth.blocks.entity.OculusPortalBlockEntity;
 import com.github.runicrebirth.blocks.entity.RunicAnvilBlockEntity;
 import com.github.runicrebirth.blocks.multiblock.DimensionalOculusValidator;
+import com.github.runicrebirth.blocks.multiblock.EarthVeinValidator;
 import com.github.runicrebirth.init.ModBlocks;
 import com.github.runicrebirth.init.ModEntities;
 import com.github.runicrebirth.init.ModItems;
@@ -106,6 +108,24 @@ public class InfusionCircleEntity extends AbstractInstantSpellEntity {
                     didSomething = true;
                 } else {
                     RunicRebirth.LOGGER.info("[Infusion] Dimensional Oculus incomplete at {}", pos);
+                }
+                break;
+            }
+        }
+
+        // Check for meditation_cushion (EarthVein multiblock)
+        for (BlockPos checkPos : BlockPos.betweenClosed(
+                centerBlock.offset(-4, -2, -4),
+                centerBlock.offset(4, 2, 4))) {
+            BlockState bs = server.getBlockState(checkPos);
+            if (bs.is(ModBlocks.MEDITATION_CUSHION.get())) {
+                var be = server.getBlockEntity(checkPos);
+                if (be instanceof MeditationCushionBlockEntity cushionBE && !cushionBE.isActive()) {
+                    if (EarthVeinValidator.validate(server, checkPos)) {
+                        cushionBE.setActive(true);
+                        RunicRebirth.LOGGER.info("[Infusion] EarthVein activated at {}", checkPos);
+                        didSomething = true;
+                    }
                 }
                 break;
             }

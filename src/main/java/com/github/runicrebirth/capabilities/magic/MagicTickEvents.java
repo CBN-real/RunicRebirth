@@ -129,16 +129,85 @@ public final class MagicTickEvents {
 
         if (data.consumePhantomMiningExpired()) {
             PhantomMiningSyncS2CPacket.sendTo(player, 0);
-            data.startCooldown(RingOfPhantomMiningItem.COOLDOWN_ID, RingOfPhantomMiningItem.COOLDOWN_TICKS);
         } else if (data.phantomMiningTicks() > 0 && player.tickCount % 20 == 0) {
             PhantomMiningSyncS2CPacket.sendTo(player, data.phantomMiningTicks());
         }
 
-        // Sync ring durations (thruster + hover) to client for overlay display
+        boolean whirlwindActive = data.isWhirlwindActive();
+        boolean waveThisTick = data.tickWhirlwind();
+        if (whirlwindActive && player.tickCount % 2 == 0) {
+            spawnWhirlwindAmbient(player);
+        }
+        if (waveThisTick) {
+            fireWhirlwindWave(player, data.whirlwindDamage());
+        }
+
+        // Sync ring durations (thruster + hover + phantom mining) to client for overlay display
         Map<ResourceLocation, Integer> ringDurations = new HashMap<>();
         ringDurations.put(ThrusterRingItem.DURATION_KEY, data.thrusterActiveTicks());
         ringDurations.put(HoverRingItem.DURATION_KEY, data.isGlidingActive() ? -1 : 0);
+        ringDurations.put(RingOfPhantomMiningItem.DURATION_KEY, data.phantomMiningTicks());
         RingDurationSyncS2CPacket.sendTo(player, ringDurations);
+    }
+
+    private static void spawnWhirlwindAmbient(ServerPlayer player) {
+        ServerLevel level = player.serverLevel();
+        Vec3 center = player.position().add(0, 1.0, 0);
+        ScaledParticleOption wind = new ScaledParticleOption(ModParticles.WIND_ELEMENT.get(), 1.5f);
+        double baseAngle = player.tickCount * 0.25;
+        for (int i = 0; i < 3; i++) {
+            double angle = baseAngle + (2.0 * Math.PI * i / 3.0);
+            double r = 1.2 + (i * 0.4);
+            double px = center.x + Math.cos(angle) * r;
+            double pz = center.z + Math.sin(angle) * r;
+            double py = center.y + (i * 0.3 - 0.3);
+            level.sendParticles(wind, px, py, pz, 0,
+                -Math.sin(angle) * 0.25, 0.04, Math.cos(angle) * 0.25, 1.0);
+        }
+    }
+
+    private static void spawnWhirlwindRadialRing(ServerPlayer player) {
+        ServerLevel level = player.serverLevel();
+        Vec3 center = player.position().add(0, 1.0, 0);
+        ScaledParticleOption wind = new ScaledParticleOption(ModParticles.WIND_ELEMENT.get(), 3.5f);
+        int points = 16;
+        for (int i = 0; i < points; i++) {
+            double angle = (2.0 * Math.PI * i) / points;
+            double cos = Math.cos(angle);
+            double sin = Math.sin(angle);
+            level.sendParticles(wind,
+                center.x + cos * 0.5, center.y, center.z + sin * 0.5,
+                0, cos * 0.45, 0.0, sin * 0.45, 1.0);
+        }
+    }
+
+    private static void fireWhirlwindWave(ServerPlayer player, float damage) {
+        spawnWhirlwindRadialRing(player);
+        ServerLevel level = player.serverLevel();
+        Vec3 center = player.position().add(0, 1, 0);
+        double radius = 3.0;
+        AABB box = new AABB(
+            center.x - radius, center.y - radius, center.z - radius,
+            center.x + radius, center.y + radius, center.z + radius);
+
+        for (net.minecraft.world.entity.LivingEntity target :
+                level.getEntitiesOfClass(net.minecraft.world.entity.LivingEntity.class, box,
+                e -> e != player && e.isAlive() && e.distanceTo(player) <= radius)) {
+            Vec3 knockDir = target.position().subtract(center).normalize();
+            target.knockback(1.5f, -knockDir.x, -knockDir.z);
+            com.github.runicrebirth.damage.SpellDamageSource src =
+                com.github.runicrebirth.damage.SpellDamageSource.source(
+                    player,
+                    com.github.runicrebirth.api.spells.MagicDamageType.BLUNT,
+                    com.github.runicrebirth.init.ModElements.WIND.get());
+            com.github.runicrebirth.damage.DamageSources.applyDamage(target, damage, src);
+
+            ScaledParticleOption wind =
+                new ScaledParticleOption(ModParticles.WIND_ELEMENT.get(), 1.5f);
+            level.sendParticles(wind,
+                target.getX(), target.getY() + 1, target.getZ(),
+                8, knockDir.x * 0.5, 0.3, knockDir.z * 0.5, 0.05);
+        }
     }
 
     @SubscribeEvent

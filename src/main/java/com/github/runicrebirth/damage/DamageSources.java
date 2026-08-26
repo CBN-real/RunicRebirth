@@ -75,7 +75,10 @@ public final class DamageSources {
                 target.igniteForTicks(sds.fireTicks());
             }
             if (sds.element() != null) {
-                sds.element().applyStatusEffects(target);
+                if (target.level() instanceof net.minecraft.server.level.ServerLevel sl) {
+                    LivingEntity caster = attacker instanceof LivingEntity la ? la : null;
+                    sds.element().onHitEntity(dealt, sds.magicDamageType(), caster, target, sl);
+                }
             }
         }
     }

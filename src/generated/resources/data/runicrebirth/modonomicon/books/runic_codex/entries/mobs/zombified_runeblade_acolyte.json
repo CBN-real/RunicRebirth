@@ -1,0 +1,42 @@
+{
+  "background_u_index": 0,
+  "background_v_index": 0,
+  "category": "mobs",
+  "description": "book.runicrebirth.runic_codex.mobs.zombified_runeblade_acolyte.description",
+  "hide_while_locked": false,
+  "icon": {
+    "item": "minecraft:bone"
+  },
+  "name": "book.runicrebirth.runic_codex.mobs.zombified_runeblade_acolyte.name",
+  "pages": [
+    {
+      "type": "modonomicon:text",
+      "anchor": "",
+      "condition": {
+        "type": "modonomicon:none"
+      },
+      "show_title_separator": true,
+      "text": "book.runicrebirth.runic_codex.mobs.zombified_runeblade_acolyte.info.text",
+      "title": "book.runicrebirth.runic_codex.mobs.zombified_runeblade_acolyte.info.title",
+      "use_markdown_in_title": false
+    },
+    {
+      "type": "modonomicon:entity",
+      "anchor": "",
+      "condition": {
+        "type": "modonomicon:none"
+      },
+      "default_rotation": -20.0,
+      "entity_id": "runicrebirth:zombified_runeblade_acolyte",
+      "name": "",
+      "offset": 0.0,
+      "rotate": true,
+      "scale": 1.0,
+      "text": ""
+    }
+  ],
+  "show_when_any_parent_unlocked": false,
+  "sort_number": 1,
+  "x": 1,
+  "y": -1
+}

@@ -25,6 +25,7 @@ import com.github.runicrebirth.init.ModSounds;
 import com.github.runicrebirth.init.ModSpellTypes;
 import com.github.runicrebirth.compat.modonomicon.ModonomiconCompat;
 import com.github.runicrebirth.network.ModPackets;
+import com.github.runicrebirth.rune.RuneTypeRegistry;
 import com.mojang.logging.LogUtils;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
@@ -79,6 +80,7 @@ public class RunicRebirth {
         LOGGER.info("[RunicRebirth] Common setup");
         event.enqueueWork(ModShapes::init);
         event.enqueueWork(ModonomiconCompat::registerPageLoaders);
+        event.enqueueWork(RuneTypeRegistry::init);
     }
 
 }

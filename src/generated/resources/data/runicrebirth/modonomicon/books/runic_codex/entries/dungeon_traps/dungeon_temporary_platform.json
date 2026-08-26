@@ -1,0 +1,30 @@
+{
+  "background_u_index": 0,
+  "background_v_index": 0,
+  "category": "dungeon_traps",
+  "description": "book.runicrebirth.runic_codex.dungeon_traps.dungeon_temporary_platform.description",
+  "hide_while_locked": false,
+  "icon": {
+    "item": "runicrebirth:dungeon_temporary_platform"
+  },
+  "name": "book.runicrebirth.runic_codex.dungeon_traps.dungeon_temporary_platform.name",
+  "pages": [
+    {
+      "type": "modonomicon:spotlight",
+      "anchor": "",
+      "condition": {
+        "type": "modonomicon:none"
+      },
+      "item": {
+        "count": 1,
+        "item": "runicrebirth:dungeon_temporary_platform"
+      },
+      "text": "",
+      "title": "Temporary Platform"
+    }
+  ],
+  "show_when_any_parent_unlocked": false,
+  "sort_number": 3,
+  "x": 1,
+  "y": -1
+}

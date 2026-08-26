@@ -27,16 +27,16 @@ public class MagicBinding extends SpellType {
     @Override public int cooldownTicks() { return 160; }
     @Override public float baseDamage() { return 6f; }
     @Override public float baseSize() { return 1f; }
+    @Override public float baseRange() {return 10;}
 
-    @Override public String iconName() { return "binding"; }
+  @Override public String iconName() { return "binding"; }
     @Override public Element defaultElement() { return ModElements.ARCANE.get(); }
     @Override public MagicDamageType damageCategory() { return MagicDamageType.SPIRIT; }
 
     @Override
     public CastResult onCast(SpellCastContext ctx, SpellParams params) {
-        double range = 24.0;
         Vec3 start = ctx.aimStart();
-        Vec3 end = start.add(ctx.aimDirection().normalize().scale(range));
+        Vec3 end = start.add(ctx.aimDirection().normalize().scale(baseRange()));
         HitResult hit = RaycastBuilder.begin(ctx.level(), ctx.caster())
             .start(start).end(end)
             .checkForBlocks(true)

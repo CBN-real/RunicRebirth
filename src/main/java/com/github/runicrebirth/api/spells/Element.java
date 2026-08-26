@@ -2,7 +2,9 @@ package com.github.runicrebirth.api.spells;
 
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
+import org.jetbrains.annotations.Nullable;
 
 public interface Element {
     ResourceLocation id();
@@ -20,5 +22,15 @@ public interface Element {
 
     default float bonusDamage(MagicDamageType damageType) { return 0f; }
 
+    /** Called before a spell is cast to allow element to mutate {@link SpellParams}. */
+    default void modifyParams(SpellParams params) {}
+
+    /** Called server-side after spell damage is dealt to the target. */
+    default void onHitEntity(float dealt, MagicDamageType damageType,
+                             @Nullable LivingEntity caster,
+                             LivingEntity target, ServerLevel level) {}
+
+    /** @deprecated use {@link #onHitEntity} instead */
+    @Deprecated
     default void applyStatusEffects(LivingEntity target) {}
 }

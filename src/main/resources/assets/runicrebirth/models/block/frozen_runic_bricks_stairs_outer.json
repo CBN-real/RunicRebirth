@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/outer_stairs",
+  "textures": {
+    "bottom": "runicrebirth:block/frozen_runic_bricks",
+    "top": "runicrebirth:block/frozen_runic_bricks",
+    "side": "runicrebirth:block/frozen_runic_bricks"
+  }
+}

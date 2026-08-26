@@ -2,14 +2,19 @@ package com.github.runicrebirth.init;
 
 import com.github.runicrebirth.RunicRebirth;
 import com.github.runicrebirth.api.spells.WandStacksData;
+import com.github.runicrebirth.rune.EnhancementRuneData;
 import com.mojang.serialization.Codec;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.component.ItemContainerContents;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
+
+import java.util.List;
 
 public final class ModDataComponents {
 
@@ -47,6 +52,19 @@ public final class ModDataComponents {
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<ItemContainerContents>> KEY_RING_INVENTORY =
         COMPONENTS.registerComponentType("key_ring_inventory",
             b -> b.persistent(ItemContainerContents.CODEC).networkSynchronized(ItemContainerContents.STREAM_CODEC));
+
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<BlockPos>> CONFIGURATOR_TRACKER_POS =
+        COMPONENTS.registerComponentType("configurator_tracker_pos",
+            b -> b.persistent(BlockPos.CODEC).networkSynchronized(BlockPos.STREAM_CODEC));
+
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<List<EnhancementRuneData>>> ENHANCEMENT_RUNES =
+        COMPONENTS.registerComponentType("enhancement_runes",
+            b -> b.persistent(EnhancementRuneData.CODEC.listOf())
+                   .networkSynchronized(EnhancementRuneData.LIST_STREAM_CODEC));
+
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<CompoundTag>> RUNE_STATS =
+        COMPONENTS.registerComponentType("rune_stats",
+            b -> b.persistent(CompoundTag.CODEC).networkSynchronized(ByteBufCodecs.COMPOUND_TAG));
 
     private ModDataComponents() {}
 

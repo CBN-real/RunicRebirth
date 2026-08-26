@@ -1,0 +1,41 @@
+{
+  "background_u_index": 0,
+  "background_v_index": 0,
+  "category": "weapons",
+  "description": "book.runicrebirth.runic_codex.weapons.runic_dagger.description",
+  "hide_while_locked": false,
+  "icon": {
+    "item": "runicrebirth:runic_dagger"
+  },
+  "name": "book.runicrebirth.runic_codex.weapons.runic_dagger.name",
+  "pages": [
+    {
+      "type": "modonomicon:spotlight",
+      "anchor": "",
+      "condition": {
+        "type": "modonomicon:none"
+      },
+      "item": {
+        "count": 1,
+        "item": "runicrebirth:runic_dagger"
+      },
+      "text": "",
+      "title": "Runic Dagger"
+    },
+    {
+      "type": "modonomicon:crafting_recipe",
+      "anchor": "",
+      "condition": {
+        "type": "modonomicon:none"
+      },
+      "recipe_id_1": "runicrebirth:runic_dagger",
+      "text": "",
+      "title1": "",
+      "title2": ""
+    }
+  ],
+  "show_when_any_parent_unlocked": false,
+  "sort_number": 1,
+  "x": 1,
+  "y": -1
+}

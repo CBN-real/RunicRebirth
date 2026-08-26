@@ -34,6 +34,7 @@ public class MagicBallistaEntity extends AbstractProjectileSpellEntity {
     private Entity pinnedEntity;
     private Vec3 pinPosition;
 
+
     public MagicBallistaEntity(EntityType<? extends MagicBallistaEntity> type, Level level) {
         super(type, level);
         this.damageCategory = MagicDamageType.SHARP;
@@ -48,6 +49,7 @@ public class MagicBallistaEntity extends AbstractProjectileSpellEntity {
         this.damageCategory = MagicDamageType.SHARP;
         this.chargeTicks = CHARGE_TICKS;
         this.endTicks = PIN_TICKS;
+        this.impact_radius = impact_radius * params.size;
     }
 
     @Override
@@ -94,11 +96,11 @@ public class MagicBallistaEntity extends AbstractProjectileSpellEntity {
         this.level().addParticle(element().particle(), pos.x, pos.y, pos.z, 0.0, 0.0, 0.0);
     }
 
-    private static final float IMPACT_RADIUS = 4.0f;
+    private float impact_radius = 4.0f;
 
     private void applyImpact(ServerLevel server, Vec3 center, Entity directTarget) {
         Entity owner = this.getOwner();
-        for (LivingEntity nearby : Utils.entitiesInRange(server, center, IMPACT_RADIUS, this)) {
+        for (LivingEntity nearby : Utils.entitiesInRange(server, center, impact_radius, this)) {
             if (nearby == directTarget) continue;
             if (owner instanceof LivingEntity living) {
                 SpellDamageSource source = SpellDamageSource.source(this, living, damageCategory, element())
@@ -108,7 +110,7 @@ public class MagicBallistaEntity extends AbstractProjectileSpellEntity {
                 nearby.hurt(this.damageSources().magic(), damage);
             }
         }
-        ImpactHelper.createImpact(server, center, IMPACT_RADIUS, element(), 1.5f);
+        ImpactHelper.createImpact(server, center, impact_radius, element(), 1.5f);
         ParticleHelper.burstParticleEvent(server, element().particle(), center,
             20, 0.4, 0.4, 0.4, 0.06, 1.0f);
     }

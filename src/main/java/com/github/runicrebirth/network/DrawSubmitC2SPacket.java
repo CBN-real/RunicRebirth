@@ -2,7 +2,9 @@ package com.github.runicrebirth.network;
 
 import com.github.runicrebirth.RunicRebirth;
 import com.github.runicrebirth.advancement.SpellAdvancementHelper;
+import com.github.runicrebirth.advancement.triggers.ModCriteriaTriggers;
 import com.github.runicrebirth.api.events.ShapeRecognizedEvent;
+import com.github.runicrebirth.capabilities.dungeon.DungeonData;
 import com.github.runicrebirth.api.registry.ElementRegistry;
 import com.github.runicrebirth.api.registry.ShapeRegistry;
 import com.github.runicrebirth.api.spells.Element;
@@ -150,6 +152,12 @@ public record DrawSubmitC2SPacket(List<List<StrokePoint>> strokes, ResourceLocat
                         .withStyle(net.minecraft.ChatFormatting.RED), true);
                 player.playNotifySound(ModSounds.CANVAS_FAILED.get(), SoundSource.PLAYERS, 1.0f, 1.0f);
                 return;
+            }
+
+            if (component instanceof SpellType) {
+                DungeonData dungData = DungeonData.of(player);
+                long total = dungData.incrementSpellsDrawn();
+                ModCriteriaTriggers.SPELL_DRAWN.get().trigger(player, total);
             }
 
             Element element = ElementRegistry.get(packet.elementId());

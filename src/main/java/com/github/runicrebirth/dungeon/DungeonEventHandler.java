@@ -91,8 +91,9 @@ public class DungeonEventHandler {
 
         // Announce dungeon entry
         player.displayClientMessage(Component.literal(""), false);
+        String tierName = instance.getTierId().getPath();
         player.displayClientMessage(
-                Component.literal("§6§l═══ " + instance.getDungeonType().getDisplayName()
+                Component.literal("§6§l═══ " + tierName
                         + " — Difficulty " + instance.getDifficulty() + " §6§l═══"), false);
         player.displayClientMessage(
                 Component.literal("§7Time limit: §e" + instance.getRemainingTimeFormatted()), false);

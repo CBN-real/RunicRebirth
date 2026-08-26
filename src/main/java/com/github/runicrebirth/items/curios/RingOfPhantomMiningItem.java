@@ -11,11 +11,8 @@ import net.minecraft.world.item.ItemStack;
 public class RingOfPhantomMiningItem extends MagicItem implements IActivatableRing {
 
     public static final int EFFECT_TICKS = 1200;
-    public static final ResourceLocation COOLDOWN_ID =
-        ResourceLocation.fromNamespaceAndPath(RunicRebirth.MODID, "phantom_mining_ring");
     public static final ResourceLocation DURATION_KEY =
         ResourceLocation.fromNamespaceAndPath(RunicRebirth.MODID, "phantom_mining_ring_duration");
-    public static final int COOLDOWN_TICKS = 600;
 
     public RingOfPhantomMiningItem(Properties properties) {
         super(properties.stacksTo(1));
@@ -24,9 +21,8 @@ public class RingOfPhantomMiningItem extends MagicItem implements IActivatableRi
     @Override
     public void activate(ServerPlayer player, ItemStack stack) {
         MagicData data = MagicData.of(player);
-        if (data.isOnCooldown(COOLDOWN_ID)) return;
-
-        data.setPhantomMiningTicks(EFFECT_TICKS);
-        PhantomMiningSyncS2CPacket.sendTo(player, EFFECT_TICKS);
+        int newTicks = data.phantomMiningTicks() > 0 ? 0 : EFFECT_TICKS;
+        data.setPhantomMiningTicks(newTicks);
+        PhantomMiningSyncS2CPacket.sendTo(player, newTicks);
     }
 }

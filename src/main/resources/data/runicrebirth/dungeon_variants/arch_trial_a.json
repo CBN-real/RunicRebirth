@@ -1,0 +1,19 @@
+{
+  "tier": "runicrebirth:arch",
+  "room_count": 10,
+  "entry_rooms": [
+    {"template": "runicrebirth:rooms/arch/entry_a", "weight": 1}
+  ],
+  "boss_rooms": [
+    {"template": "runicrebirth:rooms/arch/boss_a", "weight": 1}
+  ],
+  "inner_sanctum_rooms": [
+    {"template": "runicrebirth:rooms/arch/sanctum_a", "weight": 1}
+  ],
+  "combat_rooms": [
+    {"template": "runicrebirth:rooms/arch/combat_a", "weight": 3}
+  ],
+  "hallways": [
+    {"template": "runicrebirth:rooms/arch/hallway_a", "weight": 2}
+  ]
+}

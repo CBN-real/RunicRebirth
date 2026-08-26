@@ -22,6 +22,22 @@ public final class ModKeyMappings {
         CATEGORY
     );
 
+    public static final KeyMapping ACTIVATE_WEAPON_ABILITY = new KeyMapping(
+        "key.runicrebirth.activate_weapon_ability",
+        KeyConflictContext.IN_GAME,
+        InputConstants.Type.KEYSYM,
+        GLFW.GLFW_KEY_R,
+        CATEGORY
+    );
+
+    public static final KeyMapping TOGGLE_TARGET_CIRCLE = new KeyMapping(
+        "key.runicrebirth.toggle_target_circle",
+        KeyConflictContext.IN_GAME,
+        InputConstants.Type.KEYSYM,
+        GLFW.GLFW_KEY_UNKNOWN,
+        CATEGORY
+    );
+
     // Index 0=thumb, 1=index, 2=middle, 3=ring, 4=pinkie
     public static final KeyMapping[] ACTIVATE_SPELL_RINGS = {
         new KeyMapping("key.runicrebirth.activate_thumb_ring", KeyConflictContext.IN_GAME,
@@ -40,6 +56,8 @@ public final class ModKeyMappings {
 
     public static void register(RegisterKeyMappingsEvent event) {
         event.register(SWITCH_SPELL_STACK);
+        event.register(ACTIVATE_WEAPON_ABILITY);
+        event.register(TOGGLE_TARGET_CIRCLE);
         for (KeyMapping ring : ACTIVATE_SPELL_RINGS) {
             event.register(ring);
         }

@@ -1,5 +1,7 @@
 package com.github.runicrebirth.items;
 
+import com.github.runicrebirth.advancement.ModifierKillTracker;
+import com.github.runicrebirth.advancement.triggers.ModCriteriaTriggers;
 import com.github.runicrebirth.api.registry.ElementRegistry;
 import com.github.runicrebirth.api.registry.ModifierRegistry;
 import com.github.runicrebirth.api.registry.SpellTypeRegistry;
@@ -10,6 +12,7 @@ import com.github.runicrebirth.api.spells.SpellParams;
 import com.github.runicrebirth.api.spells.SpellStack;
 import com.github.runicrebirth.api.spells.SpellType;
 import com.github.runicrebirth.api.spells.WandStacksData;
+import com.github.runicrebirth.capabilities.dungeon.DungeonData;
 import com.github.runicrebirth.capabilities.magic.MagicData;
 import com.github.runicrebirth.config.ServerConfig;
 import com.github.runicrebirth.entities.spells.AbstractCircleEntity;
@@ -18,6 +21,8 @@ import com.github.runicrebirth.magic.stack.SpellResolver;
 import com.github.runicrebirth.network.CastAnimBroadcastS2CPacket;
 import com.github.runicrebirth.network.StackChangedS2CPacket;
 import com.github.runicrebirth.spells.types.Infusion;
+import com.github.runicrebirth.rune.RuneEffectApplicator;
+import com.github.runicrebirth.unlock.UnlockBonusCalculator;
 import com.github.runicrebirth.util.RaycastBuilder;
 import com.github.runicrebirth.util.RaycastTarget;
 import net.minecraft.ChatFormatting;
@@ -141,6 +146,67 @@ public abstract class SpellWriter extends MagicItem {
         return charges != null ? charges : 1;
     }
 
+    public static SpellType resolveActiveType(ItemStack stack) {
+        WandStacksData data = getStacks(stack);
+        if (data.stacks().isEmpty()) return null;
+        WandStacksData.StackEntry entry = data.stacks().get(data.activeIndex());
+        if (entry.chargeCount() > 0 && entry.chargedSpellId() != null) {
+            return SpellTypeRegistry.get(entry.chargedSpellId());
+        }
+        return resolveActiveStack(stack).resolveType();
+    }
+
+    public static float resolveActiveAoeRadius(ItemStack stack) {
+        WandStacksData data = getStacks(stack);
+        if (data.stacks().isEmpty()) return 0f;
+        WandStacksData.StackEntry entry = data.stacks().get(data.activeIndex());
+        if (entry.chargeCount() > 0 && entry.chargedSpellId() != null) {
+            SpellType type = SpellTypeRegistry.get(entry.chargedSpellId());
+            if (type != null && type.baseAoeRadius() > 0) {
+                SpellStack ss = fromEntry(entry);
+                SpellParams p = new SpellParams(type.baseDamage(), type.baseSize(), type.spellHeight(),
+                    type.baseSpeed(), type.baseDuration(), type.castingDelayTicks(), 0,
+                    type.defaultElement(), type.damageCategory());
+                ss.compose(p);
+                return type.baseAoeRadius() * p.size;
+            }
+            return 0f;
+        }
+        SpellStack ss = resolveActiveStack(stack);
+        SpellType type = ss.resolveType();
+        if (type == null || type.baseAoeRadius() <= 0) return 0f;
+        SpellParams p = new SpellParams(type.baseDamage(), type.baseSize(), type.spellHeight(),
+            type.baseSpeed(), type.baseDuration(), type.castingDelayTicks(), 0,
+            type.defaultElement(), type.damageCategory());
+        ss.compose(p);
+        return type.baseAoeRadius() * p.size;
+    }
+
+    public static float resolveActiveRange(ItemStack stack) {
+        WandStacksData data = getStacks(stack);
+        if (data.stacks().isEmpty()) return 32.0f;
+        WandStacksData.StackEntry entry = data.stacks().get(data.activeIndex());
+        if (entry.chargeCount() > 0 && entry.chargedSpellId() != null) {
+            SpellType type = SpellTypeRegistry.get(entry.chargedSpellId());
+            if (type != null) {
+                SpellStack ss = fromEntry(entry);
+                SpellParams p = new SpellParams(type.baseDamage(), type.baseSize(), type.spellHeight(),
+                    type.baseSpeed(), type.baseDuration(), type.castingDelayTicks(), 0,
+                    type.defaultElement(), type.damageCategory());
+                ss.compose(p);
+                return type.baseRange() * p.rangeMultiplier;
+            }
+        }
+        SpellStack ss = resolveActiveStack(stack);
+        SpellType type = ss.resolveType();
+        if (type == null) return 32.0f;
+        SpellParams p = new SpellParams(type.baseDamage(), type.baseSize(), type.spellHeight(),
+            type.baseSpeed(), type.baseDuration(), type.castingDelayTicks(), 0,
+            type.defaultElement(), type.damageCategory());
+        ss.compose(p);
+        return type.baseRange() * p.rangeMultiplier;
+    }
+
     @Override
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
         int modSlots = getMaxModifierSlots(stack);
@@ -196,13 +262,23 @@ public abstract class SpellWriter extends MagicItem {
                 StackChangedS2CPacket.sendTo(serverPlayer);
                 return InteractionResultHolder.pass(stack);
             }
+            if (!chargedType.bypassesRangeCheck() && isTargetOutOfRange(serverPlayer, chargedParams, eye, dir)) return InteractionResultHolder.pass(stack);
             for (SpellComponent c : chargedStack.components()) {
                 if (c instanceof SpellModifier) chargedParams.modifierIds.add(c.id().getPath());
             }
+            UnlockBonusCalculator.applySpellBonuses(serverPlayer, chargedParams);
+            RuneEffectApplicator.applyRuneEffectsToParams(stack, chargedParams);
             spawnCircle(serverPlayer, chargedType, chargedParams, eye, dir, xRot, yRot, stack, 1 + chargedParams.extraCasts);
             int chargeCooldown = chargedParams.cooldownOverrideTicks >= 0
                 ? chargedParams.cooldownOverrideTicks : chargedType.cooldownTicks();
+            chargeCooldown = Math.max(20, (int)(chargeCooldown * UnlockBonusCalculator.getSpellCooldownMultiplier(serverPlayer) * chargedParams.cooldownReductionFactor));
             data.startCooldown(chargedType.id(), chargeCooldown);
+            {
+                DungeonData dungData = DungeonData.of(serverPlayer);
+                long totalCasts = dungData.incrementSpellsCast();
+                ModCriteriaTriggers.SPELL_CAST.get().trigger(serverPlayer, totalCasts);
+                ModifierKillTracker.recordCast(serverPlayer, chargedParams.modifierIds);
+            }
             int newCount = activeEntry.chargeCount() - 1;
             if (newCount <= 0) {
                 if (!activeEntry.inscribed() || !activeEntry.hasPermanentSpellType()) {
@@ -214,7 +290,7 @@ public abstract class SpellWriter extends MagicItem {
                 setStacks(stack, wandData.withStack(activeIdx, activeEntry.withCharges(newCount, activeEntry.chargedSpellId())));
             }
             StackChangedS2CPacket.sendTo(serverPlayer);
-            CastAnimBroadcastS2CPacket.broadcast(serverPlayer, 60);
+            CastAnimBroadcastS2CPacket.broadcast(serverPlayer, 60, hand);
             return InteractionResultHolder.sidedSuccess(stack, false);
         }
 
@@ -228,14 +304,19 @@ public abstract class SpellWriter extends MagicItem {
             SpellParams params = prepared.params();
 
             if (data.isOnCooldown(type.id())) return InteractionResultHolder.pass(stack);
+            if (!type.bypassesRangeCheck() && isTargetOutOfRange(serverPlayer, params, eye, dir)) return InteractionResultHolder.pass(stack);
 
             for (SpellComponent c : active.components()) {
                 if (c instanceof SpellModifier) params.modifierIds.add(c.id().getPath());
             }
 
+            if (params.element != null) params.element.modifyParams(params);
+            UnlockBonusCalculator.applySpellBonuses(serverPlayer, params);
+            RuneEffectApplicator.applyRuneEffectsToParams(stack, params);
+
             int initialCharges = getInitialCharges(stack);
-            boolean useChargeMode = params.useCharges || initialCharges > 1;
-            int totalCharges = initialCharges * params.chargesMultiplier;
+            boolean useChargeMode = params.useCharges || initialCharges > 1 || params.chargesBonus > 0;
+            int totalCharges = initialCharges * params.chargesMultiplier + params.chargesBonus;
             int simultaneousCasts = 1 + params.extraCasts;
 
             if (useChargeMode && totalCharges > 1) {
@@ -253,19 +334,34 @@ public abstract class SpellWriter extends MagicItem {
             }
 
             int cooldown = params.cooldownOverrideTicks >= 0 ? params.cooldownOverrideTicks : type.cooldownTicks();
+            cooldown = Math.max(20, (int)(cooldown * UnlockBonusCalculator.getSpellCooldownMultiplier(serverPlayer) * params.cooldownReductionFactor));
             data.startCooldown(type.id(), cooldown);
+
+            DungeonData dungData = DungeonData.of(serverPlayer);
+            long totalCasts = dungData.incrementSpellsCast();
+            ModCriteriaTriggers.SPELL_CAST.get().trigger(serverPlayer, totalCasts);
+            ModifierKillTracker.recordCast(serverPlayer, params.modifierIds);
+
             StackChangedS2CPacket.sendTo(serverPlayer);
-            CastAnimBroadcastS2CPacket.broadcast(serverPlayer, 60);
+            CastAnimBroadcastS2CPacket.broadcast(serverPlayer, 60, hand);
             return InteractionResultHolder.sidedSuccess(stack, false);
         }
 
         return InteractionResultHolder.pass(stack);
     }
 
+    private static boolean isTargetOutOfRange(ServerPlayer player, SpellParams params, Vec3 eye, Vec3 dir) {
+        Vec3 farEnd = eye.add(dir.normalize().scale(64.0));
+        HitResult farHit = RaycastBuilder.begin(player.level(), player)
+            .start(eye).end(farEnd).checkForBlocks(true).inflate(3.0f).cast();
+        if (farHit.getType() == HitResult.Type.MISS) return false;
+        return farHit.getLocation().distanceTo(eye) > params.range;
+    }
+
     private void spawnCircle(ServerPlayer player, SpellType type, SpellParams params,
                              Vec3 eye, Vec3 dir, float xRot, float yRot, ItemStack wandItem,
                              int totalCasts) {
-        double range = 64.0 * params.rangeMultiplier;
+        double range = params.range;
         Vec3 end = eye.add(dir.normalize().scale(range));
         HitResult hit = RaycastBuilder.begin(player.level(), player)
             .start(eye).end(end)
@@ -297,7 +393,7 @@ public abstract class SpellWriter extends MagicItem {
     private void spawnSingleCircle(ServerPlayer player, SpellType type, SpellParams params,
                                    Vec3 eye, Vec3 dir, float xRot, float yRot, ItemStack wandItem,
                                    int extraDelayTicks, RaycastTarget target, float lateralOffset) {
-        Vec3 circlePos = eye.add(dir.scale(1.0));
+        Vec3 circlePos = eye.add(dir.scale(1.0f + params.size / 2.0f));
 
         if (lateralOffset != 0f) {
             Vec3 up = new Vec3(0, 1, 0);
@@ -339,7 +435,7 @@ public abstract class SpellWriter extends MagicItem {
         AbstractCircleEntity circle = type.buildCircle(
             player.level(), player, params, aimDir, wandItem,
             1, totalDelay, aimXRot, aimYRot, target);
-        circle.setPos(circlePos.x, circlePos.y - 0.5, circlePos.z);
+        circle.setPos(circlePos.x, circlePos.y, circlePos.z);
         circle.setYRot(aimYRot);
         circle.setXRot(aimXRot);
 

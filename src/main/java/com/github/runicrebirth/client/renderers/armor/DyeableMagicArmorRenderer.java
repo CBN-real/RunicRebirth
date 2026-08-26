@@ -22,7 +22,7 @@ public class DyeableMagicArmorRenderer<T extends MagicArmorItem> extends Dyeable
 
     @Override
     protected boolean isBoneDyeable(GeoBone bone) {
-        return bone.getName().startsWith("dye");
+        return bone.getName().startsWith("dye_");
     }
 
     @NotNull

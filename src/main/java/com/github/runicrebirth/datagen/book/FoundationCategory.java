@@ -77,12 +77,7 @@ public class FoundationCategory extends CategoryProvider {
                 .withText(this.context().pageText()));
             this.pageTitle("Welcome");
             this.pageText(
-                "Welcome to the **Runic Codex**, your guide to the arcane arts of Runic Rebirth.\\n\\n"
-                + "Within these pages you will find knowledge of every spell, modifier, and technique "
-                + "available to a practitioner of the runic arts.\\n\\n"
-                + "Begin by studying the basic spells in the **Spells** category. "
-                + "As you grow in power, return here to unlock the paths of "
-                + "**Adept Ascension** and **Arch Ascension**."
+                "Zelose was here"
             );
 
             this.page("systems", () -> BookTextPageModel.create()
@@ -90,12 +85,7 @@ public class FoundationCategory extends CategoryProvider {
                 .withText(this.context().pageText()));
             this.pageTitle("How Magic Works");
             this.pageText(
-                "To cast a spell, equip a **wand** and use it to open the **Drawing Canvas**.\\n\\n"
-                + "On the canvas, select a **tier** to reveal available spell shapes and modifiers. "
-                + "Draw the shape of the spell you wish to cast. "
-                + "Select an **element** to imbue your spell with elemental power.\\n\\n"
-                + "Each element grants unique effects: **Fire** ignites, **Ice** slows, "
-                + "**Earth** empowers blunt force, **Wind** sharpens, and **Arcane** fuels spirit magic."
+                "Hi"
             );
         }
 

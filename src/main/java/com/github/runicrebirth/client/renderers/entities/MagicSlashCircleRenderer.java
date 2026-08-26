@@ -3,6 +3,7 @@ package com.github.runicrebirth.client.renderers.entities;
 import com.github.runicrebirth.client.renderers.models.MagicSlashCircleGeoModel;
 import com.github.runicrebirth.entities.spells.MagicSlashCircleEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -12,6 +13,7 @@ import net.minecraft.util.Mth;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.Nullable;
+import software.bernie.geckolib.cache.object.BakedGeoModel;
 
 @OnlyIn(Dist.CLIENT)
 public class MagicSlashCircleRenderer extends AbstractSpellRenderer<MagicSlashCircleEntity> {
@@ -33,5 +35,15 @@ public class MagicSlashCircleRenderer extends AbstractSpellRenderer<MagicSlashCi
         float xRot = Mth.rotLerp(partialTick, entity.xRotO, entity.getXRot());
         poseStack.mulPose(Axis.YP.rotationDegrees(180f - yRot));
         poseStack.mulPose(Axis.XP.rotationDegrees(-xRot));
+    }
+
+    @Override
+    public void preRender(PoseStack poseStack, MagicSlashCircleEntity entity, BakedGeoModel model,
+        @Nullable MultiBufferSource bufferSource, @Nullable VertexConsumer buffer, boolean isReRender,
+        float partialTick, int packedLight, int packedOverlay, int colour) {
+      float scale = entity.getCircleScale();
+      poseStack.scale(scale, scale, scale);
+      super.preRender(poseStack, entity, model, bufferSource, buffer, isReRender, partialTick,
+          packedLight, packedOverlay, colour);
     }
 }

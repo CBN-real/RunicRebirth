@@ -31,22 +31,6 @@ public class MagicMeteorRenderer extends AbstractSpellRenderer<MagicMeteorEntity
         return ModRenderTypes.entityTranslucentNoDepth(texture);
     }
 
-    @Override
-    public void preRender(PoseStack poseStack, MagicMeteorEntity entity, BakedGeoModel model,
-        @Nullable MultiBufferSource bufferSource, @Nullable VertexConsumer buffer,
-        boolean isReRender, float partialTick, int packedLight, int packedOverlay,
-        int colour) {
-        Vec3 motion = entity.getDeltaMovement();
-        if (motion.lengthSqr() > 0.001) {
-            float xRot = (float) (Mth.atan2(motion.y, motion.horizontalDistance()) * Mth.RAD_TO_DEG);
-            poseStack.mulPose(Axis.XP.rotationDegrees(xRot));
-        }
-        float scale = entity.getProjectileSize();
-        poseStack.scale(scale, scale, scale);
-        super.preRender(poseStack, entity, model, bufferSource, buffer, isReRender,
-            partialTick, packedLight, packedOverlay, colour);
-    }
-
   @Override
   protected void applyRotations(MagicMeteorEntity entity, PoseStack poseStack, float ageInTicks,
       float rotationYaw, float partialTick, float nativeScale) {

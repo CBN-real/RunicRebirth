@@ -177,11 +177,11 @@ public abstract class AbstractCircleEntity extends Entity implements GeoEntity {
         age++;
         if (age == 1) {
             level().playSound(null, this.getX(), this.getY(), this.getZ(),
-                ModSounds.SPELLS_SPAWN_CIRCLE.get(), SoundSource.PLAYERS, 0.75f, 1.0f);
+                ModSounds.SPELLS_SPAWN_CIRCLE.get(), SoundSource.PLAYERS, 0.5f, 1.0f);
         }
-        if (age == 5) {
-            spawnCrackling((ServerLevel) level());
-        }
+//        if (age == 5) {
+//            //spawnCrackling((ServerLevel) level());
+//        }
         if (age >= lifespan || caster == null || caster.isRemoved() || !caster.isAlive()) {
             beginFinishing();
             return;
@@ -189,10 +189,6 @@ public abstract class AbstractCircleEntity extends Entity implements GeoEntity {
 
         if (ticksUntilNextCast > 0) {
             updateTracking();
-        }
-        if (cracklingEntity != null && !cracklingEntity.isRemoved()) {
-            Vec3 crackleCenter = getCircleCenterCast(spellType.spellHeight());
-            cracklingEntity.setPos(crackleCenter.x, crackleCenter.y, crackleCenter.z);
         }
 
         ticksUntilNextCast--;
@@ -206,13 +202,16 @@ public abstract class AbstractCircleEntity extends Entity implements GeoEntity {
     }
 
     private void spawnCrackling(ServerLevel serverLevel) {
-        float radius = getCircleScale() * 0.15f;
+        float radius = getCircleScale() * 0.1f;
         int color = params.element.displayColor();
-        cracklingEntity = new EnergyCracklingEntity(serverLevel, radius, color, lifespan - 10, 0.5f, 1.0f, 0.15f * getCircleScale());
-        Vec3 center = getCircleCenterCast(spellType.spellHeight());
-        cracklingEntity.setPos(center.x, center.y, center.z);
-        cracklingEntity.attachTo(this);
-        serverLevel.addFreshEntity(cracklingEntity);
+        EnergyCracklingEntity crackling = new EnergyCracklingEntity(serverLevel, radius, color, lifespan, 0.6f, 1.0f, 0.16f * getCircleScale());
+        Vec3 localCenter = new Vec3(0f, getCircleScale() * getCircleHeight() / 2, 0f);
+        float xRad = (float) Math.toRadians(getXRot());
+        float yRad = (float) (Math.toRadians(getYRot()) - Math.PI);
+        Vec3 center = position().add(localCenter.xRot(xRad).yRot(yRad));
+        crackling.setPos(center.x, center.y, center.z);
+        crackling.attachTo(this);
+        serverLevel.addFreshEntity(crackling);
     }
 
     private void beginFinishing() {
@@ -260,8 +259,8 @@ public abstract class AbstractCircleEntity extends Entity implements GeoEntity {
     }
 
     private Vec3 getCircleCenterCast(float spellHeight) {
-        float scale = getCircleScale();
-        Vec3 localCenter = new Vec3(0, scale * spellHeight / 2, 0);
+        float scale = Math.max(1.0f, getCircleScale() * spellHeight);
+        Vec3 localCenter = new Vec3(0, (getCircleHeight() / 2 - spellHeight) * scale / 2, 0);
         float xRad = (float) Math.toRadians(getXRot());
         float yRad = (float) Math.toRadians(-getYRot());
         return position().add(localCenter.xRot(xRad).yRot(yRad));

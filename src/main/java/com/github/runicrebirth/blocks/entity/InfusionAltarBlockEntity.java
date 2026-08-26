@@ -315,7 +315,7 @@ public class InfusionAltarBlockEntity extends BlockEntity implements GeoBlockEnt
             this.animState = newState;
             if (level != null && (newState == AnimState.ACTIVATING || newState == AnimState.DEACTIVATING)) {
                 level.playSound(null, worldPosition, ModSounds.INFUSION_ALTAR_ACTIVATE.get(),
-                        SoundSource.BLOCKS, 1.25f, 0.9f);
+                        SoundSource.BLOCKS, 0.75f, 0.9f);
             }
             syncToClient();
         }

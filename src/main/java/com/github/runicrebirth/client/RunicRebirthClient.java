@@ -1,14 +1,19 @@
 package com.github.runicrebirth.client;
 
 import com.github.runicrebirth.RunicRebirth;
+import com.github.runicrebirth.client.animations.MeditationAnimLayer;
+import com.github.runicrebirth.client.animations.RunicWeaponAnimLayer;
 import com.github.runicrebirth.client.input.ModKeyMappings;
+import com.github.runicrebirth.client.overlays.FlashOverlay;
 import com.github.runicrebirth.client.overlays.InfusionAltarOverlay;
 import com.github.runicrebirth.client.overlays.RunicAnvilOverlay;
 import com.github.runicrebirth.client.overlays.SpellBladeOverlay;
 import com.github.runicrebirth.client.overlays.SpellRingOverlay;
 import com.github.runicrebirth.client.overlays.SpellStackOverlay;
 import com.github.runicrebirth.client.particles.ArcaneElementParticle;
+import com.github.runicrebirth.client.particles.CriticalHitParticle;
 import com.github.runicrebirth.client.particles.HoverEffectParticle;
+import com.github.runicrebirth.client.particles.ResistedParticle;
 import com.github.runicrebirth.client.particles.ArcaneInkParticle;
 import com.github.runicrebirth.client.particles.ArcaneTinyParticle;
 import com.github.runicrebirth.client.particles.EarthElementParticle;
@@ -23,6 +28,7 @@ import com.github.runicrebirth.client.particles.IceTinyParticle;
 import com.github.runicrebirth.client.particles.WindElementParticle;
 import com.github.runicrebirth.client.particles.WindInkParticle;
 import com.github.runicrebirth.client.particles.WindTinyParticle;
+import com.github.runicrebirth.client.renderers.blocks.AdeptStatueRenderer;
 import com.github.runicrebirth.client.renderers.blocks.AncientArcaneTurretRenderer;
 import com.github.runicrebirth.client.renderers.blocks.DungeonBoulderSpawnerRenderer;
 import com.github.runicrebirth.client.renderers.blocks.DungeonDoorRenderer;
@@ -36,11 +42,16 @@ import com.github.runicrebirth.client.renderers.blocks.RunelightLanternRenderer;
 import com.github.runicrebirth.client.renderers.blocks.RunelightTorchRenderer;
 import com.github.runicrebirth.client.renderers.blocks.InfusionAltarRenderer;
 import com.github.runicrebirth.client.renderers.blocks.RunicAnvilRenderer;
+import com.github.runicrebirth.client.renderers.blocks.RunesteelCacheRenderer;
 import com.github.runicrebirth.client.renderers.blocks.RunesteelPortcullisRenderer;
 import com.github.runicrebirth.client.renderers.blocks.OculusControllerRenderer;
 import com.github.runicrebirth.client.renderers.blocks.OculusPillarRenderer;
 import com.github.runicrebirth.client.renderers.blocks.OculusPortalRenderer;
 import com.github.runicrebirth.client.renderers.blocks.RunesteelPylonRenderer;
+import com.github.runicrebirth.client.renderers.blocks.RunicLeverRenderer;
+import com.github.runicrebirth.client.renderers.blocks.SectBannerRenderer;
+import com.github.runicrebirth.client.renderers.blocks.TatteredSectBannerRenderer;
+import com.github.runicrebirth.client.renderers.blocks.SectBannerVariantRenderer;
 import com.github.runicrebirth.client.renderers.entities.AncientArcaneDroneRenderer;
 import com.github.runicrebirth.client.renderers.entities.DrawingCanvasRenderer;
 import com.github.runicrebirth.client.renderers.entities.RunesteelGolemRenderer;
@@ -49,6 +60,7 @@ import com.github.runicrebirth.client.renderers.entities.SkeletalMageAcolyteRend
 import com.github.runicrebirth.client.renderers.entities.SkeletalWizardAcolyteRenderer;
 import com.github.runicrebirth.client.renderers.entities.ZombifiedArtificerAcolyteRenderer;
 import com.github.runicrebirth.client.renderers.entities.ArcaneTetherRenderer;
+import com.github.runicrebirth.client.renderers.entities.FrozenEffectRenderer;
 import com.github.runicrebirth.client.renderers.entities.EnergyCracklingRenderer;
 import com.github.runicrebirth.client.sounds.EnergyCracklingSoundInstance;
 import com.github.runicrebirth.client.sounds.MagicBindingSoundInstance;
@@ -75,14 +87,19 @@ import com.github.runicrebirth.client.renderers.entities.MagicSlashRenderer;
 import com.github.runicrebirth.client.renderers.entities.AdvancedCircleRenderer;
 import com.github.runicrebirth.client.renderers.entities.BasicCircleRenderer;
 import com.github.runicrebirth.client.renderers.entities.IntermediateCircleRenderer;
+import com.github.runicrebirth.client.DungeonRoomBoundsRenderer;
 import com.github.runicrebirth.client.effects.CameraShakeHandler;
 import com.github.runicrebirth.client.effects.CrackManager;
+import com.github.runicrebirth.client.effects.ShockwaveManager;
 import com.github.runicrebirth.client.effects.TargetCircleManager;
 import com.github.runicrebirth.client.renderers.entities.ArcaneDroneRenderer;
 import com.github.runicrebirth.client.renderers.entities.HammerDroneRenderer;
 import com.github.runicrebirth.client.renderers.entities.MagicHandRenderer;
 import com.github.runicrebirth.client.renderers.entities.PhantomMinerRenderer;
+import com.github.runicrebirth.client.renderers.entities.AoeTrackerRenderer;
 import com.github.runicrebirth.client.renderers.entities.TargetCircleRenderer;
+import com.github.runicrebirth.client.renderers.entities.EarthVeinCircleRenderer;
+import com.github.runicrebirth.client.renderers.entities.EarthVeinRunesRenderer;
 import com.github.runicrebirth.client.screens.RunicKeyRingScreen;
 import com.github.runicrebirth.compat.modonomicon.ModonomiconCompat;
 import com.github.runicrebirth.init.ModBlocks;
@@ -92,6 +109,8 @@ import com.github.runicrebirth.init.ModEntities;
 import com.github.runicrebirth.init.ModParticles;
 import com.github.runicrebirth.network.ActivateRingC2SPacket;
 import com.github.runicrebirth.network.SwitchStackC2SPacket;
+import com.github.runicrebirth.network.WeaponAbilityC2SPacket;
+import com.github.runicrebirth.client.renderers.entities.ThrownRunicDaggerRenderer;
 import com.github.runicrebirth.particle.TremorBlockParticle;
 import com.github.runicrebirth.util.MinecraftInstanceHelper;
 import net.minecraft.client.Minecraft;
@@ -122,7 +141,7 @@ import net.minecraft.util.FastColor;
 import net.minecraft.world.item.component.DyedItemColor;
 import net.minecraft.world.phys.Vec3;
 import com.github.runicrebirth.init.ModItems;
-import com.github.runicrebirth.items.armor.AcolyteSetItem;
+import com.github.runicrebirth.items.armor.DyeableAcolyteSetItem;
 
 @Mod(value = RunicRebirth.MODID, dist = Dist.CLIENT)
 @EventBusSubscriber(modid = RunicRebirth.MODID, value = Dist.CLIENT)
@@ -149,7 +168,10 @@ public class RunicRebirthClient {
         NeoForge.EVENT_BUS.addListener(CrackManager::onRenderLevel);
         NeoForge.EVENT_BUS.addListener(TremorBlockParticle::renderAll);
         NeoForge.EVENT_BUS.addListener(TargetCircleManager::onRenderLevelStage);
+        NeoForge.EVENT_BUS.addListener(DungeonRoomBoundsRenderer::onRenderLevelStage);
         event.enqueueWork(() -> {
+            RunicWeaponAnimLayer.register();
+            MeditationAnimLayer.register();
             ModonomiconCompat.registerPageRenderers();
             net.minecraft.client.renderer.ItemBlockRenderTypes.setRenderLayer(
                 ModBlocks.DUNGEON_TEMPORARY_PLATFORM.get(),
@@ -194,6 +216,12 @@ public class RunicRebirthClient {
     }
 
     public void registerEntityRenderers(EntityRenderersEvent.RegisterRenderers event) {
+        event.registerEntityRenderer(ModEntities.SEAT.get(), ctx -> new net.minecraft.client.renderer.entity.EntityRenderer<>(ctx) {
+            @Override
+            public net.minecraft.resources.ResourceLocation getTextureLocation(com.github.runicrebirth.entities.SeatEntity e) {
+                return net.minecraft.resources.ResourceLocation.withDefaultNamespace("textures/misc/enchanted_item_glint.png");
+            }
+        });
         event.registerEntityRenderer(ModEntities.MAGIC_PROJECTILE.get(), MagicProjectileRenderer::new);
         event.registerEntityRenderer(ModEntities.MAGIC_ARROW.get(), MagicArrowRenderer::new);
         event.registerEntityRenderer(ModEntities.MAGIC_SLASH.get(), MagicSlashRenderer::new);
@@ -215,6 +243,11 @@ public class RunicRebirthClient {
         event.registerEntityRenderer(ModEntities.MAGIC_METEOR_DEMO.get(), MagicMeteorDemoRenderer::new);
         event.registerEntityRenderer(ModEntities.MAGIC_BALLISTA_DEMO.get(), MagicBallistaDemoRenderer::new);
         event.registerEntityRenderer(ModEntities.INFUSION_CIRCLE.get(), InfusionCircleRenderer::new);
+        event.registerEntityRenderer(ModEntities.FROZEN_EFFECT.get(), FrozenEffectRenderer::new);
+        event.registerEntityRenderer(ModEntities.EARTH_QUICKSAND.get(),
+            ctx -> new net.minecraft.client.renderer.entity.EntityRenderer<com.github.runicrebirth.entities.spells.EarthQuicksandEntity>(ctx) {
+                @Override public net.minecraft.resources.ResourceLocation getTextureLocation(com.github.runicrebirth.entities.spells.EarthQuicksandEntity e) { return net.minecraft.resources.ResourceLocation.withDefaultNamespace("textures/misc/unknown_pack.png"); }
+            });
         event.registerEntityRenderer(ModEntities.ARCANE_TETHER.get(), ArcaneTetherRenderer::new);
         event.registerEntityRenderer(ModEntities.ENERGY_CRACKLING.get(), EnergyCracklingRenderer::new);
         event.registerEntityRenderer(ModEntities.DRAWING_CANVAS.get(), DrawingCanvasRenderer::new);
@@ -224,12 +257,14 @@ public class RunicRebirthClient {
         event.registerEntityRenderer(ModEntities.ANCIENT_ARCANE_DRONE.get(), AncientArcaneDroneRenderer::new);
         event.registerEntityRenderer(ModEntities.HAMMER_DRONE.get(), HammerDroneRenderer::new);
         event.registerEntityRenderer(ModEntities.TARGET_CIRCLE.get(), TargetCircleRenderer::new);
+        event.registerEntityRenderer(ModEntities.AOE_TRACKER.get(), AoeTrackerRenderer::new);
         event.registerEntityRenderer(ModEntities.RUNESTEEL_GOLEM.get(), RunesteelGolemRenderer::new);
         event.registerEntityRenderer(ModEntities.ZOMBIFIED_RUNEBLADE_ACOLYTE.get(), ZombifiedRunebladeAcolyteRenderer::new);
         event.registerEntityRenderer(ModEntities.SKELETAL_MAGE_ACOLYTE.get(), SkeletalMageAcolyteRenderer::new);
         event.registerEntityRenderer(ModEntities.SKELETAL_WIZARD_ACOLYTE.get(), SkeletalWizardAcolyteRenderer::new);
         event.registerEntityRenderer(ModEntities.ZOMBIFIED_ARTIFICER_ACOLYTE.get(), ZombifiedArtificerAcolyteRenderer::new);
         event.registerEntityRenderer(ModEntities.CRUMBLING_PLATFORM_FALLING.get(), CrumblingPlatformFallingRenderer::new);
+        event.registerEntityRenderer(ModEntities.THROWN_RUNIC_DAGGER.get(), ThrownRunicDaggerRenderer::new);
 
         event.registerBlockEntityRenderer(ModBlockEntities.OCULUS_PORTAL.get(), OculusPortalRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.OCULUS_CONTROLLER.get(), OculusControllerRenderer::new);
@@ -237,7 +272,10 @@ public class RunicRebirthClient {
         event.registerBlockEntityRenderer(ModBlockEntities.RUNESTEEL_PYLON.get(), RunesteelPylonRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.INFUSION_ALTAR.get(), InfusionAltarRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.RUNIC_ANVIL.get(), RunicAnvilRenderer::new);
+        event.registerBlockEntityRenderer(ModBlockEntities.RUNESTEEL_CACHE.get(), RunesteelCacheRenderer::new);
         event.registerEntityRenderer(ModEntities.DUNGEON_BOULDER.get(), DungeonBoulderRenderer::new);
+        event.registerEntityRenderer(ModEntities.EARTH_VEIN_CIRCLE.get(), EarthVeinCircleRenderer::new);
+        event.registerEntityRenderer(ModEntities.EARTH_VEIN_RUNES.get(), EarthVeinRunesRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.DUNGEON_BOULDER_SPAWNER.get(), DungeonBoulderSpawnerRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.ANCIENT_ARCANE_TURRET.get(), AncientArcaneTurretRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.DUNGEON_SWINGING_AXE.get(), DungeonSwingingAxeRenderer::new);
@@ -248,6 +286,11 @@ public class RunicRebirthClient {
         event.registerBlockEntityRenderer(ModBlockEntities.DUNGEON_PRESSURE_PLATE.get(), DungeonPressurePlateRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.CRUMBLING_PLATFORM.get(), CrumblingPlatformRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.DUNGEON_MOB_SPAWNER.get(), DungeonMobSpawnerRenderer::new);
+        event.registerBlockEntityRenderer(ModBlockEntities.RUNIC_LEVER.get(), RunicLeverRenderer::new);
+        event.registerBlockEntityRenderer(ModBlockEntities.SECT_BANNER.get(), SectBannerRenderer::new);
+        event.registerBlockEntityRenderer(ModBlockEntities.TATTERED_SECT_BANNER.get(), TatteredSectBannerRenderer::new);
+        event.registerBlockEntityRenderer(ModBlockEntities.SECT_BANNER_VARIANT.get(), SectBannerVariantRenderer::new);
+        event.registerBlockEntityRenderer(ModBlockEntities.ADEPT_STATUE.get(), AdeptStatueRenderer::new);
     }
 
     public void registerKeyMappings(RegisterKeyMappingsEvent event) {
@@ -272,11 +315,13 @@ public class RunicRebirthClient {
       event.registerSpriteSet(ModParticles.WIND_INK.get(), WindInkParticle.Provider::new);
       event.registerSpecial(ModParticles.TREMOR_BLOCK.get(), new TremorBlockParticle.Provider());
       event.registerSpriteSet(ModParticles.HOVER_EFFECT.get(), HoverEffectParticle.Provider::new);
+      event.registerSpriteSet(ModParticles.CRITICAL_HIT.get(), CriticalHitParticle.Provider::new);
+      event.registerSpriteSet(ModParticles.RESISTED.get(), ResistedParticle.Provider::new);
     }
 
     public void registerItemColors(RegisterColorHandlersEvent.Item event) {
         event.register(
-            (stack, layer) -> layer > 0 ? -1 : DyedItemColor.getOrDefault(stack, AcolyteSetItem.DEFAULT_DYE_COLOR),
+            (stack, layer) -> layer > 0 ? -1 : DyedItemColor.getOrDefault(stack, DyeableAcolyteSetItem.DEFAULT_DYE_COLOR),
             ModItems.ACOLYTE_WIZARD_HAT.get(),
             ModItems.ACOLYTE_ROBES.get(),
             ModItems.ACOLYTE_PANTS.get(),
@@ -316,6 +361,9 @@ public class RunicRebirthClient {
             ResourceLocation.fromNamespaceAndPath(RunicRebirth.MODID, "spell_rings"),
             ResourceLocation.fromNamespaceAndPath(RunicRebirth.MODID, "spell_blade"),
             SpellBladeOverlay.INSTANCE);
+        event.registerAboveAll(
+            ResourceLocation.fromNamespaceAndPath(RunicRebirth.MODID, "impact_flash"),
+            FlashOverlay.INSTANCE);
     }
 
     @SubscribeEvent
@@ -332,6 +380,11 @@ public class RunicRebirthClient {
     }
 
     @SubscribeEvent
+    public static void onClientPlayerRespawn(net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent.Clone event) {
+        CrackManager.clear();
+    }
+
+    @SubscribeEvent
     public static void onEntityJoinLevel(EntityJoinLevelEvent event) {
         if (!event.getLevel().isClientSide()) return;
         if (event.getEntity() instanceof EnergyCracklingEntity crackle) {
@@ -341,9 +394,17 @@ public class RunicRebirthClient {
         }
     }
 
+    private static boolean wasMeditating = false;
+
     @SubscribeEvent
     public static void onClientPlayerTick(PlayerTickEvent.Post event) {
-        if (!(event.getEntity() instanceof net.minecraft.client.player.LocalPlayer)) return;
+        if (!(event.getEntity() instanceof net.minecraft.client.player.LocalPlayer localPlayer)) return;
+        boolean isMeditating = localPlayer.getVehicle() instanceof com.github.runicrebirth.entities.SeatEntity;
+        if (isMeditating != wasMeditating) {
+            if (isMeditating) MeditationAnimLayer.trigger((net.minecraft.client.player.AbstractClientPlayer) localPlayer);
+            else MeditationAnimLayer.stop((net.minecraft.client.player.AbstractClientPlayer) localPlayer);
+            wasMeditating = isMeditating;
+        }
         while (ModKeyMappings.SWITCH_SPELL_STACK.consumeClick()) {
             PacketDistributor.sendToServer(new SwitchStackC2SPacket());
         }
@@ -353,8 +414,16 @@ public class RunicRebirthClient {
                 PacketDistributor.sendToServer(new ActivateRingC2SPacket(_slotIdx));
             }
         }
+        while (ModKeyMappings.ACTIVATE_WEAPON_ABILITY.consumeClick()) {
+            PacketDistributor.sendToServer(new WeaponAbilityC2SPacket());
+        }
+        if (ModKeyMappings.TOGGLE_TARGET_CIRCLE.consumeClick()) {
+            com.github.runicrebirth.client.effects.TargetCircleManager.toggleHidden();
+        }
         ClientMagicData.tickCastAnim();
         CameraShakeHandler.tick();
         CrackManager.tick();
+        FlashOverlay.tick();
+        ShockwaveManager.tick();
     }
 }
