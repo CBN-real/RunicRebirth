@@ -18,7 +18,7 @@ public class DungeonBoulderRenderer extends GeoEntityRenderer<DungeonBoulderEnti
     protected void applyRotations(DungeonBoulderEntity animatable, PoseStack poseStack,
             float ageInTicks, float rotationYaw, float partialTick, float nativeScale) {
         // Apply travel direction yaw directly; skip super to avoid GeckoLib's 180-yRot flip
-        float yaw = animatable.getTravelDirection().get2DDataValue() * 90f;
+        float yaw = 180 - animatable.getTravelDirection().get2DDataValue() * 90f;
         poseStack.mulPose(Axis.YP.rotationDegrees(yaw));
     }
 }

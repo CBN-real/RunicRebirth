@@ -54,9 +54,16 @@ repositories {
         }
     }
     // SmartBrainLib — AI brain system
-    maven {
-        name = 'SmartBrainLib'
-        url = 'https://dl.cloudsmith.io/public/tslat/sbl/maven/'
+    exclusiveContent {
+        forRepository {
+            maven {
+                name = 'SmartBrainLib'
+                url = 'https://dl.cloudsmith.io/public/tslat/sbl/maven/'
+            }
+        }
+        filter {
+            includeGroup('net.tslat.smartbrainlib')
+        }
     }
     // PlayerAnimationLib — player body animations
     maven {

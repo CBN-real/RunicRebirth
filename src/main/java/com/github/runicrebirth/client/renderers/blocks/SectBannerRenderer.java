@@ -35,33 +35,36 @@ public class SectBannerRenderer extends AbstractRunicBlockRenderer<SectBannerBlo
 
     protected float getModelBaseY() { return 0f; }
 
+    // sect_banner geo has fabric at z≈-2, facing north by default
     static void applyBannerPose(PoseStack poseStack, BlockState state, float baseY) {
         AttachFace face = state.getValue(AbstractSectBannerBlock.FACE);
         Direction facing = state.getValue(AbstractSectBannerBlock.FACING);
-        float yDeg = facingToYDeg(facing) + baseY;
 
         poseStack.pushPose();
-        if (face == AttachFace.CEILING) {
-            // Flip upside-down from block top; negate yDeg because local Y axis is inverted after flip
-//            poseStack.translate(0.5, 1.0, 0.5);
-//            poseStack.mulPose(Axis.ZP.rotationDegrees(180));
-//            poseStack.mulPose(Axis.YP.rotationDegrees(-yDeg));
+        poseStack.translate(0.5, 0.0, 0.5);
+
+        if (face == AttachFace.FLOOR) {
+            int rot16 = state.getValue(AbstractSectBannerBlock.ROTATION_16);
+            // rot16=0 when player faces south; banner faces toward player = south = 180° in model space
+            float yDeg = 180f - rot16 * 22.5f + baseY + facingToYDeg(facing);
+            poseStack.mulPose(Axis.YP.rotationDegrees(yDeg));
+        } else if (face == AttachFace.CEILING) {
+            poseStack.mulPose(Axis.YP.rotationDegrees(baseY));
         } else {
-            // FLOOR and WALL: upright, rotate around Y through block horizontal center
-//            poseStack.translate(0.5, 0.0, 0.5);
-//            poseStack.mulPose(Axis.YP.rotationDegrees(yDeg));
-//            poseStack.translate(-0.5, 0.0, -0.5);
+            poseStack.mulPose(Axis.YP.rotationDegrees(baseY));
         }
+
+        poseStack.translate(-0.5, 0.0, -0.5);
     }
 
-    // sect_banner geo has fabric at z≈-2, facing north by default
+    // Returns Y rotation (degrees) so that a model facing north at 0° ends up facing `facing`
     static float facingToYDeg(Direction facing) {
         return switch (facing) {
-            case NORTH -> 180f;
-            case WEST  -> 180f;
+            case NORTH ->   0f;
             case SOUTH -> 180f;
-            case EAST  -> 180f;
-            default    -> 180f;
+            case WEST  ->  -90f;
+            case EAST  -> 90f;
+            default    ->   0f;
         };
     }
 

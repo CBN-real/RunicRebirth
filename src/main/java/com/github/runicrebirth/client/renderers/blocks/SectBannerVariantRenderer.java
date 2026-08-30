@@ -19,7 +19,7 @@ public class SectBannerVariantRenderer extends AbstractRunicBlockRenderer<SectBa
     public void render(SectBannerVariantBlockEntity be, float partialTick, PoseStack poseStack,
                        MultiBufferSource bufferSource, int packedLight, int packedOverlay) {
         SectBannerVariantBlock block = (SectBannerVariantBlock) be.getBlockState().getBlock();
-        float baseY = block.getBannerType() == SectBannerVariantBlock.BannerType.TATTERED ? 180f : 0f;
+        float baseY = 0f;
         SectBannerRenderer.applyBannerPose(poseStack, be.getBlockState(), baseY);
         super.render(be, partialTick, poseStack, bufferSource, packedLight, packedOverlay);
         poseStack.popPose();

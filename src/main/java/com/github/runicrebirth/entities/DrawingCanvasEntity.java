@@ -171,7 +171,7 @@ public class DrawingCanvasEntity extends Entity implements GeoEntity {
                 if (owner instanceof net.minecraft.world.entity.player.Player player) {
                     float fov = (float) net.minecraft.client.Minecraft.getInstance().options.fov().get();
                     double ratio = Math.tan(Math.toRadians(DEFAULT_FOV * 0.5)) / Math.tan(Math.toRadians(fov * 0.5));
-                    float dist = DISTANCE_FROM_EYE * (float) Math.pow(ratio, 0.96);
+                    float dist = DISTANCE_FROM_EYE * (float) Math.pow(ratio, 0.90);
                     snapToOwner(player, dist);
                 }
             }
@@ -248,36 +248,7 @@ public class DrawingCanvasEntity extends Entity implements GeoEntity {
             return PlayState.CONTINUE;
         }));
 
-        AnimationController<DrawingCanvasEntity> sparksController = new AnimationController<>(this, "element_sparks", 0, state -> {
-            if (state.getAnimatable().getPhaseOrdinal() != 1) return PlayState.STOP;
-            state.setAnimation(ELEMENT_SPARKS_LOOP);
-            return PlayState.CONTINUE;
-        });
-        sparksController.setParticleKeyframeHandler(event -> {
-            DrawingCanvasEntity entity = event.getAnimatable();
-            if (!entity.level().isClientSide()) return;
-            String effect = event.getKeyframeData().getEffect();
-            ParticleOptions particle = elementSparkParticle(effect);
-            double[] off = ELEMENT_SPARK_OFFSETS.get(effect);
-            if (particle == null || off == null) return;
-            Vec3 pos = entity.position();
-            float yawRad   = (float) Math.toRadians(180.0 - entity.getYRot());
-            float pitchRad = (float) Math.toRadians(-entity.getXRot());
-            float cosY = Mth.cos(yawRad),   sinY = Mth.sin(yawRad);
-            float cosP = Mth.cos(pitchRad), sinP = Mth.sin(pitchRad);
-            double mx = off[0] / 22.0, my = off[1] / 22.0, mz = off[2] / 22.0;
-            double ry = my * cosP - mz * sinP;
-            double rz = my * sinP + mz * cosP;
-            double wx = pos.x + mx * cosY + rz * sinY;
-            double wy = pos.y + ry;
-            double wz = pos.z - mx * sinY + rz * cosY;
-            var rand = entity.getRandom();
-            wx += (rand.nextDouble() - 0.5) * 0.06;
-            wy += (rand.nextDouble() - 0.5) * 0.06;
-            wz += (rand.nextDouble() - 0.5) * 0.06;
-            entity.level().addParticle(particle, wx, wy, wz, 0, 0.02, 0);
-        });
-        controllers.add(sparksController);
+
 
         controllers.add(new AnimationController<>(this, "tier_selection", 0, state -> {
             if (state.getAnimatable().getPhaseOrdinal() != 1) return PlayState.STOP;

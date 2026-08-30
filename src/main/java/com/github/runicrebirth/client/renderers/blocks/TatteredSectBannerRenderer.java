@@ -14,8 +14,7 @@ public class TatteredSectBannerRenderer extends AbstractRunicBlockRenderer<Tatte
         super(ctx, new TatteredSectBannerModel());
     }
 
-    // tattered geo has top/stand bones with 180° Y baked in → fabric faces south by default
-    private float getModelBaseY() { return 180f; }
+    private float getModelBaseY() { return 0; }
 
     @Override
     public void render(TatteredSectBannerBlockEntity be, float partialTick, PoseStack poseStack,

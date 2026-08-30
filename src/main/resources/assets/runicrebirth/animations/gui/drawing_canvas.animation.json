@@ -1982,26 +1982,6 @@
 					"rotation": {
 						"vector": [0, 0, "query.anim_time * 60"]
 					}
-				},
-				"hexagon": {
-					"rotation": {
-						"0.0": {
-							"vector": [0, 0, 0]
-						},
-						"2.0": {
-							"vector": [0, -360, 0]
-						}
-					}
-				},
-				"inner_hexagon": {
-					"rotation": {
-						"0.0": {
-							"vector": [0, 0, 0]
-						},
-						"2.0": {
-							"vector": [0, 360, 0]
-						}
-					}
 				}
 			}
 		},
@@ -4899,16 +4879,6 @@
 					"rotation": {
 						"vector": [0, 0, "query.anim_time * 60"]
 					}
-				},
-				"outer_arcane2": {
-					"rotation": {
-						"0.0": {
-							"vector": [0, 0, 0]
-						},
-						"8.0": {
-							"vector": [0, -1440, 0]
-						}
-					}
 				}
 			}
 		},
@@ -4923,16 +4893,6 @@
 						"vector": ["1 + math.sin(query.anim_time * 360) * 0.1", "1 + math.sin(query.anim_time * 360) * 0.1", "1 + math.sin(query.anim_time * 360) * 0.1"]
 					}
 				}
-			},
-			"particle_effects": {
-				"0.0":  {"effect": "wind", "locator": "air_particles"},
-				"0.25": {"effect": "wind", "locator": "air_particles"},
-				"0.5":  {"effect": "wind", "locator": "air_particles"},
-				"0.75": {"effect": "wind", "locator": "air_particles"},
-				"1.0":  {"effect": "wind", "locator": "air_particles"},
-				"1.25": {"effect": "wind", "locator": "air_particles"},
-				"1.5":  {"effect": "wind", "locator": "air_particles"},
-				"1.75": {"effect": "wind", "locator": "air_particles"}
 			}
 		},
 		"basic_selected": {
@@ -6022,16 +5982,6 @@
 						"vector": ["1 + math.sin(query.anim_time * 360) * 0.1", "1 + math.sin(query.anim_time * 360) * 0.1", "1 + math.sin(query.anim_time * 360) * 0.1"]
 					}
 				}
-			},
-			"particle_effects": {
-				"0.0":  {"effect": "arcane", "locator": "arcane_particles"},
-				"0.25": {"effect": "arcane", "locator": "arcane_particles"},
-				"0.5":  {"effect": "arcane", "locator": "arcane_particles"},
-				"0.75": {"effect": "arcane", "locator": "arcane_particles"},
-				"1.0":  {"effect": "arcane", "locator": "arcane_particles"},
-				"1.25": {"effect": "arcane", "locator": "arcane_particles"},
-				"1.5":  {"effect": "arcane", "locator": "arcane_particles"},
-				"1.75": {"effect": "arcane", "locator": "arcane_particles"}
 			}
 		},
 		"fire_selected": {
@@ -6045,16 +5995,6 @@
 						"vector": ["1 + math.sin(query.anim_time * 360) * 0.1", "1 + math.sin(query.anim_time * 360) * 0.1", "1 + math.sin(query.anim_time * 360) * 0.1"]
 					}
 				}
-			},
-			"particle_effects": {
-				"0.0":  {"effect": "fire", "locator": "fire_particles"},
-				"0.25": {"effect": "fire", "locator": "fire_particles"},
-				"0.5":  {"effect": "fire", "locator": "fire_particles"},
-				"0.75": {"effect": "fire", "locator": "fire_particles"},
-				"1.0":  {"effect": "fire", "locator": "fire_particles"},
-				"1.25": {"effect": "fire", "locator": "fire_particles"},
-				"1.5":  {"effect": "fire", "locator": "fire_particles"},
-				"1.75": {"effect": "fire", "locator": "fire_particles"}
 			}
 		},
 		"ice_selected": {
@@ -6068,16 +6008,6 @@
 						"vector": ["1 + math.sin(query.anim_time * 360) * 0.1", "1 + math.sin(query.anim_time * 360) * 0.1", "1 + math.sin(query.anim_time * 360) * 0.1"]
 					}
 				}
-			},
-			"particle_effects": {
-				"0.0":  {"effect": "ice", "locator": "ice_particles"},
-				"0.25": {"effect": "ice", "locator": "ice_particles"},
-				"0.5":  {"effect": "ice", "locator": "ice_particles"},
-				"0.75": {"effect": "ice", "locator": "ice_particles"},
-				"1.0":  {"effect": "ice", "locator": "ice_particles"},
-				"1.25": {"effect": "ice", "locator": "ice_particles"},
-				"1.5":  {"effect": "ice", "locator": "ice_particles"},
-				"1.75": {"effect": "ice", "locator": "ice_particles"}
 			}
 		},
 		"earth_selected": {
@@ -6091,62 +6021,6 @@
 						"vector": ["1 + math.sin(query.anim_time * 360) * 0.1", "1 + math.sin(query.anim_time * 360) * 0.1", "1 + math.sin(query.anim_time * 360) * 0.1"]
 					}
 				}
-			},
-			"particle_effects": {
-				"0.0":  {"effect": "earth", "locator": "earth_particles"},
-				"0.25": {"effect": "earth", "locator": "earth_particles"},
-				"0.5":  {"effect": "earth", "locator": "earth_particles"},
-				"0.75": {"effect": "earth", "locator": "earth_particles"},
-				"1.0":  {"effect": "earth", "locator": "earth_particles"},
-				"1.25": {"effect": "earth", "locator": "earth_particles"},
-				"1.5":  {"effect": "earth", "locator": "earth_particles"},
-				"1.75": {"effect": "earth", "locator": "earth_particles"}
-			}
-		},
-		"element_sparks_loop": {
-			"animation_length": 2,
-			"loop": true,
-			"particle_effects": {
-				"0.0":  {"effect": "arcane", "locator": "arcane_particles"},
-				"0.05": {"effect": "fire",   "locator": "fire_particles"},
-				"0.1":  {"effect": "ice",    "locator": "ice_particles"},
-				"0.15": {"effect": "earth",  "locator": "earth_particles"},
-				"0.2":  {"effect": "wind",   "locator": "air_particles"},
-				"0.25": {"effect": "arcane", "locator": "arcane_particles"},
-				"0.3":  {"effect": "fire",   "locator": "fire_particles"},
-				"0.35": {"effect": "ice",    "locator": "ice_particles"},
-				"0.4":  {"effect": "earth",  "locator": "earth_particles"},
-				"0.45": {"effect": "wind",   "locator": "air_particles"},
-				"0.5":  {"effect": "arcane", "locator": "arcane_particles"},
-				"0.55": {"effect": "fire",   "locator": "fire_particles"},
-				"0.6":  {"effect": "ice",    "locator": "ice_particles"},
-				"0.65": {"effect": "earth",  "locator": "earth_particles"},
-				"0.7":  {"effect": "wind",   "locator": "air_particles"},
-				"0.75": {"effect": "arcane", "locator": "arcane_particles"},
-				"0.8":  {"effect": "fire",   "locator": "fire_particles"},
-				"0.85": {"effect": "ice",    "locator": "ice_particles"},
-				"0.9":  {"effect": "earth",  "locator": "earth_particles"},
-				"0.95": {"effect": "wind",   "locator": "air_particles"},
-				"1.0":  {"effect": "arcane", "locator": "arcane_particles"},
-				"1.05": {"effect": "fire",   "locator": "fire_particles"},
-				"1.1":  {"effect": "ice",    "locator": "ice_particles"},
-				"1.15": {"effect": "earth",  "locator": "earth_particles"},
-				"1.2":  {"effect": "wind",   "locator": "air_particles"},
-				"1.25": {"effect": "arcane", "locator": "arcane_particles"},
-				"1.3":  {"effect": "fire",   "locator": "fire_particles"},
-				"1.35": {"effect": "ice",    "locator": "ice_particles"},
-				"1.4":  {"effect": "earth",  "locator": "earth_particles"},
-				"1.45": {"effect": "wind",   "locator": "air_particles"},
-				"1.5":  {"effect": "arcane", "locator": "arcane_particles"},
-				"1.55": {"effect": "fire",   "locator": "fire_particles"},
-				"1.6":  {"effect": "ice",    "locator": "ice_particles"},
-				"1.65": {"effect": "earth",  "locator": "earth_particles"},
-				"1.7":  {"effect": "wind",   "locator": "air_particles"},
-				"1.75": {"effect": "arcane", "locator": "arcane_particles"},
-				"1.8":  {"effect": "fire",   "locator": "fire_particles"},
-				"1.85": {"effect": "ice",    "locator": "ice_particles"},
-				"1.9":  {"effect": "earth",  "locator": "earth_particles"},
-				"1.95": {"effect": "wind",   "locator": "air_particles"}
 			}
 		},
 		"none_selected": {

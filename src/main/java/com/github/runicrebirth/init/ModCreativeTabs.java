@@ -24,10 +24,17 @@ public final class ModCreativeTabs {
                 output.accept(ModItems.RUNIC_STONE_STAIRS.get());
                 output.accept(ModItems.RUNIC_STONE_PILLAR.get());
                 output.accept(ModItems.RUNIC_STONE_BRICKS.get());
+                output.accept(ModItems.RUNIC_STONE_BRICKS_SLAB.get());
+                output.accept(ModItems.RUNIC_STONE_BRICKS_STAIRS.get());
+                output.accept(ModItems.RUNIC_STONE_BRICKS_WALL.get());
                 output.accept(ModItems.CRACKED_RUNIC_STONE_BRICKS.get());
                 output.accept(ModItems.CRACKED_RUNIC_STONE_BRICKS_SLAB.get());
                 output.accept(ModItems.CRACKED_RUNIC_STONE_BRICKS_STAIRS.get());
+                output.accept(ModItems.CRACKED_RUNIC_STONE_BRICKS_WALL.get());
                 output.accept(ModItems.ARCANE_RUNIC_STONE_BRICKS.get());
+                output.accept(ModItems.ARCANE_RUNIC_STONE_BRICKS_SLAB.get());
+                output.accept(ModItems.ARCANE_RUNIC_STONE_BRICKS_STAIRS.get());
+                output.accept(ModItems.ARCANE_RUNIC_STONE_BRICKS_WALL.get());
                 output.accept(ModItems.FROZEN_RUNIC_BRICKS.get());
                 output.accept(ModItems.FROZEN_RUNIC_BRICKS_SLAB.get());
                 output.accept(ModItems.FROZEN_RUNIC_BRICKS_STAIRS.get());

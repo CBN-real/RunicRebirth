@@ -79,6 +79,15 @@ public class ModBlocks {
     public static final DeferredBlock<Block> ARCANE_RUNIC_STONE_BRICKS = BLOCKS.register("arcane_runic_stone_bricks",
         () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE_BRICKS).lightLevel(s -> 4)));
 
+    public static final DeferredBlock<SlabBlock> ARCANE_RUNIC_STONE_BRICKS_SLAB = BLOCKS.register("arcane_runic_stone_bricks_slab",
+        () -> new SlabBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE_BRICKS).lightLevel(s -> 4)));
+
+    public static final DeferredBlock<StairBlock> ARCANE_RUNIC_STONE_BRICKS_STAIRS = BLOCKS.register("arcane_runic_stone_bricks_stairs",
+        () -> new StairBlock(ARCANE_RUNIC_STONE_BRICKS.get().defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(Blocks.STONE_BRICKS).lightLevel(s -> 4)));
+
+    public static final DeferredBlock<WallBlock> ARCANE_RUNIC_STONE_BRICKS_WALL = BLOCKS.register("arcane_runic_stone_bricks_wall",
+        () -> new WallBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE_BRICK_WALL).lightLevel(s -> 4)));
+
     public static final DeferredBlock<Block> CRACKED_RUNIC_STONE_BRICKS = BLOCKS.register("cracked_runic_stone_bricks",
         () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE_BRICKS)));
 

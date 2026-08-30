@@ -159,6 +159,9 @@ public class RunicRebirthLangProvider extends LanguageProvider {
         add("block.runicrebirth.runic_stone_bricks_stairs", "Runic Stone Brick Stairs");
         add("block.runicrebirth.runic_stone_bricks_wall", "Runic Stone Brick Wall");
         add("block.runicrebirth.arcane_runic_stone_bricks", "Arcane Runic Stone Bricks");
+        add("block.runicrebirth.arcane_runic_stone_bricks_slab", "Arcane Runic Stone Brick Slab");
+        add("block.runicrebirth.arcane_runic_stone_bricks_stairs", "Arcane Runic Stone Brick Stairs");
+        add("block.runicrebirth.arcane_runic_stone_bricks_wall", "Arcane Runic Stone Brick Wall");
         add("block.runicrebirth.cracked_runic_stone_bricks", "Cracked Runic Stone Bricks");
         add("block.runicrebirth.cracked_runic_stone_bricks_slab", "Cracked Runic Stone Brick Slab");
         add("block.runicrebirth.cracked_runic_stone_bricks_stairs", "Cracked Runic Stone Brick Stairs");

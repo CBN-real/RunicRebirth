@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/stairs",
+  "textures": {
+    "bottom": "runicrebirth:block/arcane_runic_stone_bricks",
+    "top": "runicrebirth:block/arcane_runic_stone_bricks",
+    "side": "runicrebirth:block/arcane_runic_stone_bricks"
+  }
+}

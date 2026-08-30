@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "runicrebirth:block/arcane_runic_stone_bricks_slab"
+    },
+    "type=top": {
+      "model": "runicrebirth:block/arcane_runic_stone_bricks_slab_top"
+    },
+    "type=double": {
+      "model": "runicrebirth:block/arcane_runic_stone_bricks"
+    }
+  }
+}

@@ -4,6 +4,7 @@ import com.github.runicrebirth.blocks.entity.AbstractSectBannerBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.util.Mth;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BannerPatternLayers;
@@ -23,6 +24,7 @@ import net.minecraft.world.level.block.state.properties.AttachFace;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -34,6 +36,7 @@ public abstract class AbstractSectBannerBlock extends BaseEntityBlock {
 
     public static final EnumProperty<AttachFace> FACE = BlockStateProperties.ATTACH_FACE;
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
+    public static final IntegerProperty ROTATION_16 = BlockStateProperties.ROTATION_16;
 
     private static final VoxelShape FLOOR   = Block.box(6,  0,  6, 10, 16, 10);
     private static final VoxelShape CEILING = Block.box(6,  0,  6, 10, 16, 10);
@@ -46,22 +49,24 @@ public abstract class AbstractSectBannerBlock extends BaseEntityBlock {
         super(props);
         registerDefaultState(stateDefinition.any()
                 .setValue(FACE, AttachFace.FLOOR)
-                .setValue(FACING, Direction.NORTH));
+                .setValue(FACING, Direction.NORTH)
+                .setValue(ROTATION_16, 0));
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(FACE, FACING);
+        builder.add(FACE, FACING, ROTATION_16);
     }
 
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext ctx) {
         Direction clicked = ctx.getClickedFace();
         Direction horizontal = ctx.getHorizontalDirection();
+        int rot16 = Mth.floor(ctx.getRotation() * 16.0F / 360.0F + 0.5F) & 15;
         return switch (clicked) {
-            case UP   -> defaultBlockState().setValue(FACE, AttachFace.FLOOR)  .setValue(FACING, horizontal);
-            case DOWN -> defaultBlockState().setValue(FACE, AttachFace.CEILING).setValue(FACING, horizontal);
-            default   -> defaultBlockState().setValue(FACE, AttachFace.WALL)   .setValue(FACING, clicked);
+            case UP   -> defaultBlockState().setValue(FACE, AttachFace.FLOOR)  .setValue(FACING, horizontal).setValue(ROTATION_16, rot16);
+            case DOWN -> defaultBlockState().setValue(FACE, AttachFace.CEILING).setValue(FACING, horizontal).setValue(ROTATION_16, 0);
+            default   -> defaultBlockState().setValue(FACE, AttachFace.WALL)   .setValue(FACING, clicked)   .setValue(ROTATION_16, 0);
         };
     }
 

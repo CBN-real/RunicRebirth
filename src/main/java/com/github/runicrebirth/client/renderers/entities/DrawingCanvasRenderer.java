@@ -1,5 +1,6 @@
 package com.github.runicrebirth.client.renderers.entities;
 
+import com.github.runicrebirth.client.renderers.ModRenderTypes;
 import com.github.runicrebirth.client.renderers.models.DrawingCanvasGeoModel;
 import com.github.runicrebirth.entities.DrawingCanvasEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -37,7 +38,7 @@ public class DrawingCanvasRenderer extends GeoEntityRenderer<DrawingCanvasEntity
   @Override
   public RenderType getRenderType(DrawingCanvasEntity entity, ResourceLocation texture,
       @Nullable MultiBufferSource bufferSource, float partialTick) {
-    return RenderType.entityCutoutNoCull(texture);
+    return ModRenderTypes.entityTranslucentNoCullNoShade(texture);
   }
 
 
@@ -69,7 +70,7 @@ public class DrawingCanvasRenderer extends GeoEntityRenderer<DrawingCanvasEntity
 
     if (name.equals("adv_rings")) {
       ResourceLocation texture = getTextureLocation(animatable);
-      RenderType cutout = RenderType.entityCutoutNoCull(texture);
+      RenderType cutout = ModRenderTypes.entityTranslucentNoCullNoShade(texture);
       VertexConsumer cutoutBuffer = bufferSource.getBuffer(cutout);
       super.renderRecursively(poseStack, animatable, bone, cutout, bufferSource, cutoutBuffer,
           isReRender, partialTick, packedLight, packedOverlay, 0xFFEDDAAA);

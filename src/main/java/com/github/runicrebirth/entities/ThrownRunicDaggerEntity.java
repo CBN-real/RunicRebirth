@@ -167,8 +167,12 @@ public class ThrownRunicDaggerEntity extends Entity implements GeoEntity {
         Vec3 vel = dir.scale(1.5);
         setDeltaMovement(vel);
         updateRotationFromVelocity(vel);
-        Vec3 next = position().add(getDeltaMovement());
-        setPos(next.x, next.y, next.z);
+        Vec3 pos = position();
+        Vec3 nextPos = position().add(getDeltaMovement());
+        this.xo = pos.x;
+        this.yo = pos.y;
+        this.zo = pos.z;
+        this.lerpPositionAndRotationStep(2, nextPos.x, nextPos.y, nextPos.z, getYRot(), getXRot());
 
         if (position().distanceTo(ownerPos) < 1.5) {
             clearOwnerDagger();
