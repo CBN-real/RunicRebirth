@@ -1,0 +1,16 @@
+{
+  "type": "modonomicon:dense",
+  "pattern": [
+    ["RSSSR", "SRRRS", "SRRRS", "SRRRS", "RSSSR"],
+    ["P___P", "_____", "__N__", "_____", "P___P"],
+    ["Y___Y", "_____", "_____", "_____", "Y___Y"]
+  ],
+  "mapping": {
+    "_": { "type": "modonomicon:any" },
+    "R": { "type": "modonomicon:block", "block": "runicrebirth:runic_stone" },
+    "S": { "type": "modonomicon:block", "block": "runicrebirth:runic_stone_slab" },
+    "P": { "type": "modonomicon:block", "block": "runicrebirth:runic_stone_pillar" },
+    "Y": { "type": "modonomicon:block", "block": "runicrebirth:runesteel_pylon" },
+    "N": { "type": "modonomicon:block", "block": "runicrebirth:runic_anvil" }
+  }
+}

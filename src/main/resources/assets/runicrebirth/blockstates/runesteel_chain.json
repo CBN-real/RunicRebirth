@@ -1,0 +1,7 @@
+{
+    "variants": {
+        "axis=x": {"model": "runicrebirth:block/runesteel_chain", "x": 90, "y": 90},
+        "axis=y": {"model": "runicrebirth:block/runesteel_chain"},
+        "axis=z": {"model": "runicrebirth:block/runesteel_chain", "x": 90}
+    }
+}

@@ -41,6 +41,7 @@ public class OculusPortalBlockEntity extends BlockEntity implements GeoBlockEnti
     private BlockPos controllerPos;
     @Nullable
     private java.util.UUID activeInstanceId = null;
+    private boolean isExitPortal = false;
 
     public OculusPortalBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.OCULUS_PORTAL.get(), pos, state);
@@ -100,6 +101,14 @@ public class OculusPortalBlockEntity extends BlockEntity implements GeoBlockEnti
 
     public void clearActiveInstanceId() { this.activeInstanceId = null; setChanged(); }
 
+    public boolean isExitPortal() { return isExitPortal; }
+
+    public void setExitPortal(boolean exitPortal) {
+        this.isExitPortal = exitPortal;
+        setChanged();
+        if (level != null) level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_CLIENTS);
+    }
+
     public int getSelectedDifficulty() {
         return selectedDifficulty;
     }
@@ -143,6 +152,7 @@ public class OculusPortalBlockEntity extends BlockEntity implements GeoBlockEnti
         if (activeInstanceId != null) {
             tag.putString("activeInstanceId", activeInstanceId.toString());
         }
+        tag.putBoolean("isExitPortal", isExitPortal);
     }
 
     @Override
@@ -170,6 +180,7 @@ public class OculusPortalBlockEntity extends BlockEntity implements GeoBlockEnti
                 activeInstanceId = null;
             }
         }
+        isExitPortal = tag.getBoolean("isExitPortal");
     }
 
     @Override

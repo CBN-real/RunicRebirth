@@ -24,6 +24,7 @@ public final class ModCreativeTabs {
                 output.accept(ModItems.RUNIC_STONE_STAIRS.get());
                 output.accept(ModItems.RUNIC_STONE_PILLAR.get());
                 output.accept(ModItems.RUNIC_STONE_BRICKS.get());
+                output.accept(ModItems.RUNIC_STONE_WALL.get());
                 output.accept(ModItems.RUNIC_STONE_BRICKS_SLAB.get());
                 output.accept(ModItems.RUNIC_STONE_BRICKS_STAIRS.get());
                 output.accept(ModItems.RUNIC_STONE_BRICKS_WALL.get());
@@ -66,6 +67,7 @@ public final class ModCreativeTabs {
                 output.accept(ModItems.REINFORCED_CUT_RUNIC_STONE.get());
                 output.accept(ModItems.RUNELIGHT_TORCH.get());
                 output.accept(ModItems.RUNELIGHT_LANTERN.get());
+                output.accept(ModItems.RUNELIGHT.get());
                 output.accept(ModItems.OCULUS_PORTAL.get());
                 output.accept(ModItems.OCULUS_CONTROLLER.get());
                 output.accept(ModItems.OCULUS_PILLAR.get());

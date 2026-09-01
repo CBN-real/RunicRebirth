@@ -11,6 +11,7 @@ import com.github.runicrebirth.blocks.entity.DungeonFlamethrowerBlockEntity;
 import com.github.runicrebirth.blocks.entity.DungeonSwingingAxeBlockEntity;
 import com.github.runicrebirth.blocks.entity.DungeonPressurePlateBlockEntity;
 import com.github.runicrebirth.blocks.entity.InfusionAltarBlockEntity;
+import com.github.runicrebirth.blocks.entity.RunelightBlockEntity;
 import com.github.runicrebirth.blocks.entity.RunelightLanternBlockEntity;
 import com.github.runicrebirth.blocks.entity.RunelightTorchBlockEntity;
 import com.github.runicrebirth.blocks.entity.OculusPillarBlockEntity;
@@ -91,6 +92,11 @@ public final class ModBlockEntities {
             BLOCK_ENTITIES.register("runelight_lantern",
                     () -> BlockEntityType.Builder.of(RunelightLanternBlockEntity::new,
                             ModBlocks.RUNELIGHT_LANTERN.get()).build(null));
+
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<RunelightBlockEntity>> RUNELIGHT =
+            BLOCK_ENTITIES.register("runelight",
+                    () -> BlockEntityType.Builder.of(RunelightBlockEntity::new,
+                            ModBlocks.RUNELIGHT.get()).build(null));
 
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<DungeonPressurePlateBlockEntity>> DUNGEON_PRESSURE_PLATE =
             BLOCK_ENTITIES.register("dungeon_pressure_plate",

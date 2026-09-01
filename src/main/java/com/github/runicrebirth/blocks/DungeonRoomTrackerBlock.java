@@ -45,7 +45,7 @@ public class DungeonRoomTrackerBlock extends BaseEntityBlock {
 
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
-        if (!level.isClientSide() && player instanceof ServerPlayer serverPlayer) {
+        if (!level.isClientSide() && player instanceof ServerPlayer serverPlayer && player.isCreative()) {
             BlockEntity be = level.getBlockEntity(pos);
             if (be instanceof DungeonRoomTrackerBlockEntity tracker) {
                 PacketDistributor.sendToPlayer(serverPlayer,

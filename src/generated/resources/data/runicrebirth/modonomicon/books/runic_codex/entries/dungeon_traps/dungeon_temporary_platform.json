@@ -19,7 +19,7 @@
         "count": 1,
         "item": "runicrebirth:dungeon_temporary_platform"
       },
-      "text": "",
+      "text": "book.runicrebirth.runic_codex.dungeon_traps.dungeon_temporary_platform.display.text",
       "title": "Temporary Platform"
     }
   ],

@@ -19,7 +19,7 @@
         "count": 1,
         "item": "runicrebirth:runic_dagger"
       },
-      "text": "",
+      "text": "book.runicrebirth.runic_codex.weapons.runic_dagger.display.text",
       "title": "Runic Dagger"
     },
     {

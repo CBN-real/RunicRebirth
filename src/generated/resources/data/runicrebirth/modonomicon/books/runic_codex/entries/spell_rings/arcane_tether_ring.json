@@ -19,7 +19,7 @@
         "count": 1,
         "item": "runicrebirth:arcane_tether_ring"
       },
-      "text": "",
+      "text": "book.runicrebirth.runic_codex.spell_rings.arcane_tether_ring.display.text",
       "title": "Arcane Tether Ring"
     }
   ],

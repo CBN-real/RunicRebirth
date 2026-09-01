@@ -19,7 +19,7 @@
         "count": 1,
         "item": "runicrebirth:arcane_acolyte_ring"
       },
-      "text": "",
+      "text": "book.runicrebirth.runic_codex.spell_rings.arcane_acolyte_ring.display.text",
       "title": "Arcane Acolyte Ring"
     }
   ],

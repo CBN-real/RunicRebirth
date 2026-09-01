@@ -99,7 +99,8 @@ public class DungeonRoomTrackerBlockEntity extends BlockEntity {
     private void tick(ServerLevel server) {
         switch (state) {
             case INACTIVE -> {
-                if (!getPlayersInZone(server).isEmpty()) {
+                List<ServerPlayer> inZone = getPlayersInZone(server);
+                if (!inZone.isEmpty() && allDungeonPlayersInZone(server, inZone)) {
                     state = State.COUNTDOWN;
                     stateTicks = 0;
                     setChanged();
@@ -154,11 +155,6 @@ public class DungeonRoomTrackerBlockEntity extends BlockEntity {
     }
 
     private void activateRoom(ServerLevel server) {
-        for (BlockPos doorPos : doorPositions) {
-            BlockState doorState = server.getBlockState(doorPos);
-            if (doorState.getBlock() instanceof DungeonDoorBlock)
-                DungeonDoorBlock.setOpen(server, doorPos, doorState, false);
-        }
         totalWaves = computeTotalWaves(server);
         currentWave = 1;
         state = State.WAVE_ACTIVE;
@@ -332,6 +328,18 @@ public class DungeonRoomTrackerBlockEntity extends BlockEntity {
         if (corner1.equals(BlockPos.ZERO) && corner2.equals(BlockPos.ZERO)) return List.of();
         AABB zone = AABB.encapsulatingFullBlocks(corner1, corner2);
         return server.getPlayers(player -> zone.intersects(player.getBoundingBox()));
+    }
+
+    private boolean allDungeonPlayersInZone(ServerLevel server, List<ServerPlayer> inZone) {
+        if (inZone.isEmpty()) return false;
+        DungeonInstance inst = DungeonInstanceManager.get().getInstanceForPlayer(inZone.get(0).getUUID());
+        if (inst == null) return true;
+        java.util.Set<java.util.UUID> zoneIds = new java.util.HashSet<>();
+        for (ServerPlayer p : inZone) zoneIds.add(p.getUUID());
+        for (java.util.UUID id : inst.getPlayers()) {
+            if (!zoneIds.contains(id)) return false;
+        }
+        return true;
     }
 
     private int getAliveMobCount(ServerLevel server) {

@@ -1,6 +1,7 @@
 package com.github.runicrebirth.dungeon.gen;
 
 import com.github.runicrebirth.RunicRebirth;
+import com.github.runicrebirth.blocks.entity.OculusPortalBlockEntity;
 import com.github.runicrebirth.dungeon.DungeonInstance;
 import com.github.runicrebirth.dungeon.DungeonVariant;
 import com.github.runicrebirth.init.ModBlocks;
@@ -66,6 +67,8 @@ public final class JigsawDungeonAssembler {
         for (JigsawInfo ji : entryJigsaws) {
             if (DungeonVariant.POOL_BOSS.equals(ji.pool())) {
                 bossConnections.add(ji);
+            } else if (DungeonVariant.POOL_PORTAL.equals(ji.pool())) {
+                processPortalJigsaw(level, ji, instance);
             } else {
                 openConnections.add(ji);
             }
@@ -154,7 +157,7 @@ public final class JigsawDungeonAssembler {
             ResourceLocation bossRL = variant.pickBossRoom(random);
             Optional<StructureTemplate> bossOpt = loadTemplate(level, bossRL);
             if (bossOpt.isPresent()) {
-                bossOutwardJigsaw = placeSpecialRoom(level, bossOpt.get(), bossSrcConn, placedRooms, random, DungeonVariant.POOL_INNER_SANCTUM);
+                bossOutwardJigsaw = placeSpecialRoom(level, bossOpt.get(), bossSrcConn, placedRooms, random, DungeonVariant.POOL_INNER_SANCTUM, null);
             } else {
                 RunicRebirth.LOGGER.error("[Dungeon] Failed to load boss room: {}", bossRL);
             }
@@ -165,7 +168,7 @@ public final class JigsawDungeonAssembler {
             ResourceLocation sanctumRL = variant.pickInnerSanctumRoom(random);
             Optional<StructureTemplate> sanctumOpt = loadTemplate(level, sanctumRL);
             if (sanctumOpt.isPresent()) {
-                placeSpecialRoom(level, sanctumOpt.get(), bossOutwardJigsaw, placedRooms, random, null);
+                placeSpecialRoom(level, sanctumOpt.get(), bossOutwardJigsaw, placedRooms, random, null, instance);
             } else {
                 RunicRebirth.LOGGER.error("[Dungeon] Failed to load inner sanctum: {}", sanctumRL);
             }
@@ -178,7 +181,8 @@ public final class JigsawDungeonAssembler {
     @Nullable
     private static JigsawInfo placeSpecialRoom(ServerLevel level, StructureTemplate template,
                                                 JigsawInfo sourceConn, List<PlacedRoom> placedRooms,
-                                                RandomSource random, @Nullable String outwardPoolName) {
+                                                RandomSource random, @Nullable String outwardPoolName,
+                                                @Nullable DungeonInstance instance) {
         for (Rotation rotation : Rotation.values()) {
             StructurePlaceSettings settings = new StructurePlaceSettings().setRotation(rotation);
             List<StructureTemplate.StructureBlockInfo> candidates =
@@ -209,13 +213,16 @@ public final class JigsawDungeonAssembler {
 
                 placedRooms.add(new PlacedRoom(candidateAABB));
 
-                if (outwardPoolName != null) {
-                    List<JigsawInfo> newJigsaws = extractJigsaws(level, placementOrigin, template, settings);
-                    for (JigsawInfo ji : newJigsaws) {
-                        if (outwardPoolName.equals(ji.pool())) return ji;
+                List<JigsawInfo> newJigsaws = extractJigsaws(level, placementOrigin, template, settings);
+                JigsawInfo outwardJigsaw = null;
+                for (JigsawInfo ji : newJigsaws) {
+                    if (outwardPoolName != null && outwardPoolName.equals(ji.pool())) {
+                        outwardJigsaw = ji;
+                    } else if (DungeonVariant.POOL_PORTAL.equals(ji.pool()) && instance != null) {
+                        processPortalJigsaw(level, ji, instance);
                     }
                 }
-                return null;
+                return outwardJigsaw;
             }
         }
         return null;
@@ -284,6 +291,16 @@ public final class JigsawDungeonAssembler {
             for (int cz = minCZ; cz <= maxCZ; cz++) {
                 level.getChunkSource().getChunk(cx, cz, true);
             }
+        }
+    }
+
+    private static void processPortalJigsaw(ServerLevel level, JigsawInfo ji, DungeonInstance instance) {
+        level.setBlock(ji.worldPos(), Blocks.AIR.defaultBlockState(), 3);
+        BlockPos belowPos = ji.worldPos().below();
+        net.minecraft.world.level.block.entity.BlockEntity be = level.getBlockEntity(belowPos);
+        if (be instanceof OculusPortalBlockEntity portal) {
+            portal.setExitPortal(true);
+            portal.setAnimState(OculusPortalBlockEntity.AnimState.ACTIVATING);
         }
     }
 

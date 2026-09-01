@@ -1,0 +1,28 @@
+{
+  "background_u_index": 0,
+  "background_v_index": 1,
+  "category": "spells",
+  "description": "book.runicrebirth.runic_codex.spells.runic_augmentation.description",
+  "hide_while_locked": false,
+  "icon": {
+    "item": "runicrebirth:acolyte_wand"
+  },
+  "name": "book.runicrebirth.runic_codex.spells.runic_augmentation.name",
+  "pages": [
+    {
+      "type": "modonomicon:text",
+      "anchor": "",
+      "condition": {
+        "type": "modonomicon:none"
+      },
+      "show_title_separator": true,
+      "text": "book.runicrebirth.runic_codex.spells.runic_augmentation.info.text",
+      "title": "book.runicrebirth.runic_codex.spells.runic_augmentation.info.title",
+      "use_markdown_in_title": false
+    }
+  ],
+  "show_when_any_parent_unlocked": false,
+  "sort_number": 13,
+  "x": -6,
+  "y": 0
+}

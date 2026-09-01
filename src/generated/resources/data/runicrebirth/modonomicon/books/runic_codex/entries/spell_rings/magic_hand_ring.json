@@ -19,7 +19,7 @@
         "count": 1,
         "item": "runicrebirth:magic_hand_ring"
       },
-      "text": "",
+      "text": "book.runicrebirth.runic_codex.spell_rings.magic_hand_ring.display.text",
       "title": "Magic Hand Ring"
     }
   ],

@@ -16,6 +16,7 @@ public class DungeonVariant {
     public static final String POOL_HALLWAY = "runicrebirth:hallway";
     public static final String POOL_BOSS = "runicrebirth:boss";
     public static final String POOL_INNER_SANCTUM = "runicrebirth:inner_sanctum";
+    public static final String POOL_PORTAL = "runicrebirth:portal";
 
     private final ResourceLocation id;
     private final ResourceLocation tier;

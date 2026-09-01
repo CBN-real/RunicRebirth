@@ -51,7 +51,7 @@ public class DungeonMobSpawnerBlock extends BaseEntityBlock {
 
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
-        if (!level.isClientSide() && player instanceof ServerPlayer serverPlayer) {
+        if (!level.isClientSide() && player instanceof ServerPlayer serverPlayer && player.isCreative()) {
             if (level.getBlockEntity(pos) instanceof DungeonMobSpawnerBlockEntity spawner) {
                 PacketDistributor.sendToPlayer(serverPlayer,
                     new OpenDungeonMobSpawnerS2CPacket(pos, spawner.serializeConfig()));

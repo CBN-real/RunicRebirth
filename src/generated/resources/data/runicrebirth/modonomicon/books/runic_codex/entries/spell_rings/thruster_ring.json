@@ -19,7 +19,7 @@
         "count": 1,
         "item": "runicrebirth:thruster_ring"
       },
-      "text": "",
+      "text": "book.runicrebirth.runic_codex.spell_rings.thruster_ring.display.text",
       "title": "Thruster Ring"
     }
   ],

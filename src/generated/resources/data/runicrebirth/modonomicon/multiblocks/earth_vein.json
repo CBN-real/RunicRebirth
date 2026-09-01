@@ -1,0 +1,14 @@
+{
+  "type": "modonomicon:dense",
+  "pattern": [
+    ["__RRR__", "_RRRRR_", "RRUUURR", "RRUUURR", "RRUUURR", "_RRRRR_", "__RRR__"],
+    ["___T___", "_T___T_", "_______", "T__M__T", "_______", "_T___T_", "___T___"]
+  ],
+  "mapping": {
+    "_": { "type": "modonomicon:any" },
+    "R": { "type": "modonomicon:block", "block": "runicrebirth:runic_stone" },
+    "U": { "type": "modonomicon:block", "block": "runicrebirth:cut_runic_stone" },
+    "T": { "type": "modonomicon:block", "block": "runicrebirth:runelight_torch" },
+    "M": { "type": "modonomicon:block", "block": "runicrebirth:meditation_cushion" }
+  }
+}

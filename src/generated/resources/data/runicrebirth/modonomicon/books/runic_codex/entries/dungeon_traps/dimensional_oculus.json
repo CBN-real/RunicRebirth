@@ -1,0 +1,47 @@
+{
+  "background_u_index": 0,
+  "background_v_index": 1,
+  "category": "dungeon_traps",
+  "description": "book.runicrebirth.runic_codex.dungeon_traps.dimensional_oculus.description",
+  "hide_while_locked": false,
+  "icon": {
+    "item": "runicrebirth:oculus_controller"
+  },
+  "name": "book.runicrebirth.runic_codex.dungeon_traps.dimensional_oculus.name",
+  "pages": [
+    {
+      "type": "modonomicon:text",
+      "anchor": "",
+      "condition": {
+        "type": "modonomicon:none"
+      },
+      "show_title_separator": true,
+      "text": "book.runicrebirth.runic_codex.dungeon_traps.dimensional_oculus.info.text",
+      "title": "book.runicrebirth.runic_codex.dungeon_traps.dimensional_oculus.info.title",
+      "use_markdown_in_title": false
+    },
+    {
+      "type": "modonomicon:multiblock",
+      "anchor": "",
+      "condition": {
+        "type": "modonomicon:none"
+      },
+      "multiblock_id": "dimensional_oculus",
+      "multiblock_name": "book.runicrebirth.runic_codex.dungeon_traps.dimensional_oculus.structure.title",
+      "show_visualize_button": true,
+      "text": "book.runicrebirth.runic_codex.dungeon_traps.dimensional_oculus.structure.text"
+    }
+  ],
+  "parents": [
+    {
+      "draw_arrow": true,
+      "entry": "dungeon_traps/exploring_runic_void",
+      "line_enabled": true,
+      "line_reversed": false
+    }
+  ],
+  "show_when_any_parent_unlocked": false,
+  "sort_number": 9,
+  "x": 0,
+  "y": -2
+}

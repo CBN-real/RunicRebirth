@@ -13,6 +13,8 @@ import com.github.runicrebirth.init.ModSpellTypes;
 import com.github.runicrebirth.magic.stack.SpellResolver;
 import com.github.runicrebirth.network.DaggerAnimS2CPacket;
 import com.github.runicrebirth.network.RunicWeaponAnimS2CPacket;
+import com.github.runicrebirth.client.animations.DaggerAnimLayer;
+import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.BlockTags;
@@ -20,9 +22,11 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlotGroup;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.item.Tier;
@@ -39,6 +43,7 @@ import software.bernie.geckolib.animation.AnimatableManager;
 import software.bernie.geckolib.animation.AnimationController;
 import software.bernie.geckolib.animation.PlayState;
 import software.bernie.geckolib.animation.RawAnimation;
+import software.bernie.geckolib.constant.DataTickets;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 import java.util.function.Consumer;
@@ -163,9 +168,32 @@ public class RunicDaggerItem extends SwordItem implements GeoItem, IMagicWeapon 
     public ResourceLocation getWeaponCooldownId() { return COOLDOWN_ID; }
 
     @Override
+    public boolean isPerspectiveAware() { return true; }
+
+    @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<>(this, "controller", 5,
-            state -> { state.setAnimation(ANIM_IDLE); return PlayState.CONTINUE; }));
+        controllers.add(new AnimationController<>(this, "controller", 5, state -> {
+            ItemDisplayContext ctx = state.getData(DataTickets.ITEM_RENDER_PERSPECTIVE);
+            boolean isHand = ctx == ItemDisplayContext.FIRST_PERSON_RIGHT_HAND
+                || ctx == ItemDisplayContext.THIRD_PERSON_RIGHT_HAND;
+            if (!isHand) {
+                state.setAnimation(ANIM_IDLE);
+                return PlayState.CONTINUE;
+            }
+            Entity raw = state.getData(DataTickets.ENTITY);
+            LivingEntity holder = raw instanceof LivingEntity le ? le : null;
+            if (holder == null) {
+                state.setAnimation(ANIM_IDLE);
+                return PlayState.CONTINUE;
+            }
+            DaggerAnimS2CPacket.Anim anim = DaggerAnimLayer.getAnim(holder.getId());
+            state.setAnimation(switch (anim) {
+                case THROWN    -> ANIM_THROWN;
+                case RETURNING -> ANIM_RETURNING;
+                default        -> ANIM_IDLE;
+            });
+            return PlayState.CONTINUE;
+        }));
     }
 
     @Override

@@ -106,7 +106,11 @@ public class RunicWarstaffItem extends SwordItem implements GeoItem, IMagicWeapo
             }
             Entity raw = state.getData(DataTickets.ENTITY);
             LivingEntity holder = raw instanceof LivingEntity le ? le : Minecraft.getInstance().player;
-            if (holder != null && WarstaffAnimLayer.isSpinning(holder.getId())) {
+            if (holder == null) {
+                state.setAnimation(ANIM_IDLE);
+                return PlayState.CONTINUE;
+            }
+            if (WarstaffAnimLayer.isSpinning(holder.getId())) {
                 state.setAnimation(ANIM_SPINNING);
             } else {
                 state.setAnimation(ANIM_IDLE);

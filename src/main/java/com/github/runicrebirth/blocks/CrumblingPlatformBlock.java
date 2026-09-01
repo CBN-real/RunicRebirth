@@ -108,12 +108,12 @@ public class CrumblingPlatformBlock extends BaseEntityBlock {
 
     @Override
     public boolean isSignalSource(BlockState state) {
-        return true;
+        return state.getValue(POWERED);
     }
 
     @Override
     public boolean hasAnalogOutputSignal(BlockState state) {
-        return true;
+        return state.getValue(POWERED);
     }
 
     @Override

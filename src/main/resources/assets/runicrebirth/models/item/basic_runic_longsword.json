@@ -53,7 +53,7 @@
     },
     "gui": {
       "rotation": [
-        90,
+        70,
         45,
         -90
       ],
@@ -92,8 +92,5 @@
         0
       ]
     }
-  },
-  "textures": {
-    "particle": "runicrebirth:item/runic_longsword"
   }
 }

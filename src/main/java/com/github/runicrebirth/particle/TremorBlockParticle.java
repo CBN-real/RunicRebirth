@@ -123,6 +123,15 @@ public class TremorBlockParticle extends Particle {
         }
     }
 
+    public static void clearAll() {
+        synchronized (ACTIVE) {
+            for (TremorBlockParticle p : new ArrayList<>(ACTIVE)) {
+                p.remove();
+            }
+            ACTIVE.clear();
+        }
+    }
+
     public static class Provider implements ParticleProvider<TremorBlockParticleOption> {
         @Override
         public Particle createParticle(TremorBlockParticleOption option, ClientLevel level,

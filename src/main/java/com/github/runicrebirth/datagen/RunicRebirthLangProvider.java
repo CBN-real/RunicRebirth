@@ -202,7 +202,9 @@ public class RunicRebirthLangProvider extends LanguageProvider {
         add("block.runicrebirth.false_sky", "False Sky");
         add("block.runicrebirth.cracked_false_sky", "Cracked False Sky");
         add("block.runicrebirth.runelight_lantern", "Runelight Lantern");
+        add("block.runicrebirth.runesteel_chain", "Runesteel Chain");
         add("block.runicrebirth.runelight_torch", "Runelight Torch");
+        add("block.runicrebirth.runelight", "Runelight");
         add("block.runicrebirth.oculus_portal", "Dimensional Oculus Portal");
         add("block.runicrebirth.oculus_controller", "Dimensional Oculus Controller");
         add("block.runicrebirth.oculus_pillar", "Activated Pillar");

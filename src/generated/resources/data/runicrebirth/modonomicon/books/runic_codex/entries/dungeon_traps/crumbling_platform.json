@@ -19,7 +19,7 @@
         "count": 1,
         "item": "runicrebirth:crumbling_platform"
       },
-      "text": "",
+      "text": "book.runicrebirth.runic_codex.dungeon_traps.crumbling_platform.display.text",
       "title": "Crumbling Platform"
     }
   ],

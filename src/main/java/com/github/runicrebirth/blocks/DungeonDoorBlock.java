@@ -133,14 +133,16 @@ public class DungeonDoorBlock extends BaseEntityBlock {
 
     public static void setOpen(ServerLevel level, BlockPos pos, BlockState state, boolean open) {
         BlockState newState = state.setValue(OPEN, open);
-        level.setBlock(pos, newState, Block.UPDATE_ALL);
+        // UPDATE_CLIENTS only — UPDATE_ALL notifies neighbors which triggers checkRedstone via proxies,
+        // causing the door to close again immediately when opened without a redstone signal.
+        level.setBlock(pos, newState, Block.UPDATE_CLIENTS);
 
         Direction facing = state.getValue(FACING);
         for (BlockPos offset : getProxyOffsets(facing)) {
             BlockPos target = pos.offset(offset);
             BlockState targetState = level.getBlockState(target);
             if (targetState.is(ModBlocks.DUNGEON_DOOR_PROXY.get())) {
-                level.setBlock(target, targetState.setValue(DungeonDoorProxyBlock.OPEN, open), Block.UPDATE_ALL);
+                level.setBlock(target, targetState.setValue(DungeonDoorProxyBlock.OPEN, open), Block.UPDATE_CLIENTS);
             }
         }
 

@@ -240,15 +240,15 @@ public static final DeferredItem<RingOfExpansionItem> RING_OF_EXPANSION = ITEMS.
 
     public static final DeferredItem<BasicRunicLongsword> BASIC_RUNIC_LONGSWORD = ITEMS.registerItem(
         "basic_runic_longsword", BasicRunicLongsword::new, new Item.Properties().stacksTo(1).attributes(
-            SwordItem.createAttributes(Tiers.IRON, 3, -2.4F)));
+            SwordItem.createAttributes(Tiers.IRON, 4, -2.4F)));
 
     public static final DeferredItem<RunicDaggerItem> RUNIC_DAGGER = ITEMS.register(
         "runic_dagger", () -> new RunicDaggerItem(new Item.Properties().stacksTo(1).attributes(
-            SwordItem.createAttributes(Tiers.IRON, 3, -0.8F))));
+            SwordItem.createAttributes(Tiers.IRON, 3, -1.5F))));
 
     public static final DeferredItem<RunicWarstaffItem> RUNIC_WARSTAFF = ITEMS.register(
         "runic_warstaff", () -> new RunicWarstaffItem(new Item.Properties().stacksTo(1).attributes(
-            SwordItem.createAttributes(Tiers.DIAMOND, 0, -2.0F))));
+            SwordItem.createAttributes(Tiers.DIAMOND, 1, -2.0F))));
 
     public static final DeferredItem<RunicShieldItem> RUNIC_SHIELD = ITEMS.register(
         "runic_shield", () -> new RunicShieldItem(new Item.Properties()));
@@ -303,6 +303,7 @@ public static final DeferredItem<RingOfExpansionItem> RING_OF_EXPANSION = ITEMS.
     public static final DeferredItem<BlockItem> WINDSWEPT_RUNESTEEL_BLOCK = ITEMS.registerSimpleBlockItem(ModBlocks.WINDSWEPT_RUNESTEEL_BLOCK);
     public static final DeferredItem<BlockItem> FROZEN_RUNESTEEL_BLOCK = ITEMS.registerSimpleBlockItem(ModBlocks.FROZEN_RUNESTEEL_BLOCK);
     public static final DeferredItem<BlockItem> EARTHEN_RUNESTEEL_BLOCK = ITEMS.registerSimpleBlockItem(ModBlocks.EARTHEN_RUNESTEEL_BLOCK);
+    public static final DeferredItem<BlockItem> RUNESTEEL_CHAIN = ITEMS.registerSimpleBlockItem(ModBlocks.RUNESTEEL_CHAIN);
     public static final DeferredItem<BlockItem> FALSE_SKY = ITEMS.registerSimpleBlockItem(ModBlocks.FALSE_SKY);
     public static final DeferredItem<BlockItem> CRACKED_FALSE_SKY = ITEMS.registerSimpleBlockItem(ModBlocks.CRACKED_FALSE_SKY);
     public static final DeferredItem<BlockItem> CUT_RUNIC_STONE = ITEMS.registerSimpleBlockItem(ModBlocks.CUT_RUNIC_STONE);
@@ -357,6 +358,9 @@ public static final DeferredItem<RingOfExpansionItem> RING_OF_EXPANSION = ITEMS.
     public static final DeferredItem<RunicBlockItem> RUNELIGHT_LANTERN = ITEMS.register("runelight_lantern",
             () -> new RunicBlockItem(ModBlocks.RUNELIGHT_LANTERN.get(), new Item.Properties(), "idle", "runelight_lantern")
                     .withTexture("textures/entity/runic_templates/arcane_runic_template.png"));
+
+    public static final DeferredItem<BlockItem> RUNELIGHT = ITEMS.register("runelight",
+            () -> new BlockItem(ModBlocks.RUNELIGHT.get(), new Item.Properties()));
 
     public static final DeferredItem<RunicBlockItem> ANCIENT_ARCANE_TURRET = ITEMS.register("ancient_arcane_turret",
       () -> new RunicBlockItem(ModBlocks.ANCIENT_ARCANE_TURRET.get(), new Item.Properties(), "idle", "ancient_arcane_turret_floor")

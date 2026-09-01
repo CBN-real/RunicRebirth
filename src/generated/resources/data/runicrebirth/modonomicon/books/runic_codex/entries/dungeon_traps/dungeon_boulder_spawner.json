@@ -21,7 +21,7 @@
       "offset": 0.0,
       "rotate": true,
       "scale": 1.5,
-      "text": ""
+      "text": "book.runicrebirth.runic_codex.dungeon_traps.dungeon_boulder_spawner.entity.text"
     }
   ],
   "show_when_any_parent_unlocked": false,

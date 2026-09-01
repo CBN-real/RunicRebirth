@@ -19,7 +19,7 @@
         "count": 1,
         "item": "runicrebirth:runic_shield"
       },
-      "text": "",
+      "text": "book.runicrebirth.runic_codex.weapons.runic_shield.display.text",
       "title": "Runic Shield"
     },
     {

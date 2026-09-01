@@ -1,0 +1,28 @@
+{
+  "background_u_index": 0,
+  "background_v_index": 1,
+  "category": "weapons",
+  "description": "book.runicrebirth.runic_codex.weapons.runic_weaponry.description",
+  "hide_while_locked": false,
+  "icon": {
+    "item": "runicrebirth:basic_runic_longsword"
+  },
+  "name": "book.runicrebirth.runic_codex.weapons.runic_weaponry.name",
+  "pages": [
+    {
+      "type": "modonomicon:text",
+      "anchor": "",
+      "condition": {
+        "type": "modonomicon:none"
+      },
+      "show_title_separator": true,
+      "text": "book.runicrebirth.runic_codex.weapons.runic_weaponry.info.text",
+      "title": "book.runicrebirth.runic_codex.weapons.runic_weaponry.info.title",
+      "use_markdown_in_title": false
+    }
+  ],
+  "show_when_any_parent_unlocked": false,
+  "sort_number": 5,
+  "x": 0,
+  "y": -2
+}

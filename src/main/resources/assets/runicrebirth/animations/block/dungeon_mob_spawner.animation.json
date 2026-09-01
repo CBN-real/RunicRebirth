@@ -4,9 +4,24 @@
 		"idle": {
 			"animation_length": 1,
 			"bones": {
-				"earth_vein_runes": {
+				"under_ring": {
+					"scale": {
+						"vector": [0, 0, 0]
+					}
+				},
+				"dungeon_mob_spawner": {
 					"scale": {
 						"vector": [1, 1, 1]
+					}
+				},
+				"large_circle": {
+					"scale": {
+						"vector": [0.25, 0.25, 0.25]
+					}
+				},
+				"hexagon": {
+					"scale": {
+						"vector": [0, 0, 0]
 					}
 				}
 			}
@@ -1289,7 +1304,7 @@
 		"end_spawning": {
 			"animation_length": 0.3333,
 			"bones": {
-				"earth_vein_runes": {
+				"dungeon_mob_spawner": {
 					"scale": {
 						"0.0": {
 							"vector": [1, 1, 1]

@@ -39,6 +39,7 @@ import com.github.runicrebirth.client.renderers.blocks.DungeonMobSpawnerRenderer
 import com.github.runicrebirth.client.renderers.blocks.DungeonPressurePlateRenderer;
 import com.github.runicrebirth.client.renderers.entities.CrumblingPlatformFallingRenderer;
 import com.github.runicrebirth.client.renderers.blocks.RunelightLanternRenderer;
+import com.github.runicrebirth.client.renderers.blocks.RunelightRenderer;
 import com.github.runicrebirth.client.renderers.blocks.RunelightTorchRenderer;
 import com.github.runicrebirth.client.renderers.blocks.InfusionAltarRenderer;
 import com.github.runicrebirth.client.renderers.blocks.RunicAnvilRenderer;
@@ -283,6 +284,7 @@ public class RunicRebirthClient {
         event.registerBlockEntityRenderer(ModBlockEntities.DUNGEON_DOOR.get(), DungeonDoorRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.RUNELIGHT_TORCH.get(), RunelightTorchRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.RUNELIGHT_LANTERN.get(), RunelightLanternRenderer::new);
+        event.registerBlockEntityRenderer(ModBlockEntities.RUNELIGHT.get(), RunelightRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.DUNGEON_PRESSURE_PLATE.get(), DungeonPressurePlateRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.CRUMBLING_PLATFORM.get(), CrumblingPlatformRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.DUNGEON_MOB_SPAWNER.get(), DungeonMobSpawnerRenderer::new);
@@ -381,7 +383,20 @@ public class RunicRebirthClient {
 
     @SubscribeEvent
     public static void onClientPlayerRespawn(net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent.Clone event) {
+        CameraShakeHandler.clear();
+        FlashOverlay.clear();
+        ShockwaveManager.clear();
         CrackManager.clear();
+        com.github.runicrebirth.particle.TremorBlockParticle.clearAll();
+    }
+
+    @SubscribeEvent
+    public static void onClientPlayerLogout(net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent.LoggingOut event) {
+        CameraShakeHandler.clear();
+        FlashOverlay.clear();
+        ShockwaveManager.clear();
+        CrackManager.clear();
+        com.github.runicrebirth.particle.TremorBlockParticle.clearAll();
     }
 
     @SubscribeEvent

@@ -19,6 +19,7 @@ import com.github.runicrebirth.blocks.InfusionAltarProxyBlock;
 import com.github.runicrebirth.blocks.OculusPillarBlock;
 import com.github.runicrebirth.blocks.OculusPortalBlock;
 import com.github.runicrebirth.blocks.ReturnPortalBlock;
+import com.github.runicrebirth.blocks.RunelightBlock;
 import com.github.runicrebirth.blocks.RunelightLanternBlock;
 import com.github.runicrebirth.blocks.RunelightTorchBlock;
 import com.github.runicrebirth.blocks.RunelightWallTorchBlock;
@@ -35,6 +36,7 @@ import com.github.runicrebirth.blocks.TatteredSectBannerBlock;
 import com.github.runicrebirth.blocks.SectBannerVariantBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.ChainBlock;
 import net.minecraft.world.level.block.SlabBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.StairBlock;
@@ -156,6 +158,9 @@ public class ModBlocks {
     public static final DeferredBlock<Block> EARTHEN_RUNESTEEL_BLOCK = BLOCKS.register("earthen_runesteel_block",
         () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK)));
 
+    public static final DeferredBlock<ChainBlock> RUNESTEEL_CHAIN = BLOCKS.register("runesteel_chain",
+        () -> new ChainBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.CHAIN).noOcclusion()));
+
     public static final DeferredBlock<Block> FALSE_SKY = BLOCKS.register("false_sky",
         () -> new Block(
             Properties.of()
@@ -237,6 +242,9 @@ public class ModBlocks {
 
     public static final DeferredBlock<RunelightLanternBlock> RUNELIGHT_LANTERN = BLOCKS.register("runelight_lantern",
             () -> new RunelightLanternBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.LANTERN).noOcclusion().lightLevel(s -> 15).destroyTime(0.5f)));
+
+    public static final DeferredBlock<RunelightBlock> RUNELIGHT = BLOCKS.register("runelight",
+            () -> new RunelightBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.TORCH).noOcclusion().lightLevel(s -> 18)));
 
     // Dungeon trap blocks
     public static final DeferredBlock<DungeonTemporaryPlatformBlock> DUNGEON_TEMPORARY_PLATFORM = BLOCKS.register("dungeon_temporary_platform",

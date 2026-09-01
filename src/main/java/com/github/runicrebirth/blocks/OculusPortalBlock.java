@@ -115,6 +115,16 @@ public class OculusPortalBlock extends BaseEntityBlock {
 
         BlockEntity be = level.getBlockEntity(pos);
         if (!(be instanceof OculusPortalBlockEntity portal)) return;
+
+        if (portal.isExitPortal()) {
+            DungeonInstance exitInst = DungeonInstanceManager.get().getInstanceForPlayer(player.getUUID());
+            if (exitInst != null) {
+                TELEPORT_COOLDOWNS.put(player.getUUID(), gameTime);
+                DungeonTeleporter.teleportFromDungeon(player, exitInst);
+            }
+            return;
+        }
+
         if (!portal.hasSelectedDungeon()) return;
         if (portal.getAnimState() != OculusPortalBlockEntity.AnimState.ACTIVATING) return;
 
