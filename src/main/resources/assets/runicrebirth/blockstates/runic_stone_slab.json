@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "runicrebirth:block/runic_stone_slab"
+    },
+    "type=top": {
+      "model": "runicrebirth:block/runic_stone_slab_top"
+    },
+    "type=double": {
+      "model": "runicrebirth:block/runic_stone"
+    }
+  }
+}

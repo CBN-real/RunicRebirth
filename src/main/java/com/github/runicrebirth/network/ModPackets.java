@@ -1,0 +1,60 @@
+package com.github.runicrebirth.network;
+
+import com.github.runicrebirth.RunicRebirth;
+import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
+import net.neoforged.neoforge.network.registration.PayloadRegistrar;
+
+public final class ModPackets {
+
+    private static final String VERSION = "1";
+
+    private ModPackets() {}
+
+    public static void register(RegisterPayloadHandlersEvent event) {
+        PayloadRegistrar registrar = event.registrar(RunicRebirth.MODID).versioned(VERSION);
+
+        // C2S
+        registrar.playToServer(WeaponAbilityC2SPacket.TYPE, WeaponAbilityC2SPacket.STREAM_CODEC, WeaponAbilityC2SPacket::handle);
+        registrar.playToServer(ActivateRingC2SPacket.TYPE, ActivateRingC2SPacket.STREAM_CODEC, ActivateRingC2SPacket::handle);
+        registrar.playToServer(DrawStartC2SPacket.TYPE, DrawStartC2SPacket.STREAM_CODEC, DrawStartC2SPacket::handle);
+        registrar.playToServer(DrawSubmitC2SPacket.TYPE, DrawSubmitC2SPacket.STREAM_CODEC, DrawSubmitC2SPacket::handle);
+        registrar.playToServer(CancelDrawC2SPacket.TYPE, CancelDrawC2SPacket.STREAM_CODEC, CancelDrawC2SPacket::handle);
+        registrar.playToServer(CanvasSelectElementC2SPacket.TYPE, CanvasSelectElementC2SPacket.STREAM_CODEC, CanvasSelectElementC2SPacket::handle);
+        registrar.playToServer(CanvasSelectTierC2SPacket.TYPE, CanvasSelectTierC2SPacket.STREAM_CODEC, CanvasSelectTierC2SPacket::handle);
+        registrar.playToServer(ClearStackC2SPacket.TYPE, ClearStackC2SPacket.STREAM_CODEC, ClearStackC2SPacket::handle);
+        registrar.playToServer(SwitchStackC2SPacket.TYPE, SwitchStackC2SPacket.STREAM_CODEC, SwitchStackC2SPacket::handle);
+        registrar.playToServer(FinalizeCircuitC2SPacket.TYPE, FinalizeCircuitC2SPacket.STREAM_CODEC, FinalizeCircuitC2SPacket::handle);
+
+        // S2C
+        registrar.playToClient(StackChangedS2CPacket.TYPE, StackChangedS2CPacket.STREAM_CODEC, StackChangedS2CPacket::handle);
+        registrar.playToClient(PhantomMiningSyncS2CPacket.TYPE, PhantomMiningSyncS2CPacket.STREAM_CODEC, PhantomMiningSyncS2CPacket::handle);
+        registrar.playToClient(ImpactEffectS2CPacket.TYPE, ImpactEffectS2CPacket.STREAM_CODEC, ImpactEffectS2CPacket::handle);
+        registrar.playToClient(SpellUnlockSyncS2CPacket.TYPE, SpellUnlockSyncS2CPacket.STREAM_CODEC, SpellUnlockSyncS2CPacket::handle);
+        registrar.playToClient(CastAnimBroadcastS2CPacket.TYPE, CastAnimBroadcastS2CPacket.STREAM_CODEC, CastAnimBroadcastS2CPacket::handle);
+        registrar.playToClient(RingCastAnimS2CPacket.TYPE, RingCastAnimS2CPacket.STREAM_CODEC, RingCastAnimS2CPacket::handle);
+        registrar.playToClient(RunicWeaponAnimS2CPacket.TYPE, RunicWeaponAnimS2CPacket.STREAM_CODEC, RunicWeaponAnimS2CPacket::handle);
+        registrar.playToClient(CooldownSyncS2CPacket.TYPE, CooldownSyncS2CPacket.STREAM_CODEC, CooldownSyncS2CPacket::handle);
+        registrar.playToClient(DaggerAnimS2CPacket.TYPE, DaggerAnimS2CPacket.STREAM_CODEC, DaggerAnimS2CPacket::handle);
+        registrar.playToClient(MagicHandSyncS2CPacket.TYPE, MagicHandSyncS2CPacket.STREAM_CODEC, MagicHandSyncS2CPacket::handle);
+        registrar.playToClient(RingDurationSyncS2CPacket.TYPE, RingDurationSyncS2CPacket.STREAM_CODEC, RingDurationSyncS2CPacket::handle);
+
+        // Dungeon system
+        registrar.playToServer(EnterDungeonC2SPacket.TYPE, EnterDungeonC2SPacket.STREAM_CODEC, EnterDungeonC2SPacket::handle);
+        registrar.playToServer(SelectDungeonC2SPacket.TYPE, SelectDungeonC2SPacket.STREAM_CODEC, SelectDungeonC2SPacket::handle);
+        registrar.playToClient(DungeonDataSyncS2CPacket.TYPE, DungeonDataSyncS2CPacket.STREAM_CODEC, DungeonDataSyncS2CPacket::handle);
+        registrar.playToClient(OpenDungeonScreenS2CPacket.TYPE, OpenDungeonScreenS2CPacket.STREAM_CODEC, OpenDungeonScreenS2CPacket::handle);
+
+        // Dungeon Room Tracker
+        registrar.playToClient(OpenDungeonRoomTrackerS2CPacket.TYPE, OpenDungeonRoomTrackerS2CPacket.STREAM_CODEC, OpenDungeonRoomTrackerS2CPacket::handle);
+        registrar.playToServer(DungeonRoomTrackerSyncC2SPacket.TYPE, DungeonRoomTrackerSyncC2SPacket.STREAM_CODEC, DungeonRoomTrackerSyncC2SPacket::handle);
+        registrar.playToServer(DungeonRoomTrackerResetC2SPacket.TYPE, DungeonRoomTrackerResetC2SPacket.STREAM_CODEC, DungeonRoomTrackerResetC2SPacket::handle);
+
+        // Dungeon Mob Spawner
+        registrar.playToClient(OpenDungeonMobSpawnerS2CPacket.TYPE, OpenDungeonMobSpawnerS2CPacket.STREAM_CODEC, OpenDungeonMobSpawnerS2CPacket::handle);
+        registrar.playToServer(DungeonMobSpawnerSyncC2SPacket.TYPE, DungeonMobSpawnerSyncC2SPacket.STREAM_CODEC, DungeonMobSpawnerSyncC2SPacket::handle);
+
+        // EarthVein unlock system
+        registrar.playToClient(OpenUnlockScreenS2CPacket.TYPE, OpenUnlockScreenS2CPacket.STREAM_CODEC, OpenUnlockScreenS2CPacket::handle);
+        registrar.playToServer(AttemptUnlockC2SPacket.TYPE, AttemptUnlockC2SPacket.STREAM_CODEC, AttemptUnlockC2SPacket::handle);
+    }
+}

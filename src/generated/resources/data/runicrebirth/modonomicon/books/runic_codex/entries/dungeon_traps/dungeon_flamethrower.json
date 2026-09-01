@@ -1,0 +1,16 @@
+{
+  "type": "modonomicon:content",
+  "category": "runicrebirth:dungeon_traps",
+  "condition": {
+    "type": "modonomicon:none"
+  },
+  "description": "book.runicrebirth.runic_codex.dungeon_traps.dungeon_flamethrower.description",
+  "icon": {
+    "id": "runicrebirth:dungeon_flamethrower"
+  },
+  "id": "runicrebirth:dungeon_traps/dungeon_flamethrower",
+  "name": "book.runicrebirth.runic_codex.dungeon_traps.dungeon_flamethrower.name",
+  "sort_number": 1,
+  "x": 1,
+  "y": -2
+}

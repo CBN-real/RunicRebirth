@@ -1,0 +1,9 @@
+{
+  "model": {
+    "type": "minecraft:special",
+    "base": "runicrebirth:item/sect_banner_artificer",
+    "model": {
+      "type": "geckolib:geckolib"
+    }
+  }
+}

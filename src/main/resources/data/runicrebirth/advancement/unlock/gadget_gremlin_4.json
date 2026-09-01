@@ -1,0 +1,8 @@
+{
+  "criteria": {
+    "progress": {
+      "trigger": "runicrebirth:ring_activated",
+      "conditions": { "min_count": 500 }
+    }
+  }
+}

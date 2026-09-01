@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "runicrebirth:item/enhancement_rune_arcane_acolyte"
+  }
+}

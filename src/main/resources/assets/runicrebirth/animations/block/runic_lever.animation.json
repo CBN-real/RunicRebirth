@@ -1,0 +1,114 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"open": {
+			"loop": "hold_on_last_frame",
+			"animation_length": 1,
+			"bones": {
+				"gear_assembly": {
+					"rotation": {
+						"0.0": {
+							"vector": [
+								0,
+								0,
+								0
+							]
+						},
+						"1.0": {
+							"vector": [
+								0,
+								0,
+								-60
+							],
+							"easing": "easeInElastic",
+							"easingArgs": [
+								1.5
+							]
+						}
+					}
+				},
+				"gears": {
+					"rotation": {
+						"0.0": {
+							"vector": [
+								0,
+								0,
+								0
+							]
+						},
+						"1.0": {
+							"vector": [
+								0,
+								0,
+								240
+							],
+							"easing": "easeInElastic",
+							"easingArgs": [
+								1.5
+							]
+						}
+					}
+				}
+			}
+		},
+		"close": {
+			"loop": "hold_on_last_frame",
+			"animation_length": 1,
+			"bones": {
+				"gear_assembly": {
+					"rotation": {
+						"0.0": {
+							"vector": [
+								0,
+								0,
+								-60
+							],
+							"easing": "easeInElastic",
+							"easingArgs": [
+								1.5
+							]
+						},
+						"1.0": {
+							"vector": [
+								0,
+								0,
+								0
+							],
+							"easing": "easeInElastic",
+							"easingArgs": [
+								1.5
+							]
+						}
+					}
+				},
+				"gears": {
+					"rotation": {
+						"0.0": {
+							"vector": [
+								0,
+								0,
+								240
+							],
+							"easing": "easeInElastic",
+							"easingArgs": [
+								1.5
+							]
+						},
+						"1.0": {
+							"vector": [
+								0,
+								0,
+								0
+							],
+							"easing": "easeInElastic",
+							"easingArgs": [
+								1.5
+							]
+						}
+					}
+				}
+			}
+		}
+	},
+	"geckolib_format_version": 2
+}

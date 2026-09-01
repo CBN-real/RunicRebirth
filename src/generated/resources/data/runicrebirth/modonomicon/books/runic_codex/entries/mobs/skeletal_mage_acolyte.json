@@ -1,0 +1,16 @@
+{
+  "type": "modonomicon:content",
+  "category": "runicrebirth:mobs",
+  "condition": {
+    "type": "modonomicon:none"
+  },
+  "description": "book.runicrebirth.runic_codex.mobs.skeletal_mage_acolyte.description",
+  "icon": {
+    "id": "minecraft:bone"
+  },
+  "id": "runicrebirth:mobs/skeletal_mage_acolyte",
+  "name": "book.runicrebirth.runic_codex.mobs.skeletal_mage_acolyte.name",
+  "sort_number": 2,
+  "x": -2,
+  "y": 0
+}

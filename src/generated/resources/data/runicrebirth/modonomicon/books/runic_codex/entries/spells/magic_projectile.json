@@ -1,0 +1,17 @@
+{
+  "type": "modonomicon:content",
+  "category": "runicrebirth:spells",
+  "condition": {
+    "type": "runicrebirth:spell_unlock",
+    "advancement_id": "runicrebirth:spells/magic_projectile",
+    "spell_name": "Magic Projectile",
+    "unlock_hint": "Hold a spell writer for the first time"
+  },
+  "description": "book.runicrebirth.runic_codex.spells.magic_projectile.description",
+  "icon": "runicrebirth:textures/gui/shape_icons/line_icon.png",
+  "id": "runicrebirth:spells/magic_projectile",
+  "name": "book.runicrebirth.runic_codex.spells.magic_projectile.name",
+  "sort_number": 11,
+  "x": -12,
+  "y": -2
+}

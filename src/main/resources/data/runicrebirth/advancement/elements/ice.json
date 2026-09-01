@@ -1,0 +1,26 @@
+{
+  "parent": "runicrebirth:elements/root",
+  "display": {
+    "icon": {
+      "id": "minecraft:blue_ice"
+    },
+    "title": {
+      "translate": "advancement.runicrebirth.elements.ice.title"
+    },
+    "description": {
+      "translate": "advancement.runicrebirth.elements.ice.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "element_trial": {
+      "trigger": "runicrebirth:element_trial",
+      "conditions": {
+        "element": "runicrebirth:ice"
+      }
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "type": "modonomicon:content",
+  "category": "runicrebirth:spell_rings",
+  "condition": {
+    "type": "modonomicon:none"
+  },
+  "description": "book.runicrebirth.runic_codex.spell_rings.ring_of_phantom_mining.description",
+  "icon": {
+    "id": "runicrebirth:ring_of_phantom_mining"
+  },
+  "id": "runicrebirth:spell_rings/ring_of_phantom_mining",
+  "name": "book.runicrebirth.runic_codex.spell_rings.ring_of_phantom_mining.name",
+  "sort_number": 5,
+  "x": 4,
+  "y": 0
+}

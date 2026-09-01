@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=north": { "model": "runicrebirth:block/adept_wizard_statue" },
+    "facing=south": { "model": "runicrebirth:block/adept_wizard_statue", "y": 180 },
+    "facing=east":  { "model": "runicrebirth:block/adept_wizard_statue", "y": 90 },
+    "facing=west":  { "model": "runicrebirth:block/adept_wizard_statue", "y": 270 }
+  }
+}

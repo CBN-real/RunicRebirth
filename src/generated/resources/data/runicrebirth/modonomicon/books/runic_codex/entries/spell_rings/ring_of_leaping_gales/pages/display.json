@@ -1,0 +1,13 @@
+{
+  "type": "modonomicon:spotlight",
+  "condition": {
+    "type": "modonomicon:none"
+  },
+  "id": "display",
+  "item": {
+    "id": "runicrebirth:ring_of_leaping_gales"
+  },
+  "sort_number": 0,
+  "text": "",
+  "title": "Ring of Leaping Gales"
+}

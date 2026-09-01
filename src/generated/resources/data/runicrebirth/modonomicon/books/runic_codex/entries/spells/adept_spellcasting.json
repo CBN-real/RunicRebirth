@@ -1,0 +1,21 @@
+{
+  "type": "modonomicon:content",
+  "category": "runicrebirth:spells",
+  "condition": {
+    "type": "modonomicon:none"
+  },
+  "description": "book.runicrebirth.runic_codex.spells.adept_spellcasting.description",
+  "icon": {
+    "id": "minecraft:nether_star"
+  },
+  "id": "runicrebirth:spells/adept_spellcasting",
+  "name": "book.runicrebirth.runic_codex.spells.adept_spellcasting.name",
+  "parents": [
+    {
+      "entry": "runicrebirth:spells/magic_arrow"
+    }
+  ],
+  "sort_number": 16,
+  "x": -7,
+  "y": -1
+}

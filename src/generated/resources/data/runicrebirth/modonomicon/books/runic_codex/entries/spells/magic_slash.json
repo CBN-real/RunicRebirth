@@ -1,0 +1,22 @@
+{
+  "type": "modonomicon:content",
+  "category": "runicrebirth:spells",
+  "condition": {
+    "type": "runicrebirth:spell_unlock",
+    "advancement_id": "runicrebirth:spells/magic_slash",
+    "spell_name": "Magic Slash",
+    "unlock_hint": "Unlock conditions coming soon"
+  },
+  "description": "book.runicrebirth.runic_codex.spells.magic_slash.description",
+  "icon": "runicrebirth:textures/gui/shape_icons/slash_icon.png",
+  "id": "runicrebirth:spells/magic_slash",
+  "name": "book.runicrebirth.runic_codex.spells.magic_slash.name",
+  "parents": [
+    {
+      "entry": "runicrebirth:spells/magic_shield"
+    }
+  ],
+  "sort_number": 18,
+  "x": -2,
+  "y": -1
+}

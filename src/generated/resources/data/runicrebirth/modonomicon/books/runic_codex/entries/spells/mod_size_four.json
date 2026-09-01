@@ -1,0 +1,14 @@
+{
+  "type": "modonomicon:content",
+  "category": "runicrebirth:spells",
+  "condition": {
+    "type": "modonomicon:none"
+  },
+  "description": "book.runicrebirth.runic_codex.spells.mod_size_four.description",
+  "icon": "runicrebirth:textures/gui/shape_icons/plus_four_icon_small.png",
+  "id": "runicrebirth:spells/mod_size_four",
+  "name": "book.runicrebirth.runic_codex.spells.mod_size_four.name",
+  "sort_number": 9,
+  "x": 10,
+  "y": -4
+}

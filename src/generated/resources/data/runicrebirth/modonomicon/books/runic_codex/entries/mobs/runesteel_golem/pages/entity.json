@@ -1,0 +1,13 @@
+{
+  "type": "modonomicon:entity",
+  "condition": {
+    "type": "modonomicon:none"
+  },
+  "default_rotation": -20.0,
+  "entity_id": "runicrebirth:runesteel_golem",
+  "entity_name": "",
+  "id": "entity",
+  "scale": 0.6,
+  "sort_number": 1,
+  "text": ""
+}

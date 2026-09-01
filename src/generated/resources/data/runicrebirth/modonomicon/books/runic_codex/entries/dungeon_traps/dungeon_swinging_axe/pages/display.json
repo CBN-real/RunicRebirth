@@ -1,0 +1,13 @@
+{
+  "type": "modonomicon:spotlight",
+  "condition": {
+    "type": "modonomicon:none"
+  },
+  "id": "display",
+  "item": {
+    "id": "runicrebirth:dungeon_swinging_axe"
+  },
+  "sort_number": 0,
+  "text": "",
+  "title": "Swinging Axe"
+}

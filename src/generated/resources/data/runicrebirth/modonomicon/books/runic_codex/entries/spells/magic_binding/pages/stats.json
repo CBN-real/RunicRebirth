@@ -1,0 +1,11 @@
+{
+  "type": "runicrebirth:spell_page",
+  "damage": "6",
+  "damage_type": "SPIRIT",
+  "offset_x": 0.75,
+  "offset_y": 0.0,
+  "offset_z": 0.0,
+  "range": "24",
+  "sort_number": 0,
+  "spell_name": "Magic Binding"
+}

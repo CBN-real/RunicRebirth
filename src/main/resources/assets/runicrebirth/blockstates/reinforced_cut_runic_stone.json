@@ -1,0 +1,7 @@
+{"athena:loader":"athena:ctm",
+  "ctm_textures":{"center":"runicrebirth:block/runic_stone/ctm/reinforced_runic_stone_center",
+    "empty":"runicrebirth:block/runic_stone/ctm/reinforced_runic_stone_empty",
+    "horizontal":"runicrebirth:block/runic_stone/ctm/reinforced_runic_stone_horizontal",
+    "particle":"runicrebirth:block/runic_stone/ctm/reinforced_runic_stone",
+    "vertical":"runicrebirth:block/runic_stone/ctm/reinforced_runic_stone_vertical"},
+  "variants":{"":{"model":"runicrebirth:block/reinforced_runic_stone"}}}

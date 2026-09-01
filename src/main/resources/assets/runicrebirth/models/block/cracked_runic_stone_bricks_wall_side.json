@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/template_wall_side",
+  "textures": {
+    "wall": "runicrebirth:block/cracked_runic_stone_bricks"
+  }
+}

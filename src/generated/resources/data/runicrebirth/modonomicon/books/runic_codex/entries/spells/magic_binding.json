@@ -1,0 +1,22 @@
+{
+  "type": "modonomicon:content",
+  "category": "runicrebirth:spells",
+  "condition": {
+    "type": "runicrebirth:spell_unlock",
+    "advancement_id": "runicrebirth:spells/magic_binding",
+    "spell_name": "Magic Binding",
+    "unlock_hint": "Unlock conditions coming soon"
+  },
+  "description": "book.runicrebirth.runic_codex.spells.magic_binding.description",
+  "icon": "runicrebirth:textures/gui/shape_icons/binding_icon.png",
+  "id": "runicrebirth:spells/magic_binding",
+  "name": "book.runicrebirth.runic_codex.spells.magic_binding.name",
+  "parents": [
+    {
+      "entry": "runicrebirth:spells/arch_spellcasting"
+    }
+  ],
+  "sort_number": 22,
+  "x": 8,
+  "y": -2
+}

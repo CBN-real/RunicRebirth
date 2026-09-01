@@ -1,0 +1,9 @@
+{
+  "model": {
+    "type": "minecraft:special",
+    "base": "runicrebirth:item/runelight_lantern",
+    "model": {
+      "type": "geckolib:geckolib"
+    }
+  }
+}

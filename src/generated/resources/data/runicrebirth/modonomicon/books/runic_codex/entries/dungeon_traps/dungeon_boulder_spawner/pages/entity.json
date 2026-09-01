@@ -1,0 +1,13 @@
+{
+  "type": "modonomicon:entity",
+  "condition": {
+    "type": "modonomicon:none"
+  },
+  "default_rotation": -20.0,
+  "entity_id": "runicrebirth:dungeon_boulder",
+  "entity_name": "",
+  "id": "entity",
+  "scale": 1.5,
+  "sort_number": 0,
+  "text": ""
+}

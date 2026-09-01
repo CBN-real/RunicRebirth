@@ -1,0 +1,41 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"idle": {
+			"loop": true,
+			"animation_length": 24,
+			"bones": {
+				"large_circle": {
+					"rotation": {
+						"vector": [
+							0,
+							"-query.anim_time * 15",
+							0
+						]
+					}
+				},
+				"small_circle": {
+					"rotation": {
+						"vector": [
+							0,
+							"-query.anim_time * -25",
+							"math.sin(query.anim_time * 360) * 3"
+						]
+					}
+				},
+				"__dummy__": {
+					"rotation": {
+						"0.0": {
+							"vector": [
+								0,
+								0,
+								0
+							]
+						}
+					}
+				}
+			}
+		}
+	},
+	"geckolib_format_version": 2
+}

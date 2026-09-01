@@ -1,0 +1,13 @@
+{
+  "type": "modonomicon:entity",
+  "condition": {
+    "type": "modonomicon:none"
+  },
+  "entity_id": "runicrebirth:magic_explosion",
+  "entity_name": "",
+  "id": "entity",
+  "rotate": false,
+  "scale": 0.4,
+  "sort_number": 1,
+  "text": "book.runicrebirth.runic_codex.spells.magic_explosion.entity.text"
+}

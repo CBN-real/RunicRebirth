@@ -1,0 +1,11 @@
+{
+  "type": "runicrebirth:spell_page",
+  "damage": "8",
+  "damage_type": "SHARP",
+  "offset_x": 0.0,
+  "offset_y": 0.5,
+  "offset_z": 0.0,
+  "range": "64",
+  "sort_number": 0,
+  "spell_name": "Magic Ballista"
+}

@@ -1,0 +1,13 @@
+{
+  "type": "modonomicon:spotlight",
+  "condition": {
+    "type": "modonomicon:none"
+  },
+  "id": "display",
+  "item": {
+    "id": "runicrebirth:basic_runic_longsword"
+  },
+  "sort_number": 0,
+  "text": "",
+  "title": "Basic Runic Longsword"
+}

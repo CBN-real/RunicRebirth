@@ -1,0 +1,30 @@
+{
+	"format_version": "1.12.0",
+	"minecraft:geometry": [
+		{
+			"description": {
+				"identifier": "geometry.unknown",
+				"texture_width": 1024,
+				"texture_height": 1024,
+				"visible_bounds_width": 3,
+				"visible_bounds_height": 1.5,
+				"visible_bounds_offset": [0, 0.25, 0]
+			},
+			"bones": [
+				{
+					"name": "aoe_tracker",
+					"pivot": [0, 0, 0],
+					"cubes": [
+						{
+							"origin": [-13.005, 0, -14.005],
+							"size": [26.349, 0, 27.81],
+							"uv": {
+								"up": {"uv": [947, 961], "uv_size": [-350, -380]}
+							}
+						}
+					]
+				}
+			]
+		}
+	]
+}

@@ -1,0 +1,22 @@
+{
+  "type": "modonomicon:content",
+  "category": "runicrebirth:spells",
+  "condition": {
+    "type": "runicrebirth:spell_unlock",
+    "advancement_id": "runicrebirth:spells/magic_blast",
+    "spell_name": "Magic Blast",
+    "unlock_hint": "Kill an entity with magic from less than 5 blocks away"
+  },
+  "description": "book.runicrebirth.runic_codex.spells.magic_blast.description",
+  "icon": "runicrebirth:textures/gui/shape_icons/v_icon.png",
+  "id": "runicrebirth:spells/magic_blast",
+  "name": "book.runicrebirth.runic_codex.spells.magic_blast.name",
+  "parents": [
+    {
+      "entry": "runicrebirth:spells/magic_beam"
+    }
+  ],
+  "sort_number": 14,
+  "x": -12,
+  "y": 0
+}

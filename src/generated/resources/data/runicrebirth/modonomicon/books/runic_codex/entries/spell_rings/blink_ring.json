@@ -1,0 +1,16 @@
+{
+  "type": "modonomicon:content",
+  "category": "runicrebirth:spell_rings",
+  "condition": {
+    "type": "modonomicon:none"
+  },
+  "description": "book.runicrebirth.runic_codex.spell_rings.blink_ring.description",
+  "icon": {
+    "id": "runicrebirth:blink_ring"
+  },
+  "id": "runicrebirth:spell_rings/blink_ring",
+  "name": "book.runicrebirth.runic_codex.spell_rings.blink_ring.name",
+  "sort_number": 6,
+  "x": -2,
+  "y": 1
+}

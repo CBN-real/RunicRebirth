@@ -1,0 +1,24 @@
+{
+  "display": {
+    "icon": {
+      "id": "minecraft:blaze_powder"
+    },
+    "title": {
+      "translate": "advancement.runicrebirth.spells.magic_projectile.title"
+    },
+    "description": {
+      "translate": "advancement.runicrebirth.spells.magic_projectile.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": false,
+    "background": "minecraft:textures/gui/advancements/backgrounds/stone.png"
+  },
+  "criteria": {
+    "held_spell_writer": {
+      "trigger": "runicrebirth:held_spell_writer",
+      "conditions": {}
+    }
+  }
+}

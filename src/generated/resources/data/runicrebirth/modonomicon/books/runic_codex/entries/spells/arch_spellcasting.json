@@ -1,0 +1,21 @@
+{
+  "type": "modonomicon:content",
+  "category": "runicrebirth:spells",
+  "condition": {
+    "type": "modonomicon:none"
+  },
+  "description": "book.runicrebirth.runic_codex.spells.arch_spellcasting.description",
+  "icon": {
+    "id": "minecraft:nether_star"
+  },
+  "id": "runicrebirth:spells/arch_spellcasting",
+  "name": "book.runicrebirth.runic_codex.spells.arch_spellcasting.name",
+  "parents": [
+    {
+      "entry": "runicrebirth:spells/magic_meteor"
+    }
+  ],
+  "sort_number": 21,
+  "x": 3,
+  "y": -1
+}

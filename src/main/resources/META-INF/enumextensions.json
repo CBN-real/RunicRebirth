@@ -1,0 +1,22 @@
+{
+  "entries": [
+    {
+      "enum": "net/minecraft/client/model/HumanoidModel$ArmPose",
+      "name": "RUNICREBIRTH_CASTING",
+      "constructor": "(ZZLnet/neoforged/neoforge/client/IArmPoseTransformer;)V",
+      "parameters": {
+        "class": "com/github/runicrebirth/client/SpellWriterArmPose",
+        "field": "CASTING"
+      }
+    },
+    {
+      "enum": "net/minecraft/client/model/HumanoidModel$ArmPose",
+      "name": "RUNICREBIRTH_RING_CAST",
+      "constructor": "(ZZLnet/neoforged/neoforge/client/IArmPoseTransformer;)V",
+      "parameters": {
+        "class": "com/github/runicrebirth/client/RingCastArmPose",
+        "field": "RING_CAST"
+      }
+    }
+  ]
+}

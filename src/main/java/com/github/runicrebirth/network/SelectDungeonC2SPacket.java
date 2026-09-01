@@ -1,0 +1,64 @@
+package com.github.runicrebirth.network;
+
+import com.github.runicrebirth.RunicRebirth;
+import com.github.runicrebirth.blocks.entity.OculusControllerBlockEntity;
+import com.github.runicrebirth.blocks.entity.OculusPortalBlockEntity;
+import com.github.runicrebirth.dungeon.DungeonTierRegistry;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.Identifier;
+import net.minecraft.server.level.ServerPlayer;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
+
+public record SelectDungeonC2SPacket(
+        Identifier dungeonId,
+        int difficulty,
+        BlockPos controllerPos
+) implements CustomPacketPayload {
+
+    public static final Type<SelectDungeonC2SPacket> TYPE =
+            new Type<>(Identifier.fromNamespaceAndPath(RunicRebirth.MODID, "select_dungeon"));
+
+    public static final StreamCodec<FriendlyByteBuf, SelectDungeonC2SPacket> STREAM_CODEC = StreamCodec.of(
+            (buf, pkt) -> {
+                buf.writeIdentifier(pkt.dungeonId);
+                buf.writeVarInt(pkt.difficulty);
+                buf.writeBlockPos(pkt.controllerPos);
+            },
+            buf -> new SelectDungeonC2SPacket(
+                    buf.readIdentifier(),
+                    buf.readVarInt(),
+                    buf.readBlockPos()
+            )
+    );
+
+    @Override
+    public Type<? extends CustomPacketPayload> type() { return TYPE; }
+
+    public static void handle(SelectDungeonC2SPacket packet, IPayloadContext ctx) {
+        ctx.enqueueWork(() -> {
+            if (!(ctx.player() instanceof ServerPlayer player)) return;
+
+            if (packet.difficulty < 1 || packet.difficulty > 3) return;
+
+            var be = player.level().getBlockEntity(packet.controllerPos);
+            if (!(be instanceof OculusControllerBlockEntity controller) || !controller.isActive()) return;
+
+            BlockPos portalPos = controller.getPortalPos();
+            if (portalPos == null) return;
+
+            var portalBe = player.level().getBlockEntity(portalPos);
+            if (!(portalBe instanceof OculusPortalBlockEntity portal)) return;
+
+            portal.setSelectedDungeon(packet.dungeonId, packet.difficulty);
+
+            String tierName = packet.dungeonId.getPath();
+            player.sendSystemMessage(
+                    Component.literal("§6Portal attuned to " + tierName
+                            + " §7(Difficulty " + packet.difficulty + ")§6. Walk through to enter."));
+        });
+    }
+}

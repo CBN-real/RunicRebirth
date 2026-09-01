@@ -1,0 +1,21 @@
+{
+  "type": "modonomicon:content",
+  "category": "runicrebirth:foundation",
+  "condition": {
+    "type": "modonomicon:none"
+  },
+  "description": "book.runicrebirth.runic_codex.foundation.adept_ascension.description",
+  "icon": {
+    "id": "minecraft:nether_star"
+  },
+  "id": "runicrebirth:foundation/adept_ascension",
+  "name": "book.runicrebirth.runic_codex.foundation.adept_ascension.name",
+  "parents": [
+    {
+      "entry": "runicrebirth:foundation/introduction"
+    }
+  ],
+  "sort_number": 1,
+  "x": 0,
+  "y": 0
+}

@@ -1,0 +1,14 @@
+{
+  "entities": [
+    "player"
+  ],
+  "slots": [
+    "ring",
+    "index_spell_ring",
+    "middle_spell_ring",
+    "thumb_spell_ring",
+    "pinkie_spell_ring",
+    "ring_spell_ring",
+    "runic_drone"
+  ]
+}

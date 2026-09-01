@@ -1,0 +1,11 @@
+{
+  "type": "modonomicon:text",
+  "condition": {
+    "type": "modonomicon:none"
+  },
+  "id": "info",
+  "show_title_separator": true,
+  "sort_number": 0,
+  "text": "book.runicrebirth.runic_codex.foundation.adept_ascension.info.text",
+  "title": "book.runicrebirth.runic_codex.foundation.adept_ascension.info.title"
+}

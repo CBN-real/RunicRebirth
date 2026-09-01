@@ -1,0 +1,9 @@
+{
+  "model": {
+    "type": "minecraft:special",
+    "base": "runicrebirth:item/ancient_arcane_turret",
+    "model": {
+      "type": "geckolib:geckolib"
+    }
+  }
+}

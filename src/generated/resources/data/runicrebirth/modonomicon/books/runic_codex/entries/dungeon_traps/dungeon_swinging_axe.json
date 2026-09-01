@@ -1,0 +1,16 @@
+{
+  "type": "modonomicon:content",
+  "category": "runicrebirth:dungeon_traps",
+  "condition": {
+    "type": "modonomicon:none"
+  },
+  "description": "book.runicrebirth.runic_codex.dungeon_traps.dungeon_swinging_axe.description",
+  "icon": {
+    "id": "runicrebirth:dungeon_swinging_axe"
+  },
+  "id": "runicrebirth:dungeon_traps/dungeon_swinging_axe",
+  "name": "book.runicrebirth.runic_codex.dungeon_traps.dungeon_swinging_axe.name",
+  "sort_number": 0,
+  "x": -2,
+  "y": -2
+}

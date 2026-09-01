@@ -1,0 +1,57 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"animation.thrown_runic_dagger.spinning": {
+			"loop": true,
+			"animation_length": 1.0,
+			"bones": {
+				"__dummy__": {
+					"rotation": {
+						"0.0": {
+							"vector": [
+								0,
+								0,
+								0
+							]
+						}
+					}
+				}
+			}
+		},
+		"animation.thrown_runic_dagger.idle": {
+			"loop": true,
+			"animation_length": 1.0,
+			"bones": {
+				"__dummy__": {
+					"rotation": {
+						"0.0": {
+							"vector": [
+								0,
+								0,
+								0
+							]
+						}
+					}
+				}
+			}
+		},
+		"animation.thrown_runic_dagger.returning": {
+			"loop": true,
+			"animation_length": 1.0,
+			"bones": {
+				"__dummy__": {
+					"rotation": {
+						"0.0": {
+							"vector": [
+								0,
+								0,
+								0
+							]
+						}
+					}
+				}
+			}
+		}
+	},
+	"geckolib_format_version": 2
+}

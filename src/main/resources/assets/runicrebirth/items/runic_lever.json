@@ -1,0 +1,9 @@
+{
+  "model": {
+    "type": "minecraft:special",
+    "base": "runicrebirth:item/runic_lever",
+    "model": {
+      "type": "geckolib:geckolib"
+    }
+  }
+}

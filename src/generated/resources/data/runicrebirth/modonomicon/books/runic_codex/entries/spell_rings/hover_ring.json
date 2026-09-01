@@ -1,0 +1,16 @@
+{
+  "type": "modonomicon:content",
+  "category": "runicrebirth:spell_rings",
+  "condition": {
+    "type": "modonomicon:none"
+  },
+  "description": "book.runicrebirth.runic_codex.spell_rings.hover_ring.description",
+  "icon": {
+    "id": "runicrebirth:hover_ring"
+  },
+  "id": "runicrebirth:spell_rings/hover_ring",
+  "name": "book.runicrebirth.runic_codex.spell_rings.hover_ring.name",
+  "sort_number": 8,
+  "x": 4,
+  "y": 1
+}

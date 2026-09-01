@@ -1,0 +1,22 @@
+{
+  "type": "modonomicon:content",
+  "category": "runicrebirth:spells",
+  "condition": {
+    "type": "runicrebirth:spell_unlock",
+    "advancement_id": "runicrebirth:spells/magic_explosion",
+    "spell_name": "Magic Explosion",
+    "unlock_hint": "Unlock conditions coming soon"
+  },
+  "description": "book.runicrebirth.runic_codex.spells.magic_explosion.description",
+  "icon": "runicrebirth:textures/gui/shape_icons/explosion_icon.png",
+  "id": "runicrebirth:spells/magic_explosion",
+  "name": "book.runicrebirth.runic_codex.spells.magic_explosion.name",
+  "parents": [
+    {
+      "entry": "runicrebirth:spells/magic_slash"
+    }
+  ],
+  "sort_number": 19,
+  "x": -2,
+  "y": 0
+}

@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "triggered=false,powered=false": { "model": "runicrebirth:block/crumbling_platform" },
+    "triggered=false,powered=true":  { "model": "runicrebirth:block/crumbling_platform" },
+    "triggered=true,powered=false":  { "model": "runicrebirth:block/crumbling_platform" },
+    "triggered=true,powered=true":   { "model": "runicrebirth:block/crumbling_platform" }
+  }
+}

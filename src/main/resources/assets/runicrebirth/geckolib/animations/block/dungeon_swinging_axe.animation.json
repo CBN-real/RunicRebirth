@@ -1,0 +1,48 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"animation.dungeon_swinging_axe.swinging_axe": {
+			"loop": true,
+			"animation_length": 6,
+			"bones": {
+				"root": {
+					"rotation": {
+						"0.0": [
+							0,
+							0,
+							-45
+						],
+						"3.0": [
+							0,
+							0,
+							45
+						],
+						"6.0": [
+							0,
+							0,
+							-45
+						]
+					}
+				}
+			}
+		},
+		"swinging_axe": {
+			"loop": true,
+			"animation_length": 2,
+			"bones": {
+				"gear_assembly": {
+					"rotation": {
+						"0.0": {
+							"vector": [
+								0,
+								0,
+								"math.sin(query.anim_time * 180) * 65"
+							]
+						}
+					}
+				}
+			}
+		}
+	},
+	"geckolib_format_version": 2
+}

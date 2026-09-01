@@ -1,0 +1,11 @@
+{
+  "type": "runicrebirth:spell_page",
+  "damage": "4",
+  "damage_type": "SHARP",
+  "offset_x": 1.1,
+  "offset_y": 0.4,
+  "offset_z": 0.0,
+  "range": "16",
+  "sort_number": 0,
+  "spell_name": "Magic Slash"
+}

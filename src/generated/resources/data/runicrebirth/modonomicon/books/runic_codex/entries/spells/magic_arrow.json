@@ -1,0 +1,22 @@
+{
+  "type": "modonomicon:content",
+  "category": "runicrebirth:spells",
+  "condition": {
+    "type": "runicrebirth:spell_unlock",
+    "advancement_id": "runicrebirth:spells/magic_arrow",
+    "spell_name": "Magic Arrow",
+    "unlock_hint": "Kill a skeleton with magic"
+  },
+  "description": "book.runicrebirth.runic_codex.spells.magic_arrow.description",
+  "icon": "runicrebirth:textures/gui/shape_icons/arrow_icon.png",
+  "id": "runicrebirth:spells/magic_arrow",
+  "name": "book.runicrebirth.runic_codex.spells.magic_arrow.name",
+  "parents": [
+    {
+      "entry": "runicrebirth:spells/magic_blast"
+    }
+  ],
+  "sort_number": 15,
+  "x": -12,
+  "y": 1
+}

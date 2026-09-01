@@ -1,0 +1,11 @@
+{
+  "type": "runicrebirth:spell_page",
+  "damage": "12 (+6 splash)",
+  "damage_type": "BLUNT",
+  "offset_x": -0.8,
+  "offset_y": -1.0,
+  "offset_z": 0.0,
+  "range": "16",
+  "sort_number": 0,
+  "spell_name": "Magic Hammer"
+}

@@ -1,0 +1,9 @@
+{
+  "model": {
+    "type": "minecraft:special",
+    "base": "runicrebirth:item/adept_runeblade_statue",
+    "model": {
+      "type": "geckolib:geckolib"
+    }
+  }
+}

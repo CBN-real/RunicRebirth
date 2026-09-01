@@ -1,0 +1,8 @@
+{
+  "criteria": {
+    "progress": {
+      "trigger": "runicrebirth:spell_cast",
+      "conditions": { "min_count": 50 }
+    }
+  }
+}

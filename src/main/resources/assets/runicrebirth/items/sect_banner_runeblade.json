@@ -1,0 +1,9 @@
+{
+  "model": {
+    "type": "minecraft:special",
+    "base": "runicrebirth:item/sect_banner_runeblade",
+    "model": {
+      "type": "geckolib:geckolib"
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "type": "modonomicon:entity",
+  "condition": {
+    "type": "modonomicon:none"
+  },
+  "entity_id": "runicrebirth:magic_slash_demo",
+  "entity_name": "",
+  "id": "entity",
+  "rotate": false,
+  "scale": 0.5,
+  "sort_number": 1,
+  "text": "book.runicrebirth.runic_codex.spells.magic_slash.entity.text"
+}

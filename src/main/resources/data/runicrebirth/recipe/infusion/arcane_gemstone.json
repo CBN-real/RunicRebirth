@@ -1,0 +1,12 @@
+{
+  "type": "runicrebirth:infusion",
+  "ingredients": [
+    "runicrebirth:arcane_spirit",
+    "runicrebirth:arcane_spirit",
+    "runicrebirth:arcane_spirit",
+    "runicrebirth:arcane_spirit",
+    "minecraft:diamond"
+  ],
+  "result": "runicrebirth:arcane_gemstone",
+  "crafting_time": 165
+}

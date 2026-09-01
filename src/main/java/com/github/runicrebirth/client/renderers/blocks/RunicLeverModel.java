@@ -1,0 +1,37 @@
+package com.github.runicrebirth.client.renderers.blocks;
+
+import com.github.runicrebirth.RunicRebirth;
+import com.github.runicrebirth.blocks.entity.RunicLeverBlockEntity;
+import net.minecraft.resources.Identifier;
+import com.geckolib.model.GeoModel;
+import com.geckolib.renderer.base.GeoRenderState;
+
+public class RunicLeverModel extends GeoModel<RunicLeverBlockEntity> {
+
+    private static final Identifier MODEL_FLOOR = Identifier.fromNamespaceAndPath(
+            RunicRebirth.MODID, "block/runic_lever");
+    private static final Identifier MODEL_WALL = Identifier.fromNamespaceAndPath(
+            RunicRebirth.MODID, "block/runic_lever_wall");
+    private static final Identifier MODEL_CEILING = Identifier.fromNamespaceAndPath(
+            RunicRebirth.MODID, "block/runic_lever_ceiling");
+    private static final Identifier TEXTURE = Identifier.fromNamespaceAndPath(
+            RunicRebirth.MODID, "textures/entity/runic_templates/earth_runic_template.png");
+    private static final Identifier ANIMATION = Identifier.fromNamespaceAndPath(
+            RunicRebirth.MODID, "block/runic_lever");
+
+    @Override
+    public Identifier getModelResource(GeoRenderState renderState) {
+        // TODO GeckoLib 5: migrate block-state face selection to render state data ticket
+        return MODEL_FLOOR;
+    }
+
+    @Override
+    public Identifier getTextureResource(GeoRenderState renderState) {
+        return TEXTURE;
+    }
+
+    @Override
+    public Identifier getAnimationResource(RunicLeverBlockEntity animatable) {
+        return ANIMATION;
+    }
+}

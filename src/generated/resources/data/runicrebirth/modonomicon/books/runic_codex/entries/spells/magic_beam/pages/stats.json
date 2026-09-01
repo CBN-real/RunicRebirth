@@ -1,0 +1,11 @@
+{
+  "type": "runicrebirth:spell_page",
+  "damage": "3",
+  "damage_type": "SPIRIT",
+  "offset_x": -0.2,
+  "offset_y": 0.55,
+  "offset_z": 0.0,
+  "range": "12",
+  "sort_number": 0,
+  "spell_name": "Magic Beam"
+}

@@ -1,0 +1,8 @@
+{
+  "criteria": {
+    "progress": {
+      "trigger": "runicrebirth:dungeon_trial_cleared",
+      "conditions": { "trial_id": "runicrebirth:arch_practitioner_trial" }
+    }
+  }
+}

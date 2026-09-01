@@ -1,0 +1,11 @@
+{
+  "type": "runicrebirth:spell_page",
+  "damage": "5",
+  "damage_type": "BLUNT",
+  "offset_x": 0.25,
+  "offset_y": 0.4,
+  "offset_z": 0.0,
+  "range": "16",
+  "sort_number": 0,
+  "spell_name": "Magic Projectile"
+}

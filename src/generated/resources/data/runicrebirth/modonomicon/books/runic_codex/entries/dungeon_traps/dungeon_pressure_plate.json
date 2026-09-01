@@ -1,0 +1,16 @@
+{
+  "type": "modonomicon:content",
+  "category": "runicrebirth:dungeon_traps",
+  "condition": {
+    "type": "modonomicon:none"
+  },
+  "description": "book.runicrebirth.runic_codex.dungeon_traps.dungeon_pressure_plate.description",
+  "icon": {
+    "id": "runicrebirth:dungeon_pressure_plate"
+  },
+  "id": "runicrebirth:dungeon_traps/dungeon_pressure_plate",
+  "name": "book.runicrebirth.runic_codex.dungeon_traps.dungeon_pressure_plate.name",
+  "sort_number": 6,
+  "x": -2,
+  "y": 1
+}

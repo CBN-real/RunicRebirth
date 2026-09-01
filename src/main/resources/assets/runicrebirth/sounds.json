@@ -1,0 +1,232 @@
+{
+    "canvas.success": {
+        "sounds": [
+            "runicrebirth:canvas/success"
+        ]
+    },
+    "canvas.failed": {
+        "sounds": [
+            "runicrebirth:canvas/failed"
+        ]
+    },
+    "canvas.canvas_ambient": {
+        "sounds": [
+            "runicrebirth:canvas/canvas_ambient"
+        ]
+    },
+    "oculus.controller_open": {
+        "sounds": [
+            "runicrebirth:dimensional_oculus/controller_open"
+        ]
+    },
+    "oculus.portal_open": {
+        "sounds": [
+            "runicrebirth:dimensional_oculus/open_portal"
+        ]
+    },
+    "infusion.altar_activating": {
+        "sounds": [
+            "runicrebirth:infusion/altar_activating"
+        ]
+    },
+    "infusion.add_item": {
+        "sounds": [
+            "runicrebirth:infusion/add_item"
+        ]
+    },
+    "infusion.infusing": {
+        "sounds": [
+            "runicrebirth:infusion/infusing"
+        ]
+    },
+    "infusion.quick_infusion": {
+        "sounds": [
+            "runicrebirth:infusion/quick_infusion"
+        ]
+    },
+  "forging.forging": {
+    "sounds": [
+      "runicrebirth:forging/forging"
+    ]
+  },
+  "forging.forge_active": {
+    "sounds": [
+      "runicrebirth:forging/forge_active"
+    ]
+  },
+  "spells.explosion": {
+    "sounds": [
+      "runicrebirth:spells/explosion"
+    ]
+  },
+  "spells.fuse": {
+    "sounds": [
+      "runicrebirth:spells/fuse"
+    ]
+  },
+  "spells.hammer_spell": {
+    "sounds": [
+      "runicrebirth:spells/hammer_spell"
+    ]
+  },
+  "spells.laser_shot": {
+    "sounds": [
+      "runicrebirth:spells/laser-shot"
+    ]
+  },
+  "spells.load_arrow": {
+    "sounds": [
+      "runicrebirth:spells/load_arrow"
+    ]
+  },
+  "spells.shoot_arrow": {
+    "sounds": [
+      "runicrebirth:spells/shoot_arrow"
+    ]
+  },
+  "spells.load_ballista": {
+    "sounds": [
+      "runicrebirth:spells/load_ballista"
+    ]
+  },
+  "spells.shoot_ballista": {
+    "sounds": [
+      "runicrebirth:spells/shoot_ballista"
+    ]
+  },
+  "spells.projectile_shoot": {
+    "sounds": [
+      "runicrebirth:spells/projectile_shoot"
+    ]
+  },
+  "spells.shield_initiate": {
+    "sounds": [
+      "runicrebirth:spells/shield_initiate"
+    ]
+  },
+  "spells.shield_hit": {
+    "sounds": [
+      "runicrebirth:spells/shield_hit"
+    ]
+  },
+  "spells.shield_end": {
+    "sounds": [
+      "runicrebirth:spells/shield_end"
+    ]
+  },
+  "spells.longsword": {
+    "sounds": [
+      "runicrebirth:spells/longsword"
+    ]
+  },
+  "spells.slash_spell": {
+    "sounds": [
+      "runicrebirth:spells/slash_spell"
+    ]
+  },
+  "spells.spawn_circle": {
+    "sounds": [
+      "runicrebirth:spells/spawn_circle"
+    ]
+  },
+  "spells.energy_crackling": {
+    "sounds": [
+      "runicrebirth:spells/energy_crackling"
+    ]
+  },
+  "spells.initiate_binding": {
+    "sounds": [
+      "runicrebirth:spells/initiate_binding"
+    ]
+  },
+  "spells.hold_binding": {
+    "sounds": [
+      "runicrebirth:spells/hold_binding"
+    ]
+  },
+  "spells.end_binding": {
+    "sounds": [
+      "runicrebirth:spells/end_binding"
+    ]
+  },
+  "spells.chime2": {
+    "sounds": [
+      "runicrebirth:spells/chime2"
+    ]
+  },
+  "spells.hammer_initiate": {
+    "sounds": [
+      "runicrebirth:spells/hammer_initiate"
+    ]
+  },
+  "spells.meteor_circle_initiate": {
+    "sounds": [
+      "runicrebirth:spells/meteor_circle_initiate"
+    ]
+  },
+  "spells.meteor_initiate": {
+    "sounds": [
+      "runicrebirth:spells/meteor_initiate"
+    ]
+  },
+  "spells.meteor_end": {
+    "sounds": [
+      "runicrebirth:spells/meteor_end"
+    ]
+  },
+  "dungeon.door": {
+    "sounds": [
+      "runicrebirth:dungeon/door"
+    ]
+  },
+  "dungeon.door_closing": {
+    "sounds": [
+      "runicrebirth:dungeon/dungeon_door_closing"
+    ]
+  },
+  "dungeon.pressure_plate": {
+    "sounds": [
+      "runicrebirth:dungeon/pressure_plate"
+    ]
+  },
+  "dungeon.spike": {
+    "sounds": [
+      "runicrebirth:dungeon/spike"
+    ]
+  },
+  "dungeon.temporary_platform": {
+    "sounds": [
+      "runicrebirth:dungeon/temporary_platform"
+    ]
+  },
+  "dungeon.turret_power_on": {
+    "sounds": [
+      "runicrebirth:dungeon/turret_power_on"
+    ]
+  },
+  "spells.hover": {
+    "sounds": [
+      { "name": "runicrebirth:spells/hover", "stream": true }
+    ]
+  },
+  "spells.thruster": {
+    "sounds": [
+      "runicrebirth:spells/thruster"
+    ]
+  },
+  "spells.blink": {
+    "sounds": [
+      "runicrebirth:spells/blink"
+    ]
+  },
+  "spells.leaping": {
+    "sounds": [
+      "runicrebirth:spells/leaping"
+    ]
+  },
+  "spells.tether": {
+    "sounds": [
+      "runicrebirth:spells/tether"
+    ]
+  }
+}

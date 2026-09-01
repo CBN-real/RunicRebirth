@@ -1,0 +1,180 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"hold_spell": {
+			"loop": "hold_on_last_frame",
+			"animation_length": 0.5,
+			"bones": {
+				"magic_beam": {
+					"scale": {
+						"0.0417": {
+							"vector": [
+								0,
+								0,
+								1
+							]
+						},
+						"0.125": {
+							"vector": [
+								1,
+								1,
+								1
+							],
+							"easing": "easeOutSine"
+						}
+					}
+				},
+				"runes": {
+					"rotation": {
+						"vector": [
+							0,
+							0,
+							"query.anim_time * 360"
+						]
+					},
+					"position": {
+						"vector": [
+							"-math.sin(query.anim_time * 360) * 0.2",
+							"math.sin(query.anim_time * -180) * 0.2",
+							0
+						]
+					}
+				}
+			}
+		},
+		"initiate_spell": {
+			"loop": "hold_on_last_frame",
+			"animation_length": 0.75,
+			"bones": {
+				"outer": {
+					"scale": {
+						"0.0": {
+							"vector": [
+								0,
+								0,
+								1
+							]
+						},
+						"0.375": {
+							"vector": [
+								1,
+								1,
+								1
+							],
+							"easing": "easeOutBack",
+							"easingArgs": [
+								3
+							]
+						},
+						"0.5417": {
+							"vector": [
+								0,
+								0,
+								1
+							],
+							"easing": "easeInSine"
+						}
+					}
+				},
+				"inner": {
+					"scale": {
+						"0.0": {
+							"vector": [
+								0,
+								0,
+								1
+							]
+						},
+						"0.375": {
+							"vector": [
+								1,
+								1,
+								1
+							],
+							"easing": "easeOutBack",
+							"easingArgs": [
+								3
+							]
+						},
+						"0.5417": {
+							"vector": [
+								0,
+								0,
+								1
+							],
+							"easing": "easeInSine"
+						}
+					}
+				},
+				"runes": {
+					"rotation": {
+						"vector": [
+							0,
+							0,
+							"query.anim_time * 360"
+						]
+					},
+					"position": {
+						"vector": [
+							"-math.sin(query.anim_time * 360) * 0.2",
+							"math.sin(query.anim_time * -180) * 0.2",
+							0
+						]
+					},
+					"scale": {
+						"0.0": {
+							"vector": [
+								0,
+								0,
+								1
+							]
+						},
+						"0.375": {
+							"vector": [
+								1,
+								1,
+								1
+							],
+							"easing": "easeOutBack",
+							"easingArgs": [
+								2
+							]
+						},
+						"0.4583": {
+							"vector": [
+								1,
+								1,
+								1
+							]
+						},
+						"0.75": {
+							"vector": [
+								0,
+								0,
+								1
+							],
+							"easing": "easeInSine"
+						}
+					}
+				}
+			}
+		},
+		"end_spell": {
+			"loop": true,
+			"bones": {
+				"__dummy__": {
+					"rotation": {
+						"0.0": {
+							"vector": [
+								0,
+								0,
+								0
+							]
+						}
+					}
+				}
+			}
+		}
+	},
+	"geckolib_format_version": 2
+}

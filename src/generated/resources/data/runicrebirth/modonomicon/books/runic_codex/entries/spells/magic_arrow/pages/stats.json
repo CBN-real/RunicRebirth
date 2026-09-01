@@ -1,0 +1,11 @@
+{
+  "type": "runicrebirth:spell_page",
+  "damage": "6",
+  "damage_type": "SHARP",
+  "offset_x": 0.29,
+  "offset_y": 0.6,
+  "offset_z": 0.0,
+  "range": "64",
+  "sort_number": 0,
+  "spell_name": "Magic Arrow"
+}

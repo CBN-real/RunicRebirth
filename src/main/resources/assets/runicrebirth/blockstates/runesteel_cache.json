@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=north": { "model": "runicrebirth:block/runesteel_cache" },
+    "facing=south": { "model": "runicrebirth:block/runesteel_cache", "y": 180 },
+    "facing=west":  { "model": "runicrebirth:block/runesteel_cache", "y": 270 },
+    "facing=east":  { "model": "runicrebirth:block/runesteel_cache", "y": 90 }
+  }
+}

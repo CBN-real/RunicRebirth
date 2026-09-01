@@ -1,0 +1,9 @@
+{
+  "model": {
+    "type": "minecraft:special",
+    "base": "runicrebirth:item/adept_mage_statue",
+    "model": {
+      "type": "geckolib:geckolib"
+    }
+  }
+}

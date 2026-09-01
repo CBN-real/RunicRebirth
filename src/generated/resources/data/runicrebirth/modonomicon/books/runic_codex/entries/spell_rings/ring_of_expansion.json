@@ -1,0 +1,16 @@
+{
+  "type": "modonomicon:content",
+  "category": "runicrebirth:spell_rings",
+  "condition": {
+    "type": "modonomicon:none"
+  },
+  "description": "book.runicrebirth.runic_codex.spell_rings.ring_of_expansion.description",
+  "icon": {
+    "id": "runicrebirth:ring_of_expansion"
+  },
+  "id": "runicrebirth:spell_rings/ring_of_expansion",
+  "name": "book.runicrebirth.runic_codex.spell_rings.ring_of_expansion.name",
+  "sort_number": 0,
+  "x": -2,
+  "y": -1
+}

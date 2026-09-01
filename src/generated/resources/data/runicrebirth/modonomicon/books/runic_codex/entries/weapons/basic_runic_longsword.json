@@ -1,0 +1,16 @@
+{
+  "type": "modonomicon:content",
+  "category": "runicrebirth:weapons",
+  "condition": {
+    "type": "modonomicon:none"
+  },
+  "description": "book.runicrebirth.runic_codex.weapons.basic_runic_longsword.description",
+  "icon": {
+    "id": "runicrebirth:basic_runic_longsword"
+  },
+  "id": "runicrebirth:weapons/basic_runic_longsword",
+  "name": "book.runicrebirth.runic_codex.weapons.basic_runic_longsword.name",
+  "sort_number": 0,
+  "x": -2,
+  "y": -1
+}

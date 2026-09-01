@@ -1,0 +1,23 @@
+{
+  "parent": "runicrebirth:spells/magic_projectile",
+  "display": {
+    "icon": {
+      "id": "minecraft:anvil"
+    },
+    "title": {
+      "translate": "advancement.runicrebirth.spells.magic_hammer.title"
+    },
+    "description": {
+      "translate": "advancement.runicrebirth.spells.magic_hammer.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": true
+  },
+  "criteria": {
+    "placeholder": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

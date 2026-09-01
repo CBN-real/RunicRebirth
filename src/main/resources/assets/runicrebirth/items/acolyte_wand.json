@@ -1,0 +1,9 @@
+{
+  "model": {
+    "type": "minecraft:special",
+    "base": "runicrebirth:item/acolyte_wand",
+    "model": {
+      "type": "geckolib:geckolib"
+    }
+  }
+}

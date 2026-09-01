@@ -1,0 +1,13 @@
+{
+  "type": "modonomicon:entity",
+  "condition": {
+    "type": "modonomicon:none"
+  },
+  "entity_id": "runicrebirth:advanced_circle",
+  "entity_name": "",
+  "id": "entity",
+  "rotate": false,
+  "scale": 0.6,
+  "sort_number": 1,
+  "text": "book.runicrebirth.runic_codex.spells.arch_spellcasting.entity.text"
+}

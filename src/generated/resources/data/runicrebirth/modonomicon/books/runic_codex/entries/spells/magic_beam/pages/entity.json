@@ -1,0 +1,12 @@
+{
+  "type": "modonomicon:entity",
+  "condition": {
+    "type": "modonomicon:none"
+  },
+  "entity_id": "runicrebirth:magic_beam",
+  "entity_name": "",
+  "id": "entity",
+  "rotate": false,
+  "sort_number": 1,
+  "text": "book.runicrebirth.runic_codex.spells.magic_beam.entity.text"
+}

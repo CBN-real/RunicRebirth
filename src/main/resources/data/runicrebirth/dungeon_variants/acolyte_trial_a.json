@@ -1,0 +1,20 @@
+{
+  "tier": "runicrebirth:acolyte",
+  "room_count": 5,
+  "entry_rooms": [
+    {"template": "runicrebirth:rooms/acolyte/entry_a", "weight": 1}
+  ],
+  "boss_rooms": [
+    {"template": "runicrebirth:rooms/acolyte/boss_a", "weight": 1}
+  ],
+  "inner_sanctum_rooms": [
+    {"template": "runicrebirth:rooms/acolyte/sanctum_a", "weight": 1}
+  ],
+  "combat_rooms": [
+    {"template": "runicrebirth:rooms/acolyte/combat_a", "weight": 3},
+    {"template": "runicrebirth:rooms/acolyte/combat_b", "weight": 2}
+  ],
+  "hallways": [
+    {"template": "runicrebirth:rooms/acolyte/hallway_a", "weight": 2}
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "type": "runicrebirth:spell_page",
+  "damage": "N/A",
+  "damage_type": "BLUNT",
+  "offset_x": 0.0,
+  "offset_y": 0.0,
+  "offset_z": 0.0,
+  "range": "Self",
+  "sort_number": 0,
+  "spell_name": "Magic Shield"
+}

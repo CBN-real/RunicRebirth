@@ -1,0 +1,13 @@
+{
+  "type": "modonomicon:entity",
+  "condition": {
+    "type": "modonomicon:none"
+  },
+  "entity_id": "runicrebirth:magic_projectile",
+  "entity_name": "",
+  "id": "entity",
+  "rotate": false,
+  "scale": 2.0,
+  "sort_number": 1,
+  "text": "book.runicrebirth.runic_codex.spells.magic_projectile.entity.text"
+}

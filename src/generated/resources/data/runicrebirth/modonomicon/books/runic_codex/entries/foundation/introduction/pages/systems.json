@@ -1,0 +1,11 @@
+{
+  "type": "modonomicon:text",
+  "condition": {
+    "type": "modonomicon:none"
+  },
+  "id": "systems",
+  "show_title_separator": true,
+  "sort_number": 1,
+  "text": "book.runicrebirth.runic_codex.foundation.introduction.systems.text",
+  "title": "book.runicrebirth.runic_codex.foundation.introduction.systems.title"
+}

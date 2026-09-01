@@ -1,0 +1,13 @@
+{
+  "type": "modonomicon:spotlight",
+  "condition": {
+    "type": "modonomicon:none"
+  },
+  "id": "display",
+  "item": {
+    "id": "runicrebirth:magic_hand_ring"
+  },
+  "sort_number": 0,
+  "text": "",
+  "title": "Magic Hand Ring"
+}

@@ -1,0 +1,187 @@
+{
+	"format_version": "1.12.0",
+	"minecraft:geometry": [
+		{
+			"description": {
+				"identifier": "geometry.unknown",
+				"texture_width": 128,
+				"texture_height": 128,
+				"visible_bounds_width": 1,
+				"visible_bounds_height": 1,
+				"visible_bounds_offset": [0, 0, 0]
+			},
+			"bones": [
+				{
+					"name": "portal_frame",
+					"pivot": [-0.6989, 24.38, -0.86845],
+					"rotation": [0, 0, 1.25]
+				},
+				{
+					"name": "outer_rings",
+					"parent": "portal_frame",
+					"pivot": [0, 24.08, 0]
+				},
+				{
+					"name": "outer_ring2",
+					"parent": "outer_rings",
+					"pivot": [-0.3689, 23.76, 1.20436]
+				},
+				{
+					"name": "tilted_ring7",
+					"parent": "outer_ring2",
+					"pivot": [-1.0289, 26.01636, 85.84936],
+					"rotation": [-90, 0, 37.5]
+				},
+				{
+					"name": "bot_part3",
+					"parent": "tilted_ring7",
+					"pivot": [0.9863, -58.7083, 86.78546],
+					"rotation": [0, -180, 0]
+				},
+				{
+					"name": "outer_ring3",
+					"parent": "outer_rings",
+					"pivot": [-0.3689, 23.76, -1.20436]
+				},
+				{
+					"name": "tilted_ring2",
+					"parent": "outer_ring3",
+					"pivot": [-1.0289, 26.01636, -85.84936],
+					"rotation": [90, 0, 37.5]
+				},
+				{
+					"name": "bot_part4",
+					"parent": "tilted_ring2",
+					"pivot": [0.9863, -58.7083, -86.78546],
+					"rotation": [0, 180, 0]
+				},
+				{
+					"name": "inner_rings",
+					"parent": "portal_frame",
+					"pivot": [0, 22.68, 0]
+				},
+				{
+					"name": "inner_ring2",
+					"parent": "inner_rings",
+					"pivot": [-0.92578, 53.39375, -2.94126]
+				},
+				{
+					"name": "tilted_ring3",
+					"parent": "inner_ring2",
+					"pivot": [-0.26578, 22.65011, -1.31876],
+					"rotation": [90, 0, 37.5]
+				},
+				{
+					"name": "bot_part5",
+					"parent": "tilted_ring3",
+					"pivot": [-0.04713, 22.29791, -1.16674],
+					"rotation": [0, 180, 0]
+				},
+				{
+					"name": "br_part2",
+					"parent": "tilted_ring3",
+					"pivot": [-0.26578, 22.65011, -1.01876],
+					"rotation": [0, -157.5, 0]
+				},
+				{
+					"name": "bl_part2",
+					"parent": "tilted_ring3",
+					"pivot": [-0.26578, 22.65011, -1.01876],
+					"rotation": [0, 157.5, 0]
+				},
+				{
+					"name": "inner_ring3",
+					"parent": "inner_rings",
+					"pivot": [-0.92578, 53.39375, 2.94126]
+				},
+				{
+					"name": "tilted_ring4",
+					"parent": "inner_ring3",
+					"pivot": [-0.26578, 22.65011, 1.31876],
+					"rotation": [-90, 0, 37.5]
+				},
+				{
+					"name": "bot_part2",
+					"parent": "tilted_ring4",
+					"pivot": [-0.04713, 22.29791, 1.16674],
+					"rotation": [0, -180, 0]
+				},
+				{
+					"name": "br_part3",
+					"parent": "tilted_ring4",
+					"pivot": [-0.26578, 22.65011, 1.01876],
+					"rotation": [0, 157.5, 0]
+				},
+				{
+					"name": "bl_part3",
+					"parent": "tilted_ring4",
+					"pivot": [-0.26578, 22.65011, 1.01876],
+					"rotation": [0, -157.5, 0]
+				},
+				{
+					"name": "innest_rings",
+					"parent": "portal_frame",
+					"pivot": [0, 21.08, 0]
+				},
+				{
+					"name": "innest_ring2",
+					"parent": "innest_rings",
+					"pivot": [-0.3689, 20.76, 1.20436]
+				},
+				{
+					"name": "tilted_ring9",
+					"parent": "innest_ring2",
+					"pivot": [-0.84336, 22.62279, 69.55437],
+					"rotation": [-90, 0, 37.5]
+				},
+				{
+					"name": "fpart3",
+					"parent": "tilted_ring9",
+					"pivot": [0.78895, -46.00419, 70.31261],
+					"rotation": [0, -180, 0]
+				},
+				{
+					"name": "fpart7",
+					"parent": "tilted_ring9",
+					"pivot": [0.78895, -46.00419, 70.31261],
+					"rotation": [0, 150, 0]
+				},
+				{
+					"name": "fpart10",
+					"parent": "tilted_ring9",
+					"pivot": [0.78895, -46.00419, 70.31261],
+					"rotation": [0, -150, 0]
+				},
+				{
+					"name": "innest_ring3",
+					"parent": "innest_rings",
+					"pivot": [-0.3689, 20.76, -1.20436]
+				},
+				{
+					"name": "tilted_ring5",
+					"parent": "innest_ring3",
+					"pivot": [-0.84336, 22.62279, -69.55437],
+					"rotation": [90, 0, 37.5]
+				},
+				{
+					"name": "fpart2",
+					"parent": "tilted_ring5",
+					"pivot": [0.78895, -46.00419, -70.31261],
+					"rotation": [0, 180, 0]
+				},
+				{
+					"name": "fpart4",
+					"parent": "tilted_ring5",
+					"pivot": [0.78895, -46.00419, -70.31261],
+					"rotation": [0, -150, 0]
+				},
+				{
+					"name": "fpart5",
+					"parent": "tilted_ring5",
+					"pivot": [0.78895, -46.00419, -70.31261],
+					"rotation": [0, 150, 0]
+				}
+			]
+		}
+	]
+}

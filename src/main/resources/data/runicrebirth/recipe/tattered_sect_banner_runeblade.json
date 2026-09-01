@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "minecraft:green_dye",
+    "minecraft:brown_dye",
+    "runicrebirth:tattered_sect_banner"
+  ],
+  "result": {
+    "id": "runicrebirth:tattered_sect_banner_runeblade",
+    "count": 1
+  }
+}

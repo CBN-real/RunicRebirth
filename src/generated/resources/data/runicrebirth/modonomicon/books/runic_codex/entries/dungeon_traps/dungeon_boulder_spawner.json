@@ -1,0 +1,16 @@
+{
+  "type": "modonomicon:content",
+  "category": "runicrebirth:dungeon_traps",
+  "condition": {
+    "type": "modonomicon:none"
+  },
+  "description": "book.runicrebirth.runic_codex.dungeon_traps.dungeon_boulder_spawner.description",
+  "icon": {
+    "id": "runicrebirth:dungeon_boulder_spawner"
+  },
+  "id": "runicrebirth:dungeon_traps/dungeon_boulder_spawner",
+  "name": "book.runicrebirth.runic_codex.dungeon_traps.dungeon_boulder_spawner.name",
+  "sort_number": 2,
+  "x": -2,
+  "y": -1
+}

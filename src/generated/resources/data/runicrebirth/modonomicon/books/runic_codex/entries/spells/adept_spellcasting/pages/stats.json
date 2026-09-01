@@ -1,0 +1,12 @@
+{
+  "type": "runicrebirth:spell_page",
+  "damage": "0",
+  "damage_type": "BLUNT",
+  "hide_stats": true,
+  "offset_x": 0.0,
+  "offset_y": 0.0,
+  "offset_z": 0.0,
+  "range": "0",
+  "sort_number": 0,
+  "spell_name": "Adept Spellcasting"
+}

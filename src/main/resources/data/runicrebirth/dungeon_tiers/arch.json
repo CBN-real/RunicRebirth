@@ -1,0 +1,17 @@
+{
+  "knowledge_point_reward": 6,
+  "element_unlock": null,
+  "modifiers": [
+    {"modifier": "swift_enemies", "weight": 3},
+    {"modifier": "blunt_resistant", "weight": 2},
+    {"modifier": "sharp_resistant", "weight": 2},
+    {"modifier": "magic_resistant", "weight": 2},
+    {"modifier": "swarm", "weight": 3},
+    {"modifier": "darkness", "weight": 3},
+    {"modifier": "heavy_hitters", "weight": 3},
+    {"modifier": "double_sharp_damage", "weight": 2},
+    {"modifier": "double_blunt_damage", "weight": 2},
+    {"modifier": "double_fire_damage", "weight": 2}
+  ],
+  "variants": ["runicrebirth:arch_trial_a"]
+}

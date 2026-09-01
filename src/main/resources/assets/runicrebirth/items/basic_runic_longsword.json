@@ -1,0 +1,9 @@
+{
+  "model": {
+    "type": "minecraft:special",
+    "base": "runicrebirth:item/basic_runic_longsword",
+    "model": {
+      "type": "geckolib:geckolib"
+    }
+  }
+}

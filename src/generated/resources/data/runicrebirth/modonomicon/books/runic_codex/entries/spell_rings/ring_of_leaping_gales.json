@@ -1,0 +1,16 @@
+{
+  "type": "modonomicon:content",
+  "category": "runicrebirth:spell_rings",
+  "condition": {
+    "type": "modonomicon:none"
+  },
+  "description": "book.runicrebirth.runic_codex.spell_rings.ring_of_leaping_gales.description",
+  "icon": {
+    "id": "runicrebirth:ring_of_leaping_gales"
+  },
+  "id": "runicrebirth:spell_rings/ring_of_leaping_gales",
+  "name": "book.runicrebirth.runic_codex.spell_rings.ring_of_leaping_gales.name",
+  "sort_number": 4,
+  "x": 1,
+  "y": 0
+}

@@ -1,0 +1,22 @@
+{
+  "type": "modonomicon:content",
+  "category": "runicrebirth:spells",
+  "condition": {
+    "type": "runicrebirth:spell_unlock",
+    "advancement_id": "runicrebirth:spells/magic_hammer",
+    "spell_name": "Magic Hammer",
+    "unlock_hint": "Unlock conditions coming soon"
+  },
+  "description": "book.runicrebirth.runic_codex.spells.magic_hammer.description",
+  "icon": "runicrebirth:textures/gui/shape_icons/hammer_icon.png",
+  "id": "runicrebirth:spells/magic_hammer",
+  "name": "book.runicrebirth.runic_codex.spells.magic_hammer.name",
+  "parents": [
+    {
+      "entry": "runicrebirth:spells/magic_binding"
+    }
+  ],
+  "sort_number": 23,
+  "x": 8,
+  "y": -1
+}

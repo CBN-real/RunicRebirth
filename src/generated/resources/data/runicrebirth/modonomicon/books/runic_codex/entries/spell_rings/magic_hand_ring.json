@@ -1,0 +1,16 @@
+{
+  "type": "modonomicon:content",
+  "category": "runicrebirth:spell_rings",
+  "condition": {
+    "type": "modonomicon:none"
+  },
+  "description": "book.runicrebirth.runic_codex.spell_rings.magic_hand_ring.description",
+  "icon": {
+    "id": "runicrebirth:magic_hand_ring"
+  },
+  "id": "runicrebirth:spell_rings/magic_hand_ring",
+  "name": "book.runicrebirth.runic_codex.spell_rings.magic_hand_ring.name",
+  "sort_number": 3,
+  "x": -2,
+  "y": 0
+}

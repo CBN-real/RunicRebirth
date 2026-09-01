@@ -1,0 +1,8 @@
+{
+  "criteria": {
+    "progress": {
+      "trigger": "runicrebirth:modifier_kill",
+      "conditions": { "modifier_path": "size_plus", "min_count": 25 }
+    }
+  }
+}

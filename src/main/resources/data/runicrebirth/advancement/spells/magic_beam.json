@@ -1,0 +1,27 @@
+{
+  "parent": "runicrebirth:spells/magic_projectile",
+  "display": {
+    "icon": {
+      "id": "minecraft:ender_eye"
+    },
+    "title": {
+      "translate": "advancement.runicrebirth.spells.magic_beam.title"
+    },
+    "description": {
+      "translate": "advancement.runicrebirth.spells.magic_beam.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": false
+  },
+  "criteria": {
+    "long_range_kill": {
+      "trigger": "runicrebirth:magic_kill",
+      "conditions": {
+        "spell_type": "runicrebirth:magic_projectile",
+        "min_distance": 10.0
+      }
+    }
+  }
+}

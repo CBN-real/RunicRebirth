@@ -1,0 +1,9 @@
+{
+  "model": {
+    "type": "minecraft:special",
+    "base": "runicrebirth:item/tattered_sect_banner_artificer",
+    "model": {
+      "type": "geckolib:geckolib"
+    }
+  }
+}

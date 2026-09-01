@@ -1,0 +1,12 @@
+{
+  "type": "modonomicon:entity",
+  "condition": {
+    "type": "modonomicon:none"
+  },
+  "default_rotation": -20.0,
+  "entity_id": "runicrebirth:skeletal_wizard_acolyte",
+  "entity_name": "",
+  "id": "entity",
+  "sort_number": 1,
+  "text": ""
+}

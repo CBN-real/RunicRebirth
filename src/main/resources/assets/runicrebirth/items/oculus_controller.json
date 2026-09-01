@@ -1,0 +1,9 @@
+{
+  "model": {
+    "type": "minecraft:special",
+    "base": "runicrebirth:item/oculus_controller",
+    "model": {
+      "type": "geckolib:geckolib"
+    }
+  }
+}

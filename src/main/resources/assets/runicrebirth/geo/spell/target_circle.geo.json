@@ -1,0 +1,60 @@
+{
+	"format_version": "1.12.0",
+	"minecraft:geometry": [
+		{
+			"description": {
+				"identifier": "geometry.unknown",
+				"texture_width": 512,
+				"texture_height": 512,
+				"visible_bounds_width": 3,
+				"visible_bounds_height": 1.5,
+				"visible_bounds_offset": [0, 0.25, 0]
+			},
+			"bones": [
+				{
+					"name": "target_circle",
+					"pivot": [0, 0.0033, 0]
+				},
+				{
+					"name": "large_circle",
+					"parent": "target_circle",
+					"pivot": [0, 0.0033, 0],
+					"rotation": [-90, 0, 0],
+					"cubes": [
+						{
+							"origin": [-7.92, -7.92, 0],
+							"size": [15.84, 15.84, 0],
+							"uv": {
+								"north": {"uv": [254.5, 0], "uv_size": [257.5, 257]},
+								"east": {"uv": [79.5, 6], "uv_size": [0, 2]},
+								"south": {"uv": [512, 0], "uv_size": [-257.5, 257]},
+								"west": {"uv": [77.5, 6], "uv_size": [0, 2]},
+								"up": {"uv": [79.5, 6], "uv_size": [-2, 0]},
+								"down": {"uv": [79.5, 8], "uv_size": [-2, 0]}
+							}
+						}
+					]
+				},
+				{
+					"name": "small_circle",
+					"parent": "target_circle",
+					"pivot": [0, 0.0033, 0],
+					"cubes": [
+						{
+							"origin": [-3.73, 0.4, -3.73],
+							"size": [7.46, 0, 7.46],
+							"uv": {
+								"north": {"uv": [13.5, 43.5], "uv_size": [2, 0]},
+								"east": {"uv": [13.5, 43.5], "uv_size": [2, 0]},
+								"south": {"uv": [13.5, 43.5], "uv_size": [2, 0]},
+								"west": {"uv": [13.5, 43.5], "uv_size": [2, 0]},
+								"up": {"uv": [224, 238], "uv_size": [-188, -188]},
+								"down": {"uv": [15.5, 43.5], "uv_size": [-2, -2]}
+							}
+						}
+					]
+				}
+			]
+		}
+	]
+}

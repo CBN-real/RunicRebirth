@@ -1,0 +1,9 @@
+{
+  "model": {
+    "type": "minecraft:special",
+    "base": "runicrebirth:item/infusion_altar",
+    "model": {
+      "type": "geckolib:geckolib"
+    }
+  }
+}

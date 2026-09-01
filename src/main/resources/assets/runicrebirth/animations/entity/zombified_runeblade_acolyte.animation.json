@@ -1,0 +1,326 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"misc.idle": {
+			"loop": true,
+			"bones": {
+				"bipedRightArm": {
+					"rotation": {
+						"vector": [
+							-75,
+							0,
+							0
+						]
+					}
+				},
+				"bipedLeftArm": {
+					"rotation": {
+						"vector": [
+							-75,
+							0,
+							0
+						]
+					}
+				},
+				"__dummy__": {
+					"rotation": {
+						"0.0": {
+							"vector": [
+								0,
+								0,
+								0
+							]
+						}
+					}
+				}
+			}
+		},
+		"move.walk": {
+			"loop": true,
+			"animation_length": 1,
+			"bones": {
+				"bipedRightArm": {
+					"rotation": {
+						"0.0": {
+							"vector": [
+								-75,
+								0,
+								0
+							]
+						},
+						"0.25": {
+							"vector": [
+								-80,
+								0,
+								0
+							]
+						},
+						"0.5": {
+							"vector": [
+								-75,
+								0,
+								0
+							]
+						},
+						"0.75": {
+							"vector": [
+								-80,
+								0,
+								0
+							]
+						},
+						"1.0": {
+							"vector": [
+								-75,
+								0,
+								0
+							]
+						}
+					}
+				},
+				"bipedLeftArm": {
+					"rotation": {
+						"0.0": {
+							"vector": [
+								-75,
+								0,
+								0
+							]
+						},
+						"0.25": {
+							"vector": [
+								-80,
+								0,
+								0
+							]
+						},
+						"0.5": {
+							"vector": [
+								-75,
+								0,
+								0
+							]
+						},
+						"0.75": {
+							"vector": [
+								-80,
+								0,
+								0
+							]
+						},
+						"1.0": {
+							"vector": [
+								-75,
+								0,
+								0
+							]
+						}
+					}
+				},
+				"bipedLeftLeg": {
+					"rotation": {
+						"0.0": {
+							"vector": [
+								0,
+								0,
+								0
+							]
+						},
+						"0.25": {
+							"vector": [
+								30,
+								0,
+								0
+							]
+						},
+						"0.5": {
+							"vector": [
+								0,
+								0,
+								0
+							]
+						},
+						"0.75": {
+							"vector": [
+								-30,
+								0,
+								0
+							]
+						},
+						"1.0": {
+							"vector": [
+								0,
+								0,
+								0
+							]
+						}
+					}
+				},
+				"bipedRightLeg": {
+					"rotation": {
+						"0.0": {
+							"vector": [
+								0,
+								0,
+								0
+							]
+						},
+						"0.25": {
+							"vector": [
+								-30,
+								0,
+								0
+							]
+						},
+						"0.5": {
+							"vector": [
+								0,
+								0,
+								0
+							]
+						},
+						"0.75": {
+							"vector": [
+								30,
+								0,
+								0
+							]
+						},
+						"1.0": {
+							"vector": [
+								0,
+								0,
+								0
+							]
+						}
+					}
+				},
+				"back_robe": {
+					"rotation": {
+						"0.0": {
+							"vector": [
+								0,
+								0,
+								0
+							]
+						},
+						"0.25": {
+							"vector": [
+								30,
+								0,
+								0
+							]
+						},
+						"0.5": {
+							"vector": [
+								0,
+								0,
+								0
+							]
+						},
+						"0.75": {
+							"vector": [
+								30,
+								0,
+								0
+							]
+						},
+						"1.0": {
+							"vector": [
+								0,
+								0,
+								0
+							]
+						}
+					}
+				},
+				"front_robe": {
+					"rotation": {
+						"0.0": {
+							"vector": [
+								0,
+								0,
+								0
+							]
+						},
+						"0.25": {
+							"vector": [
+								-40,
+								0,
+								0
+							]
+						},
+						"0.5": {
+							"vector": [
+								0,
+								0,
+								0
+							]
+						},
+						"0.75": {
+							"vector": [
+								-40,
+								0,
+								0
+							]
+						},
+						"1.0": {
+							"vector": [
+								0,
+								0,
+								0
+							]
+						}
+					}
+				}
+			}
+		},
+		"attack.swing": {
+			"animation_length": 0.5,
+			"bones": {
+				"bipedRightArm": {
+					"rotation": {
+						"0.0": {
+							"vector": [
+								-75,
+								0,
+								0
+							]
+						},
+						"0.1667": {
+							"vector": [
+								-142.5,
+								0,
+								0
+							]
+						},
+						"0.3333": {
+							"vector": [
+								20,
+								0,
+								0
+							]
+						},
+						"0.5": {
+							"vector": [
+								-75,
+								0,
+								0
+							]
+						}
+					}
+				},
+				"bipedLeftArm": {
+					"rotation": {
+						"vector": [
+							-75,
+							0,
+							0
+						]
+					}
+				}
+			}
+		}
+	},
+	"geckolib_format_version": 2
+}

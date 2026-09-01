@@ -1,0 +1,8 @@
+{
+  "criteria": {
+    "progress": {
+      "trigger": "runicrebirth:weapon_kill",
+      "conditions": { "min_count": 50 }
+    }
+  }
+}

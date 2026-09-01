@@ -1,0 +1,23 @@
+{
+  "parent": "runicrebirth:spells/magic_projectile",
+  "display": {
+    "icon": {
+      "id": "minecraft:crossbow"
+    },
+    "title": {
+      "translate": "advancement.runicrebirth.spells.magic_ballista.title"
+    },
+    "description": {
+      "translate": "advancement.runicrebirth.spells.magic_ballista.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": true
+  },
+  "criteria": {
+    "placeholder": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

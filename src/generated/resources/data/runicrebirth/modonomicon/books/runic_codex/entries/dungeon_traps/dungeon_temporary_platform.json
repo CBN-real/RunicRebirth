@@ -1,0 +1,16 @@
+{
+  "type": "modonomicon:content",
+  "category": "runicrebirth:dungeon_traps",
+  "condition": {
+    "type": "modonomicon:none"
+  },
+  "description": "book.runicrebirth.runic_codex.dungeon_traps.dungeon_temporary_platform.description",
+  "icon": {
+    "id": "runicrebirth:dungeon_temporary_platform"
+  },
+  "id": "runicrebirth:dungeon_traps/dungeon_temporary_platform",
+  "name": "book.runicrebirth.runic_codex.dungeon_traps.dungeon_temporary_platform.name",
+  "sort_number": 3,
+  "x": 1,
+  "y": -1
+}

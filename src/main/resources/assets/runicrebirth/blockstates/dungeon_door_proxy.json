@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=north": { "model": "runicrebirth:block/dungeon_door_proxy" },
+    "facing=south": { "model": "runicrebirth:block/dungeon_door_proxy" },
+    "facing=east":  { "model": "runicrebirth:block/dungeon_door_proxy" },
+    "facing=west":  { "model": "runicrebirth:block/dungeon_door_proxy" }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "type": "modonomicon:content",
+  "category": "runicrebirth:mobs",
+  "condition": {
+    "type": "modonomicon:none"
+  },
+  "description": "book.runicrebirth.runic_codex.mobs.runesteel_golem.description",
+  "icon": {
+    "id": "minecraft:bone"
+  },
+  "id": "runicrebirth:mobs/runesteel_golem",
+  "name": "book.runicrebirth.runic_codex.mobs.runesteel_golem.name",
+  "sort_number": 0,
+  "x": -2,
+  "y": -1
+}

@@ -1,0 +1,9 @@
+{
+  "model": {
+    "type": "minecraft:special",
+    "base": "runicrebirth:item/runesteel_portcullis",
+    "model": {
+      "type": "geckolib:geckolib"
+    }
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "runicrebirth:item/ring_of_expansion"
+  }
+}

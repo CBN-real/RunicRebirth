@@ -1,0 +1,9 @@
+{
+  "model": {
+    "type": "minecraft:special",
+    "base": "runicrebirth:item/dungeon_swinging_axe",
+    "model": {
+      "type": "geckolib:geckolib"
+    }
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "model": {
+    "type": "minecraft:special",
+    "base": "runicrebirth:item/hammer_drone",
+    "model": {
+      "type": "geckolib:geckolib"
+    }
+  }
+}
